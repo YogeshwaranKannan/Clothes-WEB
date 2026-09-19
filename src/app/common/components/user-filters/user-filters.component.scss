@@ -1,0 +1,579 @@
+/* ---- Filters (copied from product-list.component.scss to restore exact UI) ---- */
+.desktop-sidebar { display: none; }
+.filters-box {
+	background: #fff;
+	border: 1px solid rgba(2,6,23,0.06);
+	border-radius: 10px;
+	box-shadow: 0 6px 18px rgba(15,23,42,0.04);
+	padding: 10px;
+	position: relative;
+	z-index: 10;
+}
+
+
+.btn,
+.clear-all-btn {
+  display: inline-block;
+  background: #111;
+  color: #fff;
+  padding: 0.45rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:hover,
+.clear-all-btn:hover {
+  background: #000;
+}
+
+/* row of chips */
+.filters-box .filter-row {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+/* single chip container (relative anchor for the panel) */
+.filter-chip { position: relative; }
+
+.section-title {
+  display: block;
+  font-weight: 700;
+  font-size: 16px;   /* Bold */
+  margin: 15px 0 8px;      /* 2px top & bottom */
+}
+
+/* chip button */
+.chip-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 10px;
+	height: 36px;
+	font-size: 13px;
+	text-transform: uppercase;
+	background: transparent;
+	border: 1px solid rgba(2,6,23,0.06);
+	border-radius: 8px;
+	cursor: pointer;
+	color: #0f172a;
+}
+
+/* small chevron */
+.chip-btn .chev { margin-left: 6px; color: #64748b; }
+
+/* floating panel anchored under chip (desktop) */
+.filter-panel {
+	position: absolute;
+	top: calc(100% + 8px);
+	left: 0;
+	min-width: 260px;
+	max-width: 360px;
+	background: #fff;
+	border-radius: 10px;
+	border: 1px solid rgba(2,6,23,0.08);
+	box-shadow: 0 10px 30px rgba(2,6,23,0.08);
+	padding: 10px;
+	z-index: 1000;
+}
+
+/* panel body rows */
+.panel-body { display: block; max-height: 320px; overflow: auto; padding-bottom: 8px; }
+
+/* brand list - two columns */
+.brand-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; }
+
+/* rows inside panel */
+.panel-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	min-height: 36px;
+	font-size: 14px;
+	padding: 6px 2px;
+}
+
+/* panel action row */
+.panel-actions {
+	display: flex;
+	justify-content: space-between;
+	gap: 12px;
+	border-top: 1px solid rgba(2,6,23,0.04);
+	padding-top: 8px;
+}
+
+/* apply button / clear link */
+.panel-actions .btn { background: #111; color: #fff; padding: 6px 12px; border-radius: 6px; }
+.panel-actions .link { background: transparent; border: none; color: #0b5ed7; cursor: pointer; padding: 6px; }
+
+/* filter-controls (sort + clear all) */
+.filter-controls { display: flex; align-items: center; gap: 8px; margin-left: 12px; }
+.filter-controls .sort-label { font-weight: 600; font-size: 13px; color: #334155; }
+.filter-controls select { height: 36px; padding: 6px 10px; border-radius: 8px; border: 1px solid #e2e8f0; }
+
+/* backdrop (hidden on desktop) */
+.filter-backdrop { display: none; }
+
+@media (max-width: 900px) {
+	/* mobile: chips can wrap or scroll horizontally */
+	.filters-box .filter-row { gap: 6px; }
+
+	/* mobile: panel becomes fixed and full-ish width */
+	.filter-panel {
+		position: fixed !important;
+		left: 12px !important;
+		right: 12px !important;
+		top: 120px !important;
+		max-width: none !important;
+		width: auto !important;
+		max-height: calc(100vh - 180px) !important;
+		overflow: auto;
+		box-shadow: 0 30px 60px rgba(2,6,23,0.28);
+		border-radius: 10px;
+	}
+
+}
+
+/* ---- Mobile drawer styles ---- */
+
+/* ---- Mobile drawer styles ---- */
+.mobile-drawer {
+	position: fixed;
+	right: -100%;
+	top: 0;
+	height: 100vh;
+	width: 92%;
+	max-width: 420px;
+	background: #fff;
+	box-shadow: -12px 0 40px rgba(2,6,23,0.12);
+	transition: right 240ms ease;
+	z-index: 1200;
+	display: flex;
+	flex-direction: column;
+}
+.mobile-drawer.open { right: 0; }
+.drawer-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.36); z-index: 1100; }
+.drawer-header { display:flex; align-items:center; justify-content:space-between; padding:12px; border-bottom:1px solid rgba(2,6,23,0.04); }
+.drawer-title { margin:0; font-weight:700; font-size:16px; }
+.drawer-close, .back { background:transparent; border:none; font-size:18px; cursor:pointer; }
+.drawer-body { padding:12px; overflow:auto; flex:1 1 auto; }
+.group-list { list-style:none; padding:0; margin:0; }
+.group-list li { padding:14px 8px; border-bottom:1px solid rgba(2,6,23,0.04); display:flex; justify-content:space-between; align-items:center; cursor:pointer; }
+.group-panel .panel-body { padding-top:8px; }
+.drawer-footer { padding:12px; border-top:1px solid rgba(2,6,23,0.04); }
+.drawer-footer .btn { width:100%; }
+
+/* Hide desktop top filters on mobile to avoid duplicates */
+@media (max-width: 900px) {
+	.filters-topbar { display: none !important; }
+	.mobile-filter-btn { display: inline-flex !important; }
+	.mobile-clear-btn {
+    display: inline-block;
+    background: #111;
+    color: #fff;
+    padding: 0.45rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    border: none;
+  }
+
+  .mobile-clear-btn:hover {
+    background: #000;
+  }
+}
+
+/* Mobile drawer exact positioning and z-index per spec */
+.mobile-drawer {
+	position: fixed;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	width: 92%;
+	max-width: 420px;
+	z-index: 9999;
+	background: #fff;
+	transform: translateX(100%);
+	transition: transform 240ms ease;
+	display: flex;
+	flex-direction: column;
+}
+.mobile-drawer.open { transform: translateX(0); }
+.drawer-backdrop { position: fixed; inset: 0; z-index: 9998; background: rgba(0,0,0,0.36); }
+
+/* Ensure drawer never appears on desktop widths */
+@media (min-width: 901px) {
+	.mobile-drawer, .drawer-backdrop { display: none !important; }
+	.filters-topbar { display: block !important; }
+
+/* Make vertical space for two rows */
+  .price-slider.two-sliders {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;       /* space between the min & max slider */
+    height: auto;    /* remove fixed height */
+    margin-top: 10px;
+  }
+
+  /* Each slider stays in its own row */
+  .price-slider.two-sliders .single-range {
+    position: relative;
+    height: 36px;    /* nice compact line */
+  }
+
+  /* This is the BLUE track for each slider */
+  .price-slider.two-sliders .single-range input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* Each slider shows its OWN track filled by Angular gradient */
+  .price-slider.two-sliders .single-range::before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 4px;
+    background: #e6e7e9;
+    border-radius: 4px;
+    z-index: 1;
+  }
+
+  /* White circular handles */
+  .price-slider.two-sliders .single-range input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #0b5ed7;
+    box-shadow: 0 2px 6px rgba(2,6,23,0.12);
+    position: relative;
+    z-index: 2;
+  }
+
+  .price-slider.two-sliders .single-range input[type="range"]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #0b5ed7;
+    box-shadow: 0 2px 6px rgba(2,6,23,0.12);
+    z-index: 2;
+  }
+
+  /* Remove the single combined blue track */
+  .price-slider .slider-track {
+    display: none !important;
+  }
+
+
+}
+
+/* Mobile-drawer scoped checkbox styling and layout */
+.mobile-drawer .panel-body { max-height: calc(100vh - 160px); overflow: auto; }
+.mobile-drawer .panel-body label.mobile-checkbox-row {
+	display: grid;
+	grid-template-columns: 18px 1fr;
+	align-items: center;
+	gap: 8px;
+	min-height: 36px;
+	padding: 6px 4px;
+}
+.mobile-drawer .panel-body label.mobile-checkbox-row input[type="checkbox"] {
+	width: 16px;
+	height: 16px;
+	-webkit-appearance: none;
+	appearance: none;
+	border: 1px solid #cbd5e1;
+	border-radius: 3px;
+	background: #fff;
+	display: inline-block;
+	position: relative;
+}
+.mobile-drawer .panel-body label.mobile-checkbox-row input[type="checkbox"]:checked {
+	background: #0b5ed7;
+	border-color: #0b5ed7;
+}
+.mobile-drawer .panel-body label.mobile-checkbox-row input[type="checkbox"]:checked::after {
+	content: "";
+	position: absolute;
+	left: 4px;
+	top: 2px;
+	width: 5px;
+	height: 9px;
+	border: solid #fff;
+	border-width: 0 2px 2px 0;
+	transform: rotate(45deg);
+}
+.mobile-drawer .panel-body label.mobile-checkbox-row span {
+	display: block;
+	align-self: center;
+	text-align: left;
+}
+
+/* Brand list: single column and scrollable in mobile drawer */
+.mobile-drawer .panel-body .brand-list,
+.mobile-drawer .panel-body > .brand-list { display:block; }
+
+/* Price slider styles (desktop and mobile) */
+.price-panel { padding: 8px 4px; }
+.price-display { font-weight: 700; margin-bottom: 8px; }
+.price-slider { position: relative; height: 48px; display: block; margin: 6px 4px 10px; }
+
+/* explicit track element filled by the component via [style.background] */
+.slider-track {
+	position: absolute;
+	left: 12px;
+	right: 12px;
+	top: 50%;
+	transform: translateY(-50%);
+	height: 4px;
+	border-radius: 4px;
+	background: #e6e7e9;
+	z-index: 1;
+}
+
+.price-slider input[type="range"] {
+	-webkit-appearance: none;
+	appearance: none;
+	position: absolute;
+	left: 12px;
+	right: 12px;
+	top: 50%;
+	transform: translateY(-50%);
+	height: 24px;
+	margin: 0;
+	padding: 0;
+	background: transparent;
+	touch-action: none;
+}
+.price-slider input[type="range"]::-webkit-slider-runnable-track { height: 4px; background: transparent; }
+.price-slider input[type="range"]::-moz-range-track { height: 4px; background: transparent; }
+.price-slider input[type="range"]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
+	background: #fff;
+	border: 2px solid #0b5ed7;
+	box-shadow: 0 2px 6px rgba(2,6,23,0.12);
+	margin-top: -11px;
+}
+.price-slider input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: #fff; border: 2px solid #0b5ed7; box-shadow: 0 2px 6px rgba(2,6,23,0.12); }
+
+
+
+.ticks { display: flex; justify-content: space-between; gap: 4px; margin-top: 6px; font-size: 12px; color: #64748b; }
+.ticks .tick { flex: 1 1 0; text-align: center; }
+
+/* Mobile touch targets */
+@media (max-width: 900px) {
+	.price-slider input[type="range"]::-webkit-slider-thumb { width: 26px; height: 26px; margin-top: -11px; }
+	.price-slider input[type="range"]::-moz-range-thumb { width: 26px; height: 26px; }
+	.price-display { font-size: 14px; }
+}
+
+/* --- New styling to make the slider look like a single track with two white circular handles --- */
+/* Removed conflicting overlay rules so the original blue slider
+   defined earlier in this file remains authoritative. */
+
+/* Responsive gating: desktop vs mobile explicit rules */
+@media (max-width: 900px) {
+	.filters-topbar { display: none !important; }
+	.mobile-filter-btn { display: inline-flex !important; }
+	/* mobile drawer positioning (mobile-only) */
+	.mobile-drawer { position: fixed; right: 0; top: 0; bottom: 0; z-index: 9999; width: 92%; max-width: 420px; }
+	.drawer-backdrop { position: fixed; inset: 0; z-index: 9998; }
+}
+
+	/* show backdrop on mobile */
+	.filter-backdrop {
+		display: block;
+		position: fixed;
+		left: 0;
+		right: 0;
+		top: 0;
+	}
+
+/* Desktop sidebar styles (when this component is placed inside .filters-sidebar) */
+@media (min-width: 901px) {
+	.desktop-sidebar { display: block; }
+	.desktop-sidebar .filter-header h3 { font-size: 1rem; }
+	// .desktop-sidebar .filter-section { display: flex; flex-direction: column; margin-bottom: 10px; border-bottom: 2px solid var(--border-color, var(--color-border)); }
+	.desktop-sidebar .filter-section {
+		display: flex;
+		flex-direction: column;
+		margin-bottom: 10px;
+		padding-bottom: 10px;
+		position: relative;
+	}
+
+	.desktop-sidebar .filter-section::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 3px;
+		background: var(--border-color, var(--color-border)); /* or var(--border-color) */
+	}
+
+	.desktop-sidebar .filter-section:last-child::after {
+		display: none;
+	}
+	.desktop-sidebar .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+	.desktop-sidebar .chip {
+		padding: 6px 12px;
+		border-radius: 20px;
+		border: 1px solid var(--color-border);
+		background: var(--color-card-bg);
+		cursor: pointer;
+	}
+	.desktop-sidebar .chip.active {
+		background: var(--color-primary);
+		color: var(--color-on-primary, #fff);
+		border-color: var(--color-primary);
+	}
+	/* hide the horizontal topbar when showing desktop sidebar version */
+	.filters-topbar { display: none !important; }
+	.mobile-drawer, .drawer-backdrop { display: none !important; }
+}
+
+/* Category accordion styles */
+.category-section .category-list { display: block; }
+// .category-section .category-item { border-bottom: 1px solid var(--border-color, var(--color-border)); }
+.category-section .category-item {
+    border-bottom: 1px solid var(--border-color, var(--color-border));
+}
+
+.category-section .category-item:last-child {
+    border-bottom: none;
+}
+.category-section .parent {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 12px;
+	cursor: pointer;
+	border-radius: 8px;
+	color: var(--text-color, var(--color-text));
+}
+.category-section .parent.active {
+	background: var(--primary-color, var(--color-primary));
+	color: var(--on-primary-color, var(--color-on-primary, #fff));
+}
+.category-section .parent-left { display: flex; gap: 8px; align-items: center; }
+.category-section .children { padding-left: 12px; padding-bottom: 8px; }
+.category-section .child { padding: 8px 12px; cursor: pointer; }
+.category-section .child label { display: flex; gap: 8px; align-items: center; }
+.category-section .child:hover { background: rgba(0,0,0,0.02); }
+
+/* Make category section fixed height with vertical scroll when overflowing */
+.category-section .category-list {
+	max-height: 280px;
+	overflow-y: auto;
+	padding-right: 6px; /* room for scrollbar */
+}
+.category-section .parent-toggle { font-weight: 700; padding-left: 8px; }
+
+
+/* ensure panel sits above backdrop */
+	.filter-panel { z-index: 1000; }
+
+	/* enlarge tap targets */
+	.chip-btn { height: 40px; padding: 10px 12px; }
+	.panel-row { min-height: 44px; padding: 8px 2px; }
+
+/* ---- Search box styles (used by page but originally adjacent to filters) ---- */
+.search-wrap { display: flex; justify-content: center; margin: 12px 0; }
+.search-box { width: 480px; max-width: 100%; position: relative; }
+.search-input {
+	width: 100%;
+	height: 40px;
+	padding: 8px 36px 8px 12px;
+	border-radius: 10px;
+	border: 1px solid #e6eef6;
+	font-size: 14px;
+	outline: none;
+}
+.search-clear {
+	position: absolute;
+	right: 6px;
+	top: 6px;
+	width: 28px;
+	height: 28px;
+	border-radius: 6px;
+	border: none;
+	background: rgba(2,6,23,0.04);
+	cursor: pointer;
+}
+
+/* ---- Checkbox tweaks: normalize and shrink to 16px, left aligned ---- */
+.filter-panel input[type="checkbox"] {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 16px;
+	height: 16px;
+	border: 1px solid #cbd5e1;
+	border-radius: 3px;
+	background: #fff;
+	display: inline-block;
+	vertical-align: middle;
+	position: relative;
+}
+.filter-panel input[type="checkbox"]:checked {
+	background: #2563eb;
+	border-color: #2563eb;
+}
+.filter-panel input[type="checkbox"]:checked::after {
+	content: "";
+	position: absolute;
+	left: 4px;
+	top: 1px;
+	width: 6px;
+	height: 10px;
+	border-right: 2px solid #fff;
+	border-bottom: 2px solid #fff;
+	transform: rotate(45deg);
+}
+
+/* Align rows: checkbox left, label centered vertically */
+.filter-panel .panel-row { display: flex; align-items: center; gap: 10px; min-height: 36px; }
+.filter-panel .panel-row span { line-height: 1; }
+
+/* Brand grid: 2 columns desktop, 1 on mobile */
+.filter-panel .brand-list { grid-template-columns: 1fr 1fr; }
+@media (max-width: 900px) {
+	.filter-panel .brand-list { grid-template-columns: 1fr; }
+	.search-box { width: 100%; }
+}
+
+/* small muted count next to option labels */
+.filter-count {
+	color: #6b7280;
+	font-size: 12px;
+	margin-left: 6px;
+}
+
+
+/* FORCE correct layering for desktop */
+.price-slider .range-min { z-index: 3 !important; }
+.price-slider .range-max { z-index: 2 !important; }
+.price-slider .range-min.active,
+.price-slider .range-max.active {
+  z-index: 4 !important;
+}
+

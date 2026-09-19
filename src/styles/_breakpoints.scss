@@ -1,0 +1,57 @@
+// =============================================================================
+// BREAKPOINTS - Single Source of Truth
+// =============================================================================
+// Aligned with Bootstrap 5.x breakpoints
+// Used by media query mixins in _media.scss
+
+$breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px
+) !default;
+
+// Helper function to retrieve breakpoint values
+@use 'sass:map';
+@use 'sass:list';
+
+@function breakpoint($key) {
+  @if map.has-key($breakpoints, $key) {
+    @return map.get($breakpoints, $key);
+  }
+  @error "Invalid breakpoint key: '#{$key}'. Valid keys are: #{map.keys($breakpoints)}";
+}
+
+// Helper function to get next breakpoint
+@function breakpoint-next($key) {
+  $keys: map.keys($breakpoints);
+  $index: list.index($keys, $key);
+  
+  @if not $index {
+    @error "Invalid breakpoint key: '#{$key}'. Valid keys are: #{$keys}";
+  }
+  
+  @if $index < list.length($keys) {
+    @return list.nth($keys, $index + 1);
+  }
+  
+  @return null;
+}
+
+// Helper function to get previous breakpoint
+@function breakpoint-prev($key) {
+  $keys: map.keys($breakpoints);
+  $index: list.index($keys, $key);
+  
+  @if not $index {
+    @error "Invalid breakpoint key: '#{$key}'. Valid keys are: #{$keys}";
+  }
+  
+  @if $index > 1 {
+    @return list.nth($keys, $index - 1);
+  }
+  
+  @return null;
+}

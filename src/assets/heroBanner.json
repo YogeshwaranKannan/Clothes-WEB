@@ -1,0 +1,89 @@
+{
+  "products": [
+    {
+      "ProductId": 1,
+      "ProductName": "Trek FX4 Sport 4 (Lithium Grey)",
+      "Brand": "Aire",
+      "Size": "",
+      "Gender": "",
+      "Speed": "",
+      "StockStatus": "","AvilableQty":10,
+      "SellingPrice": "Rs. 148,599.00",
+      "OfferPrice": "Rs. 96,599.00",
+      "DiscountPercent": "35%",
+      "Image": "assets/img/prod/hero1.webp",
+      "Category": {
+        "CategoryId": 6,
+        "CategoryName": "Hybrid Bikes"
+      }
+    },
+    {
+      "ProductId": 2,
+      "ProductName": "Trek Verve 1 Disc (Factory Orange)",
+      "Brand": "Alligator",
+      "Size": "",
+      "Gender": "",
+      "Speed": "",
+      "StockStatus": "","AvilableQty":20,
+      "SellingPrice": "Rs. 48,929.00",
+      "OfferPrice": "Rs. 31,599.00",
+      "DiscountPercent": "35%",
+      "Image": "assets/img/prod/hero2.webp",
+      "Category": {
+        "CategoryId": 6,
+        "CategoryName": "Hybrid Bikes"
+      }
+    },
+    {
+      "ProductId": 3,
+      "ProductName": "Trek Verve 2 Disc Hybrid (Rage Red)",
+      "Brand": "Apace",
+      "Size": "",
+      "Gender": "",
+      "Speed": "",
+      "StockStatus": "","AvilableQty":30,
+      "SellingPrice": "Rs. 56,989.00",
+      "OfferPrice": "Rs. 36,799.00",
+      "DiscountPercent": "35%",
+      "Image": "assets/img/prod/hero1.webp",
+      "Category": {
+        "CategoryId": 6,
+        "CategoryName": "Hybrid Bikes"
+      }
+    },
+    {
+      "ProductId": 4,
+      "ProductName": "Trek Verve 2 Disc Hybrid (Lithium Grey)",
+      "Brand": "ABC",
+      "Size": "",
+      "Gender": "",
+      "Speed": "",
+      "StockStatus": "","AvilableQty":40,
+      "SellingPrice": "Rs. 56,989.00",
+      "OfferPrice": "Rs. 36,799.00",
+      "DiscountPercent": "35%",
+      "Image": "assets/img/prod/hero1.webp",
+      "Category": {
+        "CategoryId": 6,
+        "CategoryName": "Hybrid Bikes"
+      }
+    },
+    {
+      "ProductId": 5,
+      "ProductName": "Giant Revolt 2 (Sapphire)",
+      "Brand": "Abus",
+      "Size": "",
+      "Gender": "",
+      "Speed": "",
+      "StockStatus": "","AvilableQty":50,
+      "SellingPrice": "Rs. 109,999.00",
+      "OfferPrice": "",
+      "DiscountPercent": "",
+      "Image": "assets/img/prod/hero2.webp",
+      "Category": {
+        "CategoryId": 7,
+        "CategoryName": "Gravel Bikes"
+      }
+    }
+  ]
+}

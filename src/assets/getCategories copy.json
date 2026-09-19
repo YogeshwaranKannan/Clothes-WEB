@@ -1,0 +1,204 @@
+{
+  "categories": [
+
+    {
+      "id": "CAT001",
+      "parent": null,
+      "category": "RICE",
+      "children": [
+        { "id": "R001", "category": "TRADITIONAL RICE" },
+        { "id": "R002", "category": "BOILED RICE" },
+        { "id": "R003", "category": "RAW RICE" },
+        { "id": "R004", "category": "BASMATI RICE" },
+        { "id": "R005", "category": "RICE PRODUCTS" }
+      ]
+    },
+
+    {
+      "id": "CAT002",
+      "parent": null,
+      "category": "PULSES & LEGUMES",
+      "children": [
+        { "id": "P001", "category": "WHOLE PULSES" },
+        { "id": "P002", "category": "SPLIT DAL" },
+        { "id": "P003", "category": "PULSE FLOURS" },
+        { "id": "P004", "category": "ROASTED ITEMS" },
+        { "id": "P005", "category": "PULSE PRODUCTS" }
+      ]
+    },
+
+    {
+      "id": "CAT003",
+      "parent": null,
+      "category": "MILLETS",
+      "children": [
+        { "id": "M001", "category": "WHOLE MILLETS" },
+        { "id": "M002", "category": "MILLET FLOURS" },
+        { "id": "M003", "category": "MILLET RAVA / SEMOLINA" },
+        { "id": "M004", "category": "MILLET PRODUCTS" }
+      ]
+    },
+
+    {
+      "id": "CAT004",
+      "parent": null,
+      "category": "FLOURS",
+      "children": [
+        { "id": "F001", "category": "BASIC FLOURS" },
+        { "id": "F002", "category": "MILLET FLOURS" },
+        { "id": "F003", "category": "PULSE FLOURS" },
+        { "id": "F004", "category": "MULTI-GRAIN FLOURS" },
+        { "id": "F005", "category": "READY MIX FLOURS" }
+      ]
+    },
+
+    {
+      "id": "CAT005",
+      "parent": null,
+      "category": "SWEETENERS & SUGARS",
+      "children": [
+        { "id": "S001", "category": "REFINED SUGARS" },
+        { "id": "S002", "category": "TRADITIONAL SWEETENERS" },
+        { "id": "S003", "category": "NATURAL SWEETENERS" },
+        { "id": "S004", "category": "LIQUID SWEETENERS" }
+      ]
+    },
+
+    {
+      "id": "CAT006",
+      "parent": null,
+      "category": "EDIBLE OILS & GHEE",
+      "children": [
+        { "id": "O001", "category": "COOKING OILS" },
+        { "id": "O002", "category": "TRADITIONAL OILS" },
+        { "id": "O003", "category": "GHEE & BUTTER" },
+        { "id": "O004", "category": "SPECIALTY OILS" }
+      ]
+    },
+
+    {
+      "id": "CAT007",
+      "parent": null,
+      "category": "SPICES & MASALAS",
+      "children": [
+        { "id": "SP001", "category": "WHOLE SPICES" },
+        { "id": "SP002", "category": "POWDERED SPICES" },
+        { "id": "SP003", "category": "MASALA MIXES" },
+        { "id": "SP004", "category": "READY PASTE & MIXES" }
+      ]
+    },
+
+    {
+      "id": "CAT008",
+      "parent": null,
+      "category": "DRY FRUITS & NUTS",
+      "children": [
+        { "id": "D001", "category": "DRY FRUITS" },
+        { "id": "D002", "category": "NUTS" },
+        { "id": "D003", "category": "SEEDS" },
+        { "id": "D004", "category": "ROASTED & FLAVORED" }
+      ]
+    },
+
+    {
+      "id": "CAT009",
+      "parent": null,
+      "category": "SNACKS & SAVORIES",
+      "children": [
+        { "id": "SN001", "category": "TRADITIONAL SNACKS" },
+        { "id": "SN002", "category": "PACKAGED SNACKS" },
+        { "id": "SN003", "category": "SWEETS" },
+        { "id": "SN004", "category": "HEALTHY SNACKS" }
+      ]
+    },
+
+    {
+      "id": "CAT010",
+      "parent": null,
+      "category": "INSTANT & READY MIX",
+      "children": [
+        { "id": "I001", "category": "BREAKFAST MIXES" },
+        { "id": "I002", "category": "COOKING MIXES" },
+        { "id": "I003", "category": "READY TO EAT" }
+      ]
+    },
+
+    {
+      "id": "CAT011",
+      "parent": null,
+      "category": "BEVERAGES & HEALTH DRINKS",
+      "children": [
+        { "id": "B001", "category": "TEA & COFFEE" },
+        { "id": "B002", "category": "HEALTH DRINKS" },
+        { "id": "B003", "category": "TRADITIONAL DRINKS" },
+        { "id": "B004", "category": "SOFT DRINKS & JUICES" }
+      ]
+    },
+
+    {
+      "id": "CAT012",
+      "parent": null,
+      "category": "PICKLES & CHUTNEYS",
+      "children": [
+        { "id": "PC001", "category": "PICKLES" },
+        { "id": "PC002", "category": "CHUTNEY POWDERS" },
+        { "id": "PC003", "category": "PASTES & DIPS" }
+      ]
+    },
+
+    {
+      "id": "CAT013",
+      "parent": null,
+      "category": "SALT & ESSENTIALS",
+      "children": [
+        { "id": "SE001", "category": "SALT" },
+        { "id": "SE002", "category": "TAMARIND" },
+        { "id": "SE003", "category": "COOKING ESSENTIALS" }
+      ]
+    },
+
+    {
+      "id": "CAT014",
+      "parent": null,
+      "category": "DAIRY & PRODUCTS",
+      "children": [
+        { "id": "DA001", "category": "MILK" },
+        { "id": "DA002", "category": "CURD & PANEER" },
+        { "id": "DA003", "category": "BUTTER & GHEE" }
+      ]
+    },
+
+    {
+      "id": "CAT015",
+      "parent": null,
+      "category": "HOUSEHOLD & CLEANING",
+      "children": [
+        { "id": "H001", "category": "DETERGENTS" },
+        { "id": "H002", "category": "DISHWASH" },
+        { "id": "H003", "category": "CLEANERS" }
+      ]
+    },
+
+    {
+      "id": "CAT016",
+      "parent": null,
+      "category": "PERSONAL CARE",
+      "children": [
+        { "id": "PC001", "category": "SOAPS & BODY CARE" },
+        { "id": "PC002", "category": "HAIR CARE" },
+        { "id": "PC003", "category": "ORAL CARE" }
+      ]
+    },
+
+    {
+      "id": "CAT017",
+      "parent": null,
+      "category": "POOJA ITEMS",
+      "children": [
+        { "id": "PO001", "category": "AGARBATTI & CAMPHOR" },
+        { "id": "PO002", "category": "Pooja ESSENTIALS" }
+      ]
+    }
+
+  ]
+}

@@ -1,0 +1,1441 @@
+// =============================================================================
+// _theme.scss  —  Global CSS variable tokens + all runtime themes
+// =============================================================================
+//
+//  THEMES (body class → theme name)
+//  ─────────────────────────────────────────────────────────────────────────
+//  :root / (no class)     → Primary / Blue     (default)
+//  body.theme-red         → Red
+//  body.theme-green       → Green
+//  body.theme-dark        → Dark
+//  body.theme-purple      → Purple   (Modern SaaS)
+//  body.theme-orange      → Orange   (Marketplace)
+//  body.theme-teal        → Teal     (Fintech)
+//  body.theme-rose        → Rose     (Elegant / Editorial)
+//  body.theme-slate       → Slate    (Corporate Minimal)
+//  body.theme-midnight    → Midnight (Deep Dark)
+//
+//  All themes are applied purely via CSS custom properties on body.
+//  ThemeService adds/removes the body class — no JS per-component needed.
+// =============================================================================
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RESPONSIVE TYPOGRAPHY  (fluid type scale via clamp())
+// Applied globally; each theme may override --font-* tokens if needed.
+// ─────────────────────────────────────────────────────────────────────────────
+:root {
+  // Font families
+  --font-sans:    'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  --font-serif:  "Playfair Display", serif;
+  // Fluid type scale
+  --text-xs:      clamp(10px, 0.7vw, 12px);
+  --text-sm:      clamp(12px, 0.85vw, 14px);
+  --text-base:    clamp(14px, 1vw,    16px);
+  --text-md:      clamp(15px, 1.1vw,  17px);
+  --text-lg:      clamp(16px, 1.25vw, 20px);
+  --text-xl:      clamp(18px, 1.5vw,  24px);
+  --text-2xl:     clamp(20px, 1.75vw, 28px);
+  --text-3xl:     clamp(22px, 2vw,    32px);
+  --text-4xl:     clamp(24px, 2.5vw,  38px);
+
+  // Line heights
+  --leading-tight:  1.2;
+  --leading-normal: 1.5;
+  --leading-relaxed:1.65;
+
+  // Letter spacing
+  --tracking-tight:  -0.02em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.04em;
+  --tracking-wider:   0.08em;
+  --tracking-widest:  0.12em;
+
+  // Font weights
+  --fw-normal:  400;
+  --fw-medium:  500;
+  --fw-semi:    600;
+  --fw-bold:    700;
+  --fw-black:   800;
+}
+
+// Apply fluid type scale to native elements globally
+html {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1 { font-size: var(--text-4xl); line-height: var(--leading-tight); font-weight: var(--fw-black); letter-spacing: var(--tracking-tight); }
+h2 { font-size: var(--text-3xl); line-height: var(--leading-tight); font-weight: var(--fw-bold); }
+h3 { font-size: var(--text-2xl); line-height: var(--leading-tight); font-weight: var(--fw-bold); }
+h4 { font-size: var(--text-xl);  line-height: var(--leading-normal); font-weight: var(--fw-semi); }
+h5 { font-size: var(--text-lg);  line-height: var(--leading-normal); font-weight: var(--fw-semi); }
+h6 { font-size: var(--text-md);  line-height: var(--leading-normal); font-weight: var(--fw-medium); }
+p, li, td, th, label, span { font-size: var(--text-base); }
+small, .text-sm { font-size: var(--text-sm); }
+caption, .text-xs { font-size: var(--text-xs); }
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DEFAULT  —  PRIMARY (Blue)   :root
+// ─────────────────────────────────────────────────────────────────────────────
+:root {
+  // ── Core palette ──────────────────────────────────────────────────────────
+  --color-primary:       #0b5ed7;
+  --color-primary-hover: #0a51b8;
+  --color-primary-soft:  #dbeafe;
+  --color-primary-rgb:   11, 94, 215;
+  --color-on-primary:    #ffffff;
+  --color-on-discount: #df1e1e;
+
+  // ── Semantic tokens ───────────────────────────────────────────────────────
+  --color-background:    #ffffff;
+  --color-surface:       #f8f9fb;
+  --color-text:          #0b2540;
+  --color-text-muted:    #6c757d;
+  --color-border:        #e6e6e6;
+  --color-label-bg:      #dbeafe;
+  --color-filter-bg:     #f8f9fb;
+  --color-filter-border: #e6e6e6;
+  --color-filter-active: #dbeafe;
+  --color-card-bg:       #ffffff;
+  --color-page-header:   #f0f7ff;
+
+  // ── App tokens (legacy — keep existing code working) ──────────────────────
+  --app-bg:              var(--color-background);
+  --app-surface:         var(--color-surface);
+  --app-text:            var(--color-text);
+  --app-muted:           var(--color-text-muted);
+  --app-border:          var(--color-border);
+  --app-primary:         var(--color-primary);
+  --app-primary-rgb:     var(--color-primary-rgb);
+  --app-on-primary:      var(--color-on-primary);
+  --search-icon-color:   var(--color-primary);
+
+  // ── Navbar ────────────────────────────────────────────────────────────────
+  --nav-bg:              #000000;
+  --nav-foreground:      #ffffff;
+  --nav-hover-background:#FE5915;
+  --nav-hover-foreground:#ffffff;
+  // Legacy compatibility: set a safe default for `--primary-color` so
+  // older components still render when no theme class is present.
+  // Avoid referencing `--color-primary` here to prevent stale bindings
+  // when theme classes (body.theme-*) are toggled at runtime.
+  --primary-color:       #0b5ed7;
+
+  // ── Header ────────────────────────────────────────────────────────────────
+  --header-bg:           var(--color-background);
+  --header-color:        var(--color-primary);
+  --header-border-top:   var(--nav-bg);
+
+  // ── Buttons ───────────────────────────────────────────────────────────────
+  --btn-bg:              var(--color-primary);
+  --btn-color:           #ffffff;
+  --btn-hover-bg:        var(--color-primary-hover);
+  --btn-border:          var(--color-primary);
+
+  // ── Inputs ────────────────────────────────────────────────────────────────
+  --input-bg:            #ffffff;
+  --input-text:          #111827;
+  --input-border:        #d1d5db;
+  --input-border-focus:  var(--color-primary);
+
+  // ── order-history tokens (--oh-*) ─────────────────────────────────────────
+  --oh-text:             #111827;
+  --oh-text-secondary:   #374151;
+  --oh-muted:            #6b7280;
+  --oh-surface:          #ffffff;
+  --oh-heading:          #1a365d;
+  --oh-eyebrow:          #4a90c4;
+  --oh-header-tint-a:    #e8f4fd;
+  --oh-header-tint-b:    #ddeeff;
+  --oh-header-tint-c:    #f0f7ff;
+  --oh-header-border:    rgba(99,163,220,0.18);
+  --oh-header-shadow:    rgba(80,140,200,0.08);
+  --oh-header-dot:       rgba(99,163,220,0.12);
+  --oh-header-glow:      rgba(99,179,237,0.28);
+  --oh-header-divider:   rgba(99,163,220,0.30);
+  --oh-export-bg:        #ffffff;
+  --oh-export-border:    rgba(99,163,220,0.45);
+  --oh-export-hover:     #e8f4fd;
+  --oh-export-active:    #d6eaf8;
+
+  // ── generic-list-filter tokens (--glf-*) ──────────────────────────────────
+  --glf-text-dark:       #0f172a;
+  --glf-text-mid:        #334155;
+  --glf-text-muted:      #64748b;
+  --glf-surface:         #ffffff;
+  --glf-input-bg:        #ffffff;
+  --glf-prefix-bg:       #f8fafc;
+  --glf-border:          rgba(2,6,23,0.07);
+  --glf-panel-border:    rgba(2,6,23,0.08);
+  --glf-input-border:    #e2e8f0;
+  --glf-row-divider:     rgba(2,6,23,0.03);
+  --glf-hover-row:       #f8fafc;
+  --glf-slider-track:    #e6e7e9;
+  --glf-slider-thumb-bg: #ffffff;
+  --glf-btn-bg:          #111111;
+  --glf-btn-color:       #ffffff;
+  --glf-btn-hover-bg:    #000000;
+  --glf-clear-btn-bg:    rgba(2,6,23,0.05);
+  --glf-clear-btn-hover: rgba(2,6,23,0.10);
+  --glf-badge-bg:        #ef4444;
+
+  // ── Hamburger / Bootstrap toggler ─────────────────────────────────────────
+  --hamburger-color:     #ffffff;
+  --hamburger-stroke:    255, 255, 255;
+  --_hamburger-color:    rgb(var(--hamburger-stroke));
+  --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='currentColor' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+
+  // ── Bootstrap overrides ───────────────────────────────────────────────────
+  --bs-body-bg:          var(--color-background);
+  --bs-body-color:       var(--color-text);
+  --bs-body-color-rgb:   11,37,64;
+  --bs-link-color:       var(--color-primary);
+  --bs-card-bg:          var(--color-surface);
+  --bs-border-color:     var(--color-border);
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// GLOBAL RULES
+// ─────────────────────────────────────────────────────────────────────────────
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.navbar-toggler .navbar-toggler-icon {
+  background-image: var(--bs-navbar-toggler-icon-bg) !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 100% !important;
+  color: var(--_hamburger-color) !important;
+}
+
+.btn-primary {
+  background-color: var(--btn-bg) !important;
+  border-color: var(--btn-border) !important;
+  color: var(--btn-color) !important;
+}
+.btn-primary:hover {
+  background-color: var(--btn-hover-bg) !important;
+  border-color: var(--btn-hover-bg) !important;
+}
+
+input, select, textarea {
+  background: var(--input-bg);
+  color: var(--input-text);
+  border-color: var(--input-border);
+  transition: background 0.25s ease, border-color 0.15s;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--input-border-focus);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.20);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// [data-theme='dark']  — legacy support
+// ─────────────────────────────────────────────────────────────────────────────
+[data-theme='dark'] {
+  --_hamburger-color: rgb(var(--hamburger-stroke));
+  --app-bg:           #071021;
+  --app-surface:      #0b1220;
+  --app-text:         #e6eef8;
+  --app-muted:        #9fb0c8;
+  --app-border:       rgba(255,255,255,0.06);
+  --app-primary:      #3aa0ff;
+  --app-primary-rgb:  58,160,255;
+  --search-icon-color:#ff4d4f;
+  --nav-bg:           #ffffff;
+  --nav-foreground:   #000000;
+  --hamburger-color:  #000000;
+  --hamburger-stroke: 0,0,0;
+  --nav-hover-background:#FE5915;
+  --nav-hover-foreground:#000000;
+  --app-on-primary:   #ffffff;
+  --bs-body-bg:       var(--app-bg);
+  --bs-body-color:    var(--app-text);
+  --bs-body-color-rgb:230,238,248;
+  --bs-link-color:    var(--app-primary);
+  --bs-card-bg:       var(--app-surface);
+  --bs-border-color:  var(--app-border);
+}
+
+
+// ═════════════════════════════════════════════════════════════════════════════
+// THEME  2 / 4  — GREEN
+// ═════════════════════════════════════════════════════════════════════════════
+body.theme-green {
+  /* Map legacy primary tokens inside the theme scope so components
+     using --primary-color update correctly when the body class changes. */
+  --primary-color: var(--color-primary);
+  --primary-dark:  var(--color-primary-hover);
+  --primary-light: var(--color-primary-soft);
+  --color-primary:       #15803d;
+  --bs-border-color:     var(--color-primary);
+  --color-primary-hover: #16a34a;
+  --color-primary-soft:  #dcfce7;
+  --color-primary-rgb:   22,163,74;
+  //--color-on-primary:    #ffffff;
+  //--color-background:    #f0fdf4;
+   --font-family-title: var(--font-serif);
+  --color-background:    #fcfcfc;
+  --color-surface:       #dcfce7;
+  --color-text:          #052e16;
+  --color-text-muted:    #6b8f72;
+  --color-border:        #86efac;
+  --color-label-bg:      #dcfce7;
+  --color-filter-bg:     #dcfce7;
+  --color-filter-border: #86efac;
+  --color-filter-active: #dcfce7;
+  --color-card-bg:       #ECEDEE;
+  --color-page-header:   #dcfce7;
+  --app-bg:              var(--color-background);
+  --app-surface:         var(--color-surface);
+  --app-text:            var(--color-text);
+  --app-muted:           var(--color-text-muted);
+  --app-border:          var(--color-border);
+  --app-primary:         var(--color-primary);
+  --app-primary-rgb:     var(--color-primary-rgb);
+  --nav-bg:              #14532d;
+  --nav-foreground:      #ffffff;
+  --nav-hover-background:#16a34a;
+  --nav-hover-foreground:#ffffff;
+  --header-bg:           var(--color-background);
+  --header-color:        var(--color-background);
+  --header-border-top:   var(--nav-bg);
+  --btn-bg:              var(--color-primary);
+  --btn-hover-bg:        var(--color-primary-hover);
+  --input-border-focus:  var(--color-primary);
+   
+  --oh-text:             #052e16;
+  --oh-text-secondary:   #14532d;
+  --oh-muted:            #6b8f72;
+  --oh-surface:          #f0fdf4;
+  --oh-heading:          #14532d;
+  --oh-eyebrow:          #16a34a;
+  --oh-header-tint-a:    #f0fdf4;
+  --oh-header-tint-b:    #dcfce7;
+  --oh-header-tint-c:    #f7fef9;
+  --oh-header-border:    rgba(22,163,74,0.18);
+  --oh-header-shadow:    rgba(21,128,61,0.08);
+  --oh-header-dot:       rgba(22,163,74,0.10);
+  --oh-header-glow:      rgba(74,222,128,0.28);
+  --oh-header-divider:   rgba(22,163,74,0.25);
+  --oh-export-bg:        #f0fdf4;
+  --oh-export-border:    rgba(22,163,74,0.35);
+  --oh-export-hover:     #dcfce7;
+  --oh-export-active:    #bbf7d0;
+  --glf-text-dark:       #052e16;
+  --glf-text-mid:        #14532d;
+  --glf-text-muted:      #6b8f72;
+  --glf-surface:         #f0fdf4;
+  --glf-input-bg:        #f0fdf4;
+  --glf-prefix-bg:       #dcfce7;
+  --glf-border:          rgba(22,163,74,0.10);
+  --glf-panel-border:    rgba(22,163,74,0.13);
+  --glf-input-border:    #86efac;
+  --glf-row-divider:     rgba(22,163,74,0.05);
+  --glf-hover-row:       #dcfce7;
+  --glf-slider-track:    #bbf7d0;
+  --glf-slider-thumb-bg: #ffffff;
+  --glf-btn-bg:          #14532d;
+  --glf-btn-color:       #ffffff;
+  --glf-btn-hover-bg:    #0a2f19;
+  --glf-clear-btn-bg:    rgba(22,163,74,0.06);
+  --glf-clear-btn-hover: rgba(22,163,74,0.12);
+  --glf-badge-bg:        #16a34a;
+  --hamburger-stroke:    255,255,255;
+  --_hamburger-color:    rgb(var(--hamburger-stroke));
+  --bs-body-bg:          var(--color-background);
+  --bs-body-color:       var(--color-text);
+  --bs-body-color-rgb:   5,46,22;
+  --bs-link-color:       var(--color-primary);
+  --bs-card-bg:          var(--color-surface);
+ 
+  --search-icon-color:   var(--color-primary);
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// THEME  1 / 4  — RED
+// ═════════════════════════════════════════════════════════════════════════════
+body.theme-red {
+  /* Map legacy primary tokens inside the theme scope so components
+     using --primary-color update correctly when the body class changes. */
+  --primary-color: var(--color-primary);
+  --primary-dark:  var(--color-primary-hover);
+  --primary-light: var(--color-primary-soft);
+  --color-primary:       #dc2626;
+  --color-primary-hover: #b91c1c;
+  --color-primary-soft:  #fee2e2;
+  --color-primary-rgb:   220,38,38;
+  --color-on-primary:    #ffffff;
+  --color-background:    #fff8f8;
+  --color-surface:       #fff1f1;
+  --color-text:          #3b0a0a;
+  --color-text-muted:    #9b6b6b;
+  --color-border:        #fca5a5;
+  --color-label-bg:      #fee2e2;
+  --color-filter-bg:     #fff1f1;
+  --color-filter-border: #fca5a5;
+  --color-filter-active: #fee2e2;
+  --color-card-bg:       #fff8f8;
+  --color-page-header:   #fff1f1;
+  --app-bg:              var(--color-background);
+  --app-surface:         var(--color-surface);
+  --app-text:            var(--color-text);
+  --app-muted:           var(--color-text-muted);
+  --app-border:          var(--color-border);
+  --app-primary:         var(--color-primary);
+  --app-primary-rgb:     var(--color-primary-rgb);
+  --nav-bg:              #7f1d1d;
+  --nav-foreground:      #ffffff;
+  --nav-hover-background:#dc2626;
+  --nav-hover-foreground:#ffffff;
+  --header-bg:           var(--color-background);
+  --header-color:        var(--color-primary);
+  --header-border-top:   var(--nav-bg);
+  --btn-bg:              var(--color-primary);
+  --btn-hover-bg:        var(--color-primary-hover);
+  --input-border-focus:  var(--color-primary);
+  --oh-text:             #3b0a0a;
+  --oh-text-secondary:   #7f1d1d;
+  --oh-muted:            #9b6464;
+  --oh-surface:          #fff8f8;
+  --oh-heading:          #7f1d1d;
+  --oh-eyebrow:          #dc2626;
+  --oh-header-tint-a:    #fef2f2;
+  --oh-header-tint-b:    #fee2e2;
+  --oh-header-tint-c:    #fff5f5;
+  --oh-header-border:    rgba(220,38,38,0.18);
+  --oh-header-shadow:    rgba(185,28,28,0.08);
+  --oh-header-dot:       rgba(220,38,38,0.10);
+  --oh-header-glow:      rgba(248,113,113,0.28);
+  --oh-header-divider:   rgba(220,38,38,0.25);
+  --oh-export-bg:        #fff8f8;
+  --oh-export-border:    rgba(220,38,38,0.35);
+  --oh-export-hover:     #fee2e2;
+  --oh-export-active:    #fecaca;
+  --glf-text-dark:       #3b0a0a;
+  --glf-text-mid:        #7f1d1d;
+  --glf-text-muted:      #9b6464;
+  --glf-surface:         #fff8f8;
+  --glf-input-bg:        #fff8f8;
+  --glf-prefix-bg:       #fff1f1;
+  --glf-border:          rgba(220,38,38,0.10);
+  --glf-panel-border:    rgba(220,38,38,0.13);
+  --glf-input-border:    #fca5a5;
+  --glf-row-divider:     rgba(220,38,38,0.05);
+  --glf-hover-row:       #fee2e2;
+  --glf-slider-track:    #fecaca;
+  --glf-slider-thumb-bg: #ffffff;
+  --glf-btn-bg:          #7f1d1d;
+  --glf-btn-color:       #ffffff;
+  --glf-btn-hover-bg:    #5c0f0f;
+  --glf-clear-btn-bg:    rgba(220,38,38,0.06);
+  --glf-clear-btn-hover: rgba(220,38,38,0.12);
+  --glf-badge-bg:        #dc2626;
+  --hamburger-stroke:    255,255,255;
+  --_hamburger-color:    rgb(var(--hamburger-stroke));
+  --bs-body-bg:          var(--color-background);
+  --bs-body-color:       var(--color-text);
+  --bs-body-color-rgb:   59,10,10;
+  --bs-link-color:       var(--color-primary);
+  --bs-card-bg:          var(--color-surface);
+  --bs-border-color:     var(--color-border);
+  --search-icon-color:   var(--color-primary);
+}
+// ═════════════════════════════════════════════════════════════════════════════
+// THEME  3 / 4  — DARK
+// ═════════════════════════════════════════════════════════════════════════════
+body.theme-dark {
+  /* Map legacy primary tokens inside the theme scope so components
+     using --primary-color update correctly when the body class changes. */
+  --primary-color: var(--color-primary);
+  --primary-dark:  var(--color-primary-hover);
+  --primary-light: var(--color-primary-soft);
+  --color-primary:       #3aa0ff;
+  --color-primary-hover: #2389e8;
+  --color-primary-soft:  #1e3a5f;
+  --color-primary-rgb:   58,160,255;
+  --color-on-primary:    #071021;
+  --color-background:    #071021;
+  --color-surface:       #0b1a2e;
+  --color-text:          #e6eef8;
+  --color-text-muted:    #9fb0c8;
+  --color-border:        rgba(255,255,255,0.08);
+  --color-label-bg:      #1e3a5f;
+  --color-filter-bg:     #0b1a2e;
+  --color-filter-border: rgba(58,160,255,0.20);
+  --color-filter-active: #1e3a5f;
+  --color-card-bg:       #0b1a2e;
+  --color-page-header:   #0d1f38;
+  --app-bg:              var(--color-background);
+  --app-surface:         var(--color-surface);
+  --app-text:            var(--color-text);
+  --app-muted:           var(--color-text-muted);
+  --app-border:          var(--color-border);
+  --app-primary:         var(--color-primary);
+  --app-primary-rgb:     var(--color-primary-rgb);
+  --nav-bg:              #0d1f38;
+  --nav-foreground:      #e6eef8;
+  --nav-hover-background:#1e3a5f;
+  --nav-hover-foreground:#ffffff;
+  --header-bg:           #0b1a2e;
+  --header-color:        var(--color-primary);
+  --header-border-top:   var(--nav-bg);
+  --btn-bg:              var(--color-primary);
+  --btn-color:           #071021;
+  --btn-hover-bg:        var(--color-primary-hover);
+  --input-bg:            #0d1f38;
+  --input-text:          #e6eef8;
+  --input-border:        rgba(255,255,255,0.15);
+  --input-border-focus:  var(--color-primary);
+  --oh-text:             #e6eef8;
+  --oh-text-secondary:   #9fb0c8;
+  --oh-muted:            #6b85a1;
+  --oh-surface:          #0b1a2e;
+  --oh-heading:          #e6eef8;
+  --oh-eyebrow:          #3aa0ff;
+  --oh-header-tint-a:    #0d1f38;
+  --oh-header-tint-b:    #0f2544;
+  --oh-header-tint-c:    #091629;
+  --oh-header-border:    rgba(58,160,255,0.15);
+  --oh-header-shadow:    rgba(0,0,0,0.30);
+  --oh-header-dot:       rgba(58,160,255,0.08);
+  --oh-header-glow:      rgba(58,160,255,0.20);
+  --oh-header-divider:   rgba(58,160,255,0.20);
+  --oh-export-bg:        #0d1f38;
+  --oh-export-border:    rgba(58,160,255,0.30);
+  --oh-export-hover:     #1e3a5f;
+  --oh-export-active:    #163050;
+  --glf-text-dark:       #e6eef8;
+  --glf-text-mid:        #9fb0c8;
+  --glf-text-muted:      #6b85a1;
+  --glf-surface:         #0b1a2e;
+  --glf-input-bg:        #0d1f38;
+  --glf-prefix-bg:       #071021;
+  --glf-border:          rgba(58,160,255,0.12);
+  --glf-panel-border:    rgba(58,160,255,0.15);
+  --glf-input-border:    rgba(255,255,255,0.15);
+  --glf-row-divider:     rgba(255,255,255,0.04);
+  --glf-hover-row:       #1e3a5f;
+  --glf-slider-track:    #1e3a5f;
+  --glf-slider-thumb-bg: #0b1a2e;
+  --glf-btn-bg:          #1e3a5f;
+  --glf-btn-color:       #e6eef8;
+  --glf-btn-hover-bg:    #163050;
+  --glf-clear-btn-bg:    rgba(58,160,255,0.08);
+  --glf-clear-btn-hover: rgba(58,160,255,0.16);
+  --glf-badge-bg:        #3aa0ff;
+  --hamburger-stroke:    230,238,248;
+  --_hamburger-color:    rgb(var(--hamburger-stroke));
+  --bs-body-bg:          var(--color-background);
+  --bs-body-color:       var(--color-text);
+  --bs-body-color-rgb:   230,238,248;
+  --bs-link-color:       var(--color-primary);
+  --bs-card-bg:          var(--color-surface);
+  --bs-border-color:     var(--color-border);
+  --search-icon-color:   var(--color-primary);
+}
+
+
+// ═════════════════════════════════════════════════════════════════════════════
+// THEME  5 / 10  — PURPLE  (Modern SaaS)
+// ═════════════════════════════════════════════════════════════════════════════
+body.theme-purple {
+  /* Map legacy primary tokens inside the theme scope so components
+     using --primary-color update correctly when the body class changes. */
+  --primary-color: var(--color-primary);
+  --primary-dark:  var(--color-primary-hover);
+  --primary-light: var(--color-primary-soft);
+  --color-primary:       #7c3aed;
+  --color-primary-hover: #6d28d9;
+  --color-primary-soft:  #ede9fe;
+  --color-primary-rgb:   124,58,237;
+  --color-on-primary:    #ffffff;
+  --color-background:    #faf9ff;
+  --color-surface:       #f3f0ff;
+  --color-text:          #1e1148;
+  --color-text-muted:    #7c6f9e;
+  --color-border:        #c4b5fd;
+  --color-label-bg:      #ede9fe;
+  --color-filter-bg:     #f3f0ff;
+  --color-filter-border: #c4b5fd;
+  --color-filter-active: #ede9fe;
+  --color-card-bg:       #faf9ff;
+  --color-page-header:   #f3f0ff;
+  --app-bg:              var(--color-background);
+  --app-surface:         var(--color-surface);
+  --app-text:            var(--color-text);
+  --app-muted:           var(--color-text-muted);
+  --app-border:          var(--color-border);
+  --app-primary:         var(--color-primary);
+  --app-primary-rgb:     var(--color-primary-rgb);
+  --nav-bg:              #3b1a8a;
+  --nav-foreground:      #f3f0ff;
+  --nav-hover-background:#7c3aed;
+  --nav-hover-foreground:#ffffff;
+  --header-bg:           var(--color-background);
+  --header-color:        var(--color-primary);
+  --header-border-top:   var(--nav-bg);
+  --btn-bg:              var(--color-primary);
+  --btn-hover-bg:        var(--color-primary-hover);
+  --input-bg:            #faf9ff;
+  --input-text:          #1e1148;
+  --input-border:        #c4b5fd;
+  --input-border-focus:  var(--color-primary);
+  --oh-text:             #1e1148;
+  --oh-text-secondary:   #4c1d95;
+  --oh-muted:            #7c6f9e;
+  --oh-surface:          #faf9ff;
+  --oh-heading:          #2e1065;
+  --oh-eyebrow:          #7c3aed;
+  --oh-header-tint-a:    #f5f3ff;
+  --oh-header-tint-b:    #ede9fe;
+  --oh-header-tint-c:    #faf9ff;
+  --oh-header-border:    rgba(124,58,237,0.18);
+  --oh-header-shadow:    rgba(109,40,217,0.08);
+  --oh-header-dot:       rgba(124,58,237,0.10);
+  --oh-header-glow:      rgba(167,139,250,0.30);
+  --oh-header-divider:   rgba(124,58,237,0.22);
+  --oh-export-bg:        #faf9ff;
+  --oh-export-border:    rgba(124,58,237,0.35);
+  --oh-export-hover:     #ede9fe;
+  --oh-export-active:    #ddd6fe;
+  --glf-text-dark:       #1e1148;
+  --glf-text-mid:        #4c1d95;
+  --glf-text-muted:      #7c6f9e;
+  --glf-surface:         #faf9ff;
+  --glf-input-bg:        #faf9ff;
+  --glf-prefix-bg:       #f3f0ff;
+  --glf-border:          rgba(124,58,237,0.10);
+  --glf-panel-border:    rgba(124,58,237,0.13);
+  --glf-input-border:    #c4b5fd;
+  --glf-row-divider:     rgba(124,58,237,0.05);
+  --glf-hover-row:       #ede9fe;
+  --glf-slider-track:    #ddd6fe;
+  --glf-slider-thumb-bg: #ffffff;
+  --glf-btn-bg:          #3b1a8a;
+  --glf-btn-color:       #ffffff;
+  --glf-btn-hover-bg:    #2d1270;
+  --glf-clear-btn-bg:    rgba(124,58,237,0.06);
+  --glf-clear-btn-hover: rgba(124,58,237,0.12);
+  --glf-badge-bg:        #7c3aed;
+  --hamburger-stroke:    243,240,255;
+  --_hamburger-color:    rgb(var(--hamburger-stroke));
+  --bs-body-bg:          var(--color-background);
+  --bs-body-color:       var(--color-text);
+  --bs-body-color-rgb:   30,17,72;
+  --bs-link-color:       var(--color-primary);
+  --bs-card-bg:          var(--color-surface);
+  --bs-border-color:     var(--color-border);
+  --search-icon-color:   var(--color-primary);
+}
+
+
+// ═════════════════════════════════════════════════════════════════════════════
+// THEME  6 / 10  — ORANGE  (Marketplace Style)
+// ═════════════════════════════════════════════════════════════════════════════
+body.theme-orange {
+  /* Map legacy primary tokens inside the theme scope so components
+     using --primary-color update correctly when the body class changes. */
+  --primary-color: var(--color-primary);
+  --primary-dark:  var(--color-primary-hover);
+  --primary-light: var(--color-primary-soft);
+  --color-primary:       #ea580c;
+  --color-primary-hover: #c2410c;
+  --color-primary-soft:  #ffedd5;
+  --color-primary-rgb:   234,88,12;
+  --color-on-primary:    #ffffff;
+  //--color-background:    #fffbf7;
+  --color-background:    #fff;
+  --color-surface:       #fff7ed;
+  --color-text:          #431407;
+  --color-text-muted:    #9a6040;
+  --color-border:        #fdba74;
+  --color-label-bg:      #ffedd5;
+  --color-filter-bg:     #fff7ed;
+  --color-filter-border: #fdba74;
+  --color-filter-active: #ffedd5;
+  --color-card-bg:       #fffbf7;
+  --color-page-header:   #fff7ed;
+  --app-bg:              var(--color-background);
+  --app-surface:         var(--color-surface);
+  --app-text:            var(--color-text);
+  --app-muted:           var(--color-text-muted);
+  --app-border:          var(--color-border);
+  --app-primary:         var(--color-primary);
+  --app-primary-rgb:     var(--color-primary-rgb);
+  --nav-bg:              #7c2d12;
+  --nav-foreground:      #fff7ed;
+  --nav-hover-background:#ea580c;
+  --nav-hover-foreground:#ffffff;
+  --header-bg:           var(--color-background);
+  --header-color:        var(--color-primary);
+  --header-border-top:   var(--nav-bg);
+  --btn-bg:              var(--color-primary);
+  --btn-hover-bg:        var(--color-primary-hover);
+  --input-bg:            #fffbf7;
+  --input-text:          #431407;
+  --input-border:        #fdba74;
+  --input-border-focus:  var(--color-primary);
+  --oh-text:             #431407;
+  --oh-text-secondary:   #7c2d12;
+  --oh-muted:            #9a6040;
+  --oh-surface:          #fffbf7;
+  --oh-heading:          #7c2d12;
+  --oh-eyebrow:          #ea580c;
+  --oh-header-tint-a:    #fff7ed;
+  --oh-header-tint-b:    #ffedd5;
+  --oh-header-tint-c:    #fffbf7;
+  --oh-header-border:    rgba(234,88,12,0.18);
+  --oh-header-shadow:    rgba(194,65,12,0.08);
+  --oh-header-dot:       rgba(234,88,12,0.10);
+  --oh-header-glow:      rgba(251,146,60,0.30);
+  --oh-header-divider:   rgba(234,88,12,0.22);
+  --oh-export-bg:        #fffbf7;
+  --oh-export-border:    rgba(234,88,12,0.35);
+  --oh-export-hover:     #ffedd5;
+  --oh-export-active:    #fed7aa;
+  --glf-text-dark:       #431407;
+  --glf-text-mid:        #7c2d12;
+  --glf-text-muted:      #9a6040;
+  --glf-surface:         #fffbf7;
+  --glf-input-bg:        #fffbf7;
+  --glf-prefix-bg:       #fff7ed;
+  --glf-border:          rgba(234,88,12,0.10);
+  --glf-panel-border:    rgba(234,88,12,0.13);
+  --glf-input-border:    #fdba74;
+  --glf-row-divider:     rgba(234,88,12,0.05);
+  --glf-hover-row:       #ffedd5;
+  --glf-slider-track:    #fed7aa;
+  --glf-slider-thumb-bg: #ffffff;
+  --glf-btn-bg:          #7c2d12;
+  --glf-btn-color:       #ffffff;
+  --glf-btn-hover-bg:    #5c1a08;
+  --glf-clear-btn-bg:    rgba(234,88,12,0.06);
+  --glf-clear-btn-hover: rgba(234,88,12,0.12);
+  --glf-badge-bg:        #ea580c;
+  --hamburger-stroke:    255,247,237;
+  --_hamburger-color:    rgb(var(--hamburger-stroke));
+  --bs-body-bg:          var(--color-background);
+  --bs-body-color:       var(--color-text);
+  --bs-body-color-rgb:   67,20,7;
+  --bs-link-color:       var(--color-primary);
+  --bs-card-bg:          var(--color-surface);
+  --bs-border-color:     var(--color-border);
+  --search-icon-color:   var(--color-primary);
+}
+
+
+// ═════════════════════════════════════════════════════════════════════════════
+// THEME  7 / 10  — TEAL  (Fintech Style)
+// ═════════════════════════════════════════════════════════════════════════════
+body.theme-teal {
+  /* Map legacy primary tokens inside the theme scope so components
+     using --primary-color update correctly when the body class changes. */
+  --primary-color: var(--color-primary);
+  --primary-dark:  var(--color-primary-hover);
+  --primary-light: var(--color-primary-soft);
+  --color-primary:       #0f766e;
+  --color-primary-hover: #115e59;
+  --color-primary-soft:  #ccfbf1;
+  --color-primary-rgb:   15,118,110;
+  --color-on-primary:    #ffffff;
+  --color-background:    #f0fdfa;
+  --color-surface:       #ccfbf1;
+  --color-text:          #042f2e;
+  --color-text-muted:    #5e8c87;
+  --color-border:        #5eead4;
+  --color-label-bg:      #ccfbf1;
+  --color-filter-bg:     #ccfbf1;
+  --color-filter-border: #5eead4;
+  --color-filter-active: #ccfbf1;
+  --color-card-bg:       #f0fdfa;
+  --color-page-header:   #ccfbf1;
+  --app-bg:              var(--color-background);
+  --app-surface:         var(--color-surface);
+  --app-text:            var(--color-text);
+  --app-muted:           var(--color-text-muted);
+  --app-border:          var(--color-border);
+  --app-primary:         var(--color-primary);
+  --app-primary-rgb:     var(--color-primary-rgb);
+  --nav-bg:              #042f2e;
+  --nav-foreground:      #ccfbf1;
+  --nav-hover-background:#0f766e;
+  --nav-hover-foreground:#ffffff;
+  --header-bg:           var(--color-background);
+  --header-color:        var(--color-primary);
+  --header-border-top:   var(--nav-bg);
+  --btn-bg:              var(--color-primary);
+  --btn-hover-bg:        var(--color-primary-hover);
+  --input-bg:            #f0fdfa;
+  --input-text:          #042f2e;
+  --input-border:        #5eead4;
+  --input-border-focus:  var(--color-primary);
+  --oh-text:             #042f2e;
+  --oh-text-secondary:   #115e59;
+  --oh-muted:            #5e8c87;
+  --oh-surface:          #f0fdfa;
+  --oh-heading:          #042f2e;
+  --oh-eyebrow:          #0f766e;
+  --oh-header-tint-a:    #f0fdfa;
+  --oh-header-tint-b:    #ccfbf1;
+  --oh-header-tint-c:    #f0fdfa;
+  --oh-header-border:    rgba(15,118,110,0.18);
+  --oh-header-shadow:    rgba(17,94,89,0.08);
+  --oh-header-dot:       rgba(15,118,110,0.10);
+  --oh-header-glow:      rgba(45,212,191,0.30);
+  --oh-header-divider:   rgba(15,118,110,0.22);
+  --oh-export-bg:        #f0fdfa;
+  --oh-export-border:    rgba(15,118,110,0.35);
+  --oh-export-hover:     #ccfbf1;
+  --oh-export-active:    #99f6e4;
+  --glf-text-dark:       #042f2e;
+  --glf-text-mid:        #115e59;
+  --glf-text-muted:      #5e8c87;
+  --glf-surface:         #f0fdfa;
+  --glf-input-bg:        #f0fdfa;
+  --glf-prefix-bg:       #ccfbf1;
+  --glf-border:          rgba(15,118,110,0.10);
+  --glf-panel-border:    rgba(15,118,110,0.13);
+  --glf-input-border:    #5eead4;
+  --glf-row-divider:     rgba(15,118,110,0.05);
+  --glf-hover-row:       #ccfbf1;
+  --glf-slider-track:    #99f6e4;
+  --glf-slider-thumb-bg: #ffffff;
+  --glf-btn-bg:          #042f2e;
+  --glf-btn-color:       #ccfbf1;
+  --glf-btn-hover-bg:    #021c1b;
+  --glf-clear-btn-bg:    rgba(15,118,110,0.06);
+  --glf-clear-btn-hover: rgba(15,118,110,0.12);
+  --glf-badge-bg:        #0f766e;
+  --hamburger-stroke:    204,251,241;
+  --_hamburger-color:    rgb(var(--hamburger-stroke));
+  --bs-body-bg:          var(--color-background);
+  --bs-body-color:       var(--color-text);
+  --bs-body-color-rgb:   4,47,46;
+  --bs-link-color:       var(--color-primary);
+  --bs-card-bg:          var(--color-surface);
+  --bs-border-color:     var(--color-border);
+  --search-icon-color:   var(--color-primary);
+}
+
+
+// ═════════════════════════════════════════════════════════════════════════════
+// THEME  8 / 10  — ROSE  (Elegant / Editorial)
+// Typography: high-contrast warm black on cream, rose accent
+// ═════════════════════════════════════════════════════════════════════════════
+body.theme-rose {
+  /* Map legacy primary tokens inside the theme scope so components
+     using --primary-color update correctly when the body class changes. */
+  --primary-color: var(--color-primary);
+  --primary-dark:  var(--color-primary-hover);
+  --primary-light: var(--color-primary-soft);
+  --color-primary:       #e11d48;
+  --color-primary-hover: #be123c;
+  --color-primary-soft:  #ffe4e6;
+  --color-primary-rgb:   225,29,72;
+  --color-on-primary:    #ffffff;
+  --color-background:    #fef6f7;
+  --color-surface:       #fce7f3;
+  --color-text:          #1f0a12;
+  --color-text-muted:    #9d6070;
+  --color-border:        #fbcfe8;
+  --color-label-bg:      #ffe4e6;
+  --color-filter-bg:     #fce7f3;
+  --color-filter-border: #fbcfe8;
+  --color-filter-active: #ffe4e6;
+  --color-card-bg:       #fef6f7;
+  --color-page-header:   #fce7f3;
+  // Elegant type scale override — slightly increased for editorial feel
+  --text-base:    clamp(14px, 1.05vw, 16.5px);
+  --leading-normal: 1.65;
+  --tracking-normal: 0.01em;
+  --app-bg:              var(--color-background);
+  --app-surface:         var(--color-surface);
+  --app-text:            var(--color-text);
+  --app-muted:           var(--color-text-muted);
+  --app-border:          var(--color-border);
+  --app-primary:         var(--color-primary);
+  --app-primary-rgb:     var(--color-primary-rgb);
+  --nav-bg:              #881337;
+  --nav-foreground:      #fce7f3;
+  --nav-hover-background:#e11d48;
+  --nav-hover-foreground:#ffffff;
+  --header-bg:           var(--color-background);
+  --header-color:        var(--color-primary);
+  --header-border-top:   var(--nav-bg);
+  --btn-bg:              var(--color-primary);
+  --btn-hover-bg:        var(--color-primary-hover);
+  --input-bg:            #fef6f7;
+  --input-text:          #1f0a12;
+  --input-border:        #fbcfe8;
+  --input-border-focus:  var(--color-primary);
+  --oh-text:             #1f0a12;
+  --oh-text-secondary:   #881337;
+  --oh-muted:            #9d6070;
+  --oh-surface:          #fef6f7;
+  --oh-heading:          #881337;
+  --oh-eyebrow:          #e11d48;
+  --oh-header-tint-a:    #fff1f2;
+  --oh-header-tint-b:    #ffe4e6;
+  --oh-header-tint-c:    #fef6f7;
+  --oh-header-border:    rgba(225,29,72,0.15);
+  --oh-header-shadow:    rgba(190,18,60,0.07);
+  --oh-header-dot:       rgba(225,29,72,0.09);
+  --oh-header-glow:      rgba(251,113,133,0.28);
+  --oh-header-divider:   rgba(225,29,72,0.20);
+  --oh-export-bg:        #fef6f7;
+  --oh-export-border:    rgba(225,29,72,0.30);
+  --oh-export-hover:     #ffe4e6;
+  --oh-export-active:    #fecdd3;
+  --glf-text-dark:       #1f0a12;
+  --glf-text-mid:        #881337;
+  --glf-text-muted:      #9d6070;
+  --glf-surface:         #fef6f7;
+  --glf-input-bg:        #fef6f7;
+  --glf-prefix-bg:       #fce7f3;
+  --glf-border:          rgba(225,29,72,0.10);
+  --glf-panel-border:    rgba(225,29,72,0.13);
+  --glf-input-border:    #fbcfe8;
+  --glf-row-divider:     rgba(225,29,72,0.05);
+  --glf-hover-row:       #ffe4e6;
+  --glf-slider-track:    #fecdd3;
+  --glf-slider-thumb-bg: #ffffff;
+  --glf-btn-bg:          #881337;
+  --glf-btn-color:       #ffffff;
+  --glf-btn-hover-bg:    #5c0c26;
+  --glf-clear-btn-bg:    rgba(225,29,72,0.06);
+  --glf-clear-btn-hover: rgba(225,29,72,0.12);
+  --glf-badge-bg:        #e11d48;
+  --hamburger-stroke:    252,231,243;
+  --_hamburger-color:    rgb(var(--hamburger-stroke));
+  --bs-body-bg:          var(--color-background);
+  --bs-body-color:       var(--color-text);
+  --bs-body-color-rgb:   31,10,18;
+  --bs-link-color:       var(--color-primary);
+  --bs-card-bg:          var(--color-surface);
+  --bs-border-color:     var(--color-border);
+  --search-icon-color:   var(--color-primary);
+}
+
+
+// ═════════════════════════════════════════════════════════════════════════════
+// THEME  9 / 10  — SLATE  (Corporate Minimal)
+// Typography: tight, crisp, high-legibility — ideal for dense data UIs
+// ═════════════════════════════════════════════════════════════════════════════
+body.theme-slate {
+  /* Map legacy primary tokens inside the theme scope so components
+     using --primary-color update correctly when the body class changes. */
+  --primary-color: var(--color-primary);
+  --primary-dark:  var(--color-primary-hover);
+  --primary-light: var(--color-primary-soft);
+  --color-primary:       #475569;
+  --color-primary-hover: #334155;
+  --color-primary-soft:  #f1f5f9;
+  --color-primary-rgb:   71,85,105;
+  --color-on-primary:    #ffffff;
+  --color-background:    #f8fafc;
+  --color-surface:       #f1f5f9;
+  --color-text:          #0f172a;
+  --color-text-muted:    #64748b;
+  --color-border:        #cbd5e1;
+  --color-label-bg:      #e2e8f0;
+  --color-filter-bg:     #f1f5f9;
+  --color-filter-border: #cbd5e1;
+  --color-filter-active: #e2e8f0;
+  --color-card-bg:       #ffffff;
+  --color-page-header:   #f1f5f9;
+  // Crisp minimal type override
+  --leading-normal: 1.45;
+  --tracking-normal: -0.005em;
+  --app-bg:              var(--color-background);
+  --app-surface:         var(--color-surface);
+  --app-text:            var(--color-text);
+  --app-muted:           var(--color-text-muted);
+  --app-border:          var(--color-border);
+  --app-primary:         var(--color-primary);
+  --app-primary-rgb:     var(--color-primary-rgb);
+  --nav-bg:              #0f172a;
+  --nav-foreground:      #e2e8f0;
+  --nav-hover-background:#334155;
+  --nav-hover-foreground:#ffffff;
+  --header-bg:           #ffffff;
+  --header-color:        var(--color-primary);
+  --header-border-top:   var(--nav-bg);
+  --btn-bg:              var(--color-primary);
+  --btn-hover-bg:        var(--color-primary-hover);
+  --input-bg:            #ffffff;
+  --input-text:          #0f172a;
+  --input-border:        #cbd5e1;
+  --input-border-focus:  #475569;
+  --oh-text:             #0f172a;
+  --oh-text-secondary:   #334155;
+  --oh-muted:            #64748b;
+  --oh-surface:          #f8fafc;
+  --oh-heading:          #0f172a;
+  --oh-eyebrow:          #475569;
+  --oh-header-tint-a:    #f1f5f9;
+  --oh-header-tint-b:    #e2e8f0;
+  --oh-header-tint-c:    #f8fafc;
+  --oh-header-border:    rgba(71,85,105,0.15);
+  --oh-header-shadow:    rgba(15,23,42,0.06);
+  --oh-header-dot:       rgba(71,85,105,0.08);
+  --oh-header-glow:      rgba(148,163,184,0.22);
+  --oh-header-divider:   rgba(71,85,105,0.18);
+  --oh-export-bg:        #ffffff;
+  --oh-export-border:    rgba(71,85,105,0.25);
+  --oh-export-hover:     #f1f5f9;
+  --oh-export-active:    #e2e8f0;
+  --glf-text-dark:       #0f172a;
+  --glf-text-mid:        #334155;
+  --glf-text-muted:      #64748b;
+  --glf-surface:         #f8fafc;
+  --glf-input-bg:        #ffffff;
+  --glf-prefix-bg:       #f1f5f9;
+  --glf-border:          rgba(71,85,105,0.12);
+  --glf-panel-border:    rgba(71,85,105,0.15);
+  --glf-input-border:    #cbd5e1;
+  --glf-row-divider:     rgba(71,85,105,0.06);
+  --glf-hover-row:       #f1f5f9;
+  --glf-slider-track:    #e2e8f0;
+  --glf-slider-thumb-bg: #ffffff;
+  --glf-btn-bg:          #0f172a;
+  --glf-btn-color:       #f1f5f9;
+  --glf-btn-hover-bg:    #1e293b;
+  --glf-clear-btn-bg:    rgba(71,85,105,0.06);
+  --glf-clear-btn-hover: rgba(71,85,105,0.12);
+  --glf-badge-bg:        #475569;
+  --hamburger-stroke:    226,232,240;
+  --_hamburger-color:    rgb(var(--hamburger-stroke));
+  --bs-body-bg:          var(--color-background);
+  --bs-body-color:       var(--color-text);
+  --bs-body-color-rgb:   15,23,42;
+  --bs-link-color:       var(--color-primary);
+  --bs-card-bg:          var(--color-surface);
+  --bs-border-color:     var(--color-border);
+  --search-icon-color:   var(--color-primary);
+}
+
+
+// ═════════════════════════════════════════════════════════════════════════════
+// THEME  10 / 10  — MIDNIGHT  (Deep Dark — rich, immersive)
+// Typography: looser line-height for dark readability, subtle warm undertones
+// ═════════════════════════════════════════════════════════════════════════════
+body.theme-midnight {
+  /* Map legacy primary tokens inside the theme scope so components
+     using --primary-color update correctly when the body class changes. */
+  --primary-color: var(--color-primary);
+  --primary-dark:  var(--color-primary-hover);
+  --primary-light: var(--color-primary-soft);
+  --color-primary:       #818cf8;
+  --color-primary-hover: #6366f1;
+  --color-primary-soft:  #1e1b4b;
+  --color-primary-rgb:   129,140,248;
+  --color-on-primary:    #1e1b4b;
+  --color-background:    #0d0d14;
+  --color-surface:       #16162a;
+  --color-text:          #e2e8f0;
+  --color-text-muted:    #94a3b8;
+  --color-border:        rgba(129,140,248,0.15);
+  --color-label-bg:      #1e1b4b;
+  --color-filter-bg:     #16162a;
+  --color-filter-border: rgba(129,140,248,0.20);
+  --color-filter-active: #1e1b4b;
+  --color-card-bg:       #16162a;
+  --color-page-header:   #16162a;
+  // Relaxed dark-mode reading
+  --leading-normal:  1.7;
+  --tracking-normal: 0.01em;
+  --text-base:       clamp(14px, 1vw, 16px);
+  --app-bg:              var(--color-background);
+  --app-surface:         var(--color-surface);
+  --app-text:            var(--color-text);
+  --app-muted:           var(--color-text-muted);
+  --app-border:          var(--color-border);
+  --app-primary:         var(--color-primary);
+  --app-primary-rgb:     var(--color-primary-rgb);
+  --nav-bg:              #0a0a14;
+  --nav-foreground:      #e2e8f0;
+  --nav-hover-background:#1e1b4b;
+  --nav-hover-foreground:#818cf8;
+  --header-bg:           #0d0d14;
+  --header-color:        var(--color-primary);
+  --header-border-top:   var(--nav-bg);
+  --btn-bg:              var(--color-primary);
+  --btn-color:           #1e1b4b;
+  --btn-hover-bg:        var(--color-primary-hover);
+  --input-bg:            #16162a;
+  --input-text:          #e2e8f0;
+  --input-border:        rgba(129,140,248,0.20);
+  --input-border-focus:  #818cf8;
+  --oh-text:             #e2e8f0;
+  --oh-text-secondary:   #94a3b8;
+  --oh-muted:            #64748b;
+  --oh-surface:          #16162a;
+  --oh-heading:          #e2e8f0;
+  --oh-eyebrow:          #818cf8;
+  --oh-header-tint-a:    #16162a;
+  --oh-header-tint-b:    #1e1b4b;
+  --oh-header-tint-c:    #0d0d14;
+  --oh-header-border:    rgba(129,140,248,0.15);
+  --oh-header-shadow:    rgba(0,0,0,0.45);
+  --oh-header-dot:       rgba(129,140,248,0.08);
+  --oh-header-glow:      rgba(129,140,248,0.18);
+  --oh-header-divider:   rgba(129,140,248,0.18);
+  --oh-export-bg:        #16162a;
+  --oh-export-border:    rgba(129,140,248,0.25);
+  --oh-export-hover:     #1e1b4b;
+  --oh-export-active:    #2d2a5e;
+  --glf-text-dark:       #e2e8f0;
+  --glf-text-mid:        #94a3b8;
+  --glf-text-muted:      #64748b;
+  --glf-surface:         #16162a;
+  --glf-input-bg:        #16162a;
+  --glf-prefix-bg:       #0d0d14;
+  --glf-border:          rgba(129,140,248,0.12);
+  --glf-panel-border:    rgba(129,140,248,0.16);
+  --glf-input-border:    rgba(129,140,248,0.20);
+  --glf-row-divider:     rgba(255,255,255,0.04);
+  --glf-hover-row:       #1e1b4b;
+  --glf-slider-track:    #2d2a5e;
+  --glf-slider-thumb-bg: #16162a;
+  --glf-btn-bg:          #1e1b4b;
+  --glf-btn-color:       #e2e8f0;
+  --glf-btn-hover-bg:    #2d2a5e;
+  --glf-clear-btn-bg:    rgba(129,140,248,0.08);
+  --glf-clear-btn-hover: rgba(129,140,248,0.16);
+  --glf-badge-bg:        #818cf8;
+  --hamburger-stroke:    226,232,240;
+  --_hamburger-color:    rgb(var(--hamburger-stroke));
+  --bs-body-bg:          var(--color-background);
+  --bs-body-color:       var(--color-text);
+  --bs-body-color-rgb:   226,232,240;
+  --bs-link-color:       var(--color-primary);
+  --bs-card-bg:          var(--color-surface);
+  --bs-border-color:     var(--color-border);
+  --search-icon-color:   var(--color-primary);
+}
+
+
+// =============================================================================
+// DARK MODE  —  body.dark-mode overrides
+// =============================================================================
+//
+//  ARCHITECTURE
+//  ─────────────────────────────────────────────────────────────────────────────
+//  Dark mode is a SECOND AXIS of theming, orthogonal to colour theme.
+//  Both classes live on <body> at the same time:
+//
+//      <body class="theme-green dark-mode">
+//
+//  Selector priority (high → low):
+//    1. body.theme-X.dark-mode   — theme-aware dark overrides  (most specific)
+//    2. body.dark-mode            — base dark overrides          (all themes)
+//    3. body.theme-X              — light theme values            (existing)
+//    4. :root                     — light defaults               (existing)
+//
+//  TOKEN POLICY
+//  ─────────────────────────────────────────────────────────────────────────────
+//  • Dark mode overrides the SURFACE tokens (background, surface, text, border,
+//    input, card, page-header, oh-*, glf-*).
+//  • It does NOT change --color-primary / --nav-bg — these stay theme-owned.
+//  • Per-theme dark blocks only need to patch tokens that differ from the
+//    base dark values below (usually just --color-primary-soft and input colours).
+//
+// =============================================================================
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BASE DARK  —  applies to ALL themes when dark-mode is active.
+// Establishes the neutral dark surface; individual theme blocks below
+// fine-tune accent/tint tokens.
+// ─────────────────────────────────────────────────────────────────────────────
+body.dark-mode {
+
+  // ── Core surface tokens ───────────────────────────────────────────────────
+  --color-background:    #0f1117;
+  --color-surface:       #1a1d27;
+  --color-text:          #e2e8f0;
+  --color-text-muted:    #94a3b8;
+  --color-border:        rgba(255, 255, 255, 0.09);
+  --color-label-bg:      #1e2130;
+  --color-filter-bg:     #1a1d27;
+  --color-filter-border: rgba(255, 255, 255, 0.10);
+  --color-filter-active: #252840;
+  --color-card-bg:       #1a1d27;
+  --color-page-header:   #161924;
+
+  // ── App alias tokens ──────────────────────────────────────────────────────
+  --app-bg:              var(--color-background);
+  --app-surface:         var(--color-surface);
+  --app-text:            var(--color-text);
+  --app-muted:           var(--color-text-muted);
+  --app-border:          var(--color-border);
+
+  // ── Input tokens ──────────────────────────────────────────────────────────
+  --input-bg:            #1e2130;
+  --input-text:          #e2e8f0;
+  --input-border:        rgba(255, 255, 255, 0.12);
+
+  // ── Button (text colour only — primary hue stays theme-owned) ────────────
+  --btn-color:           #ffffff;
+
+  // ── order-history tokens ──────────────────────────────────────────────────
+  --oh-text:             #e2e8f0;
+  --oh-text-secondary:   #94a3b8;
+  --oh-muted:            #64748b;
+  --oh-surface:          #1a1d27;
+  --oh-heading:          #e2e8f0;
+  --oh-header-tint-a:    #1e2130;
+  --oh-header-tint-b:    #252840;
+  --oh-header-tint-c:    #161924;
+  --oh-header-border:    rgba(255, 255, 255, 0.08);
+  --oh-header-shadow:    rgba(0, 0, 0, 0.40);
+  --oh-header-dot:       rgba(255, 255, 255, 0.05);
+  --oh-header-glow:      rgba(255, 255, 255, 0.08);
+  --oh-header-divider:   rgba(255, 255, 255, 0.08);
+  --oh-export-bg:        #1e2130;
+  --oh-export-border:    rgba(255, 255, 255, 0.12);
+  --oh-export-hover:     #252840;
+  --oh-export-active:    #2d3154;
+
+  // ── generic-list-filter tokens ────────────────────────────────────────────
+  --glf-text-dark:       #e2e8f0;
+  --glf-text-mid:        #94a3b8;
+  --glf-text-muted:      #64748b;
+  --glf-surface:         #1a1d27;
+  --glf-input-bg:        #1e2130;
+  --glf-prefix-bg:       #0f1117;
+  --glf-border:          rgba(255, 255, 255, 0.07);
+  --glf-panel-border:    rgba(255, 255, 255, 0.09);
+  --glf-input-border:    rgba(255, 255, 255, 0.12);
+  --glf-row-divider:     rgba(255, 255, 255, 0.04);
+  --glf-hover-row:       #252840;
+  --glf-slider-track:    #2d3154;
+  --glf-slider-thumb-bg: #1a1d27;
+  --glf-btn-bg:          #252840;
+  --glf-btn-color:       #e2e8f0;
+  --glf-btn-hover-bg:    #2d3154;
+  --glf-clear-btn-bg:    rgba(255, 255, 255, 0.06);
+  --glf-clear-btn-hover: rgba(255, 255, 255, 0.11);
+
+  // ── Bootstrap sync ────────────────────────────────────────────────────────
+  --bs-body-bg:          var(--color-background);
+  --bs-body-color:       var(--color-text);
+  --bs-body-color-rgb:   226, 232, 240;
+  --bs-card-bg:          var(--color-surface);
+  --bs-border-color:     var(--color-border);
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// THEME-AWARE DARK PATCHES
+// Only tokens that need a different value from the base dark block above.
+// --color-primary, --nav-bg, and --nav-foreground inherit from the colour theme
+// and are intentionally left untouched here.
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Primary (Blue) + dark ────────────────────────────────────────────────────
+// :root is the default theme; patch its primary-soft for dark surfaces.
+body.dark-mode:not([class*="theme-"]),
+:root body.dark-mode {
+  --color-primary-soft:  #1e3a5f;
+  --color-primary-hover: #2d7fd4;
+  --input-border-focus:  #3b82f6;
+  --oh-eyebrow:          #60a5fa;
+  --oh-header-tint-b:    #1e2d45;
+  --oh-header-border:    rgba(59, 130, 246, 0.18);
+  --oh-header-glow:      rgba(59, 130, 246, 0.15);
+  --oh-header-divider:   rgba(59, 130, 246, 0.18);
+  --oh-export-border:    rgba(59, 130, 246, 0.25);
+  --oh-export-hover:     #1e2d45;
+  --glf-hover-row:       #1e2d45;
+  --glf-badge-bg:        #3b82f6;
+  --search-icon-color:   #60a5fa;
+}
+
+// ── Red + dark ────────────────────────────────────────────────────────────────
+body.theme-red.dark-mode {
+  --color-primary-soft:  #3b0a0a;
+  --color-primary-hover: #ef4444;
+  --input-border-focus:  #f87171;
+  --oh-eyebrow:          #f87171;
+  --oh-heading:          #fca5a5;
+  --oh-header-tint-b:    #2d1010;
+  --oh-header-border:    rgba(248, 113, 113, 0.20);
+  --oh-header-glow:      rgba(248, 113, 113, 0.15);
+  --oh-header-divider:   rgba(248, 113, 113, 0.18);
+  --oh-export-border:    rgba(248, 113, 113, 0.25);
+  --oh-export-hover:     #2d1010;
+  --glf-badge-bg:        #ef4444;
+  --glf-hover-row:       #2d1010;
+  --glf-btn-bg:          #3b0a0a;
+  --glf-btn-hover-bg:    #500d0d;
+  --search-icon-color:   #f87171;
+}
+
+// ── Green + dark ──────────────────────────────────────────────────────────────
+body.theme-green.dark-mode {
+  --color-primary-soft:  #052e16;
+  --color-primary-hover: #22c55e;
+  --input-border-focus:  #4ade80;
+  --oh-eyebrow:          #4ade80;
+  --oh-heading:          #86efac;
+  --oh-header-tint-b:    #0d2e18;
+  --oh-header-border:    rgba(74, 222, 128, 0.18);
+  --oh-header-glow:      rgba(74, 222, 128, 0.15);
+  --oh-header-divider:   rgba(74, 222, 128, 0.18);
+  --oh-export-border:    rgba(74, 222, 128, 0.22);
+  --oh-export-hover:     #0d2e18;
+  --glf-badge-bg:        #22c55e;
+  --glf-hover-row:       #0d2e18;
+  --glf-btn-bg:          #052e16;
+  --glf-btn-hover-bg:    #0a3d20;
+  --search-icon-color:   #4ade80;
+}
+
+// ── Dark theme + dark-mode  ───────────────────────────────────────────────────
+// theme-dark is already dark, so dark-mode deepens the surfaces slightly.
+body.theme-dark.dark-mode {
+  --color-background:    #050d1a;
+  --color-surface:       #081428;
+  --color-card-bg:       #081428;
+  --color-page-header:   #081428;
+  --input-bg:            #081428;
+  --oh-surface:          #081428;
+  --glf-surface:         #081428;
+  --glf-input-bg:        #050d1a;
+  --glf-prefix-bg:       #030810;
+}
+
+// ── Purple + dark ─────────────────────────────────────────────────────────────
+body.theme-purple.dark-mode {
+  --color-primary-soft:  #2e1065;
+  --color-primary-hover: #a855f7;
+  --input-border-focus:  #c084fc;
+  --oh-eyebrow:          #c084fc;
+  --oh-heading:          #d8b4fe;
+  --oh-header-tint-b:    #1e1040;
+  --oh-header-border:    rgba(192, 132, 252, 0.18);
+  --oh-header-glow:      rgba(192, 132, 252, 0.15);
+  --oh-header-divider:   rgba(192, 132, 252, 0.18);
+  --oh-export-border:    rgba(192, 132, 252, 0.22);
+  --oh-export-hover:     #1e1040;
+  --glf-badge-bg:        #a855f7;
+  --glf-hover-row:       #1e1040;
+  --glf-btn-bg:          #2e1065;
+  --glf-btn-hover-bg:    #3b1585;
+  --search-icon-color:   #c084fc;
+}
+
+// ── Orange + dark ─────────────────────────────────────────────────────────────
+body.theme-orange.dark-mode {
+  --color-primary-soft:  #431407;
+  --color-primary-hover: #f97316;
+  --input-border-focus:  #fb923c;
+  --oh-eyebrow:          #fb923c;
+  --oh-heading:          #fdba74;
+  --oh-header-tint-b:    #2d1508;
+  --oh-header-border:    rgba(251, 146, 60, 0.18);
+  --oh-header-glow:      rgba(251, 146, 60, 0.15);
+  --oh-header-divider:   rgba(251, 146, 60, 0.18);
+  --oh-export-border:    rgba(251, 146, 60, 0.22);
+  --oh-export-hover:     #2d1508;
+  --glf-badge-bg:        #f97316;
+  --glf-hover-row:       #2d1508;
+  --glf-btn-bg:          #431407;
+  --glf-btn-hover-bg:    #5c1d09;
+  --search-icon-color:   #fb923c;
+}
+
+// ── Teal + dark ───────────────────────────────────────────────────────────────
+body.theme-teal.dark-mode {
+  --color-primary-soft:  #042f2e;
+  --color-primary-hover: #14b8a6;
+  --input-border-focus:  #2dd4bf;
+  --oh-eyebrow:          #2dd4bf;
+  --oh-heading:          #5eead4;
+  --oh-header-tint-b:    #0d2929;
+  --oh-header-border:    rgba(45, 212, 191, 0.18);
+  --oh-header-glow:      rgba(45, 212, 191, 0.15);
+  --oh-header-divider:   rgba(45, 212, 191, 0.18);
+  --oh-export-border:    rgba(45, 212, 191, 0.22);
+  --oh-export-hover:     #0d2929;
+  --glf-badge-bg:        #14b8a6;
+  --glf-hover-row:       #0d2929;
+  --glf-btn-bg:          #042f2e;
+  --glf-btn-hover-bg:    #073d3c;
+  --search-icon-color:   #2dd4bf;
+}
+
+// ── Rose + dark ───────────────────────────────────────────────────────────────
+body.theme-rose.dark-mode {
+  --color-primary-soft:  #4c0519;
+  --color-primary-hover: #f43f5e;
+  --input-border-focus:  #fb7185;
+  --oh-eyebrow:          #fb7185;
+  --oh-heading:          #fda4af;
+  --oh-header-tint-b:    #2d0d18;
+  --oh-header-border:    rgba(251, 113, 133, 0.18);
+  --oh-header-glow:      rgba(251, 113, 133, 0.15);
+  --oh-header-divider:   rgba(251, 113, 133, 0.18);
+  --oh-export-border:    rgba(251, 113, 133, 0.22);
+  --oh-export-hover:     #2d0d18;
+  --glf-badge-bg:        #f43f5e;
+  --glf-hover-row:       #2d0d18;
+  --glf-btn-bg:          #4c0519;
+  --glf-btn-hover-bg:    #640724;
+  --search-icon-color:   #fb7185;
+}
+
+// ── Slate + dark ──────────────────────────────────────────────────────────────
+body.theme-slate.dark-mode {
+  --color-primary-soft:  #1e293b;
+  --color-primary-hover: #94a3b8;
+  --input-border-focus:  #94a3b8;
+  --oh-eyebrow:          #94a3b8;
+  --oh-heading:          #cbd5e1;
+  --oh-header-tint-b:    #1e2535;
+  --oh-header-border:    rgba(148, 163, 184, 0.18);
+  --oh-header-glow:      rgba(148, 163, 184, 0.12);
+  --oh-header-divider:   rgba(148, 163, 184, 0.18);
+  --oh-export-border:    rgba(148, 163, 184, 0.18);
+  --oh-export-hover:     #1e2535;
+  --glf-badge-bg:        #64748b;
+  --glf-hover-row:       #1e2535;
+  --glf-btn-bg:          #1e293b;
+  --glf-btn-hover-bg:    #263347;
+  --search-icon-color:   #94a3b8;
+}
+
+// ── Midnight + dark ───────────────────────────────────────────────────────────
+// Midnight is already a very dark colour theme. dark-mode deepens it further.
+body.theme-midnight.dark-mode {
+  --color-background:    #070710;
+  --color-surface:       #0d0d1e;
+  --color-card-bg:       #0d0d1e;
+  --color-page-header:   #0d0d1e;
+  --color-border:        rgba(129, 140, 248, 0.12);
+  --input-bg:            #0d0d1e;
+  --input-border:        rgba(129, 140, 248, 0.15);
+  --oh-surface:          #0d0d1e;
+  --oh-header-tint-a:    #0d0d1e;
+  --oh-header-tint-b:    #12123a;
+  --oh-header-tint-c:    #070710;
+  --glf-surface:         #0d0d1e;
+  --glf-input-bg:        #0d0d1e;
+  --glf-prefix-bg:       #070710;
+  --glf-hover-row:       #12123a;
+  --glf-slider-track:    #1e1b4b;
+  --glf-slider-thumb-bg: #0d0d1e;
+}

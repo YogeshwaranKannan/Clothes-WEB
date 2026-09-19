@@ -1,0 +1,40 @@
+.orders-history {
+  padding: 1rem;
+}
+
+.orders-grid {
+  display: grid;
+  margin-top: 1rem;
+}
+
+.order-card {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  align-items: center;
+  background: #fff;
+}
+
+.order-img img {
+  width: 84px;
+  height: 84px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.order-info .title {
+  font-weight: 600;
+}
+
+.order-info .price {
+  color: #2c7a7b;
+  font-weight: 700;
+}
+
+.order-info .order-id,
+.order-info .placed {
+  font-size: 0.85rem;
+  color: #666;
+}

@@ -1,0 +1,119 @@
+.thunder-drawer-container {
+   position: relative;  
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+  animation: fadeIn 300ms ease-out;
+
+  .thunder-drawer-overlay {
+     display: none; 
+  }
+
+  .thunder-drawer-panel {
+    position: relative;
+    bottom: unset;
+    left: unset;
+    right: unset;
+    z-index: 2;
+    width: 100%;
+    pointer-events: auto;
+    background: white;
+    border-radius: 0 0 12px 12px;
+    border-top: 2px solid #0b5ed7;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);  
+    max-height: none; 
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 300ms ease-out;
+
+    // Mobile: drawer takes ~80% of screen
+    @media (max-width: 768px) {
+      max-height: 80vh;
+    }
+
+    // Tablet/Desktop: drawer is narrower and positioned
+    @media (min-width: 769px) {
+     width: 100%;
+      margin: 0;
+      left: unset;
+      right: unset;
+      border-radius: 0 0 12px 12px;
+    }
+
+    .thunder-drawer-header {
+      padding: 16px;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      flex-shrink: 0;
+
+      .thunder-drawer-close-btn {
+        background: none;
+        border: none;
+        font-size: 32px;
+        cursor: pointer;
+        padding: 0;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background-color: #f0f0f0;
+        }
+
+        .close-icon {
+          line-height: 1;
+          color: #333;
+        }
+      }
+    }
+
+    .thunder-drawer-content {
+      padding: 16px;
+      overflow-y: auto;
+      flex-grow: 1;
+
+      // Responsive padding
+      @media (min-width: 769px) {
+        padding: 24px;
+      }
+    }
+  }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-12px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+// Animations (CSS-based since @angular/animations not available)
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

@@ -1,0 +1,8 @@
+
+- shop now in hero banner, should go to correct product detail
+-change chveron in product list filter
+- render filtering dynmically
+- btn primary & btn btn-primary not there in product component 
+- change doller sign to inr in cart screen
+
+- change ‘shop now’ button position and color on hero banner component

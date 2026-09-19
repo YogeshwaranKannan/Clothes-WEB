@@ -1,0 +1,622 @@
+// =============================================================================
+// job-card-details.component.scss
+// =============================================================================
+// Changes in this revision (visual / colour only — ZERO layout changes):
+//
+//  ① All hardcoded Sass $variables replaced with CSS custom properties so
+//     the component responds to all 10 runtime themes automatically.
+//
+//  ② :host block defines component-scoped --jcd-* aliases that fall through
+//     to the active body.theme-* tokens from _theme.scss.
+//
+//  ③ Table header / footer tints now use --oh-header-tint-* and --oh-*
+//     tokens already defined for every theme (same tokens as order-history).
+//
+//  ④ :host-context(body.theme-midnight) block at the bottom adds:
+//       • subtle glass border on .job-card-details (the root card)
+//       • glass border on .jcd-header, .jcd-meta-row, .jcd-summary-row
+//       • softer alternating row colours
+//       • themed table header / footer tint derived from Midnight tokens
+//       • export button adopts theme colours
+//
+//  All selectors, layout, animations, and breakpoints are preserved verbatim.
+// =============================================================================
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HOST — scoped token map
+// ─────────────────────────────────────────────────────────────────────────────
+
+:host {
+  display: block;
+
+  // ── Surface / text / border ──
+  --jcd-bg:          var(--color-background,  var(--app-bg));
+  --jcd-surface:     var(--color-surface,     var(--app-surface));
+  --jcd-text:        var(--color-text,        var(--app-text));
+  --jcd-text-mid:    var(--color-text,        #374151);
+  --jcd-muted:       var(--color-text-muted,  var(--app-muted));
+  --jcd-border:      var(--color-border,      var(--app-border));
+  --jcd-border-lt:   var(--color-filter-bg,   var(--color-surface, #f3f4f6));
+
+  // ── Accent ──
+  --jcd-primary:     var(--color-primary,     var(--app-primary));
+  --jcd-primary-h:   var(--color-primary-hover, var(--app-primary));
+  --jcd-on-primary:  var(--color-on-primary,  #fff);
+  --jcd-soft:        var(--color-primary-soft, #dbeafe);
+
+  // ── Semantic status colours ── kept as direct values so they are
+  //    legible on both light and dark themes without needing theme tokens.
+  --jcd-green:       #16a34a;
+  --jcd-red:         #dc2626;
+
+  // ── Table header/footer tint — reuses order-history tokens ──
+  // Falls back to a neutral surface if those tokens aren't defined.
+  --jcd-tbl-head-bg:   var(--oh-header-tint-a, var(--color-page-header, var(--jcd-surface)));
+  --jcd-tbl-head-text: var(--oh-heading,        var(--color-text, #1a365d));
+  --jcd-tbl-head-bdr:  var(--oh-header-border,  rgba(99,163,220,0.25));
+  --jcd-tbl-stripe-odd:var(--color-background,  #ffffff);
+  --jcd-tbl-stripe-evn:var(--color-surface,     #f5f5f7);
+  --jcd-tbl-hover:     var(--color-primary-soft, #eaeff6);
+  --jcd-tbl-foot-bg:   var(--oh-header-tint-a,  var(--color-page-header, var(--jcd-surface)));
+  --jcd-tbl-foot-bdr:  var(--oh-header-divider, rgba(99,163,220,0.35));
+
+  // ── Export button ──
+  --jcd-export-bg:     var(--oh-export-bg,       #fff);
+  --jcd-export-bdr:    var(--oh-export-border,   rgba(99,163,220,0.45));
+  --jcd-export-hover:  var(--oh-export-hover,    #e8f4fd);
+  --jcd-export-active: var(--oh-export-active,   #d6eaf8);
+  --jcd-export-text:   var(--oh-heading,          #1a365d);
+  --jcd-export-icon:   var(--oh-eyebrow,          #4a90c4);
+
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ROOT CARD
+// ─────────────────────────────────────────────────────────────────────────────
+
+.job-card-details {
+  background: var(--jcd-bg);
+  border-radius: 8px;
+  border: 1px solid var(--jcd-border);
+  display: flex;
+  flex-direction: column;
+  font-family: inherit;
+  color: var(--jcd-text);
+  transition: background 0.25s ease, border-color 0.25s ease;
+
+
+  // ───────────────────────────────────────────
+  // HEADER
+  // ───────────────────────────────────────────
+
+  .jcd-header {
+    border-bottom: 1px solid var(--jcd-border);
+    padding: 0;
+    transition: border-color 0.25s ease;
+  }
+
+  // Row 1 – chevron + title
+  .jcd-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px 10px;
+  }
+
+  .jcd-chevron-btn {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    padding: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+
+    &:hover { background: var(--jcd-border-lt); }
+
+    .chevron {
+      font-size: 22px;
+      color: var(--jcd-muted);
+      display: inline-block;
+      transition: transform 0.25s ease;
+      line-height: 1;
+
+      &.open { transform: rotate(90deg); }
+    }
+  }
+
+  .jcd-title {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--jcd-text);
+    line-height: 1.3;
+  }
+
+  // Collapsible body
+  .jcd-header-body {
+    overflow: hidden;
+    max-height: 400px;
+    opacity: 1;
+    transition: max-height 0.3s ease, opacity 0.25s ease;
+
+    &.collapsed {
+      max-height: 0;
+      opacity: 0;
+    }
+  }
+
+  // Row 2 – Job Value | Duration  (outlined pill row)
+  .jcd-meta-row {
+    display: flex;
+    align-items: center;
+    margin: 0 16px 12px;
+    border: 1px solid var(--jcd-border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    gap: 0;
+    flex-wrap: wrap;
+    background: var(--jcd-surface);
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .jcd-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 0;
+    flex: 1;
+    min-width: 140px;
+
+    .meta-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--jcd-text);
+    }
+
+    .meta-value {
+      font-size: 13px;
+      color: var(--jcd-text-mid);
+    }
+  }
+
+  .jcd-meta-divider {
+    width: 1px;
+    height: 20px;
+    background: var(--jcd-border);
+    margin: 0 16px;
+
+    @media (max-width: 480px) { display: none; }
+  }
+
+  // Row 3 – Cash In / Cash Out / Final Balance grid
+  .jcd-summary-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 0 16px 16px;
+    border: 1px solid var(--jcd-border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.25s ease;
+  }
+
+  .jcd-summary-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 14px;
+    border-right: 1px solid var(--jcd-border);
+
+    &:last-child { border-right: none; }
+
+    .summary-label {
+      font-size: 12px;
+      color: var(--jcd-muted);
+      white-space: nowrap;
+    }
+
+    .summary-value {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--jcd-text);
+
+      &.cash-in  { color: var(--jcd-green); }
+      &.cash-out { color: var(--jcd-red); }
+      &.balance  { color: var(--jcd-text); }
+    }
+  }
+
+
+  // ───────────────────────────────────────────
+  // TABS
+  // ───────────────────────────────────────────
+
+  .jcd-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--jcd-border);
+    background: var(--jcd-surface);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .jcd-tab-btn {
+    flex: 1;
+    min-width: 90px;
+    padding: 11px 16px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--jcd-muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+
+    &:hover { color: var(--jcd-text); }
+
+    &.active {
+      color: var(--jcd-primary);
+      border-bottom-color: var(--jcd-primary);
+      background: var(--jcd-bg);
+      font-weight: 600;
+    }
+  }
+
+
+  // ───────────────────────────────────────────
+  // TAB CONTENT
+  // ───────────────────────────────────────────
+
+  .jcd-tab-content { flex: 1; }
+
+  .jcd-tab-pane {
+    display: none;
+    padding: 16px;
+
+    &.active { display: block; }
+  }
+
+  // Status messages
+  .jcd-loading,
+  .jcd-no-data {
+    text-align: center;
+    padding: 32px 16px;
+    font-size: 14px;
+    color: var(--jcd-muted);
+  }
+
+  .jcd-error {
+    padding: 10px 14px;
+    background: #fef3c7;
+    color: #92400e;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  // Entry count line
+  .jcd-entries-count {
+    font-size: 13px;
+    color: var(--jcd-muted);
+    margin-bottom: 10px;
+
+    strong {
+      color: var(--jcd-text);
+      font-weight: 600;
+    }
+  }
+
+
+  // ───────────────────────────────────────────
+  // TABLE
+  // ───────────────────────────────────────────
+
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--jcd-tbl-head-bdr);
+    border-radius: 8px;
+    box-shadow:
+      0 1px 4px rgba(80, 140, 200, 0.07),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: border-color 0.25s ease;
+  }
+
+  .jcd-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 520px;
+
+    // ── HEADER ────────────────────────────────
+    thead {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: var(--jcd-tbl-head-bg);
+      transition: background 0.25s ease;
+
+      th {
+        padding: 10px 12px;
+        text-align: left;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--jcd-tbl-head-text);
+        white-space: nowrap;
+        border-bottom: 2px solid var(--jcd-tbl-head-bdr);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+
+        &.num-col { text-align: right; }
+      }
+    }
+
+    // ── BODY ──────────────────────────────────
+    tbody {
+      tr {
+        transition: background 0.1s;
+
+        &:nth-child(odd)  { background: var(--jcd-tbl-stripe-odd); }
+        &:nth-child(even) { background: var(--jcd-tbl-stripe-evn); }
+        &:hover           { background: var(--jcd-tbl-hover); }
+
+        & + tr { border-top: 1px solid var(--jcd-tbl-head-bdr); }
+      }
+
+      td {
+        padding: 10px 12px;
+        color: var(--jcd-text-mid);
+        vertical-align: top;
+        line-height: 1.45;
+
+        &.num-col    { text-align: right; font-variant-numeric: tabular-nums; }
+        &.date-col   { white-space: nowrap; color: var(--jcd-muted); }
+        &.remark-col { max-width: 200px; word-break: break-word; }
+        &.cash-in    { color: var(--jcd-green); font-weight: 600; }
+        &.cash-out   { color: var(--jcd-red);   font-weight: 600; }
+      }
+    }
+
+    // ── FOOTER ────────────────────────────────
+    tfoot {
+      background: var(--jcd-tbl-foot-bg);
+      transition: background 0.25s ease;
+
+      tr.export-row {
+        border-top: 1px solid rgba(99, 163, 220, 0.2);
+
+        td.export-cell {
+          padding: 8px 12px;
+          text-align: right;
+        }
+      }
+
+      tr.summary-row {
+        border-top: 2px solid var(--jcd-tbl-foot-bdr);
+
+        td {
+          padding: 10px 12px;
+          font-size: 12px;
+          font-weight: 700;
+          color: var(--jcd-tbl-head-text);
+          letter-spacing: 0.03em;
+
+          &.num-col {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+            font-size: 13px;
+          }
+        }
+      }
+    }
+
+    // ── Export button ─────────────────────────
+    .jcd-export-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--jcd-export-bdr);
+      background: var(--jcd-export-bg);
+      color: var(--jcd-export-text);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+
+      svg { flex-shrink: 0; color: var(--jcd-export-icon); }
+
+      &:hover {
+        background: var(--jcd-export-hover);
+        border-color: var(--jcd-export-icon);
+        box-shadow: 0 2px 6px rgba(99, 163, 220, 0.18);
+      }
+
+      &:active {
+        background: var(--jcd-export-active);
+        transform: scale(0.97);
+      }
+    }
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MOBILE  (≤ 480 px)  — unchanged
+// ─────────────────────────────────────────────────────────────────────────────
+
+@media (max-width: 480px) {
+  .job-card-details {
+
+    .jcd-title { font-size: 15px; }
+
+    .jcd-meta-row {
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px 12px;
+      margin: 0 12px 10px;
+    }
+
+    .jcd-summary-row {
+      margin: 0 12px 12px;
+    }
+
+    .jcd-summary-cell {
+      padding: 10px 10px;
+
+      .summary-label { font-size: 11px; }
+      .summary-value { font-size: 14px; }
+    }
+
+    .jcd-tab-pane { padding: 12px; }
+
+    .jcd-table {
+      font-size: 12px;
+
+      thead th { padding: 9px 8px; }
+      tbody td  { padding: 9px 8px; }
+    }
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MIDNIGHT DEEP DARK — glass border + dark surface refinements
+// Everything here is scoped — completely inert on all other themes.
+// ─────────────────────────────────────────────────────────────────────────────
+
+:host-context(body.theme-midnight) {
+
+  // ── Root card: glass border + deep shadow ─────────────────────────────────
+  .job-card-details {
+    background: var(--color-surface) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.50);
+  }
+
+  // ── Header section divider ────────────────────────────────────────────────
+  .jcd-header {
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  // ── Meta row pill ─────────────────────────────────────────────────────────
+  .jcd-meta-row {
+    background: var(--color-background) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  // ── Summary (cash in/out/balance) row ─────────────────────────────────────
+  .jcd-summary-row {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .jcd-summary-cell {
+    border-right-color: rgba(255, 255, 255, 0.08) !important;
+
+    // Keep semantic colours legible on dark bg
+    .summary-value {
+      &.cash-in  { color: #6ee7b7; } // emerald-300
+      &.cash-out { color: #fca5a5; } // red-300
+      &.balance  { color: var(--color-text); }
+    }
+  }
+
+  // ── Tabs ──────────────────────────────────────────────────────────────────
+  .jcd-tabs {
+    background: var(--color-background) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .jcd-tab-btn.active {
+    background: var(--color-surface) !important;
+    color: var(--color-primary) !important;
+    border-bottom-color: var(--color-primary) !important;
+  }
+
+  // ── Table wrapper ─────────────────────────────────────────────────────────
+  .table-wrapper {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.40);
+  }
+
+  // ── Table header + footer tint ────────────────────────────────────────────
+  .jcd-table {
+    thead {
+      background: var(--color-background) !important;
+
+      th {
+        color: var(--color-text) !important;
+        border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+      }
+    }
+
+    tbody {
+      tr:nth-child(odd)  { background: var(--color-surface) !important; }
+      tr:nth-child(even) { background: var(--color-background) !important; }
+      tr:hover           { background: var(--color-primary-soft) !important; }
+
+      tr + tr { border-top-color: rgba(255, 255, 255, 0.05) !important; }
+
+      td {
+        color: var(--color-text) !important;
+
+        &.date-col   { color: var(--color-text-muted) !important; }
+        &.cash-in    { color: #6ee7b7 !important; }
+        &.cash-out   { color: #fca5a5 !important; }
+      }
+    }
+
+    tfoot {
+      background: var(--color-background) !important;
+
+      tr.export-row {
+        border-top-color: rgba(255, 255, 255, 0.06) !important;
+      }
+
+      tr.summary-row {
+        border-top-color: rgba(255, 255, 255, 0.10) !important;
+
+        td { color: var(--color-text) !important; }
+      }
+    }
+
+    // Export button in Midnight — uses theme primary
+    .jcd-export-btn {
+      background: var(--color-surface) !important;
+      color: var(--color-primary) !important;
+      border-color: rgba(129, 140, 248, 0.30) !important;
+
+      svg { color: var(--color-primary) !important; }
+
+      &:hover {
+        background: var(--color-primary-soft) !important;
+        border-color: var(--color-primary) !important;
+        box-shadow: 0 2px 8px rgba(129, 140, 248, 0.20) !important;
+      }
+
+      &:active {
+        background: var(--color-primary) !important;
+        color: var(--color-on-primary) !important;
+      }
+    }
+  }
+
+  // ── Error banner ─────────────────────────────────────────────────────────
+  .jcd-error {
+    background: rgba(251, 191, 36, 0.12) !important;
+    color: #fcd34d !important;
+    border: 1px solid rgba(251, 191, 36, 0.20);
+  }
+}

@@ -1,0 +1,30 @@
+
+<div class="products-layout" #pmRoot>
+  <section class="products-content">
+    <app-grid
+      [config]="gridConfig"
+      [features]="features"
+      [labels]="labels"
+      (cellAction)="onGridCellAction($event)"
+      (addRowRequested)="onAddRowRequested()"
+      (saveRequested)="onSaveFromGrid()"
+      (resetRequested)="onResetFromGrid()"
+      (changeSet)="onGridChangeSet($event)"
+      (rowEdited)="onRowEdited($event)"
+      (rowDeleted)="onRowDeleted($event)"
+      (rowAdded)="onRowAdded($event)"
+      (rowReverted)="onRowReverted($event)"
+    ></app-grid>
+  </section>
+</div>
+
+<app-drawer
+  [isPublic]="false"
+  [state]="drawerState"
+  (stateChange)="onDrawerChange($event)"
+>
+  <app-add-product
+    (saved)="onProductSaved($event)"
+    (cancel)="closeDrawer()"
+  ></app-add-product>
+</app-drawer>

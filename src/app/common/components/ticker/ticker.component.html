@@ -1,0 +1,23 @@
+<div
+  class="ticker"
+  role="region"
+  aria-label="Announcements"
+  aria-live="polite"
+  aria-atomic="true"
+  (mouseenter)="pause()"
+  (focusin)="pause()"
+  (mouseleave)="resume()"
+>
+  <div class="ticker-inner" [style.--anim-duration]="animationDuration + 'ms'">
+    <div
+      class="track"
+      [class.animating]="isAnimating"
+      [class.no-transition]="noTransition"
+      [style.transform]="'translateX(' + -offset * 100 + '%)'"
+    >
+      <div class="ticker-item" *ngFor="let it of items">{{ it }}</div>
+      <!-- duplicate first item to allow seamless right-to-left wrap -->
+      <div class="ticker-item" *ngIf="items?.length">{{ items[0] }}</div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,211 @@
+<div class="job-card-details">
+
+  <!-- ═══════════════════════════════════════════
+       HEADER
+  ═══════════════════════════════════════════ -->
+  <div class="jcd-header">
+
+    <!-- Row 1: Chevron + JC ID + Site Name -->
+    <div class="jcd-title-row">
+      <button
+        class="jcd-chevron-btn"
+        (click)="toggleHeader()"
+        [attr.aria-expanded]="headerExpanded()"
+        aria-label="Toggle job details">
+        <span class="chevron" [class.open]="headerExpanded()">›</span>
+      </button>
+      <h3 class="jcd-title">JC {{ orderId }} &nbsp; {{ customerSiteName }}</h3>
+    </div>
+
+    <!-- Collapsible body -->
+    <div class="jcd-header-body" [class.collapsed]="!headerExpanded()">
+
+      <!-- Row 2: Job Value | Duration -->
+      <div class="jcd-meta-row">
+        <div class="jcd-meta-item">
+          <span class="meta-label">Job Value:</span>
+          <span class="meta-value">{{ jobValue }}</span>
+        </div>
+        <div class="jcd-meta-divider"></div>
+        <div class="jcd-meta-item">
+          <span class="meta-label">Duration:</span>
+          <span class="meta-value">{{ duration }}</span>
+        </div>
+      </div>
+
+      <!-- Row 3: Total Cash In | Total Cash Out | Final Balance -->
+      <div class="jcd-summary-row">
+        <div class="jcd-summary-cell">
+          <span class="summary-label">Total Cash in</span>
+          <span class="summary-value cash-in">{{ totalCashIn }}</span>
+        </div>
+        <div class="jcd-summary-cell">
+          <span class="summary-label">Total Cash out</span>
+          <span class="summary-value cash-out">{{ totalCashOut }}</span>
+        </div>
+        <div class="jcd-summary-cell">
+          <span class="summary-label">Final Balance</span>
+          <span class="summary-value balance">{{ finalBalance }}</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       TABS
+  ═══════════════════════════════════════════ -->
+  <div class="jcd-tabs">
+    <button class="jcd-tab-btn" [class.active]="activeTab() === 'payment'" (click)="selectTab('payment')" type="button">Payment</button>
+    <button class="jcd-tab-btn" [class.active]="activeTab() === 'expense'" (click)="selectTab('expense')" type="button">Expense</button>
+    <button class="jcd-tab-btn" [class.active]="activeTab() === 'cr_dt'"  (click)="selectTab('cr_dt')"  type="button">Cr./Dt.</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       TAB CONTENT
+  ═══════════════════════════════════════════ -->
+  <div class="jcd-tab-content">
+
+    <!-- ── PAYMENT TAB ── -->
+    <div class="jcd-tab-pane" [class.active]="activeTab() === 'payment'">
+
+      <div *ngIf="isLoading()" class="jcd-loading">Loading…</div>
+      <div *ngIf="error()" class="jcd-error">{{ error() }}</div>
+
+      <ng-container *ngIf="!isLoading()">
+        <div class="jcd-entries-count" *ngIf="payments().length > 0">
+          Total No. of entries: <strong>{{ payments().length }}</strong>
+        </div>
+
+        <div *ngIf="payments().length === 0" class="jcd-no-data">No payment records found.</div>
+
+        <div *ngIf="payments().length > 0" class="table-wrapper">
+          <table class="jcd-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Remark</th>
+                <th>Entry by</th>
+                <th>Mode</th>
+                <th class="num-col">Cash in</th>
+                <th class="num-col">Cash out</th>
+                <th class="num-col">Balance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let p of payments(); trackBy: trackByIndex">
+                <td class="date-col">{{ getColumnValue(p, 'cashInDate') }}</td>
+                <td class="remark-col">{{ getColumnValue(p, 'description') }}</td>
+                <td>{{ getColumnValue(p, 'entryBy') }}</td>
+                <td>{{ getColumnValue(p, 'paymentMode') }}</td>
+                <td class="num-col cash-in">{{ getColumnValue(p, 'amountReceived') }}</td>
+                <td class="num-col cash-out">{{ getColumnValue(p, 'cashOut') }}</td>
+                <td class="num-col">{{ getColumnValue(p, 'balanceDue') }}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="export-row">
+                <td colspan="7" class="export-cell">
+                  <button
+                    type="button"
+                    class="jcd-export-btn"
+                    (click)="exportPaymentsCsv()"
+                    title="Export payment data to CSV">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"
+                         xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M8 2v8m0 0l-3-3m3 3l3-3" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M3 11v1a2 2 0 002 2h6a2 2 0 002-2v-1"
+                            stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Export CSV
+                  </button>
+                </td>
+              </tr>
+              <tr class="summary-row">
+                <td colspan="4"><strong>Final Balance</strong></td>
+                <td class="num-col"></td>
+                <td class="num-col"></td>
+                <td class="num-col"><strong>{{ finalBalance }}</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- ── EXPENSE TAB ── -->
+    <div class="jcd-tab-pane" [class.active]="activeTab() === 'expense'">
+
+      <div *ngIf="isLoading()" class="jcd-loading">Loading…</div>
+      <div *ngIf="error()" class="jcd-error">{{ error() }}</div>
+
+      <ng-container *ngIf="!isLoading()">
+        <div class="jcd-entries-count" *ngIf="expenses().length > 0">
+          Total No. of entries: <strong>{{ expenses().length }}</strong>
+        </div>
+
+        <div *ngIf="expenses().length === 0" class="jcd-no-data">No expense records found.</div>
+
+        <div *ngIf="expenses().length > 0" class="table-wrapper">
+          <table class="jcd-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Vendor</th>
+                <th>Receipt #</th>
+                <th class="num-col">Amount</th>
+                <th>Mode</th>
+                <th class="num-col">Paid</th>
+                <th class="num-col">Tax</th>
+                <th class="num-col">Due</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let e of expenses(); trackBy: trackByIndex">
+                <td class="date-col">{{ getColumnValue(e, 'transactionDate') }}</td>
+                <td class="remark-col">{{ getColumnValue(e, 'expenseDescription') }}</td>
+                <td>{{ getColumnValue(e, 'vendorName') }}</td>
+                <td>{{ getColumnValue(e, 'receiptNumber') }}</td>
+                <td class="num-col">{{ getColumnValue(e, 'transactionAmount') }}</td>
+                <td>{{ getColumnValue(e, 'typeOfExpense') }}</td>
+                <td class="num-col">{{ getColumnValue(e, 'paidAmount') }}</td>
+                <td class="num-col">{{ getColumnValue(e, 'taxAmount') }}</td>
+                <td class="num-col">{{ getColumnValue(e, 'dueAmount') }}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="export-row">
+                <td colspan="9" class="export-cell">
+                  <button
+                    type="button"
+                    class="jcd-export-btn"
+                    (click)="exportExpensesCsv()"
+                    title="Export expense data to CSV">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"
+                         xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M8 2v8m0 0l-3-3m3 3l3-3" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M3 11v1a2 2 0 002 2h6a2 2 0 002-2v-1"
+                            stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Export CSV
+                  </button>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- ── CR/DT TAB ── -->
+    <div class="jcd-tab-pane" [class.active]="activeTab() === 'cr_dt'">
+      <div class="jcd-no-data">Credit/Debit information coming soon.</div>
+    </div>
+
+  </div>
+</div>

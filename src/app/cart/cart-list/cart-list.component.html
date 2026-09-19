@@ -1,0 +1,116 @@
+ <div class="cart-list">
+  <ng-container *ngIf="vm$ | async as vms">
+
+    <!-- ════════════════════════════════ -->
+    <!--  PRODUCTS SECTION               -->
+    <!-- ════════════════════════════════ -->
+    <div *ngIf="vms.length; else empty">
+
+      <div *ngFor="let vm of vms; trackBy: trackByProductId"
+           class="cart-item-wrap">
+
+        <!-- ── Main cart row ── -->
+        <div class="cart-item">
+
+          <!-- IMAGE -->
+          <!-- <a [routerLink]="['/product', vm.item.productId]" class="thumb">
+            <img  [src]="buildImageUrl(vm.item.imageUrl ,vm.item?.title ,vm.item?.isService )"  class="item-img" />
+          </a> -->
+            
+          <a [routerLink]="['/product', vm.item.productId]" class="thumb">
+          <img
+            [src]="buildImageUrl(vm.item.imageUrl || vm.item.item.image_url, vm.item.item.inventoryId|| vm.item.item.inv_id, vm.item.isService)"
+            class="item-img"
+          />
+        </a>
+          
+
+          <!-- CONTENT -->
+          <div class="item-content">
+
+            <!-- Top row -->
+            <div class="top-row">
+              <a [routerLink]="['/product', vm.item.productId]" class="title">
+                {{ vm.item.title }}
+              </a>
+              <button type="button" class="remove-btn"
+                      (click)="remove(vm.item)" aria-label="Remove item">✕</button>
+            </div>
+
+            <!-- Quantity row -->
+            <div class="middle-row">
+              <!-- <div class="qty-box">
+                <button type="button" (click)="decrease(vm.item)">−</button>
+                <span class="qty-value">{{ vm.item.quantity }}</span>
+                <button type="button" (click)="increase(vm.item)">+</button>
+              </div> -->
+              <div class="qty-stepper">
+              <button
+                type="button"
+                class="qty-btn"
+                (click)="decrease(vm.item)"
+              >
+                −
+              </button>
+
+              <input
+                class="qty-input"
+                type="text"
+                inputmode="numeric"
+                pattern="[0-9]*"
+                [value]="vm.item.quantity"
+                (keydown)="allowOnlyIntegers($event)"
+                (blur)="updateQtyFromInput(vm.item, $event)"
+                (keyup.enter)="updateQtyFromInput(vm.item, $event)"
+              />
+ 
+
+              <button
+                type="button"
+                class="qty-btn"
+                (click)="increase(vm.item)"
+              >
+                +
+              </button>
+            </div>
+              <div class="unit-price">
+                × {{ (vm.item.dealPrice > 0 ? vm.item.dealPrice : vm.item.mrp) |  currency:'INR':'symbol':'1.2-2' }}
+              </div>
+            </div>
+
+            <!-- Subtotal -->
+           <div class="bottom-row">
+  <span
+    class="mrp-strike"
+    *ngIf="vm.item.dealPrice > 0 && vm.item.dealPrice < vm.item.mrp">
+    {{ (vm.item.mrp * vm.item.quantity + addonTotalFor(vm.item))
+        | currency:'INR':'symbol':'1.2-2' }}
+  </span>
+
+  {{ ((vm.item.dealPrice > 0 ? vm.item.dealPrice : vm.item.mrp) * vm.item.quantity + addonTotalFor(vm.item))
+      | currency:'INR':'symbol':'1.2-2' }}
+</div>
+
+          </div>
+        </div>
+
+      </div><!-- /cart-item-wrap -->
+    </div>
+
+    <!-- ════════════════════════════════ -->
+    <!--  ADD-ONS SECTION                -->
+    <!--  Delegated to AddonsSuggest     -->
+    <!-- ════════════════════════════════ -->
+    <!-- <app-addons-suggest
+      *ngIf="suggestedAddons$ | async as suggested"
+      [addonsList]="suggested"
+      sectionTitle="You might also need"
+      (addAddon)="onSuggestedAddonAdd($event)">
+    </app-addons-suggest> -->
+
+    <ng-template #empty>
+      <div class="empty">Your cart is empty</div>
+    </ng-template>
+
+  </ng-container>
+</div>

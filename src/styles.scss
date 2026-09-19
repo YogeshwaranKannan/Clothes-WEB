@@ -1,0 +1,15 @@
+// =============================================================================
+// GLOBAL STYLES — src/styles.scss
+// =============================================================================
+// IMPORTANT: @use rules must come FIRST before any other declarations.
+// stylePreprocessorOptions.includePaths: ["src/styles"] in angular.json
+// allows importing files directly by name without path prefix.
+
+@use 'styles/breakpoints' as *;
+@use 'styles/media' as *;
+@use 'styles/theme' as *;   // ← _theme.scss: all four themes + global variable rules
+
+/* Third-party — must come after @use rules */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import "ag-grid-community/styles/ag-grid.css";
+@import "ag-grid-community/styles/ag-theme-alpine.css";

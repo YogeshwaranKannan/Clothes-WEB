@@ -1,0 +1,647 @@
+// =============================================================================
+// grid.component.scss
+// =============================================================================
+// Changes in this revision (visual / colour only — ZERO layout changes):
+//
+//  ① Midnight-only overrides are scoped inside   :host-context(body.theme-midnight)
+//     — they are completely inert for every other theme.
+//
+//  ② Button unification (all themes):
+//     .bulk-btn.add-btn, .footer-btn, .bulk-btn[Save], .bulk-btn[Reset],
+//     Export Visible, Import  →  all inherit the same .bulk-btn.primary look.
+//
+//  ③ In-grid icon colours (.edit-btn / .delete-btn / .revert-btn):
+//     light themes  → green / red / primary (unchanged)
+//     Midnight      → softer theme-matched tones via :host-context override
+//
+//  ④ AG Grid filter panel, footer, paging panel:
+//     Midnight glass border (rgba(255,255,255,0.08)) + surface background.
+//
+//  ⑤ --grid-panel-border token added — transparent in light themes,
+//     white-tint in Midnight — used by toolbar groups and paging panel.
+//
+//  All existing selectors and layout rules are preserved verbatim.
+// =============================================================================
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HOST  +  SCOPED TOKENS
+// ─────────────────────────────────────────────────────────────────────────────
+
+:host {
+  display: block;
+  color: var(--color-text, var(--app-text));
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  font-size: var(--text-base, 15px);
+
+  // Core colour aliases (--color-* preferred; --app-* as fallback)
+  --grid-surface:       var(--color-surface,      var(--app-surface));
+  --grid-bg:            var(--color-background,   var(--app-bg));
+  --grid-border:        var(--color-border,        var(--app-border));
+  --grid-shadow:        rgba(0, 0, 0, 0.10);
+  --grid-hover-surface: var(--color-primary-soft,  var(--color-label-bg, rgba(11,94,215,0.06)));
+  --grid-header-bg:     var(--nav-bg);
+  --grid-header-text:   var(--nav-foreground);
+  --grid-footer-bg:     var(--nav-bg);
+  --grid-footer-text:   var(--nav-foreground);
+  --grid-primary:       var(--color-primary,       var(--app-primary));
+  --grid-primary-rgb:   var(--color-primary-rgb,   var(--app-primary-rgb, 11,94,215));
+  --grid-on-primary:    var(--color-on-primary,    var(--app-on-primary, #fff));
+  --grid-muted:         var(--color-text-muted,    var(--app-muted));
+
+  // Panel-separator border — invisible in light themes (uses normal border),
+  // overridden to glass-white in Midnight via :host-context below.
+  --grid-panel-border:  var(--color-border, var(--app-border));
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MIDNIGHT DEEP DARK — scoped token overrides
+// Applied when any ancestor <body> carries the class.
+// ─────────────────────────────────────────────────────────────────────────────
+
+:host-context(body.theme-midnight) {
+  --grid-panel-border:  rgba(255, 255, 255, 0.08);
+  --grid-shadow:        rgba(0, 0, 0, 0.45);
+  --grid-hover-surface: var(--color-primary-soft, #1e1b4b);
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WRAPPER CARD
+// ─────────────────────────────────────────────────────────────────────────────
+
+.grid-wrapper {
+  padding: 18px;
+  background: var(--grid-surface);
+  border-radius: 12px;
+  border: 1px solid var(--grid-panel-border);
+  box-shadow: 0 6px 20px var(--grid-shadow);
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  transition: background 0.25s ease, border-color 0.25s ease;
+
+  h2 {
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    font-size: var(--text-xl, 20px);
+    font-weight: var(--fw-bold, 700);
+    color: var(--color-text, var(--app-text));
+    margin: 0 0 14px;
+    letter-spacing: var(--tracking-tight, -0.02em);
+    transition: color 0.25s ease;
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONTROL CARD  (toolbar wrapper)
+// ─────────────────────────────────────────────────────────────────────────────
+
+.control-card {
+  background: var(--grid-surface);
+  border: 1px solid var(--grid-panel-border);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 16px;
+  box-shadow: 0 3px 14px var(--grid-shadow);
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.card-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SEARCH INPUT
+// ─────────────────────────────────────────────────────────────────────────────
+
+.global-search {
+  width: 260px;
+  padding: 0.85rem 4rem 0.85rem 1rem;
+  border-radius: 9999px;
+  background: var(--grid-surface);
+  border: 1px solid var(--grid-border);
+  color: var(--color-text, var(--app-text));
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  font-size: var(--text-sm, 13px);
+  outline: none;
+  transition: border-color 0.15s, background 0.25s ease;
+
+  &::placeholder { color: var(--grid-muted); }
+
+  &:focus {
+    border-color: var(--grid-primary);
+    background: var(--grid-hover-surface);
+    box-shadow: 0 0 0 3px rgba(var(--grid-primary-rgb), 0.18);
+  }
+}
+
+.global-search.compact {
+  width: 200px;
+  padding: 0.6rem 2.2rem 0.6rem 0.8rem;
+  border-radius: 8px;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BOXED TOOLBAR LAYOUT
+// ─────────────────────────────────────────────────────────────────────────────
+
+.boxed-toolbar {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.controls-left,
+.controls-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--grid-panel-border);
+  border-radius: 10px;
+  background: var(--grid-surface);
+  box-shadow: 0 2px 10px var(--grid-shadow);
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.controls-left > *,
+.controls-right > * { white-space: nowrap; }
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// GROUP-BY LABEL + SELECT
+// ─────────────────────────────────────────────────────────────────────────────
+
+.group-by {
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  font-size: var(--text-xs, 11px);
+  font-weight: var(--fw-semi, 600);
+  color: var(--grid-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide, 0.04em);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  select {
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    font-size: var(--text-sm, 13px);
+    color: var(--color-text, var(--app-text));
+    background: var(--grid-surface);
+    border: 1px solid var(--grid-border);
+    border-radius: 6px;
+    padding: 3px 8px;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.25s ease;
+
+    &:focus { border-color: var(--grid-primary); }
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TOOLBAR BUTTONS
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Base ghost style (Expand All / Collapse All / Columns)
+.bulk-btn,
+.columns-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--grid-border);
+  background: var(--grid-surface);
+  color: var(--color-text, var(--app-text));
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  font-size: var(--text-sm, 13px);
+  font-weight: var(--fw-medium, 500);
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.bulk-btn:hover,
+.columns-btn:hover {
+  background: var(--grid-hover-surface);
+  border-color: var(--grid-primary);
+  color: var(--grid-primary);
+  box-shadow: 0 2px 8px var(--grid-shadow);
+}
+
+// ── PRIMARY style — shared by Add Row, Save, Reset, and all footer actions ──
+// Any button that performs a data action gets this treatment.
+.bulk-btn.primary,
+.bulk-btn.add-btn,
+.footer-btn {
+  background: var(--grid-primary);
+  color: var(--grid-on-primary);
+  border-color: transparent;
+  font-weight: var(--fw-semi, 600);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  font-size: var(--text-sm, 13px);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+.bulk-btn.primary:hover,
+.bulk-btn.add-btn:hover,
+.footer-btn:hover {
+  background: var(--color-primary-hover, color-mix(in srgb, var(--grid-primary) 85%, black));
+  box-shadow: 0 3px 10px rgba(var(--grid-primary-rgb), 0.30);
+}
+
+// Import label behaves like a button
+.import-btn {
+  cursor: pointer;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// COLUMNS DROPDOWN PANEL
+// ─────────────────────────────────────────────────────────────────────────────
+
+.columns-dropdown { position: relative; }
+
+.dropdown-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 220px;
+  background: var(--grid-surface);
+  border: 1px solid var(--grid-panel-border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px var(--grid-shadow);
+  z-index: 200;
+  overflow: hidden;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--grid-panel-border);
+  background: var(--grid-surface);
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  font-size: var(--text-xs, 11px);
+  font-weight: var(--fw-bold, 700);
+  color: var(--grid-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide, 0.04em);
+
+  span { color: var(--color-text, var(--app-text)); }
+}
+
+.checkbox-list { padding: 6px 0; }
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  font-size: var(--text-sm, 13px);
+  color: var(--color-text, var(--app-text));
+  cursor: pointer;
+  transition: background 0.12s;
+
+  &:hover { background: var(--grid-hover-surface); }
+
+  &.locked {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  input[type="checkbox"] {
+    accent-color: var(--grid-primary);
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+  }
+}
+
+.bulk-actions {
+  display: flex;
+  gap: 6px;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AG GRID — CSS custom-property + ::ng-deep overrides
+// ─────────────────────────────────────────────────────────────────────────────
+
+.grid-theme {
+  // ── AG Grid own CSS variables ────────────────────────────────────────────
+  --ag-font-family:                  var(--font-sans, 'Inter', system-ui, sans-serif);
+  --ag-font-size:                    var(--text-sm, 13px);
+  --ag-background-color:             var(--grid-surface);
+  --ag-odd-row-background-color:     var(--grid-bg);
+  --ag-foreground-color:             var(--color-text, var(--app-text));
+  --ag-header-background-color:      var(--grid-header-bg);
+  --ag-header-foreground-color:      var(--grid-header-text);
+  --ag-header-column-resize-handle-color: var(--grid-panel-border);
+  --ag-border-color:                 var(--grid-border);
+  --ag-row-border-color:             var(--grid-border);
+  --ag-cell-horizontal-border:       1px solid var(--grid-border);
+  --ag-row-hover-color:              var(--grid-hover-surface);
+  --ag-selected-row-background-color:var(--color-primary-soft, rgba(var(--grid-primary-rgb), 0.10));
+  --ag-input-focus-border-color:     var(--grid-primary);
+  --ag-input-focus-box-shadow:       0 0 0 3px rgba(var(--grid-primary-rgb), 0.18);
+  --ag-checkbox-checked-color:       var(--grid-primary);
+  --ag-checkbox-unchecked-color:     var(--grid-border);
+  --ag-range-selection-border-color: var(--grid-primary);
+  --ag-value-change-value-highlight-background-color: rgba(var(--grid-primary-rgb), 0.18);
+  --ag-pagination-button-color:      var(--grid-primary);
+  --ag-pagination-button-disabled-color: var(--grid-muted);
+
+  // ── Header ───────────────────────────────────────────────────────────────
+  ::ng-deep .ag-header {
+    background: var(--grid-header-bg) !important;
+    color: var(--grid-header-text) !important;
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif) !important;
+    font-weight: var(--fw-semi, 600) !important;
+    font-size: var(--text-sm, 13px) !important;
+    border-bottom: 2px solid var(--grid-panel-border) !important;
+    transition: background 0.25s ease;
+  }
+
+  ::ng-deep .ag-header-cell-label,
+  ::ng-deep .ag-header-cell-text {
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif) !important;
+    font-weight: var(--fw-semi, 600) !important;
+    letter-spacing: var(--tracking-wide, 0.04em) !important;
+    text-transform: uppercase !important;
+    font-size: var(--text-xs, 11px) !important;
+    color: var(--grid-header-text) !important;
+    transition: color 0.25s ease;
+  }
+
+  ::ng-deep .ag-icon {
+    color: var(--grid-header-text) !important;
+  }
+
+  ::ng-deep .ag-header-cell {
+    border-right: 1px solid color-mix(in srgb, var(--grid-header-text) 25%, transparent) !important;
+  }
+
+  // ── Filter panel ─────────────────────────────────────────────────────────
+  ::ng-deep .ag-filter-toolpanel-header,
+  ::ng-deep .ag-filter-toolpanel-search,
+  ::ng-deep .ag-floating-filter-input,
+  ::ng-deep .ag-filter-toolpanel-instance-header,
+  ::ng-deep .ag-set-filter-list {
+    background: var(--grid-surface) !important;
+    color: var(--color-text, var(--app-text)) !important;
+    border-color: var(--grid-panel-border) !important;
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif) !important;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  // Filter container outer border
+  ::ng-deep .ag-filter-toolpanel-instance,
+  ::ng-deep .ag-popup-child,
+  ::ng-deep .ag-filter-toolpanel {
+    border: 1px solid var(--grid-panel-border) !important;
+    border-radius: 8px;
+    background: var(--grid-surface) !important;
+  }
+
+  // ── Cell / row surfaces ───────────────────────────────────────────────────
+  ::ng-deep .ag-root-wrapper,
+  ::ng-deep .ag-center-cols-container {
+    background: var(--grid-surface) !important;
+    transition: background 0.25s ease;
+  }
+
+  ::ng-deep .ag-cell {
+    background: transparent !important;
+    color: var(--color-text, var(--app-text)) !important;
+    border-color: var(--grid-border) !important;
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif) !important;
+    font-size: var(--text-sm, 13px) !important;
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+
+  ::ng-deep .ag-row {
+    background: var(--grid-surface);
+    border-bottom: 1px solid var(--grid-border);
+    transition: background 0.18s ease;
+  }
+
+  ::ng-deep .ag-row-odd { background: var(--grid-bg); }
+
+  ::ng-deep .ag-row-hover { background: var(--grid-hover-surface) !important; }
+
+  // Edited / new row tints
+  ::ng-deep .ag-row.edited-row,
+  ::ng-deep .ag-row.edited-row .ag-cell {
+    background: rgba(var(--grid-primary-rgb), 0.14) !important;
+  }
+  ::ng-deep .ag-row.new-row,
+  ::ng-deep .ag-row.new-row .ag-cell {
+    background: rgba(var(--grid-primary-rgb), 0.22) !important;
+  }
+
+  // ── Paging / pagination footer ────────────────────────────────────────────
+  ::ng-deep .ag-paging-panel {
+    background: var(--grid-surface) !important;
+    color: var(--color-text, var(--app-text)) !important;
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif) !important;
+    font-size: var(--text-sm, 13px) !important;
+    border-top: 1px solid var(--grid-panel-border) !important;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  ::ng-deep .ag-paging-button { color: var(--grid-primary) !important; }
+  ::ng-deep .ag-paging-button:disabled { color: var(--grid-muted) !important; }
+
+  // ── Cell editor ───────────────────────────────────────────────────────────
+  ::ng-deep .ag-cell-editor input,
+  ::ng-deep .ag-text-field-input {
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif) !important;
+    font-size: var(--text-sm, 13px) !important;
+    color: var(--color-text, var(--app-text)) !important;
+    background: var(--grid-bg) !important;
+    border: 1px solid var(--grid-primary) !important;
+    border-radius: 4px !important;
+  }
+
+  // ── Scrollbars ────────────────────────────────────────────────────────────
+  ::ng-deep .ag-body-horizontal-scroll-viewport,
+  ::ng-deep .ag-body-vertical-scroll-viewport {
+    scrollbar-width: thin;
+    scrollbar-color: var(--grid-border) transparent;
+  }
+  ::ng-deep ::-webkit-scrollbar       { width: 6px; height: 6px; }
+  ::ng-deep ::-webkit-scrollbar-track { background: transparent; }
+  ::ng-deep ::-webkit-scrollbar-thumb { background: var(--grid-border); border-radius: 3px; }
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// GROUP ROWS
+// ─────────────────────────────────────────────────────────────────────────────
+
+.group-header-row {
+  background: var(--grid-bg);
+  border-bottom: 1px solid var(--grid-border);
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  font-weight: var(--fw-semi, 600);
+  color: var(--color-text, var(--app-text));
+  transition: background 0.25s ease;
+}
+
+.group-footer-row {
+  background: var(--grid-surface);
+  border-top: 1px dashed var(--grid-border);
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  font-style: italic;
+  color: var(--grid-muted);
+  transition: background 0.25s ease;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// IN-GRID ACTION ICON BUTTONS
+// Default colours: green edit / red delete / primary revert  (all themes)
+// Midnight override below swaps to softer indigo-family tones.
+// ─────────────────────────────────────────────────────────────────────────────
+
+.icon-btn {
+  width: 28px;
+  height: 28px;
+  background: var(--grid-surface);
+  border: 1px solid var(--grid-border);
+  border-radius: 6px;
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 0.14s, transform 0.12s, box-shadow 0.15s, border-color 0.15s;
+}
+
+.icon-btn:hover {
+  background: var(--grid-hover-surface);
+  border-color: var(--grid-primary);
+  box-shadow: 0 2px 8px var(--grid-shadow);
+}
+
+.icon-btn:active { transform: translateY(1px); }
+
+// Default (all non-Midnight themes)
+.edit-btn   { color: #4caf50; }
+.delete-btn { color: #e53935; }
+.revert-btn { color: var(--grid-primary); }
+
+// Midnight — softer, higher-contrast on near-black surface
+:host-context(body.theme-midnight) {
+  .edit-btn   { color: #6ee7b7; } // emerald-300: visible on dark, not harsh
+  .delete-btn { color: #fca5a5; } // red-300: warm, not blinding
+  .revert-btn { color: var(--color-primary, #818cf8); } // indigo accent
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CUSTOM GRID FOOTER  (the label/export strip below the grid)
+// ─────────────────────────────────────────────────────────────────────────────
+
+.grid-footer {
+  margin-top: 8px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--grid-footer-bg);
+  color: var(--grid-footer-text);
+  border-top: 1px solid var(--grid-panel-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  font-size: var(--text-sm, 13px);
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LINK CELLS
+// ─────────────────────────────────────────────────────────────────────────────
+
+.view-detail-link,
+.grid-link {
+  color: var(--grid-primary);
+  text-decoration: underline;
+  cursor: pointer;
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  transition: color 0.15s;
+
+  &:hover { color: var(--color-primary-hover, var(--grid-primary)); }
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SCREEN-READER HELPER
+// ─────────────────────────────────────────────────────────────────────────────
+
+.sr-only {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MIDNIGHT — additional panel refinements (glass borders throughout)
+// These supplement the token override at the top and catch any
+// deeply nested AG Grid internals that only appear in dark contexts.
+// ─────────────────────────────────────────────────────────────────────────────
+
+:host-context(body.theme-midnight) {
+  // Wrapper + control card — richer shadow on very dark bg
+  .grid-wrapper,
+  .control-card {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55);
+  }
+
+  // Dropdown panel
+  .dropdown-panel {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55);
+  }
+
+  // AG Grid filter panel deeper overrides
+  .grid-theme ::ng-deep .ag-filter-toolpanel-instance,
+  .grid-theme ::ng-deep .ag-popup-child {
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.50);
+  }
+
+  // Paging panel: match the surface + glass border
+  .grid-theme ::ng-deep .ag-paging-panel {
+    background: var(--color-surface) !important;
+    border-top-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  // Subtle glow on primary buttons in dark context
+  .bulk-btn.primary:hover,
+  .bulk-btn.add-btn:hover,
+  .footer-btn:hover {
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.28),
+                0 3px 10px rgba(0, 0, 0, 0.40);
+  }
+}

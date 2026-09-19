@@ -1,0 +1,784 @@
+ <div class="product-list container py-4">
+
+  <!-- ── Top bar ────────────────────────────────────────────────────────── -->
+  <!-- <div class="pl-topbar" *ngIf="showHeading">
+    <div class="pl-topbar__inner container"></div>
+  </div> -->
+  
+  
+
+ 
+ <header class="page-header sticky-mobile-top">
+    <!-- <div class="page-header__glow"></div> -->
+    <div class="page-header__content">
+    
+
+  <nav class="breadcrumb" *ngIf="breadcrumb.length" aria-label="Breadcrumb">
+
+    <!-- Home / first breadcrumb -->
+    <ng-container *ngFor="let item of breadcrumb; let last = last">
+
+      <button
+        *ngIf="!last"
+        type="button"
+        class="breadcrumb-link"
+        (click)="navigateBreadcrumb(item)">
+        <span *ngIf="item === breadcrumb[0]" class="breadcrumb-home-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M3 10.5L12 3l9 7.5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M5.5 9.5V21h13V9.5M9.5 21v-6h5v6"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </span>
+
+        {{ item.label }}
+      </button>
+
+      <!-- Current page -->
+      <span
+        *ngIf="last"
+        class="breadcrumb-current"
+        aria-current="page">
+        {{ item.label }}
+      </span>
+
+      <!-- Separator -->
+      <span
+        *ngIf="!last"
+        class="breadcrumb-separator"
+        aria-hidden="true">
+        ›
+      </span>
+
+    </ng-container>
+
+    <!-- Item count -->
+    <div class="page-header__left">
+      <span class="page-header__eyebrow">
+        {{ (placeholder$ | async) ?? 0 }} items
+      </span>
+    </div>
+
+  </nav>
+    
+
+      <div class="page-header__right">
+        <button *ngIf="!hideFilters"
+                class="btn-outline mobile-filter-btn"
+                type="button"
+                (click)="openMobileDrawer()"
+                aria-label="Open filters">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+               viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true" focusable="false">
+            <line x1="4"  y1="6"  x2="20" y2="6"/>
+            <line x1="8"  y1="12" x2="20" y2="12"/>
+            <line x1="12" y1="18" x2="20" y2="18"/>
+            <circle cx="4"  cy="6"  r="2"/>
+            <circle cx="8"  cy="12" r="2"/>
+            <circle cx="12" cy="18" r="2"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+   <div class="page-header__left mobile-item-count">
+  <span class="page-header__eyebrow">
+    {{ (placeholder$ | async) ?? 0 }} items
+  </span>
+</div>
+  
+  <div class="product-layout" *ngIf="!hideFilters">
+    <div class="filters-sidebar">
+      <app-user-filters
+       
+        [availableBrandsWithCount$]="availableBrandsWithCount$"
+        [availableCategoriesWithCount$]="availableCategoriesWithCount$"
+        [availableSizesWithCount$]="availableSizesWithCount$"
+        [availableGendersWithCount$]="availableGendersWithCount$"
+        [priceBounds$]="priceBounds$"
+        [priceTicks$]="priceTicks$"
+        [searchTerm$]="searchTerm$"
+        [sort$]="sort$"
+        [selectedBrands$]="selectedBrands$"
+        [selectedCategoryIds$]="selectedCategoryIds$"
+        [selectedSizes$]="selectedSizes$"
+        [selectedGenders$]="selectedGenders$"
+        [selectedDiscountTiers$]="selectedDiscountTiers$"
+        [priceMin$]="priceMin$"
+        [priceMax$]="priceMax$"
+        [filteredProducts$]="filteredProducts$"
+        [placeholder$]="placeholder$"
+        (brandToggled)="toggleBrand($event)"
+        (categoryToggled)="toggleCategory($event)"
+        (sizeToggled)="toggleSize($event)"
+        (genderToggled)="toggleGender($event)"
+        (discountTierToggled)="toggleDiscountTier($event)"
+        (minPriceChanged)="setMin($event)"
+        (maxPriceChanged)="setMax($event)"
+        (searchChanged)="setSearchTerm($event)"
+        (sortChanged)="setSort($event)"
+        (clearFiltersClicked)="clearFilters()"
+        (clearOnlyClicked)="clearOnly($event)"
+      ></app-user-filters>
+    </div>
+
+    <div class="products-container" #productsContainer>
+
+      <!-- ═══════════════════════════════════════════════════════════════
+           MOBILE DRAWER
+           ═══════════════════════════════════════════════════════════════ -->
+      <div class="drawer-backdrop"
+           *ngIf="!hideFilters && mobileDrawerOpen"
+           (click)="closeMobileDrawer()"></div>
+
+      <aside class="mobile-drawer"
+             *ngIf="!hideFilters && mobileDrawerOpen"
+             [class.open]="mobileDrawerOpen"
+             [attr.aria-hidden]="!mobileDrawerOpen">
+
+        <div class="drawer-header">
+          <button class="back" *ngIf="mobileActiveGroup" (click)="closeMobileGroup()">◀</button>
+          <h3 class="drawer-title">REFINE BY</h3>
+          <button class="drawer-close" (click)="closeMobileDrawer()">✕</button>
+        </div>
+
+        <div class="drawer-body">
+          <ul class="group-list" *ngIf="!mobileActiveGroup">
+            <li (click)="openMobileGroup('price')">PRICE <span class="chev">›</span></li>
+            <!-- <li (click)="openMobileGroup('discount')">PERCENT SALE <span class="chev">›</span></li> -->
+            <li (click)="openMobileGroup('brand')">BRAND <span class="chev">›</span></li>
+            <li (click)="openMobileGroup('category')">CATEGORY <span class="chev">›</span></li>
+            <!-- <li (click)="openMobileGroup('size')">SIZE <span class="chev">›</span></li> -->
+            <!-- <li (click)="openMobileGroup('gender')">GENDER <span class="chev">›</span></li> -->
+          </ul>
+
+          <!-- BRAND -->
+          <div *ngIf="mobileActiveGroup === 'brand'" class="group-panel">
+            <div class="panel-actions-row">
+              <button class="btn" (click)="clearOnly('brand')">Clear</button>
+            </div>
+            <div class="panel-body" *ngIf="availableBrandsWithCount$ | async as brands">
+              <label class="panel-row mobile-checkbox-row" *ngFor="let opt of brands">
+                <input type="checkbox" [checked]="isBrandSelected(opt.value)" (change)="toggleBrand(opt.value)" />
+                <span>{{ opt.value }} <span class="filter-count">({{ opt.count }})</span></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- CATEGORY -->
+          <div *ngIf="mobileActiveGroup === 'category'" class="group-panel">
+            <div class="panel-actions-row">
+              <button class="btn" (click)="clearOnly('category')">Clear</button>
+            </div>
+            <div class="panel-body" *ngIf="availableCategoriesWithCount$ | async as cats">
+              <label class="panel-row mobile-checkbox-row" *ngFor="let c of cats">
+                <input type="checkbox" [checked]="isCategorySelected(c.id)" (change)="toggleCategory(c.id)" />
+                <span>{{ c.name }} <span class="filter-count">({{ c.count }})</span></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- SIZE -->
+          <div *ngIf="mobileActiveGroup === 'size'" class="group-panel">
+            <div class="panel-actions-row">
+              <button class="btn" (click)="clearOnly('size')">Clear</button>
+            </div>
+            <div class="panel-body" *ngIf="availableSizesWithCount$ | async as sizes">
+              <label class="panel-row mobile-checkbox-row" *ngFor="let opt of sizes">
+                <input type="checkbox" [checked]="isSizeSelected(opt.value)" (change)="toggleSize(opt.value)" />
+                <span>{{ opt.value }} <span class="filter-count">({{ opt.count }})</span></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- GENDER -->
+          <div *ngIf="mobileActiveGroup === 'gender'" class="group-panel">
+            <div class="panel-actions-row">
+              <button class="btn" (click)="clearOnly('gender')">Clear</button>
+            </div>
+            <div class="panel-body" *ngIf="availableGendersWithCount$ | async as genders">
+              <label class="panel-row mobile-checkbox-row" *ngFor="let opt of genders">
+                <input type="checkbox" [checked]="isGenderSelected(opt.value)" (change)="toggleGender(opt.value)" />
+                <span>{{ opt.value }} <span class="filter-count">({{ opt.count }})</span></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- DISCOUNT -->
+          <div *ngIf="mobileActiveGroup === 'discount'" class="group-panel">
+            <div class="panel-actions-row">
+              <button class="btn" (click)="clearOnly('discount')">Clear</button>
+            </div>
+            <div class="panel-body">
+              <label class="panel-row mobile-checkbox-row">
+                <input type="checkbox" [checked]="isDiscountSelected(10)" (change)="toggleDiscountTier(10)" />
+                <span>10% &amp; above</span>
+              </label>
+              <label class="panel-row mobile-checkbox-row">
+                <input type="checkbox" [checked]="isDiscountSelected(20)" (change)="toggleDiscountTier(20)" />
+                <span>20% &amp; above</span>
+              </label>
+              <label class="panel-row mobile-checkbox-row">
+                <input type="checkbox" [checked]="isDiscountSelected(30)" (change)="toggleDiscountTier(30)" />
+                <span>30% &amp; above</span>
+              </label>
+              <label class="panel-row mobile-checkbox-row">
+                <input type="checkbox" [checked]="isDiscountSelected(40)" (change)="toggleDiscountTier(40)" />
+                <span>40% &amp; above</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- PRICE -->
+          <div *ngIf="mobileActiveGroup === 'price'" class="group-panel">
+            <div class="panel-actions-row">
+              <button class="btn" (click)="clearPriceRange()">Clear</button>
+            </div>
+            <div class="panel-body">
+              <div class="price-panel mobile">
+                <div class="price-inputs">
+                  <label class="price-input">
+                    <span class="prefix">Rs.</span>
+                    <input type="text" [value]="tempMinPrice ?? lastPriceBounds.min"
+                           (input)="onMinInputChange($any($event.target).value)" aria-label="Min price" />
+                  </label>
+                  <span class="dash">-</span>
+                  <label class="price-input">
+                    <span class="prefix">Rs.</span>
+                    <input type="text" [value]="tempMaxPrice ?? lastPriceBounds.max"
+                           (input)="onMaxInputChange($any($event.target).value)" aria-label="Max price" />
+                  </label>
+                </div>
+                <div class="price-slider two-sliders">
+                  <input type="range" class="range-min"
+                         [min]="lastPriceBounds.min" [max]="lastPriceBounds.max"
+                         [value]="tempMinPrice ?? lastPriceBounds.min"
+                         (input)="onMinSliderInput($any($event.target).value)" />
+                  <input type="range" class="range-max"
+                         [min]="lastPriceBounds.min" [max]="lastPriceBounds.max"
+                         [value]="tempMaxPrice ?? lastPriceBounds.max"
+                         (input)="onMaxSliderInput($any($event.target).value)" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /drawer-body -->
+
+        <div class="drawer-footer">
+          <button class="btn" type="button" (click)="closeMobileDrawer()">
+            Show results ({{ (filteredProducts$ | async)?.length ?? 0 }})
+          </button>
+        </div>
+      </aside><!-- /mobile-drawer -->
+
+      <!-- ═══════════════════════════════════════════════════════════════
+           RESULTS SECTION
+           ═══════════════════════════════════════════════════════════════ -->
+      <section class="results">
+        <!--
+          cartQtyMap$ is subscribed ONCE here and passed down to every card
+          via template variable `qtyMap`. This avoids N separate subscriptions.
+        -->
+        <ng-container *ngIf="cartQtyMap$ | async as qtyMap">
+          <div *ngIf="displayProducts$ | async as products; else loading">
+
+            <!-- ── Rail layout ─────────────────────────────────────────── -->
+            <ng-container *ngIf="layout === 'rail'; else gridView">
+              <div class="rail-section">
+                <div class="rail-wrap">
+                  <button class="rail-btn left" type="button" (click)="scrollRail(-1)" aria-label="Scroll left">‹</button>
+                  <div #rail class="rail" tabindex="0" role="list" (keydown)="onRailKeydown($event)">
+
+                      <article class="card"
+                        *ngFor="let p of products"
+                        role="listitem"
+                        [class.card--dropdown-open]="isVariantModalOpen(p)"
+                        (click)="openProduct(p.ProductId)">
+
+                      <div class="discount" *ngIf="p.DiscountPercent">- {{ p.DiscountPercent }}</div>
+
+                      <picture class="img-wrap">
+                        <!-- Blurred background layer — same src, scaled to cover the container.
+                             The browser reuses the cached image; no extra network request. -->
+                        <!-- <img class="img-blur-bg"
+                             aria-hidden="true"
+                             [src]="buildImageUrl( $any(p).Image  , $any(p).inventoryId  || p.inventoryId,false)"
+                             alt="" loading="lazy" decoding="async" /> -->
+
+                        <ng-container *ngIf="$any(p).ImageWebp as webp">
+                          <source [srcset]="buildImageUrl(webp)" type="image/webp" />
+                        </ng-container>
+                        <!-- Foreground image — object-fit:contain so nothing is cropped -->
+                        <img class="img-main"
+                             [src]="buildImageUrl( $any(p).Image  ,  $any(p).inventoryId  || p.inventoryId,false)"
+                             (error)="onImgError($event)"
+                             [alt]="p.ProductName"
+                             loading="lazy" decoding="async" />
+                      </picture>
+
+                      <div class="card-body">
+                        <div class="meta">
+                          <!-- <span>{{ p.Category?.CategoryName }}</span> -->
+                          <!-- <span class="rating">★ ★ ★ ★ ★</span> -->
+                        </div>
+                        <h3 class="title">{{ p.ProductName | uppercase }}</h3>
+
+                        <!-- ── Variant section (rail) ── -->
+                        <ng-container *ngIf="p.variants?.length; else noVariantsRail">
+                          <ng-container *ngTemplateOutlet="variantBlock; context: { p: p, qtyMap: qtyMap }"></ng-container>
+                        </ng-container>
+
+                        <ng-template #noVariantsRail>
+                        <div class="prices">
+                              <span class="mrp">
+                                {{ p.SellingPrice | currency:'INR':'symbol':'1.2-2' }}
+                              </span>
+
+                              <span class="offer">
+                                {{ p.OfferPrice | currency:'INR':'symbol':'1.2-2' }}
+                              </span>
+                            </div>
+                          <!-- <div class="emi">{{ emiText(p.OfferPrice ?? p.SellingPrice) }}</div> -->
+                          <div class="actions">
+                            <ng-container *ngIf="!variantInCart(p, qtyMap); else stepperRailNoVariant">
+                              <button class="btn btn-cart" type="button" (click)="addVariantToCart(p, $event)">Add</button>
+                            </ng-container>
+                            <ng-template #stepperRailNoVariant>
+                           
+                              <div class="qty-steppeVariantr" (click)="$event.stopPropagation()">
+                                  <button
+                                    class="qty-btn"
+                                    type="button"
+                                    (click)="decreaseVariant(p, qtyMap, $event)"
+                                  >
+                                    −
+                                  </button>
+
+                                  <input
+                                    class="qty-input"
+                                    type="number"
+                                     (keydown)="allowOnlyIntegers($event)"
+                                       
+                 pattern="[0-9]*"
+                                    min="1"
+                                    [value]="getVariantQty(p, qtyMap)"
+                                    (click)="$event.stopPropagation()"
+                                    (blur)="updateVariantQtyFromInput(p, $event)"
+                                    (keyup.enter)="updateVariantQtyFromInput(p, $event)"
+                                  />
+
+                                  <button
+                                    class="qty-btn"
+                                    type="button"
+                                    (click)="increaseVariant(p, qtyMap, $event)"
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                            </ng-template>
+                          </div>
+                        </ng-template>
+                      </div>
+                    </article>
+
+                  </div>
+                  <button class="rail-btn right" type="button" (click)="scrollRail(1)" aria-label="Scroll right">›</button>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- ── Grid layout ─────────────────────────────────────────── -->
+            <ng-template #gridView>
+              <div class="product-grid">
+
+                <article class="card"
+                         *ngFor="let p of products"
+                         role="listitem"
+                         (click)="openProduct(p.ProductId)">
+
+                  <!-- <div class="discount" *ngIf="p.DiscountPercent">{{ p.DiscountPercent }}%</div> -->
+                   <span class="discount" *ngIf="+(p.OfferPrice ?? 0) > 0">- {{ p.DiscountPercent }}%</span>
+
+                  <picture class="img-wrap">
+                    <!-- Blurred background layer — reuses the cached image, no extra request -->
+                    <!-- <img class="img-blur-bg"
+                         aria-hidden="true"
+                         [src]="buildImageUrl( $any(p).Image  , $any(p).inventoryId  || p.inventoryId,p.isService)"
+                         alt="" loading="lazy" decoding="async" /> -->
+
+                    <ng-container *ngIf="$any(p).ImageWebp as webp">
+                      <source [srcset]="buildImageUrl(webp)" type="image/webp" />
+                    </ng-container>
+                    <!-- Foreground image — object-fit:contain so nothing is cropped -->
+                    <img class="img-main"
+                         [src]="buildImageUrl( $any(p).Image  ,  $any(p).inventoryId  || p.inventoryId,p.isService)"
+                         (error)="onImgError($event)"
+                         [alt]="p.ProductName"
+                         loading="lazy" decoding="async" />
+                  </picture>
+
+                  <div class="card-body">
+                    <div class="meta">
+                      <!-- <span>{{ p.Category?.CategoryName }}</span> -->
+                      <!-- <span class="rating">★ ★ ★ ★ ★</span> -->
+                    </div>
+                    <h3 class="title">{{ p.ProductName | uppercase }}</h3>
+
+                
+
+                      <!-- <div class="prices">
+
+                        <ng-container *ngIf="getSelectedVariant(p) as sv">
+                        <div class="variant-price-cart">
+
+                          <div>
+                            <ng-container *ngIf="parsePrice(sv.OfferPrice) > 0; else normalVariantPrice">
+
+                              <span class="mrp">
+                                {{ parsePrice(sv.SellingPrice) | currency:'INR':'symbol' }}
+                              </span>
+
+                              <span class="offer">
+                                {{ parsePrice(sv.OfferPrice) | currency:'INR':'symbol' }}
+                              </span>
+
+                            </ng-container>
+
+                            <ng-template #normalVariantPrice>
+                              <span class="offer">
+                                {{ parsePrice(sv.SellingPrice) | currency:'INR':'symbol' }}
+                              </span>
+                            </ng-template>
+                          </div>
+
+                          <div>
+                          <span
+                            class="vm-row__in-cart"
+                            *ngIf="getTotalVariantQty(p, qtyMap) as cartQty">
+                            {{ cartQty }} in cart
+                          </span>
+                        </div>
+
+                        </div>
+                          
+
+                        </ng-container>
+
+                      </div>
+
+                      <ng-container
+                        *ngTemplateOutlet="variantBlock; context:{ p: p, qtyMap: qtyMap }">
+                      </ng-container> -->
+
+     
+
+                    <ng-container *ngIf="p.variants?.length; else noVariantsGrid">
+
+                      <div class="prices">
+
+                        <ng-container *ngIf="getSelectedVariant(p) as sv">
+                          <div class="variant-price-cart">
+
+                            <div>
+                              <ng-container *ngIf="parsePrice(sv.OfferPrice) > 0; else normalVariantPrice">
+
+                                <span class="mrp">
+                                  {{ parsePrice(sv.SellingPrice) | currency:'INR':'symbol' }}
+                                </span>
+
+                                <span class="offer">
+                                  {{ parsePrice(sv.OfferPrice) | currency:'INR':'symbol' }}
+                                </span>
+
+                              </ng-container>
+
+                              <ng-template #normalVariantPrice>
+                                <span class="offer">
+                                  {{ parsePrice(sv.SellingPrice) | currency:'INR':'symbol' }}
+                                </span>
+                              </ng-template>
+                            </div>
+
+                            <div>
+                              <span
+                                class="vm-row__in-cart"
+                                *ngIf="getTotalVariantQty(p, qtyMap) as cartQty">
+                                {{ cartQty }} in cart
+                              </span>
+                            </div>
+
+                          </div>
+                        </ng-container>
+
+                      </div>
+
+                      <!-- VARIANT PRODUCT: directly open variant popup -->
+                      <div class="actions">
+                        <button
+                          class="btn btn-cart"
+                          type="button"
+                        (click)="openVariantModal(p, $event)"
+                        >
+                          Add
+                        </button>
+                      </div>
+
+                    </ng-container>
+                    <ng-template #noVariantsGrid>
+                      <div class="prices">
+
+                      <ng-container *ngIf="+(p.OfferPrice ?? 0) > 0; else normalPrice">
+
+                        <span class="mrp">
+                          {{ p.SellingPrice | currency:'INR':'symbol' }}
+                        </span>
+
+                        <span class="offer">
+                          {{ p.OfferPrice | currency:'INR':'symbol' }}
+                        </span>
+
+                      </ng-container>
+
+
+                      <ng-template #normalPrice>
+
+                        <span class="offer">
+                          {{ p.SellingPrice | currency:'INR':'symbol' }}
+                        </span>
+
+                      </ng-template>
+
+                      
+
+                    </div>
+                      <!-- <div class="emi">{{ emiText(p.OfferPrice ?? p.SellingPrice) }}</div> -->
+                      <div class="actions">
+                        <ng-container *ngIf="!variantInCart(p, qtyMap); else stepperGridNoVariant">
+                          <button class="btn btn-cart" type="button" (click)="addVariantToCart(p, $event)">Add</button>
+                        </ng-container>
+                        <ng-template #stepperGridNoVariant>
+                          <!-- <div class="qty-stepper" (click)="$event.stopPropagation()">
+                            <button class="qty-btn" type="button" (click)="decreaseVariant(p, qtyMap, $event)">−</button>
+                            <span class="qty-val">{{ getVariantQty(p, qtyMap) }}</span>
+                            <button class="qty-btn" type="button" (click)="increaseVariant(p, qtyMap, $event)">+</button>
+                          </div> -->
+                          <div class="qty-stepper" (click)="$event.stopPropagation()">
+                            <button
+                              class="qty-btn"
+                              type="button"
+                              (click)="decreaseVariant(p, qtyMap, $event)"
+                            >
+                              −
+                            </button>
+
+                            <input
+                              class="qty-input"
+                              type="number"
+                              min="1"
+                              [value]="getVariantQty(p, qtyMap)"
+                               (keydown)="allowOnlyIntegers($event)"
+                                  
+                 pattern="[0-9]*"
+                              (click)="$event.stopPropagation()"
+                              (blur)="updateVariantQtyFromInput(p, $event)"
+                              (keyup.enter)="updateVariantQtyFromInput(p, $event)"
+                            />
+
+                            <button
+                              class="qty-btn"
+                              type="button"
+                              (click)="increaseVariant(p, qtyMap, $event)"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </ng-template>
+                      </div>
+                    </ng-template>
+
+                    
+                  </div>
+
+                </article>
+
+              </div>
+            </ng-template>
+
+             <div #scrollSentinel class="scroll-sentinel" aria-hidden="true"></div>
+
+          </div><!-- /displayProducts$ -->
+
+          <ng-template #loading>
+            <div class="no-results">Loading products...</div>
+          </ng-template>
+
+        </ng-container><!-- /cartQtyMap$ -->
+      </section>
+
+    </div> <!-- /.products-container -->
+  </div> <!-- /.product-layout -->
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SHARED VARIANT BLOCK — fixed-position overlay panel
+     Context: { p: Product, qtyMap: Map<string,number> }
+     ═══════════════════════════════════════════════════════════════════════ -->
+<ng-template #variantBlock let-p="p" let-qtyMap="qtyMap">
+
+  <div class="variant-dropdown" (click)="$event.stopPropagation()">
+
+    <!-- ── Trigger — opens centered modal ─────────────────────────── -->
+    <button
+      type="button"
+      class="variant-trigger"
+      [class.variant-trigger--open]="isVariantModalOpen(p)"
+      (click)="openVariantModal(p, $event)"
+      [attr.aria-expanded]="isVariantModalOpen(p)"
+      aria-haspopup="dialog"
+    >
+      <span class="variant-trigger__label">
+        {{ getSelectedVariant(p)?.variantsName ?? 'Select size / weight' }}
+      </span>
+      <svg class="variant-trigger__chevron" viewBox="0 0 20 20" fill="none"
+           xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M5 7.5L10 12.5L15 7.5"
+              stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+  </div>
+
+</ng-template>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     VARIANT MODAL — centered overlay, opens when user clicks a variant trigger.
+     One modal at a time.  Closes on: backdrop click, × button, ESC key, scroll.
+     ═══════════════════════════════════════════════════════════════════════ -->
+<ng-container *ngIf="variantModalProduct as p">
+  <ng-container *ngIf="cartQtyMap$ | async as qtyMap2">
+
+    <!-- Backdrop — dim the page and capture outside clicks to close -->
+    <div
+      class="vm-backdrop"
+      aria-hidden="true"
+      (click)="closeVariantModal()"
+    ></div>
+
+    <!-- Modal panel -->
+    <div
+      class="vm-panel"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="'Choose variant for ' + p.ProductName"
+      (click)="$event.stopPropagation()"
+    >
+
+      <!-- ── Header ──────────────────────────────────────────────────── -->
+      <div class="vm-header">
+        <div class="vm-header__meta">
+          <!-- <span class="vm-header__category">{{ p.Category?.CategoryName }}</span> -->
+          <h3 class="vm-header__name">{{ p.ProductName }}</h3>
+        </div>
+        <button
+          type="button"
+          class="vm-close"
+          (click)="closeVariantModal()"
+          aria-label="Close variant selector"
+        >&#x2715;</button>
+      </div>
+
+      <!-- ── Variant list ────────────────────────────────────────────── -->
+      <div class="vm-body">
+        <div
+          *ngFor="let v of p.variants; trackBy: trackByVariantId"
+          class="vm-row"
+        >
+          <!-- Variant name + price -->
+          <div class="vm-row__info">
+            <span class="vm-row__name">{{ v.variantsName }}</span>
+            <div class="vm-row__prices">
+              <span class="vm-row__offer" *ngIf="parsePrice(v.OfferPrice) > 0">
+                {{ parsePrice(v.OfferPrice) | currency:'INR':'symbol':'1.2-2' }}
+              </span>
+              <span class="vm-row__mrp" [class.vm-row__mrp--strike]="parsePrice(v.OfferPrice) > 0">
+                {{ parsePrice(v.SellingPrice) | currency:'INR':'symbol':'1.2-2' }}
+              </span>
+              <span class="vm-row__badge" *ngIf="variantOfferText(v) as badge">{{ badge }}</span>
+            </div>
+          </div>
+
+          <!-- Per-row qty control -->
+          <div class="vm-row__actions" (click)="$event.stopPropagation()">
+            <ng-container *ngIf="rowVariantInCart(p, v, qtyMap2); else vmRowAddBtn">
+              <div class="qty-stepperVariant">
+                <button
+                  class="qty-btn"
+                  type="button"
+                  (click)="decreaseRowVariant(p, v, qtyMap2, $event)"
+                >−</button>
+
+                <input
+                  class="qty-input"
+                  type="number"
+                  min="1"
+                  pattern="[0-9]*"
+                  (keydown)="allowOnlyIntegers($event)"
+                  [value]="getRowVariantQty(p, v, qtyMap2)"
+                  (click)="$event.stopPropagation()"
+                  (blur)="updateRowVariantQtyFromInput(p, v, qtyMap2, $event)"
+                  (keyup.enter)="updateRowVariantQtyFromInput(p, v, qtyMap2, $event)"
+                />
+
+                <button
+                  class="qty-btn"
+                  type="button"
+                  (click)="increaseRowVariant(p, v, qtyMap2, $event)"
+                >+</button>
+              </div>
+            </ng-container>
+
+            <ng-template #vmRowAddBtn>
+              <button
+                type="button"
+                class="vm-row-add-btn"
+                (click)="addRowVariantToCart(p, v, $event)"
+              >
+                Add
+              </button>
+            </ng-template>
+          </div>
+        </div>
+      </div><!-- /vm-body -->
+
+    
+
+    </div><!-- /vm-panel -->
+
+  </ng-container>
+</ng-container>
+<!-- /VARIANT MODAL -->
+ 
+
+
+
+
+
+

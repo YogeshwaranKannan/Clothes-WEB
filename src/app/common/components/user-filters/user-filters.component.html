@@ -1,0 +1,688 @@
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     USER-FILTERS COMPONENT TEMPLATE
+     All filters + sort control restored.  Bindings emit Outputs or read
+     Inputs via the async pipe.  No logic changes — UI-only restoration.
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<div class="filters-topbar">
+  <div class="top-filters filters-box" role="region" aria-label="Filters" (click)="$event.stopPropagation()">
+
+    <!-- Backdrop (closes open panel on mobile tap) -->
+    <div class="filter-backdrop" *ngIf="expandedPanels.size" (click)="collapseAllFilters()"></div>
+
+    <div class="filter-row">
+
+      <!-- ── PRICE ─────────────────────────────────────────────────────────── -->
+      <div class="filter-chip" (click)="$event.stopPropagation(); togglePanel('price')">
+        <button type="button" class="chip-btn" [attr.aria-expanded]="isPanelOpen('price')">
+          PRICE <span class="chev">{{ isPanelOpen('price') ? '▴' : '▾' }}</span>
+        </button>
+
+        <div class="filter-panel" *ngIf="isPanelOpen('price')" (click)="$event.stopPropagation()">
+          <div class="panel-body">
+            <div class="price-panel">
+              <div class="price-inputs">
+                <label class="price-input">
+                  <span class="prefix">Rs.</span>
+                  <input type="text"
+                         [value]="tempMinPrice ?? lastPriceBounds.min"
+                         (input)="onMinInputChange($any($event.target).value)"
+                         aria-label="Minimum price" />
+                </label>
+                <span class="dash">-</span>
+                <label class="price-input">
+                  <span class="prefix">Rs.</span>
+                  <input type="text"
+                         [value]="tempMaxPrice ?? lastPriceBounds.max"
+                         (input)="onMaxInputChange($any($event.target).value)"
+                         aria-label="Maximum price" />
+                </label>
+              </div>
+
+              <div class="price-slider two-sliders">
+                <div class="slider-track" [style.background]="sliderTrackBackground()"></div>
+                <div class="single-range">
+                  <input type="range" class="range-min"
+                         [class.active]="activeThumb === 'min'"
+                         (pointerdown)="onThumbPointerDown('min')"
+                         (pointerup)="onThumbPointerUp()"
+                         [min]="lastPriceBounds.min" [max]="lastPriceBounds.max"
+                         [value]="tempMinPrice ?? lastPriceBounds.min"
+                         (input)="onMinSliderInput($any($event.target).value)"
+                         aria-label="Min price slider" />
+                </div>
+                <div class="single-range">
+                  <input type="range" class="range-max"
+                         [class.active]="activeThumb === 'max'"
+                         (pointerdown)="onThumbPointerDown('max')"
+                         (pointerup)="onThumbPointerUp()"
+                         [min]="lastPriceBounds.min" [max]="lastPriceBounds.max"
+                         [value]="tempMaxPrice ?? lastPriceBounds.max"
+                         (input)="onMaxSliderInput($any($event.target).value)"
+                         aria-label="Max price slider" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="panel-actions">
+            <button class="btn" type="button" (click)="applyPriceRange()">Apply</button>
+            <button class="btn" type="button" (click)="clearPriceRange()">Clear</button>
+          </div> -->
+        </div>
+      </div><!-- /PRICE -->
+
+      <!-- ── PERCENT SALE (Discount) ──────────────────────────────────────── -->
+      <!-- <div class="filter-chip" (click)="$event.stopPropagation(); togglePanel('discount')">
+        <button type="button" class="chip-btn" [attr.aria-expanded]="isPanelOpen('discount')">
+          PERCENT SALE <span class="chev">{{ isPanelOpen('discount') ? '▴' : '▾' }}</span>
+        </button>
+
+        <div class="filter-panel" *ngIf="isPanelOpen('discount')" (click)="$event.stopPropagation()">
+          <div class="panel-body">
+            
+            <label class="panel-row">
+              <input type="checkbox"
+                     [checked]="(selectedDiscountTiers$ | async)?.includes(10)"
+                     (change)="discountTierToggled.emit(10)" />
+              10% &amp; above
+            </label>
+            <label class="panel-row">
+              <input type="checkbox"
+                     [checked]="(selectedDiscountTiers$ | async)?.includes(20)"
+                     (change)="discountTierToggled.emit(20)" />
+              20% &amp; above
+            </label>
+            <label class="panel-row">
+              <input type="checkbox"
+                     [checked]="(selectedDiscountTiers$ | async)?.includes(30)"
+                     (change)="discountTierToggled.emit(30)" />
+              30% &amp; above
+            </label>
+            <label class="panel-row">
+              <input type="checkbox"
+                     [checked]="(selectedDiscountTiers$ | async)?.includes(40)"
+                     (change)="discountTierToggled.emit(40)" />
+              40% &amp; above
+            </label>
+          </div>
+          <div class="panel-actions">
+            <button class="btn" type="button" (click)="closePanel()">Apply</button>
+            <button class="btn" type="button" (click)="clearOnlyClicked.emit('discount')">Clear</button>
+          </div>
+        </div>
+      </div> -->
+      
+      <!-- /PERCENT SALE -->
+
+      <!-- ── BRAND ─────────────────────────────────────────────────────────── -->
+      <!-- Keyed by product.Brand — 2-column grid matching SCSS .brand-list -->
+      <div class="filter-chip" (click)="$event.stopPropagation(); togglePanel('brand')">
+        <button type="button" class="chip-btn" [attr.aria-expanded]="isPanelOpen('brand')">
+          BRAND <span class="chev">{{ isPanelOpen('brand') ? '▴' : '▾' }}</span>
+        </button>
+
+        <div class="filter-panel" *ngIf="isPanelOpen('brand')" (click)="$event.stopPropagation()">
+          <div class="panel-body brand-list" *ngIf="availableBrandsWithCount$ | async as brands">
+            <label class="panel-row" *ngFor="let opt of brands">
+              <input type="checkbox"
+                     [checked]="(selectedBrands$ | async)?.includes(opt.value)"
+                     (change)="brandToggled.emit(opt.value)" />
+              <span>{{ opt.value }} <span class="filter-count">({{ opt.count }})</span></span>
+            </label>
+          </div>
+          <div class="panel-actions">
+            <button class="btn" type="button" (click)="closePanel()">Apply</button>
+            <button class="btn" type="button" (click)="clearOnlyClicked.emit('brand')">Clear</button>
+          </div>
+        </div>
+      </div><!-- /BRAND -->
+
+      <!-- ── CATEGORY ──────────────────────────────────────────────────────── -->
+      <!-- Uses product.Category.CategoryId as the key and CategoryName as label -->
+      <div class="filter-chip" (click)="$event.stopPropagation(); togglePanel('category')">
+        <button type="button" class="chip-btn" [attr.aria-expanded]="isPanelOpen('category')">
+          CATEGORY <span class="chev">{{ isPanelOpen('category') ? '▴' : '▾' }}</span>
+        </button>
+
+        <div class="filter-panel" *ngIf="isPanelOpen('category')" (click)="$event.stopPropagation()">
+          <div class="panel-body" *ngIf="availableCategoriesWithCount$ | async as cats">
+            <label class="panel-row" *ngFor="let c of cats">
+              <input type="checkbox"
+                     [checked]="(selectedCategoryIds$ | async)?.includes(c.id)"
+                     (change)="categoryToggled.emit(c.id)" />
+              <span>{{ c.name }} <span class="filter-count">({{ c.count }})</span></span>
+            </label>
+          </div>
+          <!-- <div class="panel-actions">
+            <button class="btn" type="button" (click)="closePanel('category')">Apply</button>
+            <button class="btn" type="button" (click)="clearOnlyClicked.emit('category')">Clear</button>
+          </div> -->
+        </div>
+      </div><!-- /CATEGORY -->
+
+      <!-- ── SIZE ──────────────────────────────────────────────────────────── -->
+      <!-- Uses product.Size -->
+      <div class="filter-chip" (click)="$event.stopPropagation(); togglePanel('size')">
+        <button type="button" class="chip-btn" [attr.aria-expanded]="isPanelOpen('size')">
+          SIZE <span class="chev">{{ isPanelOpen('size') ? '▴' : '▾' }}</span>
+        </button>
+
+        <div class="filter-panel" *ngIf="isPanelOpen('size')" (click)="$event.stopPropagation()">
+          <div class="panel-body" *ngIf="availableSizesWithCount$ | async as sizes">
+            <label class="panel-row" *ngFor="let opt of sizes">
+              <input type="checkbox"
+                     [checked]="(selectedSizes$ | async)?.includes(opt.value)"
+                     (change)="sizeToggled.emit(opt.value)" />
+              <span>{{ opt.value }} <span class="filter-count">({{ opt.count }})</span></span>
+            </label>
+          </div>
+          <!-- <div class="panel-actions">
+            <button class="btn" type="button" (click)="closePanel()">Apply</button>
+            <button class="btn" type="button" (click)="clearOnlyClicked.emit('size')">Clear</button>
+          </div> -->
+        </div>
+      </div><!-- /SIZE -->
+
+      <!-- ── GENDER ─────────────────────────────────────────────────────────── -->
+      <!-- Uses product.Gender -->
+      <!-- <div class="filter-chip" (click)="$event.stopPropagation(); togglePanel('gender')">
+        <button type="button" class="chip-btn" [attr.aria-expanded]="isPanelOpen('gender')">
+          GENDER <span class="chev">{{ isPanelOpen('gender') ? '▴' : '▾' }}</span>
+        </button>
+
+        <div class="filter-panel" *ngIf="isPanelOpen('gender')" (click)="$event.stopPropagation()">
+          <div class="panel-body" *ngIf="availableGendersWithCount$ | async as genders">
+            <label class="panel-row" *ngFor="let opt of genders">
+              <input type="checkbox"
+                     [checked]="(selectedGenders$ | async)?.includes(opt.value)"
+                     (change)="genderToggled.emit(opt.value)" />
+              <span>{{ opt.value }} <span class="filter-count">({{ opt.count }})</span></span>
+            </label>
+          </div>
+          <div class="panel-actions">
+            <button class="btn" type="button" (click)="closePanel()">Apply</button>
+            <button class="btn" type="button" (click)="clearOnlyClicked.emit('gender')">Clear</button>
+          </div>
+        </div>
+      </div> -->
+      <!-- /GENDER -->
+
+      <!-- ── SORT + CLEAR ALL ───────────────────────────────────────────────── -->
+      <!--
+        Sort options:
+          ''           → default / popular (no sort applied)
+          'price-asc'  → product.SellingPrice ascending
+          'price-desc' → product.SellingPrice descending
+          'name-asc'   → product.ProductName A→Z
+          'name-desc'  → product.ProductName Z→A
+        Parent ProductListComponent handles the actual sort in filteredProducts$
+      -->
+      <div class="filter-controls">
+        <label class="sort-label">Sort</label>
+        <select
+          [value]="sort$ | async"
+          (change)="sortChanged.emit($any($event.target).value)"
+          aria-label="Sort products"
+        >
+          <option value="">Popular</option>
+          <option value="price-asc">Price: Low → High</option>
+          <option value="price-desc">Price: High → Low</option>
+          <option value="name-asc">Name: A → Z</option>
+          <option value="name-desc">Name: Z → A</option>
+        </select>
+
+        <!-- Resets: brands, categories, sizes, genders, discount tiers,
+             price range, sort, and search term in the parent -->
+        <button class="btn clear-all-btn" type="button" (click)="clearFiltersClicked.emit()">
+          Clear All
+        </button>
+      </div><!-- /SORT + CLEAR ALL -->
+
+    </div><!-- /filter-row -->
+  </div><!-- /filters-box -->
+</div><!-- /filters-topbar -->
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     MOBILE DRAWER  (triggered by the mobile-filter-btn in product-list.html)
+     Visible only on viewports ≤ 900 px (enforced by SCSS).
+     ═══════════════════════════════════════════════════════════════════════════ -->
+
+<!-- Desktop sidebar (rendered when this component is placed inside .filters-sidebar) -->
+<aside class="desktop-sidebar">
+  <div class="filters-box">
+    <div class="filter-header" style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+      <h3 style="margin:0;">Filters</h3>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <label style="font-size:13px; font-weight:700;">Sort</label>
+        <select [value]="sort$ | async" (change)="sortChanged.emit($any($event.target).value)">
+          <option value="">Popular</option>
+          <option value="price-asc">Price: Low → High</option>
+          <option value="price-desc">Price: High → Low</option>
+          <option value="name-asc">Name: A → Z</option>
+          <option value="name-desc">Name: Z → A</option>
+        </select>
+        <!-- <button class="btn" type="button" (click)="expandAllFilters()">Expand All</button>
+        <button class="btn" type="button" (click)="collapseAllFilters()">Collapse</button>
+        <button class="btn clear-all-btn" type="button" (click)="clearFiltersClicked.emit()">Clear All</button> -->
+      </div>
+    </div>
+
+    <!-- ALL Categories from nav bar - Category (desktop sidebar section — persistent, scrollable, accordion children) -->
+
+    <!-- <div class="filter-section category-section">
+      <label class="section-title">Category</label>
+      <div class="category-list" style="max-height:280px; overflow:auto;">
+        <ng-container *ngFor="let cat of categories">
+          <div class="category-item">
+            <div class="parent" [class.active]="activeCategoryId === cat.id" (click)="toggleCategoryExpand(cat.id)">
+              <div class="parent-left">
+                <input type="checkbox"
+                       (click)="$event.stopPropagation(); categoryToggled.emit(cat.id)"
+                       [checked]="selectedCategoryIdsSnapshot.includes(cat.id)" />
+                <span class="parent-label">{{ cat.category }} <span class="filter-count">({{ cat.children?.length || 0 }})</span></span>
+              </div>
+              <div class="parent-toggle">{{ expandedCategoryIds.has(cat.id) ? '−' : '+' }}</div>
+            </div>
+            <div class="children" *ngIf="expandedCategoryIds.has(cat.id) && cat.children?.length">
+              <div class="child" *ngFor="let child of cat.children">
+                <label>
+                  <input type="checkbox"
+                         [checked]="selectedCategoryIdsSnapshot.includes(child.id)"
+                         (change)="categoryToggled.emit(child.id)" />
+                  {{ child.category }}
+                </label>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="panel-actions">
+        <button class="btn" type="button" (click)="clearOnlyClicked.emit('category')">Clear</button>
+      </div>
+    </div> -->
+
+    
+    <div class="filter-section category-section">
+      <label class="section-title">Category</label>
+      <div class="category-list">
+        <ng-container *ngIf="availableCategoriesWithCount$ | async as cats">
+          <div *ngFor="let cat of cats" class="category-item">
+            <div class="parent" [class.active]="activeCategoryId === (cat.id)" (click)="toggleCategoryExpand(cat.id)">
+              <div class="parent-left">
+                <input type="checkbox"
+                       (click)="$event.stopPropagation(); categoryToggled.emit(cat.id)"
+                       [checked]="(selectedCategoryIds$ | async)?.includes(cat.id)" />
+                <span class="parent-label">{{ cat.name || cat.category }} <span class="filter-count">({{ cat.count }})</span></span>
+              </div>
+              <span class="icon">{{ activeCategoryId === cat.id ? '▼' : '▶' }}</span>
+            </div>
+
+            <div class="children" *ngIf="activeCategoryId === cat.id">
+              <div *ngIf="cat.children?.length; else flatChildren">
+                <div class="child" *ngFor="let child of cat.children" (click)="$event.stopPropagation()">
+                  <label>
+                    <input type="checkbox"
+                           [checked]="(selectedCategoryIds$ | async)?.includes(child.id)"
+                           (change)="categoryToggled.emit(child.id)" />
+                    {{ child.name || child.category }}
+                  </label>
+                </div>
+              </div>
+              <ng-template #flatChildren>
+                <div class="child no-children">No subcategories</div>
+              </ng-template>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- Price -->
+    <div class="filter-section">
+      <label class="section-title">Price</label>
+      <div class="price-panel">
+        <div class="price-display">Rs. {{ tempMinPrice ?? lastPriceBounds.min | number:'1.0-0' }} &nbsp;–&nbsp; Rs. {{ tempMaxPrice ?? lastPriceBounds.max | number:'1.0-0' }}</div>
+        <div class="price-slider two-sliders">
+          <div class="slider-track" [style.background]="sliderTrackBackground()"></div>
+          <div class="single-range">
+            <input type="range" class="range-min"
+                   [class.active]="activeThumb === 'min'"
+                   (pointerdown)="onThumbPointerDown('min')"
+                   (pointerup)="onThumbPointerUp()"
+                   [min]="lastPriceBounds.min" [max]="lastPriceBounds.max"
+                   [value]="tempMinPrice ?? lastPriceBounds.min"
+                   (input)="onMinSliderInput($any($event.target).value)"
+                   aria-label="Min price slider" />
+          </div>
+          <div class="single-range">
+            <input type="range" class="range-max"
+                   [class.active]="activeThumb === 'max'"
+                   (pointerdown)="onThumbPointerDown('max')"
+                   (pointerup)="onThumbPointerUp()"
+                   [min]="lastPriceBounds.min" [max]="lastPriceBounds.max"
+                   [value]="tempMaxPrice ?? lastPriceBounds.max"
+                   (input)="onMaxSliderInput($any($event.target).value)"
+                   aria-label="Max price slider" />
+          </div>
+        </div>
+        <!-- <div class="panel-actions">
+          <button class="btn" type="button" (click)="applyPriceRange()">Apply</button>
+          <button class="btn" type="button" (click)="clearPriceRange()">Clear</button>
+        </div> -->
+      </div>
+    </div>
+
+    <!-- Percent Sale -->
+    <!-- <div class="filter-section">
+      <label class="section-title">Percent Sale</label>
+      <div class="panel-body">
+        <label class="panel-row">
+          <input type="checkbox"
+                 [checked]="(selectedDiscountTiers$ | async)?.includes(10)"
+                 (change)="discountTierToggled.emit(10)" />
+          10% &amp; above
+        </label>
+        <label class="panel-row">
+          <input type="checkbox"
+                 [checked]="(selectedDiscountTiers$ | async)?.includes(20)"
+                 (change)="discountTierToggled.emit(20)" />
+          20% &amp; above
+        </label>
+        <label class="panel-row">
+          <input type="checkbox"
+                 [checked]="(selectedDiscountTiers$ | async)?.includes(30)"
+                 (change)="discountTierToggled.emit(30)" />
+          30% &amp; above
+        </label>
+        <label class="panel-row">
+          <input type="checkbox"
+                 [checked]="(selectedDiscountTiers$ | async)?.includes(40)"
+                 (change)="discountTierToggled.emit(40)" />
+          40% &amp; above
+        </label>
+      </div>
+    </div> -->
+
+    <!-- Brand -->
+    <div class="filter-section">
+      <label class="section-title">Brand</label>
+      <div class="chips">
+        <ng-container *ngIf="availableBrandsWithCount$ | async as brands">
+          <button type="button" class="chip" *ngFor="let b of brands"
+                  [class.active]="(selectedBrands$ | async)?.includes(b.value)"
+                  (click)="brandToggled.emit(b.value)">
+            {{ b.value }} <span class="filter-count">({{ b.count }})</span>
+          </button>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- Size -->
+    <!-- <div class="filter-section">
+      <label class="section-title">Size</label>
+      <div class="panel-body" *ngIf="availableSizesWithCount$ | async as sizes">
+        <label class="panel-row" *ngFor="let opt of sizes">
+          <input type="checkbox"
+                 [checked]="(selectedSizes$ | async)?.includes(opt.value)"
+                 (change)="sizeToggled.emit(opt.value)" />
+          <span>{{ opt.value }} <span class="filter-count">({{ opt.count }})</span></span>
+        </label>
+      </div>
+    </div> -->
+
+    <!-- Gender -->
+    <!-- <div class="filter-section">
+      <label class="section-title">Gender</label>
+      <div class="panel-body" *ngIf="availableGendersWithCount$ | async as genders">
+        <label class="panel-row" *ngFor="let opt of genders">
+          <input type="checkbox"
+                 [checked]="(selectedGenders$ | async)?.includes(opt.value)"
+                 (change)="genderToggled.emit(opt.value)" />
+          <span>{{ opt.value }} <span class="filter-count">({{ opt.count }})</span></span>
+        </label>
+      </div>
+    </div> -->
+
+    <!-- Sort -->
+    <!-- <div class="filter-section">
+      <label class="section-title">Sort</label>
+      <div class="panel-actions">
+        <select
+          [value]="sort$ | async"
+          (change)="sortChanged.emit($any($event.target).value)"
+          aria-label="Sort products"
+        >
+          <option value="">Popular</option>
+          <option value="price-asc">Price: Low → High</option>
+          <option value="price-desc">Price: High → Low</option>
+          <option value="name-asc">Name: A → Z</option>
+          <option value="name-desc">Name: Z → A</option>
+        </select>
+      </div>
+    </div> -->
+
+  </div>
+
+
+</aside>
+<div class="drawer-backdrop" *ngIf="mobileDrawerOpen" (click)="closeMobileDrawer()"></div>
+
+<aside class="mobile-drawer"
+       *ngIf="mobileDrawerOpen"
+       [class.open]="mobileDrawerOpen"
+       [attr.aria-hidden]="!mobileDrawerOpen">
+
+  <div class="drawer-header">
+    <button class="back" *ngIf="mobileActiveGroup" (click)="closeMobileGroup()">◀</button>
+    <h3 class="drawer-title">REFINE BY</h3>
+    <button class="drawer-close" (click)="closeMobileDrawer()">✕</button>
+  </div>
+
+  <div class="drawer-body">
+
+    <!-- Group list — shown when no sub-panel is active -->
+    <ul class="group-list" *ngIf="!mobileActiveGroup">
+      <li (click)="openMobileGroup('price')">PRICE <span class="chev">›</span></li>
+      <!-- <li (click)="openMobileGroup('discount')">PERCENT SALE <span class="chev">›</span></li> -->
+      <li (click)="openMobileGroup('brand')">BRAND <span class="chev">›</span></li>
+      <li (click)="openMobileGroup('category')">CATEGORY <span class="chev">›</span></li>
+      <li (click)="openMobileGroup('size')">SIZE <span class="chev">›</span></li>
+      <!-- <li (click)="openMobileGroup('gender')">GENDER <span class="chev">›</span></li> -->
+    </ul>
+
+    <!-- ── Mobile: PRICE panel ────────────────────────────────────────────── -->
+    <div *ngIf="mobileActiveGroup === 'price'" class="group-panel">
+      <div class="panel-actions-row">
+        <button class="btn mobile-clear-btn" type="button" (click)="clearPriceRange()">Clear</button>
+      </div>
+      <div class="panel-body">
+        <div class="price-panel mobile">
+          <div class="price-inputs">
+            <label class="price-input">
+              <span class="prefix">Rs.</span>
+              <input type="text"
+                     [value]="tempMinPrice ?? lastPriceBounds.min"
+                     (input)="onMinInputChange($any($event.target).value)"
+                     aria-label="Minimum price" />
+            </label>
+            <span class="dash">-</span>
+            <label class="price-input">
+              <span class="prefix">Rs.</span>
+              <input type="text"
+                     [value]="tempMaxPrice ?? lastPriceBounds.max"
+                     (input)="onMaxInputChange($any($event.target).value)"
+                     aria-label="Maximum price" />
+            </label>
+          </div>
+
+          <div class="price-display">
+            Rs. {{ tempMinPrice ?? lastPriceBounds.min | number:'1.0-0' }}
+            &nbsp;–&nbsp;
+            Rs. {{ tempMaxPrice ?? lastPriceBounds.max | number:'1.0-0' }}
+          </div>
+
+          <div class="price-slider two-sliders">
+            <div class="slider-track" [style.background]="sliderTrackBackground()"></div>
+            <div class="single-range">
+              <input type="range" class="range-min"
+                     [class.active]="activeThumb === 'min'"
+                     (pointerdown)="onThumbPointerDown('min')"
+                     (pointerup)="onThumbPointerUp()"
+                     [min]="lastPriceBounds.min" [max]="lastPriceBounds.max"
+                     [value]="tempMinPrice ?? lastPriceBounds.min"
+                     (input)="onMinSliderInput($any($event.target).value)"
+                     aria-label="Min price slider" />
+            </div>
+            <div class="single-range">
+              <input type="range" class="range-max"
+                     [class.active]="activeThumb === 'max'"
+                     (pointerdown)="onThumbPointerDown('max')"
+                     (pointerup)="onThumbPointerUp()"
+                     [min]="lastPriceBounds.min" [max]="lastPriceBounds.max"
+                     [value]="tempMaxPrice ?? lastPriceBounds.max"
+                     (input)="onMaxSliderInput($any($event.target).value)"
+                     aria-label="Max price slider" />
+            </div>
+          </div>
+
+          <div class="ticks" *ngIf="priceTicks$ | async as ticks">
+            <div class="tick" *ngFor="let t of ticks">{{ t | number:'1.0-0' }}</div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /mobile PRICE -->
+
+    <!-- ── Mobile: PERCENT SALE panel ────────────────────────────────────── -->
+    <!-- Filters on parseInt(product.DiscountPercent) >= selected tier -->
+    <!-- <div *ngIf="mobileActiveGroup === 'discount'" class="group-panel">
+      <div class="panel-actions-row">
+        <button class="btn mobile-clear-btn" type="button" (click)="clearOnlyClicked.emit('discount')">Clear</button>
+      </div>
+      <div class="panel-body">
+        <label class="panel-row mobile-checkbox-row">
+          <input type="checkbox"
+                 [checked]="(selectedDiscountTiers$ | async)?.includes(10)"
+                 (change)="discountTierToggled.emit(10)" />
+          <span>10% &amp; above</span>
+        </label>
+        <label class="panel-row mobile-checkbox-row">
+          <input type="checkbox"
+                 [checked]="(selectedDiscountTiers$ | async)?.includes(20)"
+                 (change)="discountTierToggled.emit(20)" />
+          <span>20% &amp; above</span>
+        </label>
+        <label class="panel-row mobile-checkbox-row">
+          <input type="checkbox"
+                 [checked]="(selectedDiscountTiers$ | async)?.includes(30)"
+                 (change)="discountTierToggled.emit(30)" />
+          <span>30% &amp; above</span>
+        </label>
+        <label class="panel-row mobile-checkbox-row">
+          <input type="checkbox"
+                 [checked]="(selectedDiscountTiers$ | async)?.includes(40)"
+                 (change)="discountTierToggled.emit(40)" />
+          <span>40% &amp; above</span>
+        </label>
+      </div>
+    </div> -->
+    <!-- /mobile DISCOUNT -->
+
+    <!-- ── Mobile: BRAND panel ────────────────────────────────────────────── -->
+    <!-- Filters on product.Brand -->
+    <div *ngIf="mobileActiveGroup === 'brand'" class="group-panel">
+      <div class="panel-actions-row">
+        <button class="btn mobile-clear-btn" type="button" (click)="clearOnlyClicked.emit('brand')">Clear</button>
+      </div>
+      <div class="panel-body" *ngIf="availableBrandsWithCount$ | async as brands">
+        <label class="panel-row mobile-checkbox-row" *ngFor="let opt of brands">
+          <input type="checkbox"
+                 [checked]="(selectedBrands$ | async)?.includes(opt.value)"
+                 (change)="brandToggled.emit(opt.value)" />
+          <span>{{ opt.value }} <span class="filter-count">({{ opt.count }})</span></span>
+        </label>
+      </div>
+    </div><!-- /mobile BRAND -->
+
+    <!-- ── Mobile: CATEGORY panel ─────────────────────────────────────────── -->
+    <!-- Filters on product.Category.CategoryName (id = CategoryId) -->
+    <!-- <div *ngIf="mobileActiveGroup === 'category'" class="group-panel">
+      <div class="panel-actions-row">
+        <button class="btn mobile-clear-btn" type="button" (click)="clearOnlyClicked.emit('category')">Clear</button>
+      </div>
+      <div class="panel-body" *ngIf="availableCategoriesWithCount$ | async as cats">
+        <label class="panel-row mobile-checkbox-row" *ngFor="let c of cats">
+          <input type="checkbox"
+                 [checked]="(selectedCategoryIds$ | async)?.includes(c.id)"
+                 (change)="categoryToggled.emit(c.id)" />
+          <span>{{ c.name }} <span class="filter-count">({{ c.count }})</span></span>
+        </label>
+      </div>
+    </div>/mobile CATEGORY -->
+<div *ngIf="mobileActiveGroup === 'category'" class="group-panel">
+  <div class="panel-actions-row">
+    <button class="btn mobile-clear-btn" type="button"
+            (click)="clearOnlyClicked.emit('category')">Clear</button>
+  </div>
+  <div class="panel-body">
+    <ng-container *ngFor="let cat of categories">
+      <div class="category-parent-row"
+           (click)="toggleCategoryExpand(cat.id)"
+           style="cursor:pointer; font-weight:600; padding: 4px 0">
+        <span>{{ cat.category }}</span>
+        <span *ngIf="cat.children?.length">
+          {{ activeCategoryId === cat.id ? '−' : '+' }}
+        </span>
+      </div>
+      <ng-container *ngIf="activeCategoryId === cat.id && cat.children?.length">
+        <label class="panel-row mobile-checkbox-row"
+               *ngFor="let child of cat.children"
+               style="padding-left: 16px">
+          <input type="checkbox"
+                 [checked]="(selectedCategoryIds$ | async)?.includes(child.id)"
+                 (change)="categoryToggled.emit(child.id)" />
+          <span>{{ child.category }}</span>
+        </label>
+      </ng-container>
+    </ng-container>
+  </div>
+</div><!-- /mobile CATEGORY -->
+
+    <!-- ── Mobile: SIZE panel ─────────────────────────────────────────────── -->
+    <!-- Filters on product.Size -->
+    <div *ngIf="mobileActiveGroup === 'size'" class="group-panel">
+      <div class="panel-actions-row">
+        <button class="btn mobile-clear-btn" type="button" (click)="clearOnlyClicked.emit('size')">Clear</button>
+      </div>
+      <div class="panel-body" *ngIf="availableSizesWithCount$ | async as sizes">
+        <label class="panel-row mobile-checkbox-row" *ngFor="let opt of sizes">
+          <input type="checkbox"
+                 [checked]="(selectedSizes$ | async)?.includes(opt.value)"
+                 (change)="sizeToggled.emit(opt.value)" />
+          <span>{{ opt.value }} <span class="filter-count">({{ opt.count }})</span></span>
+        </label>
+      </div>
+    </div><!-- /mobile SIZE -->
+
+    <!-- ── Mobile: GENDER panel ───────────────────────────────────────────── -->
+    <!-- Filters on product.Gender -->
+    <!-- <div *ngIf="mobileActiveGroup === 'gender'" class="group-panel">
+      <div class="panel-actions-row">
+        <button class="btn mobile-clear-btn" type="button" (click)="clearOnlyClicked.emit('gender')">Clear</button>
+      </div>
+      <div class="panel-body" *ngIf="availableGendersWithCount$ | async as genders">
+        <label class="panel-row mobile-checkbox-row" *ngFor="let opt of genders">
+          <input type="checkbox"
+                 [checked]="(selectedGenders$ | async)?.includes(opt.value)"
+                 (change)="genderToggled.emit(opt.value)" />
+          <span>{{ opt.value }} <span class="filter-count">({{ opt.count }})</span></span>
+        </label>
+      </div>
+    </div> -->
+  </div><!-- /drawer-body -->
+
+  <div class="drawer-footer">
+    <button class="btn" type="button" (click)="closeMobileDrawer()">
+      Show results ({{ (filteredProducts$ | async)?.length ?? 0 }})
+    </button>
+  </div>
+</aside>

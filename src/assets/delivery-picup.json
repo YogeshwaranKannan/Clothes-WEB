@@ -1,0 +1,53 @@
+{
+  "orders": [
+    {
+      "sellerId": "SELLER001",
+      "default":"true",
+      "addressType": "DELIVERY",
+      "address": {
+        "areaName": "Anna Nagar",
+        "pincode": "600100"
+      }
+    },
+    {
+      "sellerId": "SELLER002",
+      "addressType": "DELIVERY",
+      "address": {
+        "areaName": "Velachery",
+        "pincode": "600042"
+      }
+    },
+    {
+      "sellerId": "SELLER003",
+      "addressType": "DELIVERY",
+      "address": {
+        "areaName": "JJ Nagar",
+        "pincode": "600040"
+      }
+    },
+    {
+      "sellerId": "SELLER003",
+      "addressType": "DELIVERY",
+      "address": {
+        "areaName": "Alwarpet",
+        "pincode": "600010"
+      }
+    },
+    {
+      "sellerId": "SELLER002",
+      "addressType": "PICKUP",
+      "address": {
+        "areaName": "CMBT",
+        "pincode": "600030"
+      }
+    },
+    {
+      "sellerId": "SELLER001",
+      "addressType": "PICKUP",
+       "address": {
+        "areaName": "T Nagar",
+        "pincode": "600004"
+      }
+    }
+  ]
+}

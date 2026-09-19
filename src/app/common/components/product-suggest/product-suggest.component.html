@@ -1,0 +1,274 @@
+<!-- <input
+    #desktopSearch
+    class="search-input"
+    type="search"
+    placeholder="Search products..."
+    (input)="onDesktopInput($any($event.target).value)"
+    (keydown)="onDesktopKeydown($event)"
+  />
+  <span class="search-icon" aria-hidden="true">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M21 21l-4.35-4.35"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="2" />
+    </svg>
+  </span> -->
+
+  <!-- <input
+  #desktopSearch
+  class="search-input"
+  type="search" 
+  [attr.minlength]="INPUT_LENGTH.SEARCH_TEXT.min"
+  [attr.maxlength]="INPUT_LENGTH.SEARCH_TEXT.max"
+  placeholder="Search products..."
+  (input)="onDesktopInput($any($event.target).value)"
+  (keydown.enter)="searchProducts(desktopSearch.value)"
+/>
+
+<span
+  class="search-icon"
+  aria-hidden="true"
+  (click)="searchProducts(desktopSearch.value)"
+>
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M21 21l-4.35-4.35"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="2" />
+  </svg>
+</span> -->
+
+
+<div class="search-input-wrap" role="search">
+
+  <!-- Product Search -->
+  <ng-container *ngIf="mode === 'product'; else orderSearchTpl">
+
+    <input
+      #desktopSearch
+      class="search-input"
+      type="search"
+      [attr.minlength]="INPUT_LENGTH.SEARCH_TEXT.min"
+      [attr.maxlength]="INPUT_LENGTH.SEARCH_TEXT.max"
+      placeholder="Search products..."
+      (input)="onDesktopInput($any($event.target).value)"
+      (keydown)="onDesktopKeydown($event)"
+      (keydown.enter)="searchProducts(desktopSearch.value)"
+    />
+
+    <span
+      class="search-icon"
+      (click)="searchProducts(desktopSearch.value)"
+      aria-label="Search">
+
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M21 21l-4.35-4.35"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+        <circle
+          cx="11"
+          cy="11"
+          r="6"
+          stroke="currentColor"
+          stroke-width="2"/>
+      </svg>
+
+    </span>
+
+    <!-- Product Suggestions -->
+    <ul
+      class="suggestions"
+      *ngIf="desktopSuggestions.length"
+      role="listbox">
+
+      <li
+        *ngFor="let s of desktopSuggestions; let i = index"
+        class="suggestion-item"
+        [class.active]="i === desktopActiveIndex"
+        (click)="selectSuggestion(s,'desktop')">
+
+        <div class="thumb">
+          <img [src]="s?.Image || 'assets/placeholder.png'">
+        </div>
+
+        <div class="meta">
+
+          <div class="name">{{ s.name }}</div>
+
+          <div class="meta-bottom">
+
+            
+
+            <small>₹{{ s.raw?.price }}</small>
+
+            <button
+              type="button"
+              class="wishlist-btn"
+              (click)="toggleWishlistFor(s,$event)">
+
+              <span [class.active]="isInWishlist(s.ProductId)">
+                {{ isInWishlist(s.ProductId) ? '♥' : '♡' }}
+              </span>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </li>
+
+    </ul>
+
+  </ng-container>
+
+  <!-- Order Search -->
+  <ng-template #orderSearchTpl>
+
+    <input
+      #desktopSearch
+      class="search-input"
+      type="search"
+      [attr.minlength]="INPUT_LENGTH.SEARCH_TEXT.min"
+      [attr.maxlength]="INPUT_LENGTH.SEARCH_TEXT.max"
+      placeholder="Search Orders..."
+      (input)="searchOrders($any($event.target).value)"
+      (keydown.enter)="searchOrders(desktopSearch.value)"
+    />
+
+    <span
+      class="search-icon"
+      (click)="searchOrders(desktopSearch.value)"
+      aria-label="Search">
+
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M21 21l-4.35-4.35"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+        <circle
+          cx="11"
+          cy="11"
+          r="6"
+          stroke="currentColor"
+          stroke-width="2"/>
+      </svg>
+
+    </span>
+
+  </ng-template>
+
+</div>
+
+<!-- ── Mobile search panel ─────────────────────────────────────────────────
+     Rendered as a position:fixed overlay that slides down from the top.
+     Toggled by the icon-search-mobile button in the header actions bar.
+     The host element is off-screen on mobile, but this panel escapes it
+     because it uses position:fixed relative to the viewport.
+──────────────────────────────────────────────────────────────────────────── -->
+<div
+  class="mobile-search-panel"
+  [class.open]="isSearchOpen"
+  role="search"
+  aria-label="Mobile product search"
+>
+  <div class="mobile-search-header">
+    <span class="search-icon" aria-hidden="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+           xmlns="http://www.w3.org/2000/svg">
+        <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="2"/>
+      </svg>
+    </span>
+    <input
+      type="search"
+      class="search-input"
+      placeholder="Search products..."
+      aria-label="Search products"
+    [attr.maxlength]="INPUT_LENGTH.SEARCH_TEXT"
+      (input)="onMobileInput($any($event.target).value)"
+      (keyup.enter)="navigateSearch(mobileQuery)"
+    />
+    <button
+      type="button"
+      class="close-mobile"
+      aria-label="Close search"
+      (click)="toggleMobileSearch()">
+      ✕
+    </button>
+  </div>
+
+  <ul class="mobile-suggestions" *ngIf="mobileSuggestions.length" role="listbox">
+    <li
+      *ngFor="let s of mobileSuggestions"
+      role="option"
+      (click)="selectSuggestion(s, 'mobile')"
+    >
+      <div class="thumb">
+        <img [src]="s?.Image || 'assets/placeholder.png'" alt="" />
+      </div>
+      <div class="meta">
+        <div class="name">{{ s.name }}</div>
+        <div class="meta-bottom">
+          <small class="id">#{{ s.ProductId }}</small>
+          <small class="id">₹{{ s.raw?.SellingPrice }}</small>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="wishlist-btn"
+        (click)="toggleWishlistFor(s, $event)"
+        [attr.aria-pressed]="isInWishlist(s.ProductId)"
+        [attr.aria-label]="isInWishlist(s.ProductId) ? 'Remove from wishlist' : 'Add to wishlist'"
+      >
+        <span [class.active]="isInWishlist(s.ProductId)">
+          {{ isInWishlist(s.ProductId) ? '♥' : '♡' }}
+        </span>
+      </button>
+    </li>
+  </ul>
+
+  <!-- Empty state when user has typed but no results -->
+  <div
+    class="mobile-no-results"
+    *ngIf="mobileQuery && !mobileSuggestions.length">
+    No products found for "{{ mobileQuery }}"
+  </div>
+</div>

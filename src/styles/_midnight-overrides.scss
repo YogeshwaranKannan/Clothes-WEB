@@ -1,0 +1,335 @@
+// =============================================================================
+// _midnight-overrides.scss
+// =============================================================================
+// Midnight Deep Dark Immersive — targeted visual refinements.
+//
+// HOW TO USE:
+//   Add ONE line to src/styles/styles.scss (after the existing theme import):
+//   @use 'styles/midnight-overrides' as *;
+//
+// WHY A SEPARATE FILE:
+//   Every selector here is wrapped in `body.theme-midnight { … }` so it is
+//   completely inert for all other themes.  No Angular component logic is
+//   touched.  All colour values come from the existing --color-* tokens
+//   already defined in _theme.scss for this theme.
+//
+// TOKEN REFERENCE (defined in _theme.scss body.theme-midnight block):
+//   --color-primary:       #818cf8   indigo accent
+//   --color-primary-hover: #6366f1
+//   --color-primary-soft:  #1e1b4b
+//   --color-background:    #0d0d14   deepest bg
+//   --color-surface:       #16162a   card/panel surface
+//   --color-text:          #e2e8f0
+//   --color-text-muted:    #94a3b8
+//   --color-border:        rgba(129,140,248,0.15)
+//   --color-on-primary:    #1e1b4b
+//
+// INTERNAL HELPERS (scoped to this file only):
+//   --_mn-glass-border — soft white-tint edge for flat dark panels (Tasks 1, 2, 5)
+//   --_mn-deep-shadow  — deeper shadow for elevated surfaces
+// =============================================================================
+
+body.theme-midnight {
+
+  // ── File-scoped helpers ──────────────────────────────────────────────────
+  // These are CSS custom properties set on <body> — they cascade to every
+  // child selector below and can be overridden per-element if needed.
+  --_mn-glass-border: rgba(255, 255, 255, 0.08);   // subtle white separation
+  --_mn-glass-border-soft: rgba(255, 255, 255, 0.05); // even softer variant
+  --_mn-deep-shadow:  0 8px 32px rgba(0, 0, 0, 0.55);
+
+  // Also expose the grid panel-border token so grid.component.scss
+  // picks up the white-tint value without any ::ng-deep hacks.
+  --grid-panel-border: var(--_mn-glass-border);
+
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TASK 1 — Page header panels: add subtle light border
+  // ═══════════════════════════════════════════════════════════════════════════
+  // Targets any element carrying .page-header whether in order-history,
+  // product-management, job-card-details, or similar pages.
+
+  .page-header {
+    background: var(--color-surface) !important;
+    border: 1px solid var(--_mn-glass-border) !important;
+    border-radius: 6px;
+    box-shadow: var(--_mn-deep-shadow);
+    transition: background 180ms ease, border-color 180ms ease;
+  }
+
+  // Page title inside the header — ensure contrast on dark bg
+  .page-title,
+  .page-header h1,
+  .page-header h2,
+  .page-header h3 {
+    color: var(--color-text) !important;
+  }
+
+  .page-header .eyebrow,
+  .page-header .subtitle {
+    color: var(--color-text-muted) !important;
+  }
+
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TASK 2 — Toolbar and paging panels: subtle border + surface background
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Grid wrapper card
+  .grid-wrapper {
+    border-color: var(--_mn-glass-border) !important;
+    box-shadow: var(--_mn-deep-shadow);
+  }
+
+  // Control card (wraps the whole toolbar strip)
+  .control-card {
+    background: var(--color-surface) !important;
+    border: 1px solid var(--_mn-glass-border) !important;
+    box-shadow: var(--_mn-deep-shadow);
+  }
+
+  // Boxed toolbar row itself
+  .boxed-toolbar {
+    background: var(--color-surface) !important;
+    border: 1px solid var(--_mn-glass-border) !important;
+  }
+
+  // Left / right control groups inside the toolbar
+  .controls-left,
+  .controls-right {
+    background: var(--color-background) !important;
+    border: 1px solid var(--_mn-glass-border) !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.40);
+  }
+
+  // AG Grid pagination panel
+  app-grid .grid-theme ::ng-deep .ag-paging-panel,
+  .grid-theme ::ng-deep .ag-paging-panel {
+    background: var(--color-surface) !important;
+    color: var(--color-text) !important;
+    border-top: 1px solid var(--_mn-glass-border) !important;
+  }
+
+  // AG Grid pagination buttons
+  .grid-theme ::ng-deep .ag-paging-button {
+    color: var(--color-primary) !important;
+  }
+  .grid-theme ::ng-deep .ag-paging-button:disabled {
+    color: var(--color-text-muted) !important;
+  }
+
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TASK 3 — Button consistency: .bulk-btn.add-btn and .footer-btn
+  // ═══════════════════════════════════════════════════════════════════════════
+  // grid.component.scss already sets these to --grid-primary / --grid-on-primary
+  // globally.  The overrides below tighten the Midnight-specific hover glow so
+  // the indigo accent reads clearly on the near-black background.
+
+  .bulk-btn.add-btn,
+  .bulk-btn.primary {
+    background: var(--color-primary) !important;
+    color: var(--color-on-primary) !important;
+    border-color: transparent !important;
+
+    &:hover {
+      background: var(--color-primary-hover) !important;
+      box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.28) !important;
+    }
+  }
+
+  .footer-btn {
+    background: var(--color-primary) !important;
+    color: var(--color-on-primary) !important;
+    border-color: transparent !important;
+
+    &:hover {
+      background: var(--color-primary-hover) !important;
+      box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.28) !important;
+    }
+  }
+
+  // Secondary / neutral buttons — soft surface on dark
+  .bulk-btn:not(.primary):not(.add-btn),
+  .columns-btn {
+    background: var(--color-surface) !important;
+    color: var(--color-text) !important;
+    border-color: var(--_mn-glass-border) !important;
+
+    &:hover {
+      background: var(--color-primary-soft) !important;
+      color: var(--color-primary) !important;
+      border-color: var(--color-primary) !important;
+    }
+  }
+
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TASK 4 — Grid footer
+  // ═══════════════════════════════════════════════════════════════════════════
+  // grid.component.scss now sets .grid-footer { background: var(--grid-primary) }
+  // globally.  In Midnight we reinforce that + add the glass border-top and a
+  // glow so the footer feels intentionally styled rather than accidental.
+
+  .grid-footer {
+    background: var(--color-primary) !important;
+    color: var(--color-on-primary) !important;
+    border-top: 1px solid var(--_mn-glass-border) !important;
+    border-radius: 0 0 10px 10px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TASK 5 — Filter rows, order cards, job-history: consistent dark surfaces
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Generic filter row (used in order-history and generic-list-filter)
+  .filter-row,
+  app-generic-list-filter,
+  [class*="filter-panel"],
+  [class*="filter-container"] {
+    background: var(--color-surface) !important;
+    border: 1px solid var(--_mn-glass-border-soft) !important;
+    border-radius: 6px;
+    transition: background 180ms ease, border-color 180ms ease;
+  }
+
+  // Order cards (order-history list items)
+  .order-card,
+  [class*="order-card"],
+  .order-item {
+    background: var(--color-surface) !important;
+    border: 1px solid var(--_mn-glass-border) !important;
+    border-radius: 6px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+    transition: background 180ms ease, border-color 180ms ease;
+
+    &:hover {
+      border-color: var(--color-primary) !important;
+      box-shadow: 0 0 0 1px var(--color-primary),
+                  0 4px 20px rgba(0, 0, 0, 0.45);
+    }
+  }
+
+  // Job history / job-card-details sections
+  .job-history,
+  app-job-card-details,
+  [class*="job-history"],
+  [class*="job-card"] {
+    background: var(--color-surface) !important;
+    border: 1px solid var(--_mn-glass-border-soft) !important;
+    border-radius: 6px;
+    transition: background 180ms ease, border-color 180ms ease;
+  }
+
+  // Section headers inside job / order components
+  .job-history .section-header,
+  .order-card .card-header,
+  [class*="job-card"] .section-header {
+    background: var(--color-background) !important;
+    border-bottom: 1px solid var(--_mn-glass-border) !important;
+    color: var(--color-text) !important;
+  }
+
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TASK 6 — Purge hardcoded colours on common utility selectors
+  // ═══════════════════════════════════════════════════════════════════════════
+  // These catch any stray hardcoded values in child components that escape
+  // the component-level SCSS.  All colours are now tokens.
+
+  // Inputs and selects
+  input,
+  select,
+  textarea {
+    background: var(--color-background) !important;
+    color: var(--color-text) !important;
+    border-color: var(--_mn-glass-border) !important;
+
+    &::placeholder { color: var(--color-text-muted) !important; }
+
+    &:focus {
+      border-color: var(--color-primary) !important;
+      box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.22) !important;
+    }
+  }
+
+  // AG Grid cells / rows / header
+  .grid-theme ::ng-deep .ag-root-wrapper,
+  .grid-theme ::ng-deep .ag-center-cols-container {
+    background: var(--color-surface) !important;
+  }
+
+  .grid-theme ::ng-deep .ag-cell {
+    color: var(--color-text) !important;
+    border-color: var(--_mn-glass-border) !important;
+  }
+
+  .grid-theme ::ng-deep .ag-row {
+    border-bottom: 1px solid var(--_mn-glass-border-soft) !important;
+  }
+
+  .grid-theme ::ng-deep .ag-row-odd {
+    background: var(--color-background) !important;
+  }
+
+  .grid-theme ::ng-deep .ag-row-hover {
+    background: var(--color-primary-soft) !important;
+  }
+
+  .grid-theme ::ng-deep .ag-header {
+    border-bottom: 1px solid var(--_mn-glass-border) !important;
+  }
+
+  // Link cells
+  .view-detail-link,
+  .grid-link {
+    color: var(--color-primary) !important;
+
+    &:hover { color: var(--color-primary-hover) !important; }
+  }
+
+  // Icon action buttons inside grid rows
+  .icon-btn {
+    background: var(--color-surface) !important;
+    border-color: var(--_mn-glass-border) !important;
+
+    &:hover {
+      background: var(--color-primary-soft) !important;
+      border-color: var(--color-primary) !important;
+    }
+  }
+
+  // Columns dropdown panel
+  .dropdown-panel {
+    background: var(--color-surface) !important;
+    border: 1px solid var(--_mn-glass-border) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55);
+  }
+
+  .checkbox-item:hover {
+    background: var(--color-primary-soft) !important;
+  }
+
+  .checkbox-item input[type="checkbox"] {
+    accent-color: var(--color-primary) !important;
+  }
+
+  // Products-content left border
+  .products-content {
+    border-left-color: var(--_mn-glass-border) !important;
+  }
+
+  // Group rows
+  .group-header-row {
+    background: var(--color-background) !important;
+    border-bottom-color: var(--_mn-glass-border) !important;
+    color: var(--color-text) !important;
+  }
+  .group-footer-row {
+    background: var(--color-surface) !important;
+    border-top-color: var(--_mn-glass-border-soft) !important;
+    color: var(--color-text-muted) !important;
+  }
+}

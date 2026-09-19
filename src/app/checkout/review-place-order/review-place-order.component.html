@@ -1,0 +1,277 @@
+<app-loading-screen
+    [show]="isSubmitting"
+    message="Processing your order..."
+>
+</app-loading-screen>
+<section class="review-card mb-4">
+  <div class="review-card__header d-flex align-items-center">
+    <div class="step-indicator d-flex align-items-center justify-content-center me-3">
+      <span>3</span>
+    </div>
+    <h2 class="review-card__title mb-0">Review &amp; Place Order</h2>
+  </div>
+
+  <hr class="my-3" />
+
+  <form
+  [formGroup]="reviewForm"
+  novalidate
+  (ngSubmit)="checkoutButtonAction()"
+>
+    <div class="form-check mb-4">
+      <input
+        id="agreeToTerms"
+        type="checkbox"
+        class="form-check-input"
+        formControlName="agreeToTerms"
+        [(ngModel)]="review.agreeToTerms"
+      />
+
+      <label class="form-check-label" for="agreeToTerms">
+        I agree to the
+        <a routerLink="/terms-of-service">Terms of Service</a>
+        and
+        <a routerLink="/privacy-policy">Privacy Policy</a>
+      </label>
+    </div>
+    <div class="form-check mb-4" *ngIf="(paymentMode$ | async) === 'ONLINEPAYMENT'">
+      <label class="form-check-label">
+        Please complete the payment in the new tab. After payment, please return here to check your order status.
+      </label>
+    </div>
+
+  <div
+    class="d-flex justify-content-center my-3"
+    *ngIf="rewardsEarned > 0"
+  >
+  <ng-container *ngIf="isLoggedInUser; else guestReward">
+    <span class="reward-earned">
+      🎉 Earn <strong>{{ rewardsEarned }}</strong> Reward Points
+    </span>
+  </ng-container>
+
+  <ng-template #guestReward>
+    <div class="reward-signup-banner">
+      <div class="reward-text">
+        <span class="gift-icon">🎁</span>
+        <span>
+          Earn <strong>{{ rewardsEarned }} Reward Points</strong> with this order.
+        </span>
+      </div>
+
+      <a
+        routerLink="/login"
+        (click)="closeDrawer()"
+        class="signup-link">
+        Sign Up
+      </a>
+    </div>
+  </ng-template>
+</div>  
+
+    <button
+      type="submit"
+      class="btn btn-primary review-button d-flex justify-content-between align-items-center w-100"
+      [disabled]="reviewForm.invalid || isSubmitting"
+    >
+      <span class="me-2" *ngIf="submitSpinner">
+        <span class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true"></span>
+      </span>
+     <span class="review-button__text">
+        <span class="review-button__lock" *ngIf="!submitSpinner">🔒</span>
+        {{ getButtonText() }}
+    </span>
+      <span class="review-button__amount">
+        {{ ((cartFinalTotal$ | async) ?? 0) | currency: 'INR':'symbol' }}
+      </span>
+      
+       
+    </button>
+  <div *ngIf="errorMessage" class="text-danger small mt-2">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="text-success small mt-2">
+  {{ successMessage }}
+</div>
+
+  <div class="secure-checkout-note">
+    🔒 Secure checkout — your information is protected
+  </div>
+
+  </form>
+</section>
+ <!-- UPI Modal -->
+<div
+  class="modal fade show"
+  tabindex="-1"
+  role="dialog"
+  aria-modal="true"
+  *ngIf="showUPIModal"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content checkout-modal">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Pay Using UPI</h5>
+
+        <button
+          type="button"
+          class="btn-close"
+          (click)="closeUPIModal()">
+        </button>
+      </div>
+
+      <div class="modal-body text-center">
+
+        <img
+          [src]="upiQrImage"
+          alt="UPI QR Code"
+          width="220"
+          height="220"
+          class="img-fluid"
+        />
+
+        <h5 class="mt-4">
+          Amount :
+          <strong>
+            ₹{{ finalAmount }}
+          </strong>
+        </h5>
+
+        <p class="text-muted">
+          Please complete the payment and click Submit.
+        </p>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeUPIModal()">
+          Close
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-success"
+          (click)="submitUPIPayment()">
+          Submit
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div
+    class="modal-backdrop fade show"
+    style="background: rgba(0,0,0,0.6);">
+  </div>
+
+</div>
+
+<!-- Buyer Exist Message Modal -->
+<div
+  class="modal fade show"
+  tabindex="-1"
+  role="dialog"
+  aria-modal="true"
+  *ngIf="isBuyerMessageModalOpen"
+>
+  <div
+    class="modal-dialog modal-dialog-centered"
+    role="document"
+  >
+    <div class="modal-content checkout-modal">
+
+      <div class="modal-header">
+        <h5 class="modal-title">
+          Customer Information
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="closeBuyerMessageModal()"
+        ></button>
+      </div>
+
+      <div class="modal-body text-center py-4 px-4">
+
+        <p class="mb-0">
+          {{ buyerMessage }}
+        </p>
+
+      </div>
+
+      <div class="modal-footer d-flex justify-content-between">
+
+        <!-- LEFT: Login -->
+        <button
+          type="button"
+          class="btn btn-outline-primary"
+          (click)="loginFromBuyerMessage()"
+        >
+          Login
+        </button>
+
+        <!-- RIGHT: Continue -->
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="continueBuyerOrder()"
+        >
+          Continue
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div
+    class="modal-backdrop fade show"
+    style="background: rgba(0,0,0,0.6);"
+  ></div>
+</div>
+<!-- Bootstrap 5 modal centered, custom size 600x600 -->
+<div class="modal fade show" tabindex="-1" role="dialog" aria-modal="true" *ngIf="isModalOpen">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content checkout-modal" style="width:600px; max-width:90vw; height:600px;">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ modalTitle }}</h5>
+        <button type="button" class="btn-close" [attr.aria-label]="'Close'" (click)="cancelModal()"></button>
+      </div>
+ <div class="terms-checkbox">
+  <input
+    type="checkbox"
+    id="agreeToTerms"
+    formControlName="agreeToTerms"
+  />
+
+  <label for="agreeToTerms">
+    I agree to the
+    <a
+      (click)="openInNewTab('terms-conditions')"
+      class="policy-link"
+    >
+      Terms of Service
+    </a>
+    and
+    <a
+      (click)="openInNewTab('privacy-policy')"
+      class="policy-link"
+    >
+      Privacy Policy
+    </a>
+  </label>
+</div>
+      <!-- footer for terms already included in component; keep an extra spacer/footer for privacy -->
+      <div class="modal-footer" *ngIf="modalComponent === 'privacy'">
+        <button type="button" class="btn btn-secondary" (click)="cancelModal()">Close</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show" style="background: rgba(0,0,0,0.6);"></div>
+</div>

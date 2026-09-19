@@ -1,0 +1,253 @@
+<!-- ══════════════════════════════════════════════════════════════════════════
+     GENERIC LIST FILTER — desktop top bar
+     Driven entirely by [config] input — no screen-specific HTML needed.
+════════════════════════════════════════════════════════════════════════════ -->
+<div class="filters-topbar">
+  <div class="filters-box top-filters" role="region" aria-label="Filters" (click)="$event.stopPropagation()">
+
+    <div class="filter-backdrop" *ngIf="openPanel" (click)="openPanel = null"></div>
+
+    <div class="filter-row">
+
+      <!-- ── Search ─────────────────────────────────────────────────────── -->
+      <ng-container *ngIf="searchConfig as sc">
+        <div class="glf-search-wrap">
+          <input
+            class="glf-search-input"
+            type="search"
+            [placeholder]="sc.placeholder ?? 'Search…'"
+            [value]="searchTerm"
+            (input)="onSearchInput($any($event.target).value)"
+            [attr.aria-label]="sc.label" />
+          <button *ngIf="searchTerm" class="glf-search-clear" type="button" (click)="clearSearch()" aria-label="Clear search">✕</button>
+        </div>
+      </ng-container>
+
+      <!-- ── Dynamic chips ──────────────────────────────────────────────── -->
+      <ng-container *ngFor="let cfg of chipConfigs">
+        <div class="filter-chip" (click)="$event.stopPropagation(); togglePanel(cfg.key)">
+          <button
+            type="button"
+            class="chip-btn"
+            [class.chip-active]="isChipActive(cfg)"
+            [attr.aria-expanded]="openPanel === cfg.key">
+            {{ cfg.label }}
+            <span class="chev">{{ openPanel === cfg.key ? '▴' : '▾' }}</span>
+          </button>
+
+          <!-- Panel -->
+          <div class="filter-panel" *ngIf="openPanel === cfg.key" (click)="$event.stopPropagation()">
+            <div class="panel-body">
+
+              <!-- range panel -->
+              <ng-container *ngIf="cfg.type === 'range'">
+                <ng-container *ngTemplateOutlet="rangeTpl; context: { cfg: cfg }"></ng-container>
+              </ng-container>
+
+              <!-- daterange panel -->
+              <ng-container *ngIf="cfg.type === 'daterange'">
+                <ng-container *ngTemplateOutlet="dateTpl; context: { cfg: cfg }"></ng-container>
+              </ng-container>
+
+              <!-- multiselect panel -->
+              <ng-container *ngIf="cfg.type === 'multiselect'">
+                <ng-container *ngTemplateOutlet="multiTpl; context: { cfg: cfg }"></ng-container>
+              </ng-container>
+
+            </div>
+            <div class="panel-actions">
+              <button class="btn" type="button" (click)="closePanel()">Apply</button>
+              <button class="btn btn-outline" type="button" (click)="clearChip(cfg); closePanel()">Clear</button>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- ── Sort + Clear All ───────────────────────────────────────────── -->
+      <div class="filter-controls" *ngIf="sortableConfigs.length > 0 || true">
+        <label class="sort-label" *ngIf="sortableConfigs.length > 0">Sort</label>
+        <select *ngIf="sortableConfigs.length > 0"
+                [value]="getSortValue()"
+                (change)="onSortChange($any($event.target).value)"
+                aria-label="Sort">
+          <option *ngFor="let opt of getSortOptions()" [value]="opt.value">{{ opt.label }}</option>
+        </select>
+        <button class="btn clear-all-btn" type="button" (click)="clearAll()">Clear All</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     Mobile bar (search + Filter button) — visible only on mobile
+════════════════════════════════════════════════════════════════════════════ -->
+<div class="mobile-bar">
+  <ng-container *ngIf="searchConfig as sc">
+    <div class="glf-search-wrap mobile-search">
+      <input
+        class="glf-search-input"
+        type="search"
+        [placeholder]="sc.placeholder ?? 'Search…'"
+        [value]="searchTerm"
+        (input)="onSearchInput($any($event.target).value)"
+        [attr.aria-label]="sc.label" />
+      <button *ngIf="searchTerm" class="glf-search-clear" type="button" (click)="clearSearch()">✕</button>
+    </div>
+  </ng-container>
+  <button class="btn mobile-filter-btn" type="button" (click)="openMobileDrawer()">
+    Filter
+    <span class="filter-badge" *ngIf="activeFilterCount > 0">{{ activeFilterCount }}</span>
+  </button>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     Mobile drawer
+════════════════════════════════════════════════════════════════════════════ -->
+<div class="drawer-backdrop" *ngIf="mobileDrawerOpen" (click)="closeMobileDrawer()"></div>
+<aside class="mobile-drawer" [class.open]="mobileDrawerOpen" [attr.aria-hidden]="!mobileDrawerOpen">
+
+  <div class="drawer-header">
+    <button class="back" *ngIf="mobileActiveGroup" (click)="mobileActiveGroup = null" aria-label="Back">◀</button>
+    <h3 class="drawer-title">
+      {{ mobileActiveGroup ? getLabelForKey(mobileActiveGroup) : 'REFINE BY' }}
+    </h3>
+    <button class="drawer-close" (click)="closeMobileDrawer()" aria-label="Close">✕</button>
+  </div>
+
+  <div class="drawer-body">
+
+    <!-- Group list -->
+    <ul class="group-list" *ngIf="!mobileActiveGroup">
+      <li *ngFor="let cfg of chipConfigs" (click)="mobileActiveGroup = cfg.key">
+        <span>{{ cfg.label }} <span class="active-dot" *ngIf="isChipActive(cfg)">●</span></span>
+        <span class="chev">›</span>
+      </li>
+      <li *ngIf="sortableConfigs.length > 0" (click)="mobileActiveGroup = '__sort__'">
+        SORT <span class="chev">›</span>
+      </li>
+    </ul>
+
+    <!-- Dynamic sub-panels -->
+    <ng-container *ngFor="let cfg of chipConfigs">
+      <div *ngIf="mobileActiveGroup === cfg.key" class="group-panel">
+        <div class="panel-actions-row">
+          <button class="btn mobile-clear-btn" type="button" (click)="clearChip(cfg)">Clear</button>
+        </div>
+        <div class="panel-body">
+          <ng-container *ngIf="cfg.type === 'range'">
+            <ng-container *ngTemplateOutlet="rangeTpl; context: { cfg: cfg }"></ng-container>
+          </ng-container>
+          <ng-container *ngIf="cfg.type === 'daterange'">
+            <ng-container *ngTemplateOutlet="dateTpl; context: { cfg: cfg }"></ng-container>
+          </ng-container>
+          <ng-container *ngIf="cfg.type === 'multiselect'">
+            <ng-container *ngTemplateOutlet="multiTpl; context: { cfg: cfg }"></ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Sort sub-panel -->
+    <div *ngIf="mobileActiveGroup === '__sort__'" class="group-panel">
+      <div class="panel-body">
+        <ul class="sort-list">
+          <li *ngFor="let opt of getSortOptions()"
+              class="sort-option"
+              [class.sort-option--active]="getSortValue() === opt.value"
+              (click)="onSortChange(opt.value); mobileActiveGroup = null">
+            {{ opt.label }}
+            <span *ngIf="getSortValue() === opt.value" class="sort-check">✓</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div><!-- /.drawer-body -->
+
+  <div class="drawer-footer">
+    <button class="btn" type="button" (click)="clearAll(); closeMobileDrawer()">Clear All</button>
+    <button class="btn btn-primary" type="button" (click)="closeMobileDrawer()">Done</button>
+  </div>
+
+</aside>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     Shared panel templates (rendered via ngTemplateOutlet above)
+════════════════════════════════════════════════════════════════════════════ -->
+
+<!-- Range template -->
+<ng-template #rangeTpl let-cfg="cfg">
+  <div class="price-panel">
+    <div class="price-inputs">
+      <label class="price-input">
+        <span class="prefix" *ngIf="cfg.prefix">{{ cfg.prefix }}</span>
+        <input type="number" min="0"
+               [value]="getRangeMin(cfg.key)"
+               (input)="onRangeMin(cfg.key, $any($event.target).value)"
+               [attr.aria-label]="'Min ' + cfg.label" />
+      </label>
+      <span class="dash">–</span>
+      <label class="price-input">
+        <span class="prefix" *ngIf="cfg.prefix">{{ cfg.prefix }}</span>
+        <input type="number" min="0"
+               [value]="getRangeMax(cfg.key)"
+               (input)="onRangeMax(cfg.key, $any($event.target).value)"
+               [attr.aria-label]="'Max ' + cfg.label" />
+      </label>
+    </div>
+    <div class="price-display">
+      <span *ngIf="cfg.prefix">{{ cfg.prefix }}</span>{{ getRangeMin(cfg.key) | number:'1.0-0' }}
+      &nbsp;–&nbsp;
+      <span *ngIf="cfg.prefix">{{ cfg.prefix }}</span>{{ getRangeMax(cfg.key) | number:'1.0-0' }}
+    </div>
+    <div class="price-slider two-sliders">
+      <div class="slider-track" [style.background]="sliderTrackBg(cfg.key)"></div>
+      <div class="single-range">
+        <input type="range" class="range-min"
+               [min]="getBound(cfg.key).min" [max]="getBound(cfg.key).max"
+               [value]="getRangeMin(cfg.key)"
+               (input)="onRangeMin(cfg.key, $any($event.target).value)"
+               [attr.aria-label]="'Min ' + cfg.label" />
+      </div>
+      <div class="single-range">
+        <input type="range" class="range-max"
+               [min]="getBound(cfg.key).min" [max]="getBound(cfg.key).max"
+               [value]="getRangeMax(cfg.key)"
+               (input)="onRangeMax(cfg.key, $any($event.target).value)"
+               [attr.aria-label]="'Max ' + cfg.label" />
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Date range template -->
+<ng-template #dateTpl let-cfg="cfg">
+  <div class="date-range">
+    <label class="date-label">From
+      <input type="date"
+             [value]="dateStates[cfg.key].from"
+             (change)="onDateFrom(cfg.key, $any($event.target).value)" />
+    </label>
+    <label class="date-label">To
+      <input type="date"
+             [value]="dateStates[cfg.key].to"
+             (change)="onDateTo(cfg.key, $any($event.target).value)" />
+    </label>
+  </div>
+</ng-template>
+
+<!-- Multiselect template -->
+<ng-template #multiTpl let-cfg="cfg">
+  <div class="multi-options">
+    <label class="panel-row multi-row" *ngFor="let opt of getMultiOptions(cfg.key)">
+      <input type="checkbox"
+             [checked]="isMultiSelected(cfg.key, opt)"
+             (change)="toggleMulti(cfg.key, opt)" />
+      <span>{{ opt }}</span>
+    </label>
+  </div>
+</ng-template>

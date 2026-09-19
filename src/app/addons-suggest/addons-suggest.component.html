@@ -1,0 +1,70 @@
+<section class="addons-suggest" *ngIf="addonsList?.length">
+
+  <!-- ── Section title ── -->
+  <h2 class="as-title">{{ sectionTitle }}</h2>
+
+  <!-- ── Horizontal scroll track ── -->
+  <div class="as-scroll-track">
+
+    <article
+      *ngFor="let addon of addonsList; trackBy: trackById"
+      class="as-card">
+
+      <!-- IMAGE + floating add button -->
+      <div class="as-img-wrap">
+        <!-- <img
+           [src]="buildImageUrl(addon.image ,addon.name ,addon.isService )"
+          [alt]="addon.name"
+          class="as-img"
+          loading="lazy" /> -->
+          <img
+            class="as-img"
+            [src]="buildImageUrl($any(addon).image || $any(addon).ImageUrl)"
+            (error)="onImgError($event)"
+            [alt]="addon.name"
+            loading="lazy"
+            decoding="async"
+            draggable="false"
+          />
+
+        <!-- Discount / promo badge (top-left) -->
+        <span
+          *ngIf="addon.discountLabel"
+          class="as-badge as-badge--promo">
+          {{ addon.discountLabel }}
+        </span>
+
+        <!-- Floating "+" button (bottom-right) -->
+        <button
+          type="button"
+          class="as-add-btn"
+          (click)="onAdd(addon, $event)"
+          [attr.aria-label]="'Add ' + addon.name">
+          +
+        </button>
+      </div>
+
+      <!-- CARD BODY -->
+      <div class="as-body">
+        <p class="as-name">{{ addon.name }}</p>
+
+        <div class="as-pricing">
+          <span class="as-price">${{ addon.price | number:'1.2-2' }}</span>
+          <span
+            *ngIf="addon.originalPrice && addon.originalPrice > addon.price"
+            class="as-original">${{ addon.originalPrice | number:'1.2-2' }}</span>
+        </div>
+
+        <!-- Percent discount badge (below price) -->
+        <span
+          *ngIf="discount(addon) as pct"
+          class="as-badge as-badge--discount">
+          {{ pct }}% off
+        </span>
+      </div>
+
+    </article>
+
+  </div><!-- /as-scroll-track -->
+
+</section>

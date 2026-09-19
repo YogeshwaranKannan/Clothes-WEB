@@ -1,0 +1,91 @@
+<!-- Section wrapper with header on the border line -->
+<section class="section-box payment-section" aria-labelledby="payment-section-title">
+  <!-- Header that sits on the border -->
+  <div class="section-header">
+    <div class="step-indicator" aria-hidden="true">3</div>
+    <h2 id="payment-section-title" class="section-title">Payment</h2>
+  </div>
+
+  <!-- Fields (material style: label sits on the border) -->
+  <div class="fields-grid">
+    <!-- Card Number -->
+    <div class="material-field">
+      <label for="cardNumber">
+        Card number<span class="required" aria-hidden="true">*</span>
+      </label>
+      <input
+        id="cardNumber"
+        name="cardNumber"
+        type="text"
+        inputmode="numeric"
+        autocomplete="cc-number"
+        placeholder="•••• •••• •••• ••••"
+        aria-describedby="cardNumberError"
+        aria-required="true"
+      />
+      <!-- Validation errors -->
+      <p id="cardNumberError" class="error-text" role="alert" aria-live="polite">
+        Card number is required. Use digits only. Enter a valid card number (13–16 digits).
+      </p>
+    </div>
+
+    <!-- Expiry -->
+    <div class="material-field">
+      <label for="expiry">
+        Expiry<span class="required" aria-hidden="true">*</span>
+      </label>
+      <input
+        id="expiry"
+        name="expiry"
+        type="text"
+        inputmode="numeric"
+        autocomplete="cc-exp"
+        placeholder="YY/MM"
+        aria-describedby="expiryError"
+        aria-required="true"
+      />
+      <p id="expiryError" class="error-text" role="alert" aria-live="polite">
+        Expiry is required. Format must be YY/MM. Month must be 01–12.
+      </p>
+    </div>
+
+    <!-- CVV -->
+    <div class="material-field">
+      <label for="cvv">
+        CVV<span class="required" aria-hidden="true">*</span>
+      </label>
+      <input
+        id="cvv"
+        name="cvv"
+        type="password"
+        inputmode="numeric"
+        autocomplete="cc-csc"
+        placeholder="• • •"
+        aria-describedby="cvvError"
+        aria-required="true"
+      />
+      <p id="cvvError" class="error-text" role="alert" aria-live="polite">
+        CVV is required. Use digits only.
+      </p>
+    </div>
+
+    <!-- Name on card -->
+    <div class="material-field material-field--full">
+      <label for="nameOnCard">
+        Name on card<span class="required" aria-hidden="true">*</span>
+      </label>
+      <input
+        id="nameOnCard"
+        name="nameOnCard"
+        type="text"
+        autocomplete="cc-name"
+        placeholder="As shown on card"
+        aria-describedby="nameOnCardError"
+        aria-required="true"
+      />
+      <p id="nameOnCardError" class="error-text" role="alert" aria-live="polite">
+        Name on card is required. Use letters and spaces only. Max length is 50.
+      </p>
+    </div>
+  </div>
+</section>

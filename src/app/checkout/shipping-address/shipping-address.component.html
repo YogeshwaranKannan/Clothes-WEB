@@ -1,0 +1,83 @@
+<div class="section-box">
+
+  <!-- Step Header -->
+  <div class="section-header">
+    <div class="step-indicator">2</div>
+    <div class="section-title">
+      Shipping Address
+    </div>
+  </div>
+
+  <div class="section-content">\
+
+    <!-- Street Address -->
+    <div class="material-field">
+      <label for="street">
+        Street Address<span class="required">*</span>
+      </label>
+      <input
+        id="street"
+        type="text"
+        formControlName="streetAddress"
+        [class.invalid]="shippingForm.get('streetAddress')?.invalid && shippingForm.get('streetAddress')?.touched"
+      />
+      <div class="error-text"
+           *ngIf="shippingForm.get('streetAddress')?.touched && shippingForm.get('streetAddress')?.invalid">
+        Street address is required.
+      </div>
+    </div>
+
+    <!-- City -->
+    <div class="material-field">
+      <label for="city">
+        City<span class="required">*</span>
+      </label>
+      <input
+        id="city"
+        type="text"
+        formControlName="city"
+        [class.invalid]="shippingForm.get('city')?.invalid && shippingForm.get('city')?.touched"
+      />
+      <div class="error-text"
+           *ngIf="shippingForm.get('city')?.touched && shippingForm.get('city')?.invalid">
+        City is required.
+      </div>
+    </div>
+
+    <!-- State -->
+    <div class="material-field">
+      <label for="state">
+        State<span class="required">*</span>
+      </label>
+      <input
+        id="state"
+        type="text"
+        formControlName="state"
+        [class.invalid]="shippingForm.get('state')?.invalid && shippingForm.get('state')?.touched"
+      />
+      <div class="error-text"
+           *ngIf="shippingForm.get('state')?.touched && shippingForm.get('state')?.invalid">
+        State is required.
+      </div>
+    </div>
+
+    <!-- Pincode -->
+    <div class="material-field">
+      <label for="postalCode">
+        Postal Code<span class="required">*</span>
+      </label>
+      <input
+        id="postalCode"
+        type="text"
+        formControlName="zipCode"
+        maxlength="10"
+        [class.invalid]="shippingForm.get('zipCode')?.invalid && shippingForm.get('zipCode')?.touched"
+      />
+      <div class="error-text"
+           *ngIf="shippingForm.get('zipCode')?.touched && shippingForm.get('zipCode')?.invalid">
+        Postal code is required.
+      </div>
+    </div>
+
+  </div>
+</div>

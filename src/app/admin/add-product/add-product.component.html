@@ -1,0 +1,285 @@
+<div class="product-detail container py-3">
+
+  <!-- ✅ TOP TOOLBAR RECTANGLE (single row) -->
+  <div class="top-toolbar">
+    <div class="toolbar-left">
+      <app-product-suggest
+        id="search-desktop"
+        [navigateOnSelect]="false"
+        (productSelected)="onProductPicked($event)">
+      </app-product-suggest>
+    </div>
+
+    <div class="toolbar-right">
+      <button class="btn small" type="button" (click)="toggleEdit()">
+        {{ editMode ? 'View' : 'Edit' }}
+      </button>
+
+      <button class="btn small" type="button" (click)="onSave()">Save</button>
+      <button class="btn small upload-btn" type="button" (click)="triggerUpload()">
+            Upload
+          </button>
+
+          <input
+            #fileInput
+            type="file"
+            accept="image/*"
+            style="display:none"
+            (change)="onFileSelected($event)"
+          />
+      <button class="btn small" type="button" (click)="onCancel()">Cancel</button>
+    </div>
+  </div>
+
+  <div class="detail-grid">
+
+    <!-- LEFT: Media -->
+    <div class="media">
+      <div class="viewer-frame">
+
+        <!-- Controls overlay -->
+        <div class="image-controls-top">
+          <button class="btn small" type="button" (click)="rotate90()">Rotate 90°</button>
+
+          <button class="btn small" type="button" (click)="toggleAutoRotate()">
+            {{ autoRotate ? 'Stop' : 'Auto Rotate' }}
+          </button>
+
+          <button class="btn small" type="button" (click)="flipOnce()">Flip</button>
+
+          <button class="btn small" type="button" (click)="resetRotation()">Reset</button>
+        </div>
+
+        <!-- Fixed preview stage -->
+        <div class="viewer-stage">
+          <!-- Auto rotate wrapper -->
+          <div class="auto-wrap" [class.spinning]="autoRotate">
+
+            <!-- Manual rotate wrapper -->
+            <div class="manual-wrap" [style.transform]="manualRotateTransform">
+
+              <!-- Flip card -->
+              <div class="flip-card" [class.flipping]="isFlipping">
+                <!-- FRONT -->
+                <div class="flip-face flip-front">
+                  <img
+                    class="viewer-image"
+                    [src]="selectedImage || imagePreview || model.Image || fallbackThumbs[0]"
+                    alt="preview-front"
+                  />
+                </div>
+
+                <!-- BACK -->
+                <div class="flip-face flip-back">
+                  <img
+                    class="viewer-image"
+                    [src]="selectedImage || imagePreview || model.Image || fallbackThumbs[0]"
+                    alt="preview-back"
+                  />
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Thumbnails -->
+        <div class="thumbs">
+          <img
+            *ngFor="let img of thumbnailList"
+            class="thumbnail"
+            [src]="img"
+            alt="thumb"
+            (click)="selectThumbnail(img)"
+            [class.active]="img === selectedImage"
+          />
+        </div>
+
+        <!-- ✅ Upload Image moved under thumbnails -->
+        <div class="media-actions">
+          
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT: Fields -->
+    <div class="info">
+
+      <!-- Brand -->
+      <div class="field-row">
+        <label>Brand</label>
+        <ng-container *ngIf="editMode; else brandView">
+          <input type="text" [(ngModel)]="model.Brand" name="Brand" placeholder="Brand" />
+        </ng-container>
+        <ng-template #brandView>
+          <div class="field-box" [class.empty]="isBlank(model.Brand)">
+            <span *ngIf="!isBlank(model.Brand)">{{ model.Brand }}</span>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Product Name -->
+      <div class="field-row">
+        <label>Product Name</label>
+        <ng-container *ngIf="editMode; else nameView">
+          <input type="text" [(ngModel)]="model.ProductName" name="ProductName" placeholder="Product Name" />
+        </ng-container>
+        <ng-template #nameView>
+          <div class="field-box" [class.empty]="isBlank(model.ProductName)">
+            <span *ngIf="!isBlank(model.ProductName)">{{ model.ProductName }}</span>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Category -->
+      <div class="field-row">
+        <label>Category</label>
+        <ng-container *ngIf="editMode; else catView">
+          <input type="text" [(ngModel)]="model.Category.CategoryName" name="CategoryName" placeholder="Category" />
+        </ng-container>
+        <ng-template #catView>
+          <div class="field-box" [class.empty]="isBlank(model.Category?.CategoryName)">
+            <span *ngIf="!isBlank(model.Category?.CategoryName)">{{ model.Category?.CategoryName }}</span>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Selling Price -->
+      <div class="field-row">
+        <label>Selling Price</label>
+        <ng-container *ngIf="editMode; else spView">
+          <input type="text" [(ngModel)]="model.SellingPrice" name="SellingPrice" placeholder="Selling Price" />
+        </ng-container>
+        <ng-template #spView>
+          <div class="field-box" [class.empty]="isBlank(model.SellingPrice)">
+            <span *ngIf="!isBlank(model.SellingPrice)">{{ model.SellingPrice }}</span>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Offer Price -->
+      <div class="field-row">
+        <label>Offer Price</label>
+        <ng-container *ngIf="editMode; else opView">
+          <input type="text" [(ngModel)]="model.OfferPrice" name="OfferPrice" placeholder="Offer Price" />
+        </ng-container>
+        <ng-template #opView>
+          <div class="field-box" [class.empty]="isBlank(model.OfferPrice)">
+            <span *ngIf="!isBlank(model.OfferPrice)">{{ model.OfferPrice }}</span>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Discount -->
+      <div class="field-row">
+        <label>Discount %</label>
+        <ng-container *ngIf="editMode; else dpView">
+          <input type="text" [(ngModel)]="model.DiscountPercent" name="DiscountPercent" placeholder="Discount %" />
+        </ng-container>
+        <ng-template #dpView>
+          <div class="field-box" [class.empty]="isBlank(model.DiscountPercent)">
+            <span *ngIf="!isBlank(model.DiscountPercent)">{{ model.DiscountPercent }}</span>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Size -->
+      <div class="field-row">
+        <label>Size</label>
+        <ng-container *ngIf="editMode; else sizeView">
+          <select [(ngModel)]="model.Size" name="Size">
+            <option value="">Select size</option>
+            <option>Small</option>
+            <option>Medium</option>
+            <option>Large</option>
+          </select>
+        </ng-container>
+        <ng-template #sizeView>
+          <div class="field-box" [class.empty]="isBlank(model.Size)">
+            <span *ngIf="!isBlank(model.Size)">{{ model.Size }}</span>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Stock Status -->
+      <div class="field-row">
+        <label>Stock Status</label>
+        <ng-container *ngIf="editMode; else stockView">
+          <input type="text" [(ngModel)]="model.StockStatus" name="StockStatus" placeholder="Stock Status" />
+        </ng-container>
+        <ng-template #stockView>
+          <div class="field-box" [class.empty]="isBlank(model.StockStatus)">
+            <span *ngIf="!isBlank(model.StockStatus)">{{ model.StockStatus }}</span>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Features -->
+      <div class="field-row">
+        <label>Features</label>
+        <ng-container *ngIf="editMode; else featuresView">
+          <textarea [(ngModel)]="model.Features" name="Features" rows="3" placeholder="Features"></textarea>
+        </ng-container>
+        <ng-template #featuresView>
+          <div class="field-box textarea-like" [class.empty]="isBlank(model.Features)">
+            <span *ngIf="!isBlank(model.Features)">{{ model.Features }}</span>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Specifications -->
+      <div class="field-row">
+        <label>Specifications</label>
+        <ng-container *ngIf="editMode; else specsView">
+          <textarea [(ngModel)]="model.Specifications" name="Specifications" rows="3" placeholder="Specifications"></textarea>
+        </ng-container>
+        <ng-template #specsView>
+          <div class="field-box textarea-like" [class.empty]="isBlank(model.Specifications)">
+            <span *ngIf="!isBlank(model.Specifications)">{{ model.Specifications }}</span>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Components -->
+      <div class="field-row">
+        <label>Components</label>
+        <ng-container *ngIf="editMode; else compView">
+          <textarea [(ngModel)]="model.Components" name="Components" rows="2" placeholder="Components"></textarea>
+        </ng-container>
+        <ng-template #compView>
+          <div class="field-box textarea-like" [class.empty]="isBlank(model.Components)">
+            <span *ngIf="!isBlank(model.Components)">{{ model.Components }}</span>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Additional Info -->
+      <div class="field-row">
+        <label>Additional Info</label>
+        <ng-container *ngIf="editMode; else addView">
+          <textarea [(ngModel)]="model.AdditionalInfo" name="AdditionalInfo" rows="2" placeholder="Additional info"></textarea>
+        </ng-container>
+        <ng-template #addView>
+          <div class="field-box textarea-like" [class.empty]="isBlank(model.AdditionalInfo)">
+            <span *ngIf="!isBlank(model.AdditionalInfo)">{{ model.AdditionalInfo }}</span>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Returns Policy -->
+      <div class="field-row">
+        <label>Returns Policy</label>
+        <ng-container *ngIf="editMode; else rpView">
+          <textarea [(ngModel)]="model.ReturnsPolicy" name="ReturnsPolicy" rows="2" placeholder="Returns policy"></textarea>
+        </ng-container>
+        <ng-template #rpView>
+          <div class="field-box textarea-like" [class.empty]="isBlank(model.ReturnsPolicy)">
+            <span *ngIf="!isBlank(model.ReturnsPolicy)">{{ model.ReturnsPolicy }}</span>
+          </div>
+        </ng-template>
+      </div>
+
+    </div>
+  </div>
+</div>

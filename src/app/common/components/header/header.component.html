@@ -1,0 +1,383 @@
+ 
+
+
+<header class="pc-header" #host>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SINGLE TOPBAR — left: search · centre: logo · right: actions + theme
+       On mobile this becomes two rows:
+         Row 1:  logo  +  actions (track · wishlist · cart · theme)
+         Row 2:  full-width search
+  ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="pc-header__topbar">
+
+    <!-- Normal Header (hidden while searchOpen) -->
+    <ng-container *ngIf="!searchOpen">
+
+      <!-- LEFT: small fixed area for hamburger/menu -->
+      <div class="topbar-left">
+        <div class="mobile-menu-row">
+          <button
+            type="button"
+            class="mobile-menu-btn"
+            [class.is-open]="isMobileMenuOpen"
+            [attr.aria-label]="isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'"
+            [attr.aria-expanded]="isMobileMenuOpen"
+            aria-controls="mobileSidebar"
+            (click)="toggleMobileMenu()">
+            <span class="hamburger-box">
+              <span class="hamburger-bar hamburger-bar--top"></span>
+              <span class="hamburger-bar hamburger-bar--mid"></span>
+              <span class="hamburger-bar hamburger-bar--bottom"></span>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- CENTER: logo — centered via flex; wrapper allows cropping if needed -->
+      <div class="topbar-center">
+        <a class="header-logo" routerLink="/" aria-label="Purest home"(click)="onLogoClick($event)">
+        <span class="header-logo-wrap">
+          <img
+        class="header-logo-img"
+        src="assets/img/logo/dolphin_Updated.jpg"
+        alt="Purest — Wood-Cold Pressed Oil"
+        loading="eager"
+        draggable="false"
+      />
+        </span>
+      </a>
+
+        
+      </div>
+
+      <!-- ── RIGHT: Track · Wishlist · Cart · Theme swatches ──────────────── -->
+      <div class="topbar-right">
+        <div id="headerSummary" class="actions">
+
+       
+
+      <!-- Track My Order — migrated to <app-navbar>, see navbar.component.html -->
+
+      <!-- Wishlist -->
+      <!-- <button type="button" class="icon-btn wishlist-icon"
+              aria-label="Wishlist" (click)="goToWishlist()">
+        <ng-container *ngIf="wishlistCount$ | async as wc">
+          <span class="heart" [class.active]="wc > 0">{{ wc > 0 ? '♥' : '♡' }}</span>
+          <span class="wish-badge" *ngIf="wc > 0">{{ wc }}</span>
+        </ng-container>
+      </button> -->
+
+       <div class="track-order desktop-track-order" #trackOrderContainer>
+
+        <!-- Collapsed: icon + label -->
+        <button
+        *ngIf="!showTrackInput"
+        type="button"
+        class="track-link icon-btn"
+        title="Track My Order"
+        (click)="toggleTrackInput()">
+
+      <!-- Bike -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="5" cy="17" r="3"/>
+        <circle cx="19" cy="17" r="3"/>
+        <path d="M12 17H5.5"/>
+        <path d="M19 17h-2l-3-6h-4l-1 3"/>
+        <path d="M14 11l2-4h3"/>
+      </svg> 
+ 
+
+  <span class="track-label">Track Order</span>
+    </button>
+
+        <!-- Expanded: input + Search + Close -->
+        <div *ngIf="showTrackInput" class="track-input-wrap">
+          <input
+            #trackInputEl
+            type="text"
+            [(ngModel)]="refNo"
+            placeholder="Enter Order / Ref No"
+            class="track-input"
+            aria-label="Order reference number"
+            (keyup.enter)="trackOrder()" />
+
+          <button type="button" class="track-search-btn" (click)="trackOrder()">
+            Search
+          </button>
+
+          <button
+            type="button"
+            class="track-close-btn"
+            aria-label="Cancel tracking"
+            (click)="toggleTrackInput()">
+            ✕
+          </button>
+        </div>
+
+      </div>
+
+       <button
+              *ngIf="!searchOpen"
+              class="search-btn"
+              (click)="toggleSearch()"
+              aria-label="Open search">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                <circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="2"></circle>
+              </svg>
+        </button>
+      <!-- Cart -->
+      <button class="icon-btn cart-btn" type="button"
+              aria-label="Cart" (click)="openCartDrawer()">
+        <svg viewBox="0 0 24 24" fill="none"
+             xmlns="http://www.w3.org/2000/svg" [attr.aria-hidden]="true">
+          <path d="M6 6h15l-1.5 9h-12L4 2H2"
+                stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="10" cy="20" r="1" fill="currentColor"/>
+          <circle cx="18" cy="20" r="1" fill="currentColor"/>
+        </svg>
+        <span class="badge"
+              *ngIf="(cartCount$ | async) as c"
+              [class.hidden]="c === 0">
+          {{ c }}
+        </span>
+      </button>
+
+      <!-- Desktop User Menu -->
+<ng-container *ngIf="isLoggedIn()">
+  <app-user-menu
+    class="desktop-user-menu"
+    [user]="user()"
+    (orders)="onMyOrders()"
+    (profile)="onProfile()"
+    (openCartRequested)="openCartDrawer()"
+    (logout)="onLogout()">
+  </app-user-menu>
+</ng-container>
+
+<!-- Mobile Login -->
+<ng-container *ngIf="!isLoggedIn()">
+  <button
+    type="button"
+    class="icon-btn sign-in-btn mobile-auth-btn"
+    aria-label="Sign in"
+    title="Sign in"
+    (click)="router.navigate(['/login'])">
+
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true">
+      <circle
+        cx="12"
+        cy="8"
+        r="4"
+        stroke="currentColor"
+        stroke-width="2"/>
+      <path
+        d="M4 21c.8-4 3.5-6 8-6s7.2 2 8 6"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"/>
+    </svg>
+  </button>
+</ng-container>
+
+<!-- Mobile Logout -->
+<!-- <ng-container *ngIf="isLoggedIn()">
+  <button
+    type="button"
+    class="icon-btn sign-in-btn logout-btn mobile-auth-btn"
+    aria-label="Logout"
+    title="Logout"
+    (click)="logout()">
+
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true">
+
+      <path
+        d="M10 17l5-5-5-5"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+
+      <path
+        d="M15 12H3"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"/>
+
+      <path
+        d="M21 19V5c0-1.1-.9-2-2-2h-7"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"/>
+    </svg>
+  </button>
+</ng-container> -->
+      <!-- Theme picker — icon + dot only; swatches live in a popover -->
+      <!-- <div class="theme-picker-wrap"> -->
+        <!-- <button
+          type="button"
+          class="icon-btn theme-icon-btn"
+          aria-label="Choose theme"
+          [attr.aria-expanded]="isThemeOpen ? 'true' : 'false'"
+          aria-haspopup="true"
+          (click)="toggleThemePicker($event)"> -->
+
+          <!-- Palette / paint-bucket icon -->
+          <!-- <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+            <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+            <circle cx="8.5"  cy="7.5"  r=".5" fill="currentColor"/>
+            <circle cx="6.5"  cy="12.5" r=".5" fill="currentColor"/>
+            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+          </svg> -->
+
+          <!-- Active-theme dot indicator -->
+          <!-- <span class="theme-dot"
+                [style.background]="activeDotColor"
+                aria-hidden="true"></span> -->
+        <!-- </button> -->
+
+        <!-- Swatches popover -->
+        <!-- <div
+          class="theme-popover"
+          [class.theme-popover--open]="isThemeOpen"
+          role="dialog"
+          aria-label="Choose a theme"
+          (click)="$event.stopPropagation()">
+
+          <div class="theme-swatches" role="group" aria-label="Available themes">
+            <button
+              *ngFor="let t of themes"
+              type="button"
+              class="tp-swatch"
+              [class.tp-swatch--active]="activeTheme === t.id"
+              [style.background]="t.color"
+              [style.--sw-color]="t.color"
+              [title]="t.label"
+              [attr.aria-pressed]="activeTheme === t.id ? 'true' : 'false'"
+              (click)="setTheme(t.id)">
+              <svg *ngIf="activeTheme === t.id"
+                   class="tp-check"
+                   viewBox="0 0 24 24" fill="none"
+                   stroke="white" stroke-width="3"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </button>
+          </div>
+
+        </div> -->
+      <!-- </div> -->
+      <!-- /.theme-picker-wrap -->
+
+      <!-- Dark mode toggle — moon (light) ↔ sun (dark) -->
+      <!-- <button
+        type="button"
+        class="icon-btn dark-toggle-btn"
+        [class.dark-toggle-btn--dark]="isDark"
+        [attr.aria-label]="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+        [attr.aria-pressed]="isDark ? 'true' : 'false'"
+        (click)="toggleDarkMode()"> -->
+
+        <!-- Moon — shown in light mode -->
+        <!-- <svg *ngIf="!isDark"
+             class="dm-icon dm-icon--moon"
+             width="18" height="18" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg> -->
+
+        <!-- Sun — shown in dark mode -->
+        <!-- <svg *ngIf="isDark"
+             class="dm-icon dm-icon--sun"
+             width="18" height="18" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1"  x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22"  x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1"  y1="12" x2="3"  y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg> -->
+
+      <!-- </button> -->
+      
+      <!-- /.dark-toggle-btn -->
+
+       <!-- Sign in / Profile -->
+      <!-- <ng-container *ngIf="!isLoggedIn()">
+        <a class="icon-btn sign-in-btn" [routerLink]="'/login'" aria-label="Sign in">
+          <svg viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg" [attr.aria-hidden]="true">
+            <path fill="currentColor" fill-rule="evenodd" d="M6 4.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-4a4 4 0 1 0 0 8 4 4 0 0 0 0-8m5.58 12.15c1.12.82 1.83 2.24 1.91 4.85H1.51c.08-2.6.79-4.03 1.9-4.85C4.66 11.75 6.5 11.5 9 11.5s4.35.26 5.58 1.15M9 10.5c-2.5 0-4.65.24-6.17 1.35C1.27 12.98.5 14.93.5 18v.5h17V18c0-3.07-.77-5.02-2.33-6.15-1.52-1.1-3.67-1.35-6.17-1.35" clip-rule="evenodd"/>
+          </svg>
+        </a>
+      </ng-container> -->
+
+      <!-- Logged-in account actions (My Orders / Profile / Cart / Logout)
+           now live only in the mobile side menu (see <app-navbar>), opened
+           via .mobile-menu-btn above — the avatar dropdown is retired. -->
+        </div>
+        <!-- /.actions -->
+      </div>
+
+    </ng-container>
+
+    <!-- Search Mode (shown when searchOpen) -->
+    <div *ngIf="searchOpen" class="header-search-container">
+      <app-product-suggest></app-product-suggest>
+      <button class="close-search-btn" (click)="toggleSearch()" aria-label="Close search">✕</button>
+    </div>
+
+  </div><!-- /.pc-header__topbar -->
+
+</header>
+
+<!-- Spacer to prevent content being hidden when header is sticky on mobile -->
+<!-- <div class="header-spacer" aria-hidden="true"></div> -->
+
+
+<!-- Cart / Checkout Drawer — logic unchanged -->
+<app-drawer
+  [isPublic]="true"
+  [title]="drawerTitle"
+  [state]="drawerState"
+  (stateChange)="onDrawerChange($event)"
+  [showBack]="isCheckout && !isOrderPlaced"
+  (back)="onDrawerBack()">
+
+  <div class="cart-in-drawer">
+    <ng-container *ngIf="drawerContent === 'cart'">
+      <app-cart [inDrawer]="true" (openCheckout)="openCheckoutInDrawer()"></app-cart>
+    </ng-container>
+    <ng-container *ngIf="drawerContent === 'checkout'">
+      <ng-container *ngIf="checkoutComponent; else loadingCheckout">
+        <ng-container *ngComponentOutlet="checkoutComponent"></ng-container>
+      </ng-container>
+      <ng-template #loadingCheckout>
+        <div class="loading-checkout-placeholder">Loading checkout…</div>
+      </ng-template>
+    </ng-container>
+  </div>
+
+</app-drawer>

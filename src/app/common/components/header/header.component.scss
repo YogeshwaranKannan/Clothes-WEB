@@ -1,0 +1,2861 @@
+// @use 'media' as media;
+
+// /* ==========================================================================
+//    TRACK ORDER
+//    ========================================================================== */
+
+// .track-order {
+//   display: flex;
+//   align-items: center;
+// }
+
+// .track-link {
+//   display: flex;
+//   align-items: center;
+//   gap: 10px;
+
+//   padding: 10px 14px;
+//   border-radius: 8px;
+
+//   font-size: 15px;
+//   font-weight: 600;
+
+//   color: var(--primary-color, #b84a1a);
+// }
+
+// .track-link svg {
+//   width: 28px;
+//   height: 28px;
+// }
+
+// .track-input-wrap {
+//   display: flex;
+//   align-items: center;
+//   gap: 8px;
+// }
+// .track-input {
+//   width: 160px;
+//   padding: 6px 8px;
+
+//   border: 1px solid #cfe8dc;
+//   border-radius: 5px;
+
+//   background: #fff;
+//   color: #14532d;   // IMPORTANT
+
+//   font-size: 13px;
+//   font-weight: 500;
+
+//   outline: none;
+
+//   &::placeholder {
+//     color: #94a3b8;
+//   }
+
+//   &:focus {
+//     border-color: #14532d;
+//   }
+// }
+
+// .track-search-btn {
+//   background: var(--app-primary, #0b5ed7);
+//   color: #fff;
+
+//   border: none;
+//   border-radius: 4px;
+
+//   padding: 4px 10px;
+
+//   font-size: 0.78rem;
+//   font-weight: 600;
+
+//   cursor: pointer;
+//   white-space: nowrap;
+
+//   transition: opacity 0.15s ease;
+
+//   &:hover {
+//     opacity: 0.85;
+//   }
+// }
+
+// .track-close-btn {
+//   background: transparent;
+//   border: none;
+
+//   color: #14532d; // green
+//   cursor: pointer;
+
+//   font-size: 18px;
+//   font-weight: 600;
+//   line-height: 1;
+
+//   padding: 4px 6px;
+//   border-radius: 4px;
+
+//   display: inline-flex;
+//   align-items: center;
+//   justify-content: center;
+
+//   transition: color 0.15s ease, background 0.15s ease;
+
+//   &:hover {
+//     color: #0f3d21;
+//     background: rgba(20, 83, 45, 0.08);
+//   }
+// }
+
+// .track-label {
+//     display: none;
+//   }
+
+// .track-link {
+//   padding: 4px;
+// }
+
+// .track-link svg {
+// width: 19px;
+// height: 19px;
+// }
+
+  
+// /* ==========================================================================
+//    ICON BUTTONS
+//    ========================================================================== */
+
+// .icon-btn {
+//   box-sizing: border-box;
+//   display: inline-flex;
+//   align-items: center;
+//   justify-content: center;
+
+//   width: 40px;
+//   height: 40px;
+//   padding: 0;
+//   margin: 0;
+
+//   background: transparent !important;
+//   border: none;
+//   border-radius: 8px;
+
+//   color: #14532d !important;
+//   cursor: pointer;
+//   position: relative;
+//   flex-shrink: 0;
+
+//   svg {
+//     width: 22px;
+//     height: 22px;
+//     display: block;
+
+//     color: #14532d !important;
+//     stroke: #14532d !important;
+//     fill: none !important;
+//   }
+
+//   &:hover,
+//   &:focus,
+//   &:active {
+//     background: transparent !important;
+//     color: #14532d !important;
+
+//     svg {
+//       color: #14532d !important;
+//       stroke: #14532d !important;
+//       fill: none !important;
+//     }
+//   }
+// }
+// .cart-btn {
+//   position: relative;
+// }
+
+// .badge,
+// .wish-badge {
+//   position: absolute;
+
+//   background: var(--badge-bg, var(--app-primary));
+//   color: var(--badge-color, #ffffff);
+
+//   font-weight: 700;
+//   font-size: 0.7rem;
+//   line-height: 1;
+
+//   display: inline-flex;
+//   align-items: center;
+//   justify-content: center;
+
+//   border-radius: 999px;
+// }
+
+// .badge {
+//   top: -6px;
+//   right: -6px;
+
+//   min-width: 18px;
+//   height: 18px;
+
+//   padding: 0 4px;
+// }
+
+// .badge.hidden {
+//   display: none;
+// }
+
+// .wish-badge {
+//   top: -6px;
+//   right: -6px;
+
+//   min-width: 16px;
+//   height: 16px;
+
+//   padding: 0 4px;
+// }
+
+// // ─────────────────────────────────────────────
+// // TRACK ORDER
+// // Desktop  : visible
+// // Mobile   : hidden from header
+// //           Track Order is available in hamburger menu
+// // ─────────────────────────────────────────────
+
+// .desktop-track-order {
+//   display: flex;
+//   align-items: center;
+// }
+
+// @include media.down(md) {
+//   .desktop-track-order {
+//     display: none !important;
+//   }
+// }
+// // ─────────────────────────────────────────────────────────────────────────────
+// // HEADER SHELL
+// // ─────────────────────────────────────────────────────────────────────────────
+
+ 
+// .pc-header {
+//   background: var(--header-bg, var(--app-bg));
+//   color: var(--header-color, var(--app-primary));
+//   box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+//   position: relative;
+//   // ✅ Bumped from 30 → 50 so the header always paints ABOVE the mobile menu
+//   // panel (z-index 45) and its backdrop (z-index 40) in <app-navbar> — the
+//   // header, being opaque, stays fully visible/undimmed while the mobile menu
+//   // is open. Still well below Bootstrap's modal/offcanvas layer (1030+), so
+//   // any true modal (e.g. the cart drawer) still overlays the header as before.
+//   z-index: 50;
+//   transition: background 0.25s ease, border-color 0.25s ease;
+// }
+
+// /* Spacer used to balance the header columns so the logo sits perfectly centered on desktop */
+// // .header-left-spacer {
+// //   display: none;
+// // }
+
+
+// // @include media.up(md) {
+// //   .header-left-spacer {
+// //     display: block;
+// //     flex: 1 1 0;
+// //     min-width: 0;
+// //   }
+// // }
+// .header-left-spacer {
+//   display: flex;
+//   align-items: center;
+//   width: 260px;          // increase space
+//   min-width: 260px;
+// }
+
+// /* ===============================
+//    MOBILE HAMBURGER (moved in from navbar)
+//    Desktop: not rendered at all — zero layout impact.
+//    Mobile:  shares row 1 with the logo (top-left, vertically centred),
+//             still above app-pickup-delivery which sits on row 2
+//             (see the media queries further below).
+//    Icon: three-bar hamburger that animates into an X via .is-open
+//    (toggled from [class.is-open]="isMobileMenuOpen" in the template).
+// ================================ */
+// .mobile-menu-row {
+//   display: none;
+// }
+
+// .mobile-menu-btn {
+//   display: inline-flex;
+//   align-items: center;
+//   justify-content: center;
+//   width: 36px;
+//   height: 36px;
+//   padding: 0;
+//   border: none;
+//   border-radius: 6px;
+//   background: transparent;
+//   // ✅ fixed the missing `--` prefix (var() requires a custom-property name);
+//   // this previously made the declaration invalid CSS and silently fell back
+//   // to the inherited/initial color instead of the intended green.
+//   color: var(--color-mobile-menu-btn, #14532d);
+//   cursor: pointer;
+//   transition: background 0.15s ease, color 0.15s ease;
+
+//   &:hover, &:focus-visible {
+//     color: var(--color-mobile-menu-btn, #14532d);
+//     background: rgba(255, 255, 255, 0.10);
+//   }
+
+//   &:focus-visible {
+//     outline: 2px solid rgba(255, 255, 255, 0.65);
+//     outline-offset: 2px;
+//   }
+// }
+
+// // Three-bar box — bars use currentColor so they follow .mobile-menu-btn's
+// // color (including the hover/focus swap to #fff) automatically.
+// .hamburger-box {
+//   position: relative;
+//   width: 22px;
+//   height: 16px;
+//   display: inline-block;
+// }
+
+// .hamburger-bar {
+//   position: absolute;
+//   left: 0;
+//   width: 100%;
+//   height: 2px;
+//   border-radius: 2px;
+//   background: currentColor;
+//   transition: transform 0.25s ease, opacity 0.2s ease, top 0.25s ease;
+
+//   &--top    { top: 0; }
+//   &--mid    { top: 7px; }
+//   &--bottom { top: 14px; }
+// }
+
+// // Open state — bars rotate/fade into an X
+// .mobile-menu-btn.is-open {
+//   .hamburger-bar--top    { top: 7px; transform: rotate(45deg); }
+//   .hamburger-bar--mid    { opacity: 0; }
+//   .hamburger-bar--bottom { top: 7px; transform: rotate(-45deg); }
+// }
+
+// @media (max-width: 768px) {
+//   .mobile-menu-row {
+//     display: flex;
+//     align-items: center;   // vertically centred against the logo alongside it
+//     flex: 0 0 auto;        // was width:100% — no longer forces its own row
+//     width: auto;
+//     order: -2;             // stays first: menu button, then logo, on row 1
+//     justify-content: flex-start;
+//     padding: 0;
+//   }
+// }
+
+
+// /* make pickup-delivery bigger */
+// .header-left-spacer app-pickup-delivery {
+//   width: 100%;
+// }
+
+// /* bigger button */
+// .header-left-spacer ::ng-deep .pd-toggle {
+//   padding: 10px 16px;
+//   gap: 12px;
+//   font-size: 15px;
+//   min-width: 220px;
+//   justify-content: center;
+// }
+
+// .header-left-spacer ::ng-deep .pd-label {
+//   font-size: 15px;
+//   font-weight: 700;
+// }
+
+// .header-left-spacer ::ng-deep .pd-caret {
+//   font-size: 18px;
+// }
+
+// // .header-left-spacer {
+// //   display: flex;
+// //   align-items: center;
+// // }
+
+
+// /* ===============================
+//    HEADER ACTIONS — single source of truth.
+//    (Previously declared twice — `#headerSummary.actions { gap: 18px }` and
+//    `#headerSummary, .actions { gap: 0.4rem }` — with different specificity,
+//    which is what caused the "inconsistent spacing" symptom. Consolidated
+//    into one rule below.)
+// ================================ */
+
+// #headerSummary,
+// .actions {
+//   display: flex;
+//   align-items: center;   // ✅ guarantees every action icon sits on one baseline
+//   gap: 0.5rem;
+//   min-width: 0;
+// }
+
+
+// /* Mobile */
+// @media(max-width:768px){
+
+//   #headerSummary,
+//   .actions {
+//     gap: 0.35rem;
+//   }
+
+//   // Both action icons shrink together on small screens — keeps them
+//   // matching instead of only resizing the cart icon.
+//   .cart-btn,
+//   .sign-in-btn {
+//     width: 36px;
+//     height: 36px;
+//   }
+// }
+
+// @include media.up(md) {
+//   .header-left-spacer {
+//     flex: 1 1 0;
+//     min-width: 0;
+//   }
+// }
+
+// // ─────────────────────────────────────────────────────────────────────────────
+// // TOPBAR  —  now the ONLY header row on desktop.
+// //
+// // Desktop layout (CSS Grid, see the .logo/.logo-inner display:contents rules
+// // inside @include media.up(md) further below):
+// //   [logo icon — col 1, left] [name+tagline — col 2, true centre] [actions — col 3, right]
+// //
+// // Mobile layout (2 rows via flex-wrap, unchanged):
+// //   Row 1: hamburger + logo (icon+text together, as one unit)
+// //   Row 2: header-left-spacer + actions
+// // ─────────────────────────────────────────────────────────────────────────────
+
+// .pc-header__topbar {
+//   // position:relative unconditionally (not just desktop) — it's the
+//   // containing block .header-logo centers against, at both breakpoints.
+//   position: relative;
+//   background-color: var(--color-home-header-background, #fcfcfc);
+//   padding: 0 1rem;
+//   display: flex;
+//   flex-wrap: wrap;          // allows the mobile search row to drop onto row 2
+//   align-items: center;
+//   min-height: 48px;         // compact single-bar height; was 36px for strip only
+//   gap: 0;
+// }
+
+// // ─────────────────────────────────────────────────────────────────────────────
+// // HEADER LOGO — real <img>, replacing the earlier background-image attempt.
+// //
+// // `background-size: cover` on the bar was cropping the logo: the bar is
+// // very wide and short, so `cover` scaled the image up to match the width,
+// // which pushed its rendered height well past the bar's own height and
+// // sliced off the top/bottom. An <img> with an explicit `height` and
+// // `width: auto` can't crop — the browser preserves the image's own aspect
+// // ratio exactly, and the gap between that height and the bar's height
+// // (min-height above) IS the padding around the image.
+// //
+// // Centering: same absolute-position technique already used elsewhere in
+// // this file for .logo-text-block — resolves against the nearest
+// // *positioned* ancestor (.pc-header__topbar, position:relative above),
+// // so it centers correctly regardless of the hamburger/actions' widths on
+// // either side, and doesn't participate in their flex flow at all (so it
+// // can never push or resize them).
+// // ─────────────────────────────────────────────────────────────────────────────
+
+// .header-logo {
+//   position: absolute;
+//   left: 50%;
+//   top: 50%;
+//   transform: translate(-50%, -50%);
+//   display: flex;
+//   align-items: center;
+//   max-width: 70%;        // safety margin so it can never reach/overlap the
+//                            // hamburger (left) or cart/sign-in (right) even
+//                            // on very narrow viewports
+// }
+
+// .header-logo-img {
+//   display: block;
+//   // ✅ Switched from a fixed `height` to `height:auto` + `max-height`.
+//   // The old pattern (height: 32px + max-width: 100% from a parent cap)
+//   // had a latent distortion risk: if the image's natural width at that
+//   // fixed height ever exceeded the parent's max-width, the browser would
+//   // shrink the WIDTH to fit while the HEIGHT stayed literally fixed —
+//   // squishing it. `height:auto` + `max-height` lets the browser scale
+//   // both dimensions together to satisfy whichever constraint (max-height
+//   // or max-width) is tighter, with the aspect ratio always preserved —
+//   // this matters more now that the image is significantly bigger and
+//   // more likely to actually hit that constraint.
+//   width: auto;
+//   height: auto;
+//   max-height: 32px;         // superseded by the mobile row-2 override
+//                              // further down (this value only matters if
+//                              // that block is ever removed)
+//   max-width: 100%;
+// }
+
+// @include media.up(md) {
+//   .header-logo-img {
+//     max-height: 96px;       // ⬆ up from a fixed 56px — desktop bar grows
+//                              // to 120px (below) to give this room without
+//                              // cramping
+//   }
+// }
+
+// // ─────────────────────────────────────────────────────────────────────────────
+// // LEFT — desktop search slot
+// // ─────────────────────────────────────────────────────────────────────────────
+// .topbar-center {
+//   flex: 1 1 auto;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   min-width: 0;
+//   // ✅ `height: 100%` and `overflow: hidden` REMOVED — this zone now sizes
+//   // itself to its content (the logo) instead of being pinned to the
+//   // topbar's height and clipping whatever doesn't fit. Since the logo's
+//   // own height is now a fixed, known px value (not a percentage), there's
+//   // no risk of it blowing up to an unpredictable intrinsic size — so
+//   // there's nothing left that NEEDS clipping.
+// }
+// #search-desktop,
+// .search-desktop,
+// .topbar-search {
+//   flex: 1 1 0;
+//   display: flex;
+//   justify-content: flex-start;
+//   align-items: center;
+//   min-width: 0;
+// }
+
+// .search-form {
+//   width: 100%;
+//   max-width: 360px;
+// }
+
+// // ─────────────────────────────────────────────────────────────────────────────
+// // CENTRE — Logo  (clean HTML flex, no SVG text hacks)
+// //
+// // Structure:
+// //   <a .logo>
+// //     <div .logo-inner>          ← flex row: icon | divider | text-block
+// //       <div .logo-icon-wrap>    ← square icon container
+// //         <img .logo-icon-img>   ← object-fit:contain, never distorted
+// //       </div>
+// //       <span .logo-divider>     ← 1px vertical rule
+// //       <div .logo-text-block>   ← column: brand-name + tagline
+// //     </div>
+// //   </a>
+// // ─────────────────────────────────────────────────────────────────────────────
+
+// #logo,
+// .logo {
+//   flex: 0 0 auto;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   margin: 0 auto;   // true-centres between the two flex:1 side columns on desktop
+//   text-decoration: none;
+//   transition: opacity 0.15s ease;
+
+//   &:hover { opacity: 0.88; }
+//   &:focus-visible {
+//     outline: 2px solid rgba(255,255,255,0.65);
+//     outline-offset: 4px;
+//     border-radius: 6px;
+//   }
+// }
+
+// // ── Inner flex row — no background, inherits header bar colour ───────────────
+// .logo-inner {
+//   display: flex;
+//   align-items: center;
+//   gap: 10px;
+//   // No background — logo sits directly on the nav bar colour
+//   padding: 0;
+// }
+
+// // ── Brand icon — circular ─────────────────────────────────────────────────────
+// .logo-icon-wrap {
+//   width: 50px;
+//   height: 50px;
+//   flex-shrink: 0;
+//   // ✅ Circular shape
+//   border-radius: 50%;
+//   overflow: hidden;
+//   // Thin white ring so the circle edge is always clean against any nav colour
+//   box-shadow: 0 0 0 2px rgba(255,255,255,0.30);
+//   background: #fff;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// }
+
+// .logo-icon-img {
+//   width: 100%;
+//   height: 100%;
+//   // ✅ contain keeps the full logo visible without distortion inside the circle
+//   object-fit: contain;
+//   display: block;
+//   image-rendering: -webkit-optimize-contrast;
+//   image-rendering: crisp-edges;
+// }
+
+// // ── Vertical divider — hidden (only meaningful on coloured pill background) ───
+// .logo-divider {
+//   display: none;
+// }
+
+// // ── Text block ────────────────────────────────────────────────────────────────
+// .logo-text-block {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 2px;
+// }
+
+// .logo-brand-name {
+//   display: block;
+//   // ✅ Inter for sharp, modern eCommerce feel; clean system fallback
+//   font-family: 'Inter', system-ui, -apple-system, sans-serif;
+//   font-size: 1.35rem;      // ~22px desktop base — increased from previous
+//   font-weight: 700;
+//   letter-spacing: -0.02em; // slightly tight = premium/modern
+//   // ✅ Explicit white in light mode; CSS-var allows dark-mode override below
+//   color: var(--logo-title-color, #ffffff);
+//   line-height: 1.15;
+//   white-space: nowrap;
+//   // Crisp on all displays
+//   -webkit-font-smoothing: antialiased;
+//   -moz-osx-font-smoothing: grayscale;
+// }
+
+// .logo-tagline {
+//   display: block;
+//   font-family: 'Inter', system-ui, -apple-system, sans-serif;
+//   font-size: 0.6rem;
+//   font-weight: 500;
+//   letter-spacing: 0.12em;
+//   text-transform: uppercase;
+//   // Muted version of the title colour
+//   color: var(--logo-tagline-color, rgba(255,255,255,0.60));
+//   line-height: 1;
+//   white-space: nowrap;
+// }
+
+// // ─────────────────────────────────────────────────────────────────────────────
+// // MOBILE SEARCH ROW  —  Row 2 on small screens
+// // Takes the full topbar width, sits below the logo/actions row.
+// // Completely hidden on desktop.
+// // ─────────────────────────────────────────────────────────────────────────────
+
+// .mobile-search-row {
+//   display: none;            // hidden on desktop; enabled in media.down(md)
+//   width: 100%;
+//   padding: 0.4rem 0 0.6rem;
+
+//   .search-mobile-instance {
+//     width: 100%;
+//     display: block;
+//   }
+// }
+
+// // ─────────────────────────────────────────────────────────────────────────────
+// // ICON BUTTONS — unified sizing for Cart, Sign-in/User, and any future
+// // action icon. Fixed box size + Flexbox centring means every icon (whether
+// // it's a <button> or an <a>, and regardless of its own viewBox) renders at
+// // an identical footprint and sits on the same horizontal line.
+// // ─────────────────────────────────────────────────────────────────────────────
+
+// .icon-btn {
+//   // <button> and <a> carry different UA defaults (font, line-height,
+//   // border) — box-sizing + an explicit width/height removes the
+//   // discrepancy instead of relying on each element's own intrinsic size.
+//   box-sizing: border-box;
+//   display: inline-flex;
+//   align-items: center;
+//   justify-content: center;
+//   width: 40px;
+//   height: 40px;
+//   padding: 0;
+//   margin: 0;
+//   background: transparent;
+//   border: none;
+//   border-radius: 8px;
+//   color: rgba(255, 255, 255, 0.88);
+//   text-decoration: none;   // guards the <a> (sign-in) against any global underline
+//   line-height: 1;
+//   cursor: pointer;
+//   position: relative;
+//   vertical-align: middle;
+//   flex-shrink: 0;          // neither icon shrinks relative to the other
+
+//   // Every icon is forced to the SAME rendered size in CSS — not left to
+//   // each SVG's own viewBox/attributes.
+//   svg {
+//     width: 22px;
+//     height: 22px;
+//     display: block;
+//     color: var(--color-icon-btn, #14532d);
+//   }
+
+//   &:hover { color: #fff; svg { color: #fff; } }
+// }
+
+// .cart-btn { position: relative; }
+
+// .badge {
+//   position: absolute;
+//   top: -6px; right: -6px;
+//   background: var(--badge-bg, var(--app-primary));
+//   color: var(--badge-color, #ffffff);
+//   font-weight: 700;
+//   font-size: 0.7rem;
+//   line-height: 1;
+//   min-width: 18px;
+//   height: 18px;
+//   display: inline-flex;
+//   align-items: center;
+//   justify-content: center;
+//   border-radius: 999px;
+//   padding: 0 4px;
+// }
+
+// .badge.hidden { display: none; }
+
+// .wish-badge {
+//   position: absolute;
+//   top: -6px; right: -6px;
+//   background: var(--badge-bg, var(--app-primary));
+//   color: var(--badge-color, #ffffff);
+//   font-weight: 700;
+//   font-size: 0.7rem;
+//   line-height: 1;
+//   min-width: 16px;
+//   height: 16px;
+//   display: inline-flex;
+//   align-items: center;
+//   justify-content: center;
+//   border-radius: 999px;
+//   padding: 0 4px;
+// }
+
+// .wishlist-icon {
+//   font-size: 20px;
+//   line-height: 1;
+//   transition: transform 0.15s ease;
+
+//   .heart {
+//     color: rgba(255, 255, 255, 0.75);
+//     transition: color 0.2s ease;
+
+//     &.active { color: #e11d48; }
+//   }
+// }
+
+// @media (hover: hover) {
+//   .wishlist-icon:hover .heart { color: #e11d48; }
+//   .wishlist-icon:hover        { transform: scale(1.1); }
+// }
+
+// .wishlist-icon:active { transform: scale(0.95); }
+
+// // ─────────────────────────────────────────────────────────────────────────────
+// // THEME PICKER  —  icon + dot + popover
+// // ─────────────────────────────────────────────────────────────────────────────
+
+// .theme-picker-wrap {
+//   position: relative;
+//   flex-shrink: 0;
+// }
+
+// .theme-icon-btn {
+//   position: relative;
+
+//   &:focus-visible {
+//     outline: 2px solid rgba(255, 255, 255, 0.70);
+//     outline-offset: 3px;
+//     border-radius: 4px;
+//   }
+// }
+
+// // Small status dot — bottom-right of the icon
+// .theme-dot {
+//   position: absolute;
+//   bottom: 4px;
+//   right: 4px;
+//   width: 7px;
+//   height: 7px;
+//   border-radius: 50%;
+//   border: 1.5px solid var(--nav-bg, #1a1a2e);
+//   pointer-events: none;
+//   transition: background 0.25s ease, border-color 0.25s ease;
+// }
+
+// // Popover card
+// .theme-popover {
+//   position: absolute;
+//   top: calc(100% + 8px);
+//   right: 0;
+//   min-width: 110px;
+//   padding: 12px;
+//   background: #ffffff;
+//   border: 1px solid rgba(0, 0, 0, 0.10);
+//   border-radius: 14px;
+//   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 1px 4px rgba(0, 0, 0, 0.08);
+//   opacity: 0;
+//   transform: translateY(-6px) scale(0.96);
+//   transform-origin: top right;
+//   pointer-events: none;
+//   transition: opacity 0.18s ease, transform 0.18s ease;
+//   z-index: 200;
+
+//   &--open {
+//     opacity: 1;
+//     transform: translateY(0) scale(1);
+//     pointer-events: all;
+//   }
+
+//   /* On small screens prefer the popover to appear below the icon (top-right),
+//      not pinned to the bottom of the viewport. This keeps theme options near the
+//      header controls and avoids footer overlap. */
+//   @include media.down(md) {
+//     position: absolute;
+//     top: calc(100% + 8px);
+//     right: 0;
+//     left: auto;
+//     bottom: auto;
+//     min-width: 140px;
+//     transform-origin: top right;
+
+//     &--open {
+//       transform: translateY(0) scale(1);
+//     }
+//   }
+// }
+
+// .theme-swatches {
+//   display: flex;
+//   gap: 8px;
+//   align-items: center;
+//   flex-wrap: nowrap;
+// }
+
+// .tp-swatch {
+//   width: 32px;
+//   height: 32px;
+//   border-radius: 50%;
+//   border: none;
+//   padding: 0;
+//   cursor: pointer;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   outline: 3px solid transparent;
+//   outline-offset: 2px;
+//   transition: transform 0.15s ease, outline-color 0.15s ease;
+//   flex-shrink: 0;
+
+//   &:hover { transform: scale(1.12); }
+//   &:active { transform: scale(0.94); }
+
+//   &--active {
+//     outline-color: var(--sw-color);
+//     transform: scale(1.08);
+//   }
+
+//   &:focus-visible {
+//     outline-color: var(--sw-color);
+//     outline-width: 3px;
+//   }
+// }
+
+// .tp-check {
+//   width: 14px;
+//   height: 14px;
+//   pointer-events: none;
+//   filter: drop-shadow(0 1px 1px rgba(0,0,0,0.35));
+// }
+
+
+// // ─────────────────────────────────────────────────────────────────────────────
+// // DARK MODE TOGGLE  —  moon ↔ sun icon button
+// // ─────────────────────────────────────────────────────────────────────────────
+
+// .dark-toggle-btn {
+//   width: 32px;
+//   height: 32px;
+//   border-radius: 50%;
+//   flex-shrink: 0;
+//   transition: background 0.25s ease, color 0.2s ease;
+
+//   &:focus-visible {
+//     outline: 2px solid rgba(255, 255, 255, 0.70);
+//     outline-offset: 2px;
+//   }
+
+//   // Sun state — amber glow when dark mode is active
+//   &--dark {
+//     background: rgba(251, 191, 36, 0.18);
+//     color: #fbbf24;
+
+//     svg { color: #fbbf24; }
+
+//     &:hover {
+//       background: rgba(251, 191, 36, 0.30);
+//       color: #fde68a;
+//       svg { color: #fde68a; }
+//     }
+//   }
+// }
+
+// // Icon entrance animations
+// .dm-icon {
+//   display: block;
+
+//   &--moon { animation: dmFadeIn 0.22s ease; }
+//   &--sun  { animation: dmSpinIn 0.30s ease; }
+// }
+
+// @keyframes dmFadeIn {
+//   from { opacity: 0; transform: scale(0.7) rotate(-20deg); }
+//   to   { opacity: 1; transform: scale(1)   rotate(0deg);   }
+// }
+
+// @keyframes dmSpinIn {
+//   from { opacity: 0; transform: scale(0.6) rotate(-60deg); }
+//   to   { opacity: 1; transform: scale(1)   rotate(0deg);   }
+// }
+
+// // ─────────────────────────────────────────────────────────────────────────────
+// // DARK MODE — global body.dark-mode overrides
+// //
+// // Both colour-theme classes and dark-mode class coexist on <body>.
+// // Colour themes control hue; dark-mode controls luminance/surface.
+// // These rules fire whenever body carries the dark-mode class, regardless
+// // of which colour theme is also active.
+// // ─────────────────────────────────────────────────────────────────────────────
+
+// body.dark-mode {
+
+//   // ── Navigation / header bar ────────────────────────────────────────────────
+//   --nav-bg:        #0d0d0d;
+//   --header-bg:     #111111;
+//   --header-color:  #e2e8f0;
+
+//   // ── App surfaces ───────────────────────────────────────────────────────────
+//   --app-bg:        #121212;
+//   --app-surface:   #1e1e1e;
+//   --app-surface-2: #252525;
+//   --app-border:    rgba(255, 255, 255, 0.10);
+
+//   // ── Text ───────────────────────────────────────────────────────────────────
+//   --app-text:        #e2e8f0;
+//   --app-text-muted:  #94a3b8;
+//   --app-text-subtle: #64748b;
+
+//   // ── Body surface ───────────────────────────────────────────────────────────
+//   background-color: var(--app-bg);
+//   color: var(--app-text);
+//   transition: background-color 0.25s ease, color 0.25s ease;
+
+//   // ── Theme-picker popover in dark mode ──────────────────────────────────────
+//   .theme-popover {
+//     background: #1e1e1e;
+//     border-color: rgba(255, 255, 255, 0.12);
+//     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.55), 0 1px 4px rgba(0, 0, 0, 0.40);
+//   }
+
+//   // Dot border tracks the dark nav-bg so it looks cut-out
+//   .theme-dot {
+//     border-color: #0d0d0d;
+//   }
+
+//   // ── Logo branding in dark mode ──────────────────────────────────────────────
+//   // Dark nav-bg is near-black (#0d0d0d), so pure white is safe and readable.
+//   // Use a hair-softer white for the title to reduce eye strain on OLED screens,
+//   // and a dimmer value for the tagline.
+//   --logo-title-color:   #f1f1f1;   // ~94% white — softer than pure #fff on dark
+//   --logo-tagline-color: rgba(241,241,241,0.55);
+
+//   // Adapt the circular icon ring to the darker background
+//   .logo-icon-wrap {
+//     box-shadow: 0 0 0 2px rgba(255,255,255,0.18);
+//   }
+// }
+
+// // ── OS-level dark mode (complements the manual body.dark-mode toggle) ─────────
+// // Sets the same CSS variables so logo text reads correctly when the user's OS
+// // is in dark mode but hasn't clicked the in-app toggle.
+// @media (prefers-color-scheme: dark) {
+//   :root {
+//     --logo-title-color:   #f1f1f1;
+//     --logo-tagline-color: rgba(241,241,241,0.55);
+//   }
+// }
+
+// // ─────────────────────────────────────────────────────────────────────────────
+// // MISC
+// // ─────────────────────────────────────────────────────────────────────────────
+
+// .backdrop {
+//   position: fixed;
+//   inset: 0;
+//   background: rgba(0, 0, 0, 0.35);
+//   opacity: 0;
+//   pointer-events: none;
+//   transition: opacity 220ms ease-in-out;
+//   z-index: 50;
+
+//   &.open { opacity: 1; pointer-events: auto; }
+// }
+
+// .mobile-item-row { display: flex; align-items: center; justify-content: space-between; }
+// .user-name       { padding-right: 10px; font-weight: 600; }
+
+// // ─────────────────────────────────────────────────────────────────────────────
+// // RESPONSIVE — mobile (below md)
+// //
+// // Single row inside .pc-header__topbar: hamburger menu (left) + cart/sign-in
+// // actions (right). The header-left-spacer/#logo rules below are currently
+// // inert — both elements are commented out in header.component.html — but
+// // are left in place, documented, in case either is re-enabled later.
+// // ─────────────────────────────────────────────────────────────────────────────
+
+// @include media.down(md) {
+
+//   // Mobile layout is now two rows:
+//   //   Row 1: hamburger menu (left) + cart/sign-in actions (right)
+//   //   Row 2: header logo image, full width, its own dedicated space —
+//   //          see .header-logo below, which switches from absolute/
+//   //          overlaid (desktop) to a normal flex item that wraps onto
+//   //          this second row via flex-basis:100%.
+
+//   // Hide the desktop search slot on mobile
+//   #search-desktop,
+//   .search-desktop,
+//   .topbar-search {
+//     display: none;
+//   }
+
+//   .pc-header__topbar {
+//     min-height: unset;
+//     padding: 0.4rem 0.75rem 0.3rem;
+//     align-items: center;
+//   }
+//    .header-left-spacer {
+//     display: flex;
+//     flex: 0 1 auto;      // was flex: 0 0 auto — allow it to shrink if needed
+//     width: auto;
+//     min-width: 0;
+//     max-width: 55%;      // leave room for actions on the same row
+//     order: 1;
+//     overflow: hidden;
+//   }
+
+//   // Shrink the pickup-delivery button so it fits next to track/cart/user-menu
+//   .header-left-spacer ::ng-deep .pd-toggle {
+//     padding: 6px 10px;
+//     gap: 6px;
+//     font-size: 12px;
+//     min-width: 0;
+//     white-space: nowrap;
+//   }
+
+//   .header-left-spacer ::ng-deep .pd-label {
+//     font-size: 12px;
+//     font-weight: 600;
+//   }
+
+//   .header-left-spacer ::ng-deep .pd-caret {
+//     font-size: 14px;
+//   }
+
+//   // ── Row 1: hamburger + logo — share one row, vertically centred ─────────
+//   #logo,
+//   .logo {
+//     flex: 1 1 auto;       // fills the space left by the hamburger button
+//     min-width: 0;
+//     order: -1;            // sits right after .mobile-menu-row (order:-2)
+//     margin: 0;
+//     justify-content: center;
+//     padding: 0.25rem 0;
+//   }
+
+//   // .mobile-row-break rule removed along with its HTML element — it only
+//   // existed to force a wrap before header-left-spacer/actions when the
+//   // logo sat between them; with the logo commented out, hamburger + actions
+//   // now naturally share a single row.
+
+//   // Scale logo down for mobile — no pill, just icon + text
+//   .logo-inner {
+//     gap: 8px;
+//     padding: 0;
+//   }
+
+//   .logo-icon-wrap {
+//     width: 30px;
+//     height: 30px;
+//     // Keep circular
+//     border-radius: 50%;
+//   }
+
+//   // Divider hidden regardless
+//   .logo-divider { display: none; }
+
+//   .logo-brand-name {
+//     font-size: 1.1rem;   // ~18px — clear on mobile
+//   }
+
+//   .logo-tagline {
+//     font-size: 0.55rem;
+//     letter-spacing: 0.10em;
+//   }
+
+//   // ── Actions (cart + sign-in) — right side, same row as the hamburger ──────
+//   #headerSummary,
+//   .actions {
+//     width: auto;            // was 100% — that forced it onto its own row
+//     flex: 0 0 auto;
+//     min-width: 0;
+//     order: 2;
+//     justify-content: flex-end;
+//     // ✅ Same technique as the desktop fix: margin-left:auto pins .actions
+//     // to the true right edge of the topbar regardless of what else is (or
+//     // isn't) on the row — this is what keeps cart/sign-in on the right,
+//     // sharing one row with the hamburger, with nothing forcing a wrap.
+//     margin-left: auto;
+//     padding-bottom: 0;
+//   }
+
+//   // Row 3 (if mobile-search-row is re-enabled): full-width search bar
+//   .mobile-search-row {
+//     display: flex;
+//     align-items: center;
+//     width: 100%;
+//     padding: 0.3rem 0 0.5rem;
+//   }
+
+//   // ── Row 2: header logo — its own full-width row below hamburger/actions ──
+//   // On desktop .header-logo is position:absolute, overlaid centered on top
+//   // of row 1 (see @include media.up(md) further down — untouched by this
+//   // block). That works there because the 80px desktop bar has room for it
+//   // alongside the icons. On mobile the bar is too short (~47px) to make the
+//   // image any bigger without overlapping the hamburger/cart/sign-in icons —
+//   // which is why it looked small. Giving it a dedicated second row removes
+//   // that height ceiling entirely.
+//   .header-logo {
+//     position: static;        // was absolute (desktop-only concern) — here
+//                                // it becomes a normal flex item so it can
+//                                // wrap onto a new line
+//     left: auto;
+//     top: auto;
+//     transform: none;
+//     order: 3;                 // after hamburger (-2) and actions (2)
+//     flex-basis: 100%;         // ✅ this is what creates "row 2" — the
+//                                // existing flex-wrap on .pc-header__topbar
+//                                // wraps any item whose flex-basis exceeds
+//                                // the space left in the current row
+//     width: 100%;
+//     max-width: 100%;          // was 70% on desktop, to dodge the icons —
+//                                // not needed here since it now has the row
+//                                // to itself
+//     justify-content: center;  // centers the image horizontally in row 2
+//     // ⬇ tightened from 0.35rem/0.5rem — less whitespace around the now-
+//     // much-bigger image, per "reduce excessive whitespace around the logo"
+//     padding: 0.2rem 0 0.3rem;
+//   }
+
+//   .header-logo-img {
+//     // ⬆⬆ Significant increase from the old fixed 72px. Uses a clamp() so
+//     // it scales with viewport width instead of one fixed number: a floor
+//     // of 100px even on the smallest phones, growing up to 150px on larger
+//     // phones/phablets approaching the 768px breakpoint — noticeably a
+//     // "stronger visual focal point" at every mobile size, per the
+//     // acceptance criteria. width:auto (base rule) still guarantees this
+//     // can never crop or distort regardless of the exact value.
+//     //max-height: clamp(100px, 16vw, 150px);
+//     max-height: clamp(50px, 14vw, 80px);
+//   }
+
+//   .user-welcome        { display: none; }
+//   .icon-search-desktop { display: none; }
+// }
+ 
+// // ─────────────────────────────────────────────────────────────────────────────
+// // RESPONSIVE — desktop (md and above)
+// // ─────────────────────────────────────────────────────────────────────────────
+
+// @include media.up(md) {
+
+//   // ⚠️ NOTE: #search-desktop/.search-desktop/.topbar-search has no live
+//   // element right now (it's commented out in header.component.html — search
+//   // lives in <app-navbar> instead). If it's ever re-enabled here, give it an
+//   // explicit `grid-column` (the grid below doesn't auto-place it into a
+//   // sensible column) — these flex properties are inert once the topbar
+//   // becomes `display: grid` further down.
+//   #search-desktop,
+//   .search-desktop,
+//   .topbar-search {
+//     display: flex;
+//     flex: 1 1 0;
+//     justify-content: flex-start;
+//     align-items: center;
+//     min-width: 0;
+//   }
+
+//   .mobile-search-row {
+//     display: none;
+//   }
+
+//   // NOTE: this file's comments elsewhere still describe .pc-header__topbar
+//   // as a CSS Grid — that was true in an earlier iteration but it's actually
+//   // `display: flex` now (see the rule further below). A stray
+//   // `flex: 1 1 0` here previously assumed it was inert under a grid parent;
+//   // removed, since under flex it would compete with .actions' own
+//   // `margin-left: auto` fix below in ambiguous, hard-to-predict ways.
+//   // .actions' real sizing/position is set once, further down in this block.
+
+//   // Increase topbar height on desktop to accommodate larger logo text
+//   .pc-header__topbar {
+//     min-height: 120px;   // ⬆ up from 80px, to fit the enlarged 96px logo
+//                           // with real breathing room (~12px top/bottom)
+//                           // instead of cramming it in
+//   }
+
+//   // ⬆ Desktop gets more horizontal room than the shared 70% cap (set in
+//   // the base .header-logo rule, still used as-is on mobile) — this is
+//   // safe because .header-logo-img's own max-width:100% (of THIS element)
+//   // still guarantees it can never actually touch/overlap the hamburger or
+//   // cart/sign-in icons, which sit outside .header-logo entirely.
+//   .header-logo {
+//     max-width: 82%;
+//   }
+
+//   // Upsize for the taller 80px desktop topbar — no pill background
+//   .logo-inner {
+//     gap: 12px;
+//     padding: 0;
+//   }
+
+//   .logo-icon-wrap {
+//     width: 44px;
+//     height: 44px;
+//     // Keep circular on desktop
+//     border-radius: 50%;
+//   }
+
+//   // Divider hidden regardless
+//   .logo-divider { display: none; }
+
+//   .logo-brand-name {
+//     font-size: 1.6rem;   // ~26px — prominent on desktop, still fits 80px bar
+//   }
+
+//   .logo-tagline {
+//     font-size: 0.65rem;
+//     letter-spacing: 0.13em;
+//   }
+
+//   // ───────────────────────────────────────────────────────────────────────
+//   // LOGO ICON (left) | NAME+TAGLINE (true centre) | CART/SIGN-IN (right)
+//   // Desktop only — the mobile two-row layout above is completely untouched.
+//   //
+//   // .logo-text-block is pulled OUT of normal flow with `position: absolute`
+//   // and centered against .pc-header__topbar directly via left:50% +
+//   // translateX(-50%). This is independent of DOM nesting depth — it doesn't
+//   // matter that .logo-text-block sits two levels inside <a class="logo">;
+//   // absolute positioning always resolves against the nearest *positioned*
+//   // ancestor (.pc-header__topbar, given position:relative below), skipping
+//   // over any non-positioned wrappers in between. That's what guarantees
+//   // true centering regardless of the icon's width or the cart/sign-in
+//   // buttons' width — neither can push the text off-center, because the
+//   // text's position no longer depends on how much space its siblings take.
+//   //
+//   // (Previously this used `display: contents` on .logo/.logo-inner to
+//   // "flatten" them into a CSS Grid — replaced here because it wasn't
+//   // reliably taking effect and the icon+text kept moving together as one
+//   // clump. Absolute positioning has no such cross-browser inconsistency.)
+//   //
+//   // Clicking still works exactly as before: .logo-text-block remains a DOM
+//   // descendant of <a class="logo" routerLink="/">, and click events bubble
+//   // up through the DOM tree regardless of where an element is painted on
+//   // screen — so clicking the centered text still navigates home, same as
+//   // clicking the icon.
+//   // ───────────────────────────────────────────────────────────────────────
+
+//   .pc-header__topbar {
+//     position: relative;         // containing block for .logo-text-block below
+//     display: flex;
+//     justify-content: space-between;  // pins .logo to the start, .actions to the end
+//   }
+
+//   #logo,
+//   .logo {
+//     margin: 0;          // was `margin: 0 auto` (the old centering trick) —
+//                           // no longer needed now that .logo just needs to
+//                           // sit at flex-start.
+//                           // NOTE: must repeat the `#logo,` compound here —
+//                           // the original rule (#logo, .logo { margin: 0 auto }
+//                           // near the top of this file) carries ID-level
+//                           // specificity because the element has both
+//                           // id="logo" and class="logo". A class-only
+//                           // override (`.logo { margin: 0 }`) can never beat
+//                           // that, regardless of source order, which is why
+//                           // the icon kept snapping back to centered.
+//     flex: 0 0 auto;
+//   }
+
+//   .actions {
+//     flex: 0 0 auto;      // was flex: 1 1 0 — no longer needed; space-between
+//                           // on the topbar now pins it to flex-end directly
+//     // ✅ FIX: with <a class="logo"> currently commented out in the
+//     // template, .actions became the ONLY visible flex child of
+//     // .pc-header__topbar — and `justify-content: space-between` has
+//     // nothing to space TO when there's just one item, so it fell back to
+//     // flex-start (the left edge). `margin-left: auto` fixes this
+//     // regardless of whether .logo is present: it consumes all free space
+//     // to .actions' left, pinning it to the right edge whether it's the
+//     // only child or one of several — so cart + sign-in end up on the
+//     // right either way, and nothing breaks if the logo comes back later.
+//     margin-left: auto;
+//   }
+
+//   .logo-text-block {
+//     position: absolute;
+//     left: 50%;
+//     top: 50%;
+//     transform: translate(-50%, -50%);
+//     align-items: center;   // centers brand-name/tagline within their own stack
+//     text-align: center;
+//   }
+// }
+// :host {
+//   --pickup-delivery-text-color: rgba(255, 255, 255, 0.82);
+// }
+
+// // Emulated view encapsulation scopes header styles to the header's own
+// // template — it cannot reach inside <app-pickup-delivery>'s child template.
+// // ::ng-deep pierces that boundary while :host keeps the rule scoped to
+// // this component (no global leakage). Works identically for desktop and
+// // mobile since .track-link's color isn't breakpoint-specific.
+// :host ::ng-deep app-pickup-delivery,
+// :host ::ng-deep app-pickup-delivery * {
+//   color: var(--pickup-delivery-text-color);
+// }
+@use 'media' as media;
+
+
+/* ============================================================
+   USER MENU — DESKTOP ONLY
+   ============================================================ */
+
+.desktop-user-menu {
+  display: inline-block;
+}
+
+/* Hide the uploaded user-menu completely on mobile/tablet */
+@media (max-width: 1023px) {
+  .desktop-user-menu {
+    display: none !important;
+  }
+}
+
+/* Mobile auth buttons */
+.mobile-auth-btn {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .mobile-auth-btn {
+    display: inline-flex;
+  }
+}
+
+/* ==========================================================================
+   TRACK ORDER
+   ========================================================================== */
+
+   .sign-in-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: auto !important;
+  min-width: max-content;
+  white-space: nowrap;
+}
+
+.sign-in-btn span {
+  display: inline !important;
+}
+
+.track-order {
+  display: flex;
+  align-items: center;
+}
+
+.track-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px 14px;
+  border-radius: 8px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  color: var(--primary-color, #b84a1a);
+}
+
+.track-link svg {
+  width: 28px;
+  height: 28px;
+}
+
+.track-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.track-input {
+  width: 160px;
+  padding: 6px 8px;
+
+  border: 1px solid #cfe8dc;
+  border-radius: 5px;
+
+  background: #fff;
+  color: #14532d;   // IMPORTANT
+
+  font-size: 13px;
+  font-weight: 500;
+
+  outline: none;
+
+  &::placeholder {
+    color: #94a3b8;
+  }
+
+  &:focus {
+    border-color: #14532d;
+  }
+}
+
+.track-search-btn {
+  background: var(--app-primary, #0b5ed7);
+  color: #fff;
+
+  border: none;
+  border-radius: 4px;
+
+  padding: 4px 10px;
+
+  font-size: 0.78rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  white-space: nowrap;
+
+  transition: opacity 0.15s ease;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+.track-close-btn {
+  background: transparent;
+  border: none;
+
+  color: #14532d; // green
+  cursor: pointer;
+
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1;
+
+  padding: 4px 6px;
+  border-radius: 4px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: color 0.15s ease, background 0.15s ease;
+
+  &:hover {
+    color: #0f3d21;
+    background: rgba(20, 83, 45, 0.08);
+  }
+}
+
+.track-label {
+    display: none;
+  }
+
+.track-link {
+  padding: 4px;
+}
+
+.track-link svg {
+width: 19px;
+height: 19px;
+}
+
+  
+/* ==========================================================================
+   ICON BUTTONS
+   ========================================================================== */
+
+.icon-btn {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  margin: 0;
+
+  background: transparent !important;
+  border: none;
+  border-radius: 8px;
+
+  color: #14532d !important;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+
+  svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+
+    color: #14532d !important;
+    stroke: #14532d !important;
+    fill: none !important;
+  }
+
+  &:hover,
+  &:focus,
+  &:active {
+    background: transparent !important;
+    color: #14532d !important;
+
+    svg {
+      color: #14532d !important;
+      stroke: #14532d !important;
+      fill: none !important;
+    }
+  }
+}
+.cart-btn {
+  position: relative;
+}
+
+.badge,
+.wish-badge {
+  position: absolute;
+
+  background: var(--badge-bg, var(--app-primary));
+  color: var(--color-control-text, #D9D4C0);
+
+  font-weight: 700;
+  font-size: 0.7rem;
+  line-height: 1;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px;
+}
+
+.badge {
+  top: -6px;
+  right: -6px;
+
+  min-width: 18px;
+  height: 18px;
+
+  padding: 0 4px;
+}
+
+.badge.hidden {
+  display: none;
+}
+
+.wish-badge {
+  top: -6px;
+  right: -6px;
+
+  min-width: 16px;
+  height: 16px;
+
+  padding: 0 4px;
+}
+
+// ─────────────────────────────────────────────
+// TRACK ORDER
+// Desktop  : visible
+// Mobile   : hidden from header
+//           Track Order is available in hamburger menu
+// ─────────────────────────────────────────────
+
+.desktop-track-order {
+  display: flex;
+  align-items: center;
+}
+
+@include media.down(md) {
+  .desktop-track-order {
+    display: none !important;
+  }
+}
+// ─────────────────────────────────────────────────────────────────────────────
+// HEADER SHELL
+// ─────────────────────────────────────────────────────────────────────────────
+
+.pc-header {
+  background: var(--header-bg, var(--app-bg));
+  color: var(--header-color, var(--app-primary));
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+  position: relative;
+  // ✅ Bumped from 30 → 50 so the header always paints ABOVE the mobile menu
+  // panel (z-index 45) and its backdrop (z-index 40) in <app-navbar> — the
+  // header, being opaque, stays fully visible/undimmed while the mobile menu
+  // is open. Still well below Bootstrap's modal/offcanvas layer (1030+), so
+  // any true modal (e.g. the cart drawer) still overlays the header as before.
+  z-index: 50;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+/* Spacer used to balance the header columns so the logo sits perfectly centered on desktop */
+// .header-left-spacer {
+//   display: none;
+// }
+
+
+// @include media.up(md) {
+//   .header-left-spacer {
+//     display: block;
+//     flex: 1 1 0;
+//     min-width: 0;
+//   }
+// }
+.header-left-spacer {
+  display: flex;
+  align-items: center;
+  width: 260px;          // increase space
+  min-width: 260px;
+}
+
+/* ===============================
+   MOBILE HAMBURGER (moved in from navbar)
+   Desktop: not rendered at all — zero layout impact.
+   Mobile:  shares row 1 with the logo (top-left, vertically centred),
+            still above app-pickup-delivery which sits on row 2
+            (see the media queries further below).
+   Icon: three-bar hamburger that animates into an X via .is-open
+   (toggled from [class.is-open]="isMobileMenuOpen" in the template).
+================================ */
+.mobile-menu-row {
+  display: none;
+}
+
+.mobile-menu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  // ✅ fixed the missing `--` prefix (var() requires a custom-property name);
+  // this previously made the declaration invalid CSS and silently fell back
+  // to the inherited/initial color instead of the intended green.
+  color: var(--color-mobile-menu-btn, #14532d);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover, &:focus-visible {
+    color: var(--color-mobile-menu-btn, #14532d);
+    background: rgba(255, 255, 255, 0.10);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.65);
+    outline-offset: 2px;
+  }
+}
+
+// Three-bar box — bars use currentColor so they follow .mobile-menu-btn's
+// color (including the hover/focus swap to #fff) automatically.
+.hamburger-box {
+  position: relative;
+  width: 22px;
+  height: 16px;
+  display: inline-block;
+}
+
+.hamburger-bar {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 0.25s ease, opacity 0.2s ease, top 0.25s ease;
+
+  &--top    { top: 0; }
+  &--mid    { top: 7px; }
+  &--bottom { top: 14px; }
+}
+
+// Open state — bars rotate/fade into an X
+.mobile-menu-btn.is-open {
+  .hamburger-bar--top    { top: 7px; transform: rotate(45deg); }
+  .hamburger-bar--mid    { opacity: 0; }
+  .hamburger-bar--bottom { top: 7px; transform: rotate(-45deg); }
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-row {
+    display: flex;
+    align-items: center;   // vertically centred against the logo alongside it
+    flex: 0 0 auto;        // was width:100% — no longer forces its own row
+    width: auto;
+    order: -2;             // stays first: menu button, then logo, on row 1
+    justify-content: flex-start;
+    padding: 0;
+  }
+}
+.desktop-auth-btn {
+  display: inline-flex;
+}
+
+@media (max-width: 768px) {
+  .desktop-auth-btn {
+    display: none !important;
+  }
+}
+
+
+/* make pickup-delivery bigger */
+.header-left-spacer app-pickup-delivery {
+  width: 100%;
+}
+
+/* bigger button */
+.header-left-spacer ::ng-deep .pd-toggle {
+  padding: 10px 16px;
+  gap: 12px;
+  font-size: 15px;
+  min-width: 220px;
+  justify-content: center;
+}
+
+.header-left-spacer ::ng-deep .pd-label {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.header-left-spacer ::ng-deep .pd-caret {
+  font-size: 18px;
+}
+
+// .header-left-spacer {
+//   display: flex;
+//   align-items: center;
+// }
+
+
+/* ===============================
+   HEADER ACTIONS — single source of truth.
+   (Previously declared twice — `#headerSummary.actions { gap: 18px }` and
+   `#headerSummary, .actions { gap: 0.4rem }` — with different specificity,
+   which is what caused the "inconsistent spacing" symptom. Consolidated
+   into one rule below.)
+================================ */
+
+#headerSummary,
+.actions {
+  display: flex;
+  align-items: center;   // ✅ guarantees every action icon sits on one baseline
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+
+/* Mobile */
+@media(max-width:768px){
+
+  #headerSummary,
+  .actions {
+    gap: 0.35rem;
+  }
+
+  // Both action icons shrink together on small screens — keeps them
+  // matching instead of only resizing the cart icon.
+  .cart-btn,
+  .sign-in-btn {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@include media.up(md) {
+  .header-left-spacer {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TOPBAR  —  now the ONLY header row on desktop.
+//
+// Desktop layout (CSS Grid, see the .logo/.logo-inner display:contents rules
+// inside @include media.up(md) further below):
+//   [logo icon — col 1, left] [name+tagline — col 2, true centre] [actions — col 3, right]
+//
+// Mobile layout (2 rows via flex-wrap, unchanged):
+//   Row 1: hamburger + logo (icon+text together, as one unit)
+//   Row 2: header-left-spacer + actions
+// ─────────────────────────────────────────────────────────────────────────────
+
+.pc-header__topbar {
+  display: flex;
+  align-items: stretch;    // keeps .topbar-left/.topbar-right full height;
+                             // .topbar-center no longer depends on this for
+                             // its own height (see below), but it's still
+                             // correct for the icon columns.
+  justify-content: space-between;
+  padding: 8px 1rem;        // ✅ was 0 1rem with a hard `height` — vertical
+                              // padding is now what gives the logo breathing
+                              // room, and it contributes to the auto height
+                              // below instead of being squeezed inside a
+                              // fixed box.
+  min-height: 64px;         // ✅ FLOOR, not a cap — was `height: 64px`. A
+                              // hard `height` cannot grow to fit content
+                              // taller than itself; `min-height` lets the
+                              // row grow when the logo needs more room,
+                              // while still guaranteeing the icons/hamburger
+                              // never sit in a squashed bar on rows where
+                              // the logo happens to be short.
+  gap: 0;
+  background-color: var(--color-home-header-background, #fcfcfc);
+  position: relative;
+  // ✅ `overflow: hidden` REMOVED — this was the proximate cause of "logo
+  // hidden by app-product-suggest": combined with the hard 64px height
+  // above, it silently clipped anything taller than 64px instead of
+  // making room for it. Safe to remove now that the logo's height is a
+  // fixed, known px value (see .header-logo-img below) rather than a
+  // percentage chain that could resolve to an unpredictable/huge intrinsic
+  // size — that was the *other* failure mode this overflow:hidden was
+  // guarding against (see the long comment further down), and a fixed px
+  // height on the image closes that door without needing to clip anything.
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HEADER LOGO — real <img>, replacing the earlier background-image attempt.
+//
+// ROOT CAUSE OF "logo hidden by app-product-suggest":
+// Two things compounded:
+//   1) `.pc-header__topbar` had a HARD `height: 64px` + `overflow: hidden`
+//      (see above — now fixed to `min-height` + no clipping).
+//   2) A leftover rule from an earlier iteration of this file — inside the
+//      `@include media.down(md) { ... }` block further down, look for
+//      `.header-logo-img { height: 72px; ... }` — was still setting the
+//      logo image to 72px tall on mobile. Because that rule comes AFTER
+//      this base rule in the file, it won by normal CSS cascade order,
+//      so the image actually rendered at 72px... inside a container that
+//      was hard-capped at 64px with overflow:hidden. The bottom ~8-16px of
+//      the image (plus vertical padding) was being silently clipped, and
+//      since `app-navbar`/`app-product-suggest` is the very next element
+//      in the page after `app-header` (see app.component.html), that clip
+//      boundary sat exactly where the search bar's opaque background
+//      begins — reading visually as "the search bar is covering the
+//      bottom of the logo," even though nothing was technically
+//      overlapping; the logo was just being cut off right where the next
+//      component's background took over.
+//
+// THE FIX: that stale duplicate rule has been removed (see the comment in
+// its place, further down), and the logo's actual intended size — 72px —
+// is now declared ONCE, here, as a fixed px height (not a percentage).
+// `.pc-header__topbar` no longer clips it and grows (via min-height, no
+// max/hard height) to comfortably contain it. This is deterministic:
+// the container's rendered height is always >= the logo's real height,
+// by construction, so nothing downstream (`app-navbar`, in normal
+// document flow right after `app-header`) can ever start before the logo
+// fully ends.
+// ─────────────────────────────────────────────────────────────────────────────
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 56px; // reserved space for hamburger; matches .pc-header__topbar height
+  min-width: 56px;
+}
+
+.topbar-center {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  // ✅ `height: 100%` and `overflow: hidden` REMOVED — this zone now sizes
+  // itself to its content (the logo) instead of being pinned to the
+  // topbar's height and clipping whatever doesn't fit. Since the logo's
+  // own height is now a fixed, known px value (not a percentage), there's
+  // no risk of it blowing up to an unpredictable intrinsic size — so
+  // there's nothing left that NEEDS clipping.
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.header-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  // height:100% / overflow:hidden removed — same reasoning as .topbar-center.
+  text-decoration: none;
+  margin: 0;
+}
+
+.header-logo-wrap {
+  display: inline-block;
+  // height:calc(100% - 8px) / overflow:hidden removed — this box now sizes
+  // itself to the image below, instead of clipping it to a percentage of a
+  // container it can no longer trust to be tall enough.
+}
+
+.header-logo-img {
+  display: block;
+  height: 72px;      // ✅ fixed, deterministic mobile logo height — the
+                       // single source of truth for the logo's size (was
+                       // previously declared in two places: `100%` here,
+                       // and a conflicting `72px` in a stale duplicate
+                       // rule further down that silently won the cascade —
+                       // see that rule's replacement comment for details).
+                       // Unchanged from the size that rule intended; this
+                       // fix makes it consistent and un-clipped rather
+                       // than smaller.
+  width: auto;
+  max-width: 100%;
+  object-fit: contain; // preserve aspect ratio; use cover if you want intentional crop
+}
+
+@include media.up(md) {
+  .header-logo-img {
+    height: auto; // let desktop scale naturally within wrap or adjust via header height if needed
+    max-height: 64px;
+  }
+}
+
+// Desktop / larger screens: increase header height and logo scale
+@include media.up(md) {
+  .pc-header__topbar {
+    height: 88px; /* desktop header height */
+    padding: 0 1.5rem;
+  }
+
+  .topbar-left {
+    width: 88px;
+    min-width: 88px;
+  }
+
+  .header-logo-wrap {
+    height: calc(100% - 12px);
+  }
+
+  .header-logo-img {
+    max-height: 72px;
+    object-fit: contain;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LEFT — desktop search slot
+// ─────────────────────────────────────────────────────────────────────────────
+
+#search-desktop,
+.search-desktop,
+.topbar-search {
+  flex: 1 1 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  min-width: 0;
+}
+
+.search-form {
+  width: 100%;
+  max-width: 360px;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CENTRE — Logo  (clean HTML flex, no SVG text hacks)
+//
+// Structure:
+//   <a .logo>
+//     <div .logo-inner>          ← flex row: icon | divider | text-block
+//       <div .logo-icon-wrap>    ← square icon container
+//         <img .logo-icon-img>   ← object-fit:contain, never distorted
+//       </div>
+//       <span .logo-divider>     ← 1px vertical rule
+//       <div .logo-text-block>   ← column: brand-name + tagline
+//     </div>
+//   </a>
+// ─────────────────────────────────────────────────────────────────────────────
+
+#logo,
+.logo {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;   // true-centres between the two flex:1 side columns on desktop
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+
+  &:hover { opacity: 0.88; }
+  &:focus-visible {
+    outline: 2px solid rgba(255,255,255,0.65);
+    outline-offset: 4px;
+    border-radius: 6px;
+  }
+}
+
+// ── Inner flex row — no background, inherits header bar colour ───────────────
+.logo-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  // No background — logo sits directly on the nav bar colour
+  padding: 0;
+}
+
+// ── Brand icon — circular ─────────────────────────────────────────────────────
+.logo-icon-wrap {
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+  // ✅ Circular shape
+  border-radius: 50%;
+  overflow: hidden;
+  // Thin white ring so the circle edge is always clean against any nav colour
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.30);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-icon-img {
+  width: 100%;
+  height: 100%;
+  // ✅ contain keeps the full logo visible without distortion inside the circle
+  object-fit: contain;
+  display: block;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+// ── Vertical divider — hidden (only meaningful on coloured pill background) ───
+.logo-divider {
+  display: none;
+}
+
+// ── Text block ────────────────────────────────────────────────────────────────
+.logo-text-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.logo-brand-name {
+  display: block;
+  // ✅ Inter for sharp, modern eCommerce feel; clean system fallback
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 1.35rem;      // ~22px desktop base — increased from previous
+  font-weight: 700;
+  letter-spacing: -0.02em; // slightly tight = premium/modern
+  // ✅ Explicit white in light mode; CSS-var allows dark-mode override below
+  color: var(--logo-title-color, #ffffff);
+  line-height: 1.15;
+  white-space: nowrap;
+  // Crisp on all displays
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.logo-tagline {
+  display: block;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  // Muted version of the title colour
+  color: var(--logo-tagline-color, rgba(255,255,255,0.60));
+  line-height: 1;
+  white-space: nowrap;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MOBILE SEARCH ROW  —  Row 2 on small screens
+// Takes the full topbar width, sits below the logo/actions row.
+// Completely hidden on desktop.
+// ─────────────────────────────────────────────────────────────────────────────
+
+.mobile-search-row {
+  display: none;            // hidden on desktop; enabled in media.down(md)
+  width: 100%;
+  padding: 0.4rem 0 0.6rem;
+
+  .search-mobile-instance {
+    width: 100%;
+    display: block;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ICON BUTTONS — unified sizing for Cart, Sign-in/User, and any future
+// action icon. Fixed box size + Flexbox centring means every icon (whether
+// it's a <button> or an <a>, and regardless of its own viewBox) renders at
+// an identical footprint and sits on the same horizontal line.
+// ─────────────────────────────────────────────────────────────────────────────
+
+.icon-btn {
+  // <button> and <a> carry different UA defaults (font, line-height,
+  // border) — box-sizing + an explicit width/height removes the
+  // discrepancy instead of relying on each element's own intrinsic size.
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;   // guards the <a> (sign-in) against any global underline
+  line-height: 1;
+  cursor: pointer;
+  position: relative;
+  vertical-align: middle;
+  flex-shrink: 0;          // neither icon shrinks relative to the other
+
+  // Every icon is forced to the SAME rendered size in CSS — not left to
+  // each SVG's own viewBox/attributes.
+  svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+    color: var(--color-icon-btn, #14532d);
+  }
+
+  &:hover { color: #fff; svg { color: #fff; } }
+}
+
+.cart-btn { position: relative; }
+
+.badge {
+  position: absolute;
+  top: -13px; right: -6px;
+  background: var(--badge-bg, var(--app-primary));
+  color: var(--color-control-text, #D9D4C0);
+  font-weight: 800;
+  font-size: 0.7rem;
+  line-height: 1;
+  min-width: 25px;
+  height: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0 4px;
+}
+
+.badge.hidden { display: none; }
+
+.wish-badge {
+  position: absolute;
+  top: -6px; right: -6px;
+  background: var(--badge-bg, var(--app-primary));
+  color: var(--badge-color, #ffffff);
+  font-weight: 700;
+  font-size: 0.7rem;
+  line-height: 1;
+  min-width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0 4px;
+}
+
+.wishlist-icon {
+  font-size: 20px;
+  line-height: 1;
+  transition: transform 0.15s ease;
+
+  .heart {
+    color: rgba(255, 255, 255, 0.75);
+    transition: color 0.2s ease;
+
+    &.active { color: #e11d48; }
+  }
+}
+
+@media (hover: hover) {
+  .wishlist-icon:hover .heart { color: #e11d48; }
+  .wishlist-icon:hover        { transform: scale(1.1); }
+}
+
+.wishlist-icon:active { transform: scale(0.95); }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// THEME PICKER  —  icon + dot + popover
+// ─────────────────────────────────────────────────────────────────────────────
+
+.theme-picker-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.theme-icon-btn {
+  position: relative;
+
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.70);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+// Small status dot — bottom-right of the icon
+.theme-dot {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1.5px solid var(--nav-bg, #1a1a2e);
+  pointer-events: none;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+// Popover card
+.theme-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 110px;
+  padding: 12px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 1px 4px rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  transform: translateY(-6px) scale(0.96);
+  transform-origin: top right;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 200;
+
+  &--open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: all;
+  }
+
+  /* On small screens prefer the popover to appear below the icon (top-right),
+     not pinned to the bottom of the viewport. This keeps theme options near the
+     header controls and avoids footer overlap. */
+  @include media.down(md) {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    left: auto;
+    bottom: auto;
+    min-width: 140px;
+    transform-origin: top right;
+
+    &--open {
+      transform: translateY(0) scale(1);
+    }
+  }
+}
+
+.theme-swatches {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.tp-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: 3px solid transparent;
+  outline-offset: 2px;
+  transition: transform 0.15s ease, outline-color 0.15s ease;
+  flex-shrink: 0;
+
+  &:hover { transform: scale(1.12); }
+  &:active { transform: scale(0.94); }
+
+  &--active {
+    outline-color: var(--sw-color);
+    transform: scale(1.08);
+  }
+
+  &:focus-visible {
+    outline-color: var(--sw-color);
+    outline-width: 3px;
+  }
+}
+
+.tp-check {
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.35));
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DARK MODE TOGGLE  —  moon ↔ sun icon button
+// ─────────────────────────────────────────────────────────────────────────────
+
+.dark-toggle-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background 0.25s ease, color 0.2s ease;
+
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.70);
+    outline-offset: 2px;
+  }
+
+  // Sun state — amber glow when dark mode is active
+  &--dark {
+    background: rgba(251, 191, 36, 0.18);
+    color: #fbbf24;
+
+    svg { color: #fbbf24; }
+
+    &:hover {
+      background: rgba(251, 191, 36, 0.30);
+      color: #fde68a;
+      svg { color: #fde68a; }
+    }
+  }
+}
+
+// Icon entrance animations
+.dm-icon {
+  display: block;
+
+  &--moon { animation: dmFadeIn 0.22s ease; }
+  &--sun  { animation: dmSpinIn 0.30s ease; }
+}
+
+@keyframes dmFadeIn {
+  from { opacity: 0; transform: scale(0.7) rotate(-20deg); }
+  to   { opacity: 1; transform: scale(1)   rotate(0deg);   }
+}
+
+@keyframes dmSpinIn {
+  from { opacity: 0; transform: scale(0.6) rotate(-60deg); }
+  to   { opacity: 1; transform: scale(1)   rotate(0deg);   }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DARK MODE — global body.dark-mode overrides
+//
+// Both colour-theme classes and dark-mode class coexist on <body>.
+// Colour themes control hue; dark-mode controls luminance/surface.
+// These rules fire whenever body carries the dark-mode class, regardless
+// of which colour theme is also active.
+// ─────────────────────────────────────────────────────────────────────────────
+
+body.dark-mode {
+
+  // ── Navigation / header bar ────────────────────────────────────────────────
+  --nav-bg:        #0d0d0d;
+  --header-bg:     #111111;
+  --header-color:  #e2e8f0;
+
+  // ── App surfaces ───────────────────────────────────────────────────────────
+  --app-bg:        #121212;
+  --app-surface:   #1e1e1e;
+  --app-surface-2: #252525;
+  --app-border:    rgba(255, 255, 255, 0.10);
+
+  // ── Text ───────────────────────────────────────────────────────────────────
+  --app-text:        #e2e8f0;
+  --app-text-muted:  #94a3b8;
+  --app-text-subtle: #64748b;
+
+  // ── Body surface ───────────────────────────────────────────────────────────
+  background-color: var(--app-bg);
+  color: var(--app-text);
+  transition: background-color 0.25s ease, color 0.25s ease;
+
+  // ── Theme-picker popover in dark mode ──────────────────────────────────────
+  .theme-popover {
+    background: #1e1e1e;
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.55), 0 1px 4px rgba(0, 0, 0, 0.40);
+  }
+
+  // Dot border tracks the dark nav-bg so it looks cut-out
+  .theme-dot {
+    border-color: #0d0d0d;
+  }
+
+  // ── Logo branding in dark mode ──────────────────────────────────────────────
+  // Dark nav-bg is near-black (#0d0d0d), so pure white is safe and readable.
+  // Use a hair-softer white for the title to reduce eye strain on OLED screens,
+  // and a dimmer value for the tagline.
+  --logo-title-color:   #f1f1f1;   // ~94% white — softer than pure #fff on dark
+  --logo-tagline-color: rgba(241,241,241,0.55);
+
+  // Adapt the circular icon ring to the darker background
+  .logo-icon-wrap {
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.18);
+  }
+}
+
+// ── OS-level dark mode (complements the manual body.dark-mode toggle) ─────────
+// Sets the same CSS variables so logo text reads correctly when the user's OS
+// is in dark mode but hasn't clicked the in-app toggle.
+@media (prefers-color-scheme: dark) {
+  :root {
+    --logo-title-color:   #f1f1f1;
+    --logo-tagline-color: rgba(241,241,241,0.55);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MISC
+// ─────────────────────────────────────────────────────────────────────────────
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease-in-out;
+  z-index: 50;
+
+  &.open { opacity: 1; pointer-events: auto; }
+}
+
+.mobile-item-row { display: flex; align-items: center; justify-content: space-between; }
+.user-name       { padding-right: 10px; font-weight: 600; }
+
+/* Search mode styles */
+.header-search-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+}
+
+.close-search-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.search-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.header-logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Mobile-only sticky header */
+@media (max-width: 768px) {
+  /* Define a mobile header height variable so spacer matches header height */
+  .pc-header {
+    --mobile-header-height: 72px; /* adjust if your header is taller on mobile */
+    position: sticky;
+    top: 0;
+    z-index: 1200; /* above mobile panels */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    transition: background 180ms ease, box-shadow 180ms ease;
+    /* optional subtle backdrop blur like production sites */
+    -webkit-backdrop-filter: saturate(120%) blur(6px);
+    backdrop-filter: saturate(120%) blur(6px);
+  }
+
+  /* Ensure the topbar area uses the variable height if needed */
+  .pc-header__topbar {
+    /* keep natural sizing, but ensure spacer matches visual height */
+  }
+
+  /* Spacer displayed only on mobile to push page content below sticky header */
+  .header-spacer {
+    display: block;
+    width: 100%;
+    height: var(--mobile-header-height, 72px);
+    flex-shrink: 0;
+  }
+
+  /* Make sure any positioned children don't overlap */
+  .pc-header .topbar-left,
+  .pc-header .topbar-center,
+  .pc-header .topbar-right {
+    z-index: 1210;
+  }
+  /* Ensure the mobile hamburger button stays above nearby panels */
+  .pc-header .mobile-menu-btn {
+    z-index: 1260;
+    position: relative;
+  }
+}
+
+/* Hide spacer on desktop */
+@media (min-width: 769px) {
+  .header-spacer { display: none; }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RESPONSIVE — mobile (below md)
+//
+// Single row inside .pc-header__topbar: hamburger menu (left) + cart/sign-in
+// actions (right). The header-left-spacer/#logo rules below are currently
+// inert — both elements are commented out in header.component.html — but
+// are left in place, documented, in case either is re-enabled later.
+// ─────────────────────────────────────────────────────────────────────────────
+
+@include media.down(md) {
+
+  // Mobile layout is now two rows:
+  //   Row 1: hamburger menu (left) + cart/sign-in actions (right)
+  //   Row 2: header logo image, full width, its own dedicated space —
+  //          see .header-logo below, which switches from absolute/
+  //          overlaid (desktop) to a normal flex item that wraps onto
+  //          this second row via flex-basis:100%.
+
+  // Hide the desktop search slot on mobile
+  #search-desktop,
+  .search-desktop,
+  .topbar-search {
+    display: none;
+  }
+
+  // .pc-header__topbar's box model (display/align-items/padding/min-height)
+  // is now set ONCE, in its base rule near the top of this file — it isn't
+  // redeclared per-breakpoint here anymore. It previously was
+  // (`min-height: unset; align-items: center; ...`), which directly fought
+  // the base rule's `min-height` + `align-items: stretch` and was part of
+  // why the header couldn't grow to fit the logo. Removed rather than
+  // reconciled, to avoid this exact class of bug recurring.
+   .header-left-spacer {
+    display: flex;
+    flex: 0 1 auto;      // was flex: 0 0 auto — allow it to shrink if needed
+    width: auto;
+    min-width: 0;
+    max-width: 55%;      // leave room for actions on the same row
+    order: 1;
+    overflow: hidden;
+  }
+
+  // Shrink the pickup-delivery button so it fits next to track/cart/user-menu
+  .header-left-spacer ::ng-deep .pd-toggle {
+    padding: 6px 10px;
+    gap: 6px;
+    font-size: 12px;
+    min-width: 0;
+    white-space: nowrap;
+  }
+
+  .header-left-spacer ::ng-deep .pd-label {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .header-left-spacer ::ng-deep .pd-caret {
+    font-size: 14px;
+  }
+
+  // ── Row 1: hamburger + logo — share one row, vertically centred ─────────
+  #logo,
+  .logo {
+    flex: 1 1 auto;       // fills the space left by the hamburger button
+    min-width: 0;
+    order: -1;            // sits right after .mobile-menu-row (order:-2)
+    margin: 0;
+    justify-content: center;
+    padding: 0.25rem 0;
+  }
+
+  // .mobile-row-break rule removed along with its HTML element — it only
+  // existed to force a wrap before header-left-spacer/actions when the
+  // logo sat between them; with the logo commented out, hamburger + actions
+  // now naturally share a single row.
+
+  // Scale logo down for mobile — no pill, just icon + text
+  .logo-inner {
+    gap: 8px;
+    padding: 0;
+  }
+
+  .logo-icon-wrap {
+    width: 30px;
+    height: 30px;
+    // Keep circular
+    border-radius: 50%;
+  }
+
+  // Divider hidden regardless
+  .logo-divider { display: none; }
+
+  .logo-brand-name {
+    font-size: 1.1rem;   // ~18px — clear on mobile
+  }
+
+  .logo-tagline {
+    font-size: 0.55rem;
+    letter-spacing: 0.10em;
+  }
+
+  // ── Actions (cart + sign-in) — right side, same row as the hamburger ──────
+  #headerSummary,
+  .actions {
+    width: auto;            // was 100% — that forced it onto its own row
+    flex: 0 0 auto;
+    min-width: 0;
+    order: 2;
+    justify-content: flex-end;
+    // ✅ Same technique as the desktop fix: margin-left:auto pins .actions
+    // to the true right edge of the topbar regardless of what else is (or
+    // isn't) on the row — this is what keeps cart/sign-in on the right,
+    // sharing one row with the hamburger, with nothing forcing a wrap.
+    margin-left: auto;
+    padding-bottom: 0;
+  }
+
+  // Row 3 (if mobile-search-row is re-enabled): full-width search bar
+  .mobile-search-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0.3rem 0 0.5rem;
+  }
+
+  // .header-logo / .header-logo-img mobile sizing is now declared ONCE, in
+  // the base rules near the top of this file (.header-logo-img { height:
+  // 72px; ... }). This block previously had a SECOND, conflicting
+  // `.header-logo-img { height: 72px; max-height: 20vw }` declaration —
+  // harmless on its own, since it agreed on 72px, but it lived inside a
+  // `.header-logo { position: static; flex-basis: 100%; ... }` override
+  // built for an older two-row layout (logo on its own full-width row)
+  // that no longer matches the current `.topbar-left/.topbar-center/
+  // .topbar-right` structure. Combined with the old hard
+  // `height: 64px; overflow: hidden` on `.pc-header__topbar` (also now
+  // fixed), the net effect was the image being told to render at 72px
+  // while its container silently clipped anything past 64px — the actual
+  // cause of "logo hidden by app-product-suggest." Removed here; see the
+  // base rule's comment for the corrected, single source of truth.
+
+  .user-welcome        { display: none; }
+  .icon-search-desktop { display: none; }
+}
+ 
+// ─────────────────────────────────────────────────────────────────────────────
+// RESPONSIVE — desktop (md and above)
+// ─────────────────────────────────────────────────────────────────────────────
+
+@include media.up(md) {
+
+  // ⚠️ NOTE: #search-desktop/.search-desktop/.topbar-search has no live
+  // element right now (it's commented out in header.component.html — search
+  // lives in <app-navbar> instead). If it's ever re-enabled here, give it an
+  // explicit `grid-column` (the grid below doesn't auto-place it into a
+  // sensible column) — these flex properties are inert once the topbar
+  // becomes `display: grid` further down.
+  #search-desktop,
+  .search-desktop,
+  .topbar-search {
+    display: flex;
+    flex: 1 1 0;
+    justify-content: flex-start;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .mobile-search-row {
+    display: none;
+  }
+
+  // NOTE: this file's comments elsewhere still describe .pc-header__topbar
+  // as a CSS Grid — that was true in an earlier iteration but it's actually
+  // `display: flex` now (see the rule further below). A stray
+  // `flex: 1 1 0` here previously assumed it was inert under a grid parent;
+  // removed, since under flex it would compete with .actions' own
+  // `margin-left: auto` fix below in ambiguous, hard-to-predict ways.
+  // .actions' real sizing/position is set once, further down in this block.
+
+  // Increase topbar height on desktop to accommodate larger logo text
+  .pc-header__topbar {
+    min-height: 80px;
+  }
+
+  // Upsize for the taller 80px desktop topbar — no pill background
+  .logo-inner {
+    gap: 12px;
+    padding: 0;
+  }
+
+  .logo-icon-wrap {
+    width: 44px;
+    height: 44px;
+    // Keep circular on desktop
+    border-radius: 50%;
+  }
+
+  // Divider hidden regardless
+  .logo-divider { display: none; }
+
+  .logo-brand-name {
+    font-size: 1.6rem;   // ~26px — prominent on desktop, still fits 80px bar
+  }
+
+  .logo-tagline {
+    font-size: 0.65rem;
+    letter-spacing: 0.13em;
+  }
+
+  // ───────────────────────────────────────────────────────────────────────
+  // LOGO ICON (left) | NAME+TAGLINE (true centre) | CART/SIGN-IN (right)
+  // Desktop only — the mobile two-row layout above is completely untouched.
+  //
+  // .logo-text-block is pulled OUT of normal flow with `position: absolute`
+  // and centered against .pc-header__topbar directly via left:50% +
+  // translateX(-50%). This is independent of DOM nesting depth — it doesn't
+  // matter that .logo-text-block sits two levels inside <a class="logo">;
+  // absolute positioning always resolves against the nearest *positioned*
+  // ancestor (.pc-header__topbar, given position:relative below), skipping
+  // over any non-positioned wrappers in between. That's what guarantees
+  // true centering regardless of the icon's width or the cart/sign-in
+  // buttons' width — neither can push the text off-center, because the
+  // text's position no longer depends on how much space its siblings take.
+  //
+  // (Previously this used `display: contents` on .logo/.logo-inner to
+  // "flatten" them into a CSS Grid — replaced here because it wasn't
+  // reliably taking effect and the icon+text kept moving together as one
+  // clump. Absolute positioning has no such cross-browser inconsistency.)
+  //
+  // Clicking still works exactly as before: .logo-text-block remains a DOM
+  // descendant of <a class="logo" routerLink="/">, and click events bubble
+  // up through the DOM tree regardless of where an element is painted on
+  // screen — so clicking the centered text still navigates home, same as
+  // clicking the icon.
+  // ───────────────────────────────────────────────────────────────────────
+
+  .pc-header__topbar {
+    position: relative;         // containing block for .logo-text-block below
+    display: flex;
+    justify-content: space-between;  // pins .logo to the start, .actions to the end
+  }
+
+  #logo,
+  .logo {
+    margin: 0;          // was `margin: 0 auto` (the old centering trick) —
+                          // no longer needed now that .logo just needs to
+                          // sit at flex-start.
+                          // NOTE: must repeat the `#logo,` compound here —
+                          // the original rule (#logo, .logo { margin: 0 auto }
+                          // near the top of this file) carries ID-level
+                          // specificity because the element has both
+                          // id="logo" and class="logo". A class-only
+                          // override (`.logo { margin: 0 }`) can never beat
+                          // that, regardless of source order, which is why
+                          // the icon kept snapping back to centered.
+    flex: 0 0 auto;
+  }
+
+  .actions {
+    flex: 0 0 auto;      // was flex: 1 1 0 — no longer needed; space-between
+                          // on the topbar now pins it to flex-end directly
+    // ✅ FIX: with <a class="logo"> currently commented out in the
+    // template, .actions became the ONLY visible flex child of
+    // .pc-header__topbar — and `justify-content: space-between` has
+    // nothing to space TO when there's just one item, so it fell back to
+    // flex-start (the left edge). `margin-left: auto` fixes this
+    // regardless of whether .logo is present: it consumes all free space
+    // to .actions' left, pinning it to the right edge whether it's the
+    // only child or one of several — so cart + sign-in end up on the
+    // right either way, and nothing breaks if the logo comes back later.
+    margin-left: auto;
+  }
+
+  .logo-text-block {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    align-items: center;   // centers brand-name/tagline within their own stack
+    text-align: center;
+  }
+}
+:host {
+  --pickup-delivery-text-color: rgba(255, 255, 255, 0.82);
+}
+
+// Emulated view encapsulation scopes header styles to the header's own
+// template — it cannot reach inside <app-pickup-delivery>'s child template.
+// ::ng-deep pierces that boundary while :host keeps the rule scoped to
+// this component (no global leakage). Works identically for desktop and
+// mobile since .track-link's color isn't breakpoint-specific.
+:host ::ng-deep app-pickup-delivery,
+:host ::ng-deep app-pickup-delivery * {
+  color: var(--pickup-delivery-text-color);
+}

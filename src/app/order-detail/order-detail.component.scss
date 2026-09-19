@@ -1,0 +1,337 @@
+ /* Container & header */
+.order-detail {
+  padding: 16px;
+  color: #222;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+}
+
+.seller-price {
+  text-decoration: line-through;
+  color: #888;
+  margin-right: 8px;
+}
+
+.offer-price {
+  font-weight: 600;
+}
+
+.order-ref-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+
+  h4 { margin: 0; color: #0b5ed7; }
+
+  .order-status-pill {
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 12px;
+    background: #fff;
+
+    &.is-done {
+      background: #ecfdf5;
+      border-color: #10b981;
+      color: #065f46;
+    }
+  }
+}
+
+/* ---------- TIMELINE: robust defaults so it's always visible ---------- */
+.timeline-shell { margin: 8px 0 18px; }
+
+.timeline-container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+
+  min-height: 88px;       /* space for line + dots */
+  margin: 12px 0;
+  padding: 0 8px;
+
+  /* Don't clip pseudo-elements */
+  overflow: visible;
+}
+
+/* Dotted baseline (future) */
+.timeline-container::after {
+  content: "";
+  position: absolute;
+  top: 44px; left: 8px; right: 8px;
+  height: 0;
+  border-bottom: 2px dotted #bbb;
+  z-index: 1;
+}
+
+/* Solid completed line (past → current) */
+.timeline-container::before {
+  content: "";
+  position: absolute;
+  top: 44px; left: 8px;
+  height: 0;
+  border-bottom: 2px solid #4caf50;
+  z-index: 2;
+  width: var(--completed-width, 0%);  /* bound from template */
+}
+
+/* Steps */
+.timeline-step {
+  flex: 1 1 0;
+  min-width: 88px;
+  text-align: center;
+  position: relative;
+  z-index: 3;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.timeline-step .label {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 12px;
+  white-space: nowrap;
+}
+.timeline-step .dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ccc;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px #d1d5db; /* faint outline for visibility */
+}
+.timeline-step.completed .dot {
+  background: #4caf50;
+  box-shadow: 0 0 0 1px #4caf50;
+}
+.timeline-step .date {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+/* Moving cycle icon */
+.moving-cycle {
+  position: absolute;
+  top: 44px; left: 0%;
+  transform: translate(-50%, -50%);
+  font-size: 18px; z-index: 4;
+  animation: moveCycle 4.0s ease-out forwards;
+}
+@keyframes moveCycle {
+  from { left: 0%; }
+  to   { left: var(--target-position, 0%); }
+}
+
+/* ==========================================================
+   ACCORDION (Order Summary / Customer / Delivery / Status)
+   ========================================================== */
+
+.order-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.acc-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(16, 24, 22, 0.04), 0 1px 8px rgba(16, 24, 22, 0.05);
+  overflow: hidden;
+}
+
+.acc-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+}
+
+.acc-head-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.acc-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12.5px;
+  font-weight: 700;
+
+  &.num {
+    background: #4caf50;
+    color: #fff;
+  }
+
+  &.cart {
+    background: #ecfdf5;
+    color: #065f46;
+  }
+
+  svg { width: 15px; height: 15px; }
+}
+
+.acc-title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.acc-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #222;
+}
+
+.acc-subtitle {
+  font-size: 12px;
+  color: #6b7a76;
+  margin-top: 1px;
+}
+
+.acc-head-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.acc-amount {
+  font-size: 15px;
+  font-weight: 700;
+  color: #065f46;
+}
+
+.acc-chevron {
+  width: 18px;
+  height: 18px;
+  color: #6b7a76;
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.acc-card.open .acc-chevron {
+  transform: rotate(180deg);
+}
+
+.acc-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.acc-card.open .acc-body {
+  max-height: 900px;
+}
+
+.acc-body-inner {
+  padding: 0 18px 18px;
+  border-top: 1px solid #eee;
+  padding-top: 14px;
+}
+
+.acc-total-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px dashed #e5e7eb;
+  font-size: 13.5px;
+  font-weight: 700;
+
+  span:last-child { color: #065f46; }
+}
+
+/* Items table (inside Order Summary card) */
+.items-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+.items-table th, .items-table td {
+  text-align: left;
+  padding: 8px 6px;
+  border-bottom: 1px solid #eee;
+}
+.items-table thead th { background: #f8fafc; color: #111; font-weight: 600; }
+.item-img {
+  width: 64px; height: 64px;
+  object-fit: contain;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+/* Rewards mini-table (inside Order Summary card) */
+.order-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+.order-table th { text-align: left; padding: 6px 0; color: #666; width: 160px; }
+.order-table td { padding: 6px 0; }
+
+/* Info tables (Customer / Delivery / Status cards) */
+.info-table.compact { width: 100%; border-collapse: collapse; }
+.info-table.compact th, .info-table.compact td { padding: 6px 0; font-size: 13px; vertical-align: top; }
+.info-table.compact th { width: 42%; color: #555; font-weight: 600; }
+.info-table.compact td { color: #333; }
+.info-table.compact tr + tr th, .info-table.compact tr + tr td {
+  padding-top: 8px; border-top: 1px solid #f0f0f0;
+}
+
+.payment-info { font-weight: 500; }
+.payment-info.paid { color: #2e7d32; font-weight: 700; }
+.payment-info.unpaid { color: #b5720a; font-weight: 700; }
+
+ 
+/* Footer links */
+.checkout-footer {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+  font-size: 12px;
+
+  a {
+    color: #0b5ed7;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+    transition: color 180ms ease;
+
+    &:hover {
+      color: #084298;
+      text-decoration: underline;
+    }
+  }
+}
+ 
+
+/* Loading / not found */
+.loading { color: #666; padding: 12px 4px; }
+
+/* ---- Mobile behavior ---- */
+@media (max-width: 768px) {
+  /* swipe timeline */
+  .timeline-container {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+  }
+  .timeline-step {
+    scroll-snap-align: center;
+    flex: 0 0 auto;
+    min-width: 128px;
+  }
+
+  /* Long text wrapping in info tables */
+  .info-table.compact th, .info-table.compact td { word-break: break-word; }
+}

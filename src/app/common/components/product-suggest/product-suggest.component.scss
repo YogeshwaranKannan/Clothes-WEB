@@ -1,0 +1,319 @@
+@use '../../../../styles/media' as media;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HOST
+// ─────────────────────────────────────────────────────────────────────────────
+
+:host {
+  display: block;
+  position: relative;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SEARCH INPUT WRAP
+// ─────────────────────────────────────────────────────────────────────────────
+
+.search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  // Desktop: comfortable fixed minimum so it looks good in the flex row
+  // Mobile instance: overridden below to min-width:0 so it fills the row
+  min-width: 400px;
+  border: 1px solid var(--bs-border-color, var(--app-border));
+  padding: 0.9rem 4.2rem 0.9rem 1.2rem;
+  border-radius: 9999px;
+  background: #fff;
+  font-size: 0.95rem;
+  outline: none;
+  box-shadow: none;
+  transition: border-color 0.15s ease;
+
+  &:focus { border-color: var(--app-primary); }
+}
+
+// .search-icon {
+//   position: absolute;
+//   right: 14px;
+//   top: 50%;
+//   transform: translateY(-50%);
+//   display: inline-flex;
+//   align-items: center;
+//   justify-content: center;
+//   color: var(--search-icon-color, var(--muted, #6b6b6b));
+//   pointer-events: none;
+// }
+
+.search-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--search-icon-color, var(--muted, #6b6b6b));
+
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 1000;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DESKTOP SUGGESTIONS DROPDOWN
+// ─────────────────────────────────────────────────────────────────────────────
+
+.suggestions {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--bs-card-bg, var(--app-surface));
+  border: 1px solid var(--bs-border-color, var(--app-border));
+  box-shadow: 0 8px 30px rgba(16, 24, 40, 0.08);
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0;
+  border-radius: 8px;
+  z-index: 100;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.suggestions li {
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+
+  &:hover, &.active {
+    background: rgba(var(--bs-body-color-rgb), 0.04);
+  }
+}
+
+.suggestions .name { font-size: 0.95rem; color: var(--bs-body-color); }
+
+// Suggestion item layout
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.suggestion-item .thumb {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+
+  img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    border-radius: 6px;
+  }
+}
+
+.suggestion-item .meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.suggestion-item .name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.suggestion-item .meta-bottom {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.suggestion-item .meta-bottom .id {
+  color: rgba(var(--bs-body-color-rgb), 0.7);
+  font-size: 0.85rem;
+}
+
+.s-price { color: var(--app-primary); font-size: 0.85rem; }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MOBILE SEARCH PANEL
+// Only used when the component is rendered via the mobile-search-panel toggle.
+// When used as .search-mobile-instance (the new inline row approach),
+// this panel is never opened, so these rules are a no-op in that context.
+// Kept for backward compatibility if toggleMobileSearch() is used elsewhere.
+// ─────────────────────────────────────────────────────────────────────────────
+
+.mobile-search-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 240ms ease-in-out;
+  background: var(--bs-card-bg, var(--app-surface));
+  z-index: 900;
+
+  &.open {
+    max-height: 400px;
+    overflow: visible;
+  }
+}
+
+.mobile-search-panel:not(.open) .search-icon { display: none; }
+
+.mobile-search-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+
+  .search-input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.6rem 1rem;
+    border-radius: 9999px;
+  }
+}
+
+.mobile-suggestions {
+  list-style: none;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  max-height: 55vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  border-top: 1px solid var(--bs-border-color, var(--app-border));
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0;
+    cursor: pointer;
+
+    &:hover, &:active {
+      background: rgba(var(--bs-body-color-rgb), 0.04);
+    }
+  }
+
+  .thumb img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 6px;
+  }
+
+  .meta {
+    flex: 1;
+    min-width: 0;
+
+    .name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+.close-mobile {
+  background: transparent;
+  border: none;
+  color: rgba(var(--bs-body-color-rgb), 0.6);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 4px 8px;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MOBILE INSTANCE OVERRIDE
+// When <app-product-suggest class="search-mobile-instance"> is used inside
+// .mobile-search-row, the host fills full width and the input loses its
+// desktop min-width so it stretches edge-to-edge.
+// ─────────────────────────────────────────────────────────────────────────────
+
+:host(.search-mobile-instance) {
+  width: 100%;
+  display: block;
+
+  .search-input-wrap {
+    width: 100%;
+  }
+
+  .search-input {
+    min-width: 0;      // override the 400px desktop minimum
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 0.75rem 3.5rem 0.75rem 1.1rem;
+  }
+
+  // Suggestions dropdown: z-index high enough to clear page content
+  .suggestions {
+    z-index: 200;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MOBILE-ONLY HOST OVERRIDE (fallback for any other mobile usage)
+// ─────────────────────────────────────────────────────────────────────────────
+
+@include media.mobile-only {
+  :host {
+    display: flex;
+    align-items: center;
+  }
+
+  .search-input {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .search-input-wrap {
+    min-width: 100%;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WISHLIST BUTTON
+// ─────────────────────────────────────────────────────────────────────────────
+
+.wishlist-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 20px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+
+  span {
+    color: #9ca3af;
+    transition: color 0.2s ease;
+
+    &.active { color: #e11d48; }
+  }
+
+  &:active { transform: scale(0.95); }
+
+  &:focus-visible {
+    outline: 2px solid var(--app-primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (hover: hover) {
+    &:hover span { color: #e11d48; }
+    &:hover      { transform: scale(1.1); }
+  }
+}

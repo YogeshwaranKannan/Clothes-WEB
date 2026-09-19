@@ -1,0 +1,210 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* ===========================
+   Checkout Footer
+=========================== */
+
+.checkout-footer {
+  margin: 24px 0 16px;
+  padding: 16px 12px;
+
+  border-top: 1px solid #e5e7eb;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+
+  gap: 8px;
+
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.checkout-footer a {
+  color: #2563eb;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  cursor: pointer;
+  font-weight: 500;
+
+  transition: color 0.2s ease;
+}
+
+.checkout-footer a:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+.checkout-footer span {
+  color: #d1d5db;
+}
+
+
+/* ===========================
+   Checkout Layout
+=========================== */
+
+.checkout-container {
+  width: 100%;
+}
+
+.checkout-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.checkout-wrapper {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  box-sizing: border-box;
+
+  padding: clamp(16px, 2vw, 28px);
+  gap: clamp(20px, 2vw, 32px);
+}
+
+.checkout-wrapper,
+.checkout-wrapper * {
+  max-width: 100%;
+}
+
+
+/* ===========================
+   Success Screen
+=========================== */
+
+.success-container {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.success-container h2 {
+  margin: 0;
+}
+
+.ref-link {
+  color: #4482df;
+
+  cursor: pointer;
+
+  text-decoration: underline;
+
+  font-weight: 600;
+}
+
+.success-container app-order-detail {
+  width: 100%;
+  display: block;
+}
+
+
+/* ===========================
+   Desktop
+=========================== */
+
+@media (min-width: 992px) {
+
+  .checkout-wrapper {
+    padding: 0 4px;
+  }
+
+  .checkout-left {
+    overflow: visible;
+    padding-right: 12px;
+  }
+
+  .checkout-right-inner {
+    position: sticky;
+    top: 1.5rem;
+  }
+
+  .required-indicator {
+    color: #dc3545;
+    margin-left: 6px;
+  }
+
+  /* Center only before opening order details */
+  .success-container:not(.showing-details) {
+    min-height: 60vh;
+    justify-content: center;
+  }
+
+  /* After clicking Ref No */
+  .success-container.showing-details {
+    min-height: auto;
+    justify-content: flex-start;
+    padding-top: 12px;
+  }
+
+  .success-container app-order-detail {
+    width: 100%;
+    margin-top: 8px;
+  }
+}
+
+
+/* ===========================
+   Tablet & Mobile
+=========================== */
+
+@media (max-width: 991px) {
+
+  .checkout-container {
+    padding: 0 16px;
+  }
+
+  .checkout-wrapper {
+    padding: 16px;
+  }
+
+  .checkout-left {
+    padding-right: 0;
+  }
+
+  .success-container {
+    justify-content: flex-start;
+
+    min-height: auto;
+
+    gap: 12px;
+    padding: 12px 0;
+  }
+
+  .success-container app-order-detail {
+    width: 100%;
+  }
+}
+
+
+/* ===========================
+   Small Mobile
+=========================== */
+
+@media (max-width: 576px) {
+
+  .checkout-footer {
+    font-size: 12px;
+    gap: 6px;
+    padding: 12px 8px;
+  }
+
+  .checkout-footer a {
+    padding: 2px 0;
+  }
+}

@@ -1,0 +1,91 @@
+<div class="section-box payment-section">
+
+  <div
+    class="section-header"
+    (click)="togglePaymentOpen()"
+  >
+    <div class="step-indicator">2</div>
+
+    <div class="section-title">
+      Select Payment Method
+    </div>
+
+    <span
+      class="collapse-chevron"
+      [class.open]="isPaymentOpen"
+    >
+      ▾
+    </span>
+  </div>
+
+  <ng-container *ngIf="isPaymentOpen">
+
+    <div class="section-content">
+
+      <div class="payment-options">
+
+        <!-- COD -->
+        <label
+          class="radio-card"
+          [class.selected]="selectedPaymentMode === 'COD'"
+          [class.radio-card--disabled]="!isAvailable('COD')"
+        >
+          <input
+            type="radio"
+            id="cod"
+            name="paymentMode"
+            value="COD"
+            [(ngModel)]="selectedPaymentMode"
+            (ngModelChange)="onPaymentModeChange($event)"
+            [disabled]="!isAvailable('COD')"
+          />
+
+          <span class="radio-card__icon">💵</span>
+
+          <span class="radio-card__text">
+            <span class="radio-card__label">
+              Cash on Delivery
+            </span>
+
+            <small *ngIf="!isAvailable('COD')">
+              Not available
+            </small>
+          </span>
+        </label>
+
+        <!-- Online Payment -->
+        <label
+          class="radio-card"
+          [class.selected]="selectedPaymentMode === 'ONLINEPAYMENT'"
+          [class.radio-card--disabled]="!isAvailable('ONLINEPAYMENT')"
+        >
+          <input
+            type="radio"
+            id="onlinePay"
+            name="paymentMode"
+            value="ONLINEPAYMENT"
+            [(ngModel)]="selectedPaymentMode"
+            (ngModelChange)="onPaymentModeChange($event)"
+            [disabled]="!isAvailable('ONLINEPAYMENT')"
+          />
+
+          <span class="radio-card__icon">💳</span>
+
+          <span class="radio-card__text">
+            <span class="radio-card__label">
+              Online Payment
+            </span>
+
+            <small *ngIf="!isAvailable('ONLINEPAYMENT')">
+              Not available
+            </small>
+          </span>
+        </label>
+
+      </div>
+
+    </div>
+
+  </ng-container>
+
+</div>

@@ -1,0 +1,214 @@
+<div class="container">
+
+  <!-- Search Section -->
+  <div class="search-box" *ngIf="!hasInputId()">
+<input
+  type="text"
+  placeholder="Enter Order ID"
+  [value]="searchId()"
+  (input)="searchId.set(($any($event.target)).value)"
+/>
+
+    <button class="btn-primary" (click)="onSearch()">Search</button>
+  </div>
+
+  <!-- Bind to the single view model -->
+  <ng-container *ngIf="orderVm$ | async as vm">
+
+     <!-- Loading -->
+    <p *ngIf="vm.loading"><em>Loading...</em></p>
+    
+    <!-- Error Message -->
+    <p class="error" *ngIf="vm.error">{{ vm.error }}</p>
+
+   
+
+    <!-- Order Details -->
+    <ng-container *ngIf="vm.order as order">
+
+      <!-- If searched but no order -->
+      <ng-container *ngIf="searched">
+        <p *ngIf="!order && !vm.loading && !vm.error">No order found</p>
+      </ng-container>
+
+      <!-- Order Found -->
+      <div *ngIf="order" class="order-wrapper">
+
+       <div class="timeline-container"
+            *ngIf="vm.order?.stages?.length"
+            [style.--completed-width.%]="
+                vm.currentIndex >= 0 && vm.order.stages.length > 1
+                  ? (vm.currentIndex / (vm.order.stages.length - 1)) * 100
+                  : 0
+            ">
+          <div class="moving-cycle"
+              *ngIf="vm.currentIndex >= 0"
+              [style.--target-position.%]="(vm.currentIndex / (vm.order.stages.length - 1)) * 100">
+            🚴‍♂️
+          </div>
+
+          <div class="timeline-step"
+              *ngFor="let stage of vm.order.stages; let i = index"
+              [class.completed]="i < vm.currentIndex"
+              [class.active]="stage.name?.toLowerCase() === vm.order.order_status?.toLowerCase()">
+
+            <div class="label">
+              {{ stage.name }}
+            </div>
+
+            <!-- <div class="dot">
+              <span *ngIf="stage.name?.toLowerCase() === vm.order.order_status?.toLowerCase()"
+                    class="icon">🚚</span>
+            </div> -->
+
+            <div class="dot">
+              <span *ngIf="stage.name?.toLowerCase() === vm.order.order_status?.toLowerCase()"
+                    class="icon">🚲</span>
+            </div>
+
+
+            <div class="date">
+              {{ stage.date || '—' }}
+            </div>
+          </div>
+
+        </div>
+
+
+
+        <div class="order-layout">
+
+          <div class="order-items-section">
+
+            <!-- Order Summary -->
+             <div class="order-ref-row">
+                <h4>{{ order.order_id }}</h4>
+                <div class="order-actions" [ngSwitch]="order?.order_status?.toLowerCase()">
+                      <ng-container *ngSwitchCase="'order placed'">
+                        <button class="accept-btn">Accept</button>
+                        <button class="reject-btn">Reject</button>
+                      </ng-container>
+
+                      <ng-container *ngSwitchCase="'processing'">
+                        <button class="action-btn">Ready for Shipment</button>
+                      </ng-container>
+
+                      <ng-container *ngSwitchCase="'shipment ready'">
+                        <button class="action-btn">Update Tracking Number</button>
+                      </ng-container>
+
+                      <ng-container *ngSwitchCase="'out for delivery'">
+                        <button class="action-btn">Track Delivery</button>
+                      </ng-container>
+
+                      <ng-container *ngSwitchCase="'delivered'">
+                        <button class="action-btn">Initiate Return</button>
+                      </ng-container>
+                </div>
+            </div>
+
+            <!-- Product Items Section -->
+            <table class="items-table">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Item Name</th>
+                  <th>Qty</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let item of order.items">
+                  <td>
+                    <img
+                      [src]="item.image_url || 'assets/no-image.png'"
+                      alt="{{ item.item_name }}"
+                      class="item-img"
+                    />
+                  </td>
+                  <td>{{ item.item_name }}</td>
+                  <td>{{ item.qty }}</td>
+                  <td>₹{{ item.price }}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table class="order-table">
+              <tr>
+                <th>Status</th>
+                <td>{{ order.order_status }}</td>
+              </tr>
+              <tr>
+                <th>Total Value</th>
+                <td>₹{{ order.tot_order_value }}</td>
+              </tr>
+               <tr>
+                <th>Payment Status</th>
+                <td><div class="payment-info"
+                      [class.paid]="(order.payment?.status || '').toLowerCase() === 'paid'">
+                    {{ order.payment?.status }}
+                  </div></td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="customer-delivery-info">
+          <!--Payment information-->
+            <div class="info-card">
+              <h3>Payment Information
+                <button class="toggle-btn" (click)="isPOpen = !isPOpen">
+                  {{ isPOpen ? '▲' : '▼' }}
+                </button>
+              </h3>
+              <table class="info-table compact" *ngIf="isPOpen">
+                 <tr>
+                <th>Total Value</th>
+                <td>₹{{ order.tot_order_value }}</td>
+                </tr>
+                <tr><th>Paymment Status</th>
+                  <td><div class="payment-info"
+                      [class.paid]="(order.payment?.status || '').toLowerCase() === 'paid'">
+                    {{ order.payment?.status }}
+                  </div>
+                  </td>
+                </tr>
+                <tr><th>Payment Date</th><td>{{ order.payment.date }}</td></tr>
+              </table>
+            </div>
+            <!-- Customer Info -->
+            <div class="info-card">
+              <h3>Customer Information
+                <button class="toggle-btn" (click)="isCOpen = !isCOpen">
+                  {{ isCOpen ? '▲' : '▼' }}
+                </button>
+              </h3>
+              <div class="info-content" *ngIf="isCOpen">
+                <!-- <h3>Customer Information</h3> -->
+                <table class="info-table compact">
+                  <tr><th>Name</th><td>{{ order.customer?.name }}</td></tr>
+                  <tr><th>Email</th><td>{{ order.customer?.email }}</td></tr>
+                  <tr><th>Phone</th><td>{{ order.customer?.phone }}</td></tr>
+                </table>
+              </div>
+            </div>
+            <!-- Delivery Info -->
+            <div class="info-card">
+              <h3>Delivery Information
+                <button class="toggle-btn" (click)="isDOpen = !isDOpen">
+                  {{ isDOpen ? '▲' : '▼' }}
+                </button>
+              </h3>
+              <table class="info-table compact" *ngIf="isDOpen">
+                <tr><th>Delivery Address</th><td>{{ order.delivery?.address }}</td></tr>
+                <tr><th>City</th><td>{{ order.delivery?.city }}</td></tr>
+                <tr><th>Expected Delivery</th><td>{{ order.delivery?.expected_date }}</td></tr>
+              </table>
+            </div>
+           
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>

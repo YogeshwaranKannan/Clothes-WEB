@@ -1,0 +1,203 @@
+// =============================================================================
+// product-management.component.scss
+// =============================================================================
+// Changes in this revision:
+//  • :host-context(body.theme-midnight) block added at the bottom — scoped
+//    glass borders on .page-header, .products-content, inputs and toolbar.
+//  • All original rules preserved verbatim above that block.
+//  • Zero layout changes.
+// =============================================================================
+
+:host {
+  display: block;
+  height: 100%;
+  min-height: 0;
+
+  // ── Component-scoped aliases ──────────────────────────────────────────────
+  --pm-bg:        var(--color-background,  var(--app-bg));
+  --pm-surface:   var(--color-surface,     var(--app-surface));
+  --pm-text:      var(--color-text,        var(--app-text));
+  --pm-muted:     var(--color-text-muted,  var(--app-muted));
+  --pm-border:    var(--color-border,      var(--app-border));
+  --pm-primary:   var(--color-primary,     var(--app-primary));
+  --pm-primary-h: var(--color-primary-hover, var(--app-primary));
+  --pm-soft:      var(--color-primary-soft, var(--color-label-bg, #dbeafe));
+  --pm-on-pri:    var(--color-on-primary,  var(--app-on-primary, #fff));
+
+  // Typography
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  font-size: var(--text-base, 15px);
+  color: var(--pm-text);
+}
+
+
+// ─── Layout shell ─────────────────────────────────────────────────────────────
+
+.products-layout {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  position: relative;
+  background: var(--pm-bg);
+  overflow: visible !important;
+  transition: background 0.25s ease;
+}
+
+.products-content {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: visible !important;
+  padding: 20px;
+  background: var(--pm-surface);
+  color: var(--pm-text);
+  border-left: 1px solid var(--pm-border);
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+
+// ─── Toolbar ──────────────────────────────────────────────────────────────────
+
+.toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+
+// ─── Form grid ────────────────────────────────────────────────────────────────
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+
+// ─── Labels ───────────────────────────────────────────────────────────────────
+
+label {
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  font-size: var(--text-sm, 13px);
+  font-weight: var(--fw-semi, 600);
+  color: var(--pm-muted);
+  letter-spacing: var(--tracking-wide, 0.04em);
+  text-transform: uppercase;
+}
+
+
+// ─── Inputs ───────────────────────────────────────────────────────────────────
+
+input,
+select,
+textarea {
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  font-size: var(--text-base, 15px);
+  color: var(--pm-text);
+  background: var(--pm-surface);
+  border: 1px solid var(--pm-border);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  outline: none;
+  transition: border-color 0.15s, background 0.25s ease;
+
+  &::placeholder { color: var(--pm-muted); }
+
+  &:focus {
+    border-color: var(--pm-primary);
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb, 11,94,215), 0.18);
+  }
+}
+
+
+// ─── Buttons ──────────────────────────────────────────────────────────────────
+
+button,
+.btn {
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  font-size: var(--text-sm, 13px);
+  font-weight: var(--fw-semi, 600);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.btn-primary,
+button.primary {
+  background: var(--pm-primary);
+  color: var(--pm-on-pri);
+  border: none;
+
+  &:hover { background: var(--pm-primary-h); }
+}
+
+.btn-outline,
+button.outline {
+  background: transparent;
+  color: var(--pm-text);
+  border: 1px solid var(--pm-border);
+
+  &:hover {
+    background: var(--pm-soft);
+    border-color: var(--pm-primary);
+    color: var(--pm-primary);
+  }
+}
+
+
+// ─── Page header panel ────────────────────────────────────────────────────────
+// Shared across all themes — gets a border in all themes, stronger in Midnight.
+
+.page-header {
+  background: var(--pm-surface);
+  border: 1px solid var(--pm-border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  transition: background 0.25s ease, border-color 0.25s ease;
+
+  h1, h2, h3 {
+    color: var(--pm-text);
+    margin: 0;
+  }
+
+  .page-title {
+    color: var(--pm-primary);
+    font-weight: var(--fw-bold, 700);
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MIDNIGHT DEEP DARK — glass border refinements
+// ─────────────────────────────────────────────────────────────────────────────
+
+:host-context(body.theme-midnight) {
+  // Page header: stand out from the near-black background
+  .page-header {
+    background: var(--color-surface) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 8px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+  }
+
+  // Content area left border — glass-white instead of opaque colour
+  .products-content {
+    border-left-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  // Inputs in the drawer/form use bg colour, not surface
+  input,
+  select,
+  textarea {
+    background: var(--color-background) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: var(--color-text) !important;
+
+    &:focus {
+      border-color: var(--pm-primary) !important;
+      box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.22) !important;
+    }
+  }
+}

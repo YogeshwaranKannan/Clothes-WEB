@@ -1,0 +1,106 @@
+<div class="orders-history container">
+  <h2 class="page-title">Order History</h2>
+  <div
+  *ngIf="showAlert"
+  class="alert"
+  [ngClass]="isSuccess ? 'alert-success' : 'alert-danger'"
+  role="alert">
+
+  {{ alertMessage }}
+
+  <button
+    type="button"
+    class="btn-close"
+    (click)="showAlert = false">
+  </button>
+</div>
+
+  <section class="orders-list">
+    <ng-container *ngIf="orders$ | async as orders; else loading">
+      <div *ngIf="!orders?.length" class="no-results">No orders found.</div>
+
+      <div class="list" *ngIf="orders?.length">
+        <article
+        class="card order-card"
+        *ngFor="let o of orders; trackBy: trackById"
+        (click)="openOrderDetail(o.order_id)"
+        (keydown)="onCardKeydown($event, o.order_id)"
+        tabindex="0"
+        role="button"
+        [attr.aria-label]="'Open order detail for ' + o.order_id"
+      >
+        <div class="order-row">
+          <div class="order-main">
+            <!-- Order Ref: bold blue text (no button) -->
+            <div class="order-id">
+              Order:
+              <span class="order-ref">
+                <strong class="order-ref-text" (click)="$event.stopPropagation(); openOrderDetail(o.order_id)">
+                  {{ o.refno }}
+                </strong>
+              </span>
+            </div>
+          <div class="order-info-row">
+            <span>Items: {{ o.items_count }}</span>
+
+            <span>Order Date: {{ o.order_date }}</span>
+
+           <span class="payment-label">Payment Status:</span>
+          <span
+            class="payment-value"
+            [ngClass]="{
+              'paid': o.payment_status?.toLowerCase() === 'paid',
+              'unpaid': o.payment_status?.toLowerCase() === 'unpaid'
+            }"
+          >
+            {{ o.payment_status }}
+          </span>
+          </div>
+          </div>
+
+        <div class="order-meta">
+          <div class="order-actions">
+            <!-- <button
+              type="button"
+              class="delete-btn"
+              (click)="$event.stopPropagation(); deleteOrder(o.order_id)">
+              <i class="bi bi-trash"></i>
+            </button> -->
+           <button
+            *ngIf="o.order_Status?.toLowerCase() === 'draft'"
+            type="button"
+            class="delete-btn"
+            (click)="$event.stopPropagation(); deleteOrder(o.order_id)">
+            🗑️
+          </button>
+
+            <div class="order-total">
+              ₹ {{ o.tot_order_value | number:'1.0-0' }}
+            </div>
+          </div>
+
+          <div class="order-status" *ngIf="o.order_Status">
+            {{ o.order_Status === 'Review' ? 'Processing' : o.order_Status }}
+          </div>
+        </div>
+        </div>
+      </article>
+      </div>
+    </ng-container>
+
+    <ng-template #loading>
+      <div class="loading">Loading orders…</div>
+    </ng-template>
+  </section>
+
+  <!-- <app-drawer [isPublic]="true" [state]="drawerState" (stateChange)="drawerState = $event" [title]="'Order '+selectedOrderId" > -->
+      <app-drawer [isPublic]="true" [state]="drawerState" (stateChange)="drawerState = $event" [title]="'Order Details'" > 
+
+
+    <app-order-detail [orderId]="selectedOrderId"></app-order-detail>
+  </app-drawer>
+
+
+ 
+
+</div>

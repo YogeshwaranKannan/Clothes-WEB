@@ -1,0 +1,95 @@
+.title-banner {
+  
+width: 100%;
+  background: transparent; /* header owns background now */
+  height: 100%;           /* instead of fixed 50px */ /* was 50px in your code [1](https://netorgft17736392-my.sharepoint.com/personal/ramesh_r_intellesyde_com/Documents/Microsoft%20Copilot%20Chat%20Files/generalquery.txt) */
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+
+}
+
+.title-banner__inner {
+  width: 100%;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title-banner__left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.page-title {
+  font-weight: 700;
+  font-size: 22px;
+  color: black;
+  text-align: center;
+}
+
+// .title-banner__inner {
+//   width: 100%;
+//   padding: 0 1rem;
+//   display: flex;
+//   align-items: center;
+//   // justify-content: space-between;
+   
+// }
+
+// .title-banner__left {
+//   display: flex;
+//   align-items: center;
+  
+// }
+
+// .page-title {
+//   font-weight: 700;
+//   font-size: 22px;
+//   color: #fff;
+// }
+
+.capitalize-first-letter::first-letter {
+  text-transform: uppercase;
+}
+
+.title-banner__right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.home-link {
+  color: #0d6efd;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.home-link:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb-sep {
+  padding: 0 6px;
+  color: #495057;
+}
+
+.breadcrumb-current {
+  color: #1c2b33;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .page-title {
+    font-size: 18px;
+  }
+
+  .title-banner__inner {
+    padding: 0 12px;
+  }
+}

@@ -1,0 +1,286 @@
+ <app-loading-screen
+  [show]="isLoading"
+  message="Loading products..."
+>
+</app-loading-screen>
+<div *ngIf="groupedWithProducts$ | async as entries">
+  <section *ngFor="let entry of entries; let i = index" class="top-category py-1">
+
+    <!-- Row 1: parent category name -->
+    <div class="title">{{ entry.group.category.toUpperCase() }}</div>
+
+    <!-- Row 2: description -->
+   <!-- <div class="description" style="color: black;">
+        <ng-container *ngIf="entry.group.descriptionBlock.structured; else plainDesc">
+          <span class="desc-header1">
+            {{ asStructured(entry.group.descriptionBlock).header1 }}
+          </span>
+
+          <span class="desc-header2">
+            {{ asStructured(entry.group.descriptionBlock).header2 }}
+          </span>
+
+          <ul class="desc-items">
+            <li *ngFor="let item of asStructured(entry.group.descriptionBlock).items">
+              {{ item }}
+            </li>
+          </ul>
+        </ng-container>
+
+        <ng-template #plainDesc>
+          {{ asPlain(entry.group.descriptionBlock).text }}
+        </ng-template>
+      </div> -->
+
+    <!-- Row 3: product rail -->
+    <div class="products-section">
+
+      <!-- Controls: >> scroll + More navigate -->
+      <div class="rail-controls" *ngIf="entry.products.length > 0">
+        <!-- <button
+          class="rail-scroll-btn"
+          type="button"
+          (click)="scrollRail(i)"
+          aria-label="Scroll right"
+          *ngIf="entry.products.length > 4"
+        >&gt;&gt;</button> -->
+        <button
+          class="rail-more-btn"
+          type="button"
+          (click)="goToCategory(entry.group)"
+          *ngIf="entry.products.length > 4"
+        >View All</button>
+      </div>
+
+      <!-- Horizontal scroll rail — shows 4 on desktop, 2 on mobile -->
+      <div class="cat-rail" #rail>
+        <!-- <article class="card" *ngFor="let p of entry.products" (click)="openProduct(p.ProductId)"role="listitem"> -->
+        <article
+          class="card"
+          *ngFor="let p of entry.products"
+          (click)="openProduct(String(p.ProductId ?? ''))"
+          role="listitem"
+        >
+         <div class="discount" *ngIf="+(p.OfferPrice ?? 0) > 0">- {{ p.DiscountPercent }}%</div>
+          <picture class="img-wrap">
+            <ng-container *ngIf="$any(p).ImageWebp as webp">
+              <source [srcset]="buildImageUrl(webp)" type="image/webp" />
+            </ng-container>
+            <!-- <img
+              [src]="buildImageUrl($any(p).ImageUrl || $any(p).Image ,p?.ProductName , p?.CreatedAt ,p?.isService )"
+              (error)="onImgError($event)"
+              [alt]="p.ProductName"
+              loading="lazy"
+              decoding="async"
+            />  -->
+          
+            <!-- <img
+            
+              [src]="buildImageUrl($any(p).ImageUrl || $any(p).Image)"
+              (error)="onImgError($event)"
+              [alt]="p.ProductName"
+              loading="lazy"
+              decoding="async"
+            /> -->
+             <img
+            [src]="p.imageUrl || $any(p).Image "
+               
+              (error)="onImgError($event)"
+              [alt]="p.ProductName"
+              loading="lazy"
+              decoding="async"
+            />
+
+           
+          </picture>
+
+          <div class="card-body">
+            <div class="meta">
+              <!-- <span>{{ p.Category?.CategoryName }}</span> -->
+              <!-- <span class="rating">★ ★ ★ ★ ★</span> -->
+            </div>
+            <h3 class="card-title">{{ p.ProductName | uppercase }}</h3>
+            <div class="prices">
+              <ng-container *ngIf="parsePrice(p.OfferPrice) > 0; else normalPrice">
+
+                <!-- Offer price -->
+                <span class="offer">
+                  {{ parsePrice(p.OfferPrice) | currency:'INR':'symbol':'1.2-2' }}
+                </span>
+
+                <!-- Seller/Selling price struck out -->
+                <span class="mrp">
+                  {{ parsePrice(p.SellingPrice) | currency:'INR':'symbol':'1.2-2' }}
+                </span>
+
+              </ng-container>
+
+              <!-- No offer price -->
+              <ng-template #normalPrice>
+                <span class="offer">
+                  {{ parsePrice(p.SellingPrice) | currency:'INR':'symbol':'1.2-2' }}
+                </span>
+              </ng-template>
+            </div>
+        
+          
+            <!-- <div class="emi">{{ emiText(p.OfferPrice ?? p.SellingPrice) }}</div> -->
+
+            
+            <div class="actions" (click)="$event.stopPropagation()">
+              <!-- Wrap in cartQtyMap$ so we can check cart state per product -->
+              <ng-container *ngIf="cartQtyMap$ | async as qtyMap">
+                <ng-container *ngIf="p.variants?.length; else noVariants">
+                  
+                  <!-- <app-variant-dropdown [product]="p"[selectedVariant]="getSelectedVariant(p)"(open)="openVariantPopup(p)"></app-variant-dropdown> -->
+                  <ng-container *ngIf="p.variants?.length; else noVariants">
+                  <button
+                    class="btn btn-cart"
+                    type="button"
+                    (click)="openVariantPopup(p)"
+                  >
+                    Add to Cart
+                  </button>
+                </ng-container>
+                </ng-container>
+
+                <ng-template #noVariants>
+                  <!-- Products WITHOUT variants: Add to Cart → stepper toggle -->
+                  <ng-container *ngIf="qtyMap.get(String(p.ProductId ?? '')) as qty; else addBtn">
+                    <!-- Already in cart → show stepper (matches Product List UI) -->
+                    <!-- <div class="qty-stepper">
+                      <button class="qty-btn" type="button"
+                              (click)="decreaseCartQty(p, qty, $event)">−</button>
+                      <span class="qty-val">{{ qty }}</span>
+                      <button class="qty-btn" type="button"
+                              (click)="increaseCartQty(p, qty, $event)">+</button>
+                    </div> -->
+                    <div class="qty-stepper">
+                      <button
+                        class="qty-btn"
+                        type="button"
+                        (click)="decreaseCartQty(p, qty, $event)"
+                      >
+                        −
+                      </button>
+
+                      <input
+                        class="qty-input"
+                        type="number"
+                         maxlength="4"
+                         pattern="[0-9]*"
+                        min="1"
+                        [value]="qty"
+                         (keydown)="allowOnlyIntegers($event)"
+                        (click)="$event.stopPropagation()"
+                        (blur)="updateCartQtyFromInput(p, $event)"
+                        (keyup.enter)="updateCartQtyFromInput(p, $event)"
+                      />
+
+                      <button
+                        class="qty-btn"
+                        type="button"
+                        (click)="increaseCartQty(p, qty, $event)"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </ng-container>
+                  <ng-template #addBtn>
+                    <!-- Not in cart → Add to Cart button -->
+                    <button class="btn btn-cart" type="button"
+                            (click)="addToCart(p, $event)">Add to Cart</button>
+                  </ng-template>
+                </ng-template>
+              </ng-container>
+            </div>
+          </div>
+        </article>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<!-- Drawer is rendered globally in the header; categories uses the shared DrawerService -->
+
+<!-- GLOBAL VARIANT MODAL (renders at root of this component, fixed overlay) -->
+<ng-container *ngIf="variantModalProduct as p">
+  <ng-container *ngIf="cartQtyMap$ | async as qtyMap">
+    <div class="vm-backdrop" aria-hidden="true" (click)="closeVariantPopup()"></div>
+    <div class="vm-panel" role="dialog" aria-modal="true" [attr.aria-label]="'Choose variant for ' + p.ProductName" (click)="$event.stopPropagation()">
+
+      <div class="vm-header">
+        <div class="vm-header__meta">
+          <!-- <span class="vm-header__category">{{ p.Category?.CategoryName }}</span> -->
+          <h3 class="vm-header__name">{{ p.ProductName }}</h3>
+        </div>
+        <button type="button" class="vm-close" (click)="closeVariantPopup()" aria-label="Close variant selector">&#x2715;</button>
+      </div>
+
+            <div class="vm-body">
+        <div
+          *ngFor="let v of p.variants; trackBy: trackByVariantId"
+          class="vm-row"
+        >
+          <div class="vm-row__info">
+            <span class="vm-row__name">{{ v.variantsName }}</span>
+            <div class="vm-row__prices">
+              <span class="vm-row__offer" *ngIf="parsePrice(v.OfferPrice) > 0">
+                {{ parsePrice(v.OfferPrice) | currency:'INR':'symbol':'1.2-2' }}
+              </span>
+              <span class="vm-row__mrp" [class.vm-row__mrp--strike]="parsePrice(v.OfferPrice) > 0">
+                {{ parsePrice(v.SellingPrice) | currency:'INR':'symbol':'1.2-2' }}
+              </span>
+              <span class="vm-row__badge" *ngIf="variantOfferText(v) as badge">{{ badge }}</span>
+            </div>
+          </div>
+
+          <div class="vm-row__actions" (click)="$event.stopPropagation()">
+            <ng-container *ngIf="rowVariantInCart(p, v, qtyMap); else vmRowAddBtn">
+              <div class="qty-stepperVariant">
+                <button
+                  class="qty-btn"
+                  type="button"
+                  (click)="decreaseRowVariant(p, v, qtyMap, $event)"
+                >−</button>
+
+                <input
+                  class="qty-input"
+                  type="number"
+                  min="1"
+                  maxlength="4"
+                  pattern="[0-9]*"
+                  inputmode="numeric"
+                  (keydown)="allowOnlyIntegers($event)"
+                  [value]="getRowVariantQty(p, v, qtyMap)"
+                  (click)="$event.stopPropagation()"
+                  (blur)="updateRowVariantQtyFromInput(p, v, qtyMap, $event)"
+                  (keyup.enter)="updateRowVariantQtyFromInput(p, v, qtyMap, $event)"
+                />
+
+                <button
+                  class="qty-btn"
+                  type="button"
+                  (click)="increaseRowVariant(p, v, qtyMap, $event)"
+                >+</button>
+              </div>
+            </ng-container>
+
+            <ng-template #vmRowAddBtn>
+              <button
+                type="button"
+                class="vm-row-add-btn"
+                (click)="addRowVariantToCart(p, v, $event)"
+              >
+                Add to Cart
+              </button>
+            </ng-template>
+          </div>
+        </div>
+      </div><!-- /vm-body -->
+      
+
+    </div>
+  </ng-container>
+</ng-container>

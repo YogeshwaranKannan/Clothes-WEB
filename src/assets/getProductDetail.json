@@ -1,0 +1,2713 @@
+{
+  "products": [
+    {
+      "ProductId": "PROD-1",
+      "inventoryId": "INV-1",
+      "sellerid": "SELLER002",
+      "ProductName": "Toor Dal Premium",
+      "SellingPrice": 199,
+      "OfferPrice": "Rs. 239.00",
+      "DiscountPercent": "0%",
+      "Image": "https://tse4.mm.bing.net/th/id/OIP.fHzuclT9zQLTVOapnvOOiwHaF0?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+      "Category": {
+        "CategoryId": "P001",
+        "CategoryName": "WHOLE PULSES"
+      },
+      "Brand": "Swamy's",
+      "Size": "1kg",
+      "StockStatus": "In Stock",
+      "AvilableQty": 10,
+      "Batch_Id": "BATCH-1",
+      "batch_unit": "kg",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://tse4.mm.bing.net/th/id/OIP.fHzuclT9zQLTVOapnvOOiwHaF0?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+        "alt": "Toor Dal Premium",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://tse4.mm.bing.net/th/id/OIP.fHzuclT9zQLTVOapnvOOiwHaF0?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+          "alt": "Toor Dal Premium View 1",
+          "order": 1
+        },
+        {
+          "url": "https://tse4.mm.bing.net/th/id/OIP.fHzuclT9zQLTVOapnvOOiwHaF0?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+          "alt": "Toor Dal Premium View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Lightweight aluminum frame",
+        "Comfort-focused hybrid geometry",
+        "Reliable braking performance"
+      ],
+      "Specifications": {
+        "intended_use": "City / Fitness",
+        "bike_type": "Hybrid",
+        "braking_system": "Mechanical Disc",
+        "frame_material": "Aluminium",
+        "fork_material": "Steel"
+      },
+      "Components": {
+        "groupset": "Shimano Tourney",
+        "crankset": "Prowheel Alloy",
+        "cassette": "14-28T",
+        "rear_derailleur": "Shimano Tourney",
+        "wheels": "Alloy",
+        "tyres": "700x38C"
+      },
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 239.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Aachi"
+        },
+        {
+          "variantsid": "2",
+          "variantsName": "5 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 1000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Fresh Farm"
+        },
+        {
+          "variantsid": "3",
+          "variantsName": "10 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 2000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Tata"
+        },
+        {
+          "variantsid": "4",
+          "variantsName": "25 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 4500.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [
+        "PROD-2",
+        "PROD-2",
+        "PROD-2"
+      ],
+      "Support": {
+        "phone": "+91-80-47185232",
+        "whatsapp": "+91-80-47185232",
+        "email": "support@chennaicycles.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-2",
+      "inventoryId": "INV-2",
+      "sellerid": "SELLER002",
+      "ProductName": "Urad Dal Split",
+      "SellingPrice": 149,
+      "OfferPrice": "Rs. 179.00",
+      "DiscountPercent": "0%",
+      "Image": "https://c8.alamy.com/comp/2GGFCGP/macro-close-up-of-organic-split-black-urad-dal-vigna-mungo-with-the-shell-on-a-ceramic-black-bowl-top-view-2GGFCGP.jpg",
+      "Category": {
+        "CategoryId": "P002",
+        "CategoryName": "SPLIT DAL"
+      },
+      "Brand": "Udhayam",
+      "Size": "1kg",
+      "StockStatus": "In Stock",
+      "AvilableQty": 15,
+      "Batch_Id": "BATCH-2",
+      "batch_unit": "kg",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://c8.alamy.com/comp/2GGFCGP/macro-close-up-of-organic-split-black-urad-dal-vigna-mungo-with-the-shell-on-a-ceramic-black-bowl-top-view-2GGFCGP.jpg",
+        "alt": "Urad Dal Split",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://c8.alamy.com/comp/2GGFCGP/macro-close-up-of-organic-split-black-urad-dal-vigna-mungo-with-the-shell-on-a-ceramic-black-bowl-top-view-2GGFCGP.jpg",
+          "alt": "Urad Dal Split View 1",
+          "order": 1
+        },
+        {
+          "url": "https://c8.alamy.com/comp/2GGFCGP/macro-close-up-of-organic-split-black-urad-dal-vigna-mungo-with-the-shell-on-a-ceramic-black-bowl-top-view-2GGFCGP.jpg",
+          "alt": "Urad Dal Split View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Comfortable upright riding position",
+        "Durable alloy frame",
+        "Smooth braking performance"
+      ],
+      "Specifications": {
+        "intended_use": "City / Fitness",
+        "bike_type": "Hybrid",
+        "braking_system": "Mechanical Disc",
+        "frame_material": "Aluminium",
+        "fork_material": "Steel"
+      },
+      "Components": {
+        "groupset": "Shimano Altus",
+        "crankset": "Prowheel Alloy",
+        "cassette": "14-28T",
+        "rear_derailleur": "Shimano Altus",
+        "wheels": "Alloy",
+        "tyres": "700x40C"
+      },
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 239.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "2",
+          "variantsName": "5 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 1000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "3",
+          "variantsName": "10 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 2000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "4",
+          "variantsName": "25 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 4500.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [
+        1,
+        3,
+        4
+      ],
+      "Support": {
+        "phone": "+91-80-47185232",
+        "whatsapp": "+91-80-47185232",
+        "email": "support@chennaicycles.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-3",
+      "inventoryId": "INV-3",
+      "sellerid": "SELLER002",
+      "ProductName": "Moong Dal Yellow",
+      "SellingPrice": 129,
+      "OfferPrice": "Rs. 159.00",
+      "DiscountPercent": "0%",
+      "Image": "https://5.imimg.com/data5/SELLER/Default/2025/4/507124633/QU/IA/BD/31800628/yellow-moong-dal-1000x1000.webp",
+      "Category": {
+        "CategoryId": "P003",
+        "CategoryName": "PULSE FLOURS"
+      },
+      "Brand": "Udhayam",
+      "Size": "1kg",
+      "StockStatus": "In Stock",
+      "AvilableQty": 20,
+      "Batch_Id": "BATCH-3",
+      "batch_unit": "kg",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://5.imimg.com/data5/SELLER/Default/2025/4/507124633/QU/IA/BD/31800628/yellow-moong-dal-1000x1000.webp",
+        "alt": "Moong Dal Yellow",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://5.imimg.com/data5/SELLER/Default/2025/4/507124633/QU/IA/BD/31800628/yellow-moong-dal-1000x1000.webp",
+          "alt": "Moong Dal Yellow View 1",
+          "order": 1
+        },
+        {
+          "url": "https://5.imimg.com/data5/SELLER/Default/2025/4/507124633/QU/IA/BD/31800628/yellow-moong-dal-1000x1000.webp",
+          "alt": "Moong Dal Yellow View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Lightweight alloy frame",
+        "Comfortable hybrid geometry",
+        "Efficient city riding performance"
+      ],
+      "Specifications": {
+        "intended_use": "City / Fitness",
+        "bike_type": "Hybrid",
+        "braking_system": "Mechanical Disc",
+        "frame_material": "Aluminium",
+        "fork_material": "Steel"
+      },
+      "Components": {
+        "groupset": "Shimano Tourney",
+        "crankset": "Prowheel Alloy",
+        "cassette": "14-28T",
+        "rear_derailleur": "Shimano Tourney",
+        "wheels": "Alloy",
+        "tyres": "700x38C"
+      },
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 239.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "2",
+          "variantsName": "5 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 1000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "3",
+          "variantsName": "10 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 2000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "4",
+          "variantsName": "25 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 4500.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [
+        1,
+        2,
+        4
+      ],
+      "Support": {
+        "phone": "+91-80-47185232",
+        "whatsapp": "+91-80-47185232",
+        "email": "support@chennaicycles.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-4",
+      "inventoryId": "INV-4",
+      "sellerid": "SELLER002",
+      "ProductName": "Chana Dal Premium",
+      "SellingPrice": 99,
+      "OfferPrice": "Rs. 129.00",
+      "DiscountPercent": "0%",
+      "Image": "https://5.imimg.com/data5/SELLER/Default/2025/6/516584166/XB/AQ/DB/3185380/shri-hari-gold-chana-dal-premium-quality-1000x1000.png",
+      "Category": {
+        "CategoryId": "P004",
+        "CategoryName": "ROASTED ITEMS"
+      },
+      "Brand": "Swamy's",
+      "Size": "1kg",
+      "StockStatus": "In Stock",
+      "AvilableQty": 25,
+      "Batch_Id": "BATCH-4",
+      "batch_unit": "kg",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://5.imimg.com/data5/SELLER/Default/2025/6/516584166/XB/AQ/DB/3185380/shri-hari-gold-chana-dal-premium-quality-1000x1000.png",
+        "alt": "Chana Dal Premium",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://5.imimg.com/data5/SELLER/Default/2025/6/516584166/XB/AQ/DB/3185380/shri-hari-gold-chana-dal-premium-quality-1000x1000.png",
+          "alt": "Chana Dal Premium View 1",
+          "order": 1
+        },
+        {
+          "url": "https://5.imimg.com/data5/SELLER/Default/2025/6/516584166/XB/AQ/DB/3185380/shri-hari-gold-chana-dal-premium-quality-1000x1000.png",
+          "alt": "Chana Dal Premium View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Durable alloy frame",
+        "Comfort-first hybrid geometry",
+        "Smooth braking performance"
+      ],
+      "Specifications": {
+        "intended_use": "City / Fitness",
+        "bike_type": "Hybrid",
+        "braking_system": "Mechanical Disc",
+        "frame_material": "Aluminium",
+        "fork_material": "Steel"
+      },
+      "Components": {
+        "groupset": "Shimano Altus",
+        "crankset": "Prowheel Alloy",
+        "cassette": "14-28T",
+        "rear_derailleur": "Shimano Altus",
+        "wheels": "Alloy",
+        "tyres": "700x40C"
+      },
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 239.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "2",
+          "variantsName": "5 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 1000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "3",
+          "variantsName": "10 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 2000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "4",
+          "variantsName": "25 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 4500.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [
+        1,
+        2,
+        3
+      ],
+      "Support": {
+        "phone": "+91-80-47185232",
+        "whatsapp": "+91-80-47185232",
+        "email": "support@chennaicycles.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-5",
+      "inventoryId": "INV-5",
+      "sellerid": "SELLER002",
+      "ProductName": "Green Gram Whole",
+      "SellingPrice": 159,
+      "OfferPrice": "Rs. 189.00",
+      "DiscountPercent": "0%",
+      "Image": "https://www.naatigrains.com/image/cache/catalog/naatigrains-products/NG195/green-gram-paasi-payiru-masala-multi-vitamins-nuts-seeds-order-now-bangalore-naati-grains-1000x1000.jpg",
+      "Category": {
+        "CategoryId": "P005",
+        "CategoryName": "PULSE PRODUCTS"
+      },
+      "Brand": "Swamy's",
+      "Size": "1kg",
+      "StockStatus": "In Stock",
+      "AvilableQty": 18,
+      "Batch_Id": "BATCH-5",
+      "batch_unit": "kg",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://www.naatigrains.com/image/cache/catalog/naatigrains-products/NG195/green-gram-paasi-payiru-masala-multi-vitamins-nuts-seeds-order-now-bangalore-naati-grains-1000x1000.jpg",
+        "alt": "Green Gram Whole",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://www.naatigrains.com/image/cache/catalog/naatigrains-products/NG195/green-gram-paasi-payiru-masala-multi-vitamins-nuts-seeds-order-now-bangalore-naati-grains-1000x1000.jpg",
+          "alt": "Green Gram Whole View 1",
+          "order": 1
+        },
+        {
+          "url": "https://www.naatigrains.com/image/cache/catalog/naatigrains-products/NG195/green-gram-paasi-payiru-masala-multi-vitamins-nuts-seeds-order-now-bangalore-naati-grains-1000x1000.jpg",
+          "alt": "Green Gram Whole View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Versatile gravel geometry",
+        "Durable alloy frame",
+        "Stable off-road handling"
+      ],
+      "Specifications": {
+        "intended_use": "Gravel / Adventure",
+        "bike_type": "Gravel",
+        "braking_system": "Mechanical Disc",
+        "frame_material": "Aluminium",
+        "fork_material": "Steel"
+      },
+      "Components": {
+        "groupset": "Shimano Claris",
+        "crankset": "Prowheel Alloy",
+        "cassette": "11-32T",
+        "rear_derailleur": "Shimano Claris",
+        "wheels": "Alloy",
+        "tyres": "700x40C"
+      },
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 189.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 159,
+          "AvilableQty": 18,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [
+        6,
+        7
+      ],
+      "Support": {
+        "phone": "+91-80-47185232",
+        "whatsapp": "+91-80-47185232",
+        "email": "support@chennaicycles.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-6",
+      "inventoryId": "INV-6",
+      "sellerid": "SELLER002",
+      "ProductName": "Foxtail Millet (Thinai)",
+      "SellingPrice": 89,
+      "OfferPrice": "Rs. 109.00",
+      "DiscountPercent": "0%",
+      "Image": "https://tse3.mm.bing.net/th/id/OIP.7gJcc6Ym7ySHHby2udb5iAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+      "Category": {
+        "CategoryId": "M001",
+        "CategoryName": "WHOLE MILLETS"
+      },
+      "Brand": "Swamy's",
+      "Size": "1kg",
+      "StockStatus": "In Stock",
+      "AvilableQty": 20,
+      "Batch_Id": "BATCH-6",
+      "batch_unit": "kg",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://tse3.mm.bing.net/th/id/OIP.7gJcc6Ym7ySHHby2udb5iAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+        "alt": "Foxtail Millet (Thinai)",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://tse3.mm.bing.net/th/id/OIP.7gJcc6Ym7ySHHby2udb5iAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+          "alt": "Foxtail Millet (Thinai) View 1",
+          "order": 1
+        },
+        {
+          "url": "https://tse3.mm.bing.net/th/id/OIP.7gJcc6Ym7ySHHby2udb5iAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+          "alt": "Foxtail Millet (Thinai) View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Adventure-ready geometry",
+        "Durable alloy construction",
+        "Reliable braking performance"
+      ],
+      "Specifications": {
+        "intended_use": "Gravel / Adventure",
+        "bike_type": "Gravel",
+        "braking_system": "Mechanical Disc",
+        "frame_material": "Aluminium",
+        "fork_material": "Steel"
+      },
+      "Components": {
+        "groupset": "Shimano Claris",
+        "crankset": "Prowheel Alloy",
+        "cassette": "11-32T",
+        "rear_derailleur": "Shimano Claris",
+        "wheels": "Alloy",
+        "tyres": "700x40C"
+      },
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 239.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "2",
+          "variantsName": "5 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 1000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "3",
+          "variantsName": "10 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 2000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "4",
+          "variantsName": "25 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 4500.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [
+        5,
+        7
+      ],
+      "Support": {
+        "phone": "+91-80-47185232",
+        "whatsapp": "+91-80-47185232",
+        "email": "support@chennaicycles.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-7",
+      "inventoryId": "INV-7",
+      "sellerid": "SELLER002",
+      "ProductName": "Kodo Millet (Varagu)",
+      "SellingPrice": 95,
+      "OfferPrice": "Rs. 119.00",
+      "DiscountPercent": "0%",
+      "Image": "https://www.kannukutty.in/static/images/blog/15/2cac4674-543e-478b-92b5-839bff7cf808.jpg",
+      "Category": {
+        "CategoryId": "M001",
+        "CategoryName": "WHOLE MILLETS"
+      },
+      "Brand": "Foxtail",
+      "Size": "1kg",
+      "StockStatus": "In Stock",
+      "AvilableQty": 18,
+      "Batch_Id": "BATCH-7",
+      "batch_unit": "kg",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://www.kannukutty.in/static/images/blog/15/2cac4674-543e-478b-92b5-839bff7cf808.jpg",
+        "alt": "Kodo Millet (Varagu)",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://www.kannukutty.in/static/images/blog/15/2cac4674-543e-478b-92b5-839bff7cf808.jpg",
+          "alt": "Kodo Millet (Varagu) View 1",
+          "order": 1
+        },
+        {
+          "url": "https://www.kannukutty.in/static/images/blog/15/2cac4674-543e-478b-92b5-839bff7cf808.jpg",
+          "alt": "Kodo Millet (Varagu) View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Stable gravel geometry",
+        "Lightweight alloy frame",
+        "Reliable performance on mixed terrain"
+      ],
+      "Specifications": {
+        "intended_use": "Gravel / Adventure",
+        "bike_type": "Gravel",
+        "braking_system": "Mechanical Disc",
+        "frame_material": "Aluminium",
+        "fork_material": "Steel"
+      },
+      "Components": {
+        "groupset": "Shimano Claris",
+        "crankset": "Prowheel Alloy",
+        "cassette": "11-32T",
+        "rear_derailleur": "Shimano Claris",
+        "wheels": "Alloy",
+        "tyres": "700x40C"
+      },
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 239.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "2",
+          "variantsName": "5 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 1000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "3",
+          "variantsName": "10 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 2000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "4",
+          "variantsName": "25 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 4500.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [
+        5,
+        6
+      ],
+      "Support": {
+        "phone": "+91-80-47185232",
+        "whatsapp": "+91-80-47185232",
+        "email": "support@chennaicycles.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-8",
+      "inventoryId": "INV-8",
+      "sellerid": "SELLER002",
+      "ProductName": "Little Millet (Samai)",
+      "SellingPrice": 99,
+      "OfferPrice": "Rs. 129.00",
+      "DiscountPercent": "0%",
+      "Image": "https://tse3.mm.bing.net/th/id/OIP.mw1caQ6AKgFy-VbE5UVAzgHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+      "Category": {
+        "CategoryId": "M001",
+        "CategoryName": "WHOLE MILLETS"
+      },
+      "Brand": "Foxtail",
+      "Size": "1kg",
+      "StockStatus": "In Stock",
+      "AvilableQty": 22,
+      "Batch_Id": "BATCH-8",
+      "batch_unit": "kg",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://tse3.mm.bing.net/th/id/OIP.mw1caQ6AKgFy-VbE5UVAzgHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+        "alt": "Little Millet (Samai)",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://tse3.mm.bing.net/th/id/OIP.mw1caQ6AKgFy-VbE5UVAzgHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+          "alt": "Little Millet (Samai) View 1",
+          "order": 1
+        },
+        {
+          "url": "https://tse3.mm.bing.net/th/id/OIP.mw1caQ6AKgFy-VbE5UVAzgHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+          "alt": "Little Millet (Samai) View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "High‑performance road tyre",
+        "Durable rubber compound",
+        "Optimized for speed and grip"
+      ],
+      "Specifications": {
+        "intended_use": "Road",
+        "tyre_type": "Folding",
+        "wheel_size": "700c",
+        "material": "Rubber"
+      },
+      "Components": {},
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 239.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "2",
+          "variantsName": "5 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 1000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "3",
+          "variantsName": "10 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 2000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "4",
+          "variantsName": "25 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 4500.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [
+        9
+      ],
+      "Support": {
+        "phone": "+91-80-47185232",
+        "whatsapp": "+91-80-47185232",
+        "email": "support@chennaicycles.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-9",
+      "inventoryId": "INV-9",
+      "sellerid": "SELLER002",
+      "ProductName": "Barnyard Millet (Kuthiraivali)",
+      "SellingPrice": 105,
+      "OfferPrice": "Rs. 139.00",
+      "DiscountPercent": "0%",
+      "Image": "https://5.imimg.com/data5/XP/EY/MY-13160930/kuthiraivali-rice-500x500.jpg",
+      "Category": {
+        "CategoryId": "M001",
+        "CategoryName": "WHOLE MILLETS"
+      },
+      "Brand": "Foxtail",
+      "Size": "1kg",
+      "StockStatus": "In Stock",
+      "AvilableQty": 16,
+      "Batch_Id": "BATCH-9",
+      "batch_unit": "kg",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://5.imimg.com/data5/XP/EY/MY-13160930/kuthiraivali-rice-500x500.jpg",
+        "alt": "Barnyard Millet (Kuthiraivali)",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://5.imimg.com/data5/XP/EY/MY-13160930/kuthiraivali-rice-500x500.jpg",
+          "alt": "Barnyard Millet (Kuthiraivali) View 1",
+          "order": 1
+        },
+        {
+          "url": "https://5.imimg.com/data5/XP/EY/MY-13160930/kuthiraivali-rice-500x500.jpg",
+          "alt": "Barnyard Millet (Kuthiraivali) View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Aggressive MTB tread",
+        "Excellent cornering grip",
+        "Durable wired construction"
+      ],
+      "Specifications": {
+        "intended_use": "Mountain",
+        "tyre_type": "Wired",
+        "wheel_size": "27.5 inch",
+        "material": "Rubber"
+      },
+      "Components": {},
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 239.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "2",
+          "variantsName": "5 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 1000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "3",
+          "variantsName": "10 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 2000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "4",
+          "variantsName": "25 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 4500.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [
+        8
+      ],
+      "Support": {
+        "phone": "+91-80-47185232",
+        "whatsapp": "+91-80-47185232",
+        "email": "support@chennaicycles.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-10",
+      "inventoryId": "INV-10",
+      "sellerid": "SELLER002",
+      "ProductName": "Pearl Millet (Kambu)",
+      "SellingPrice": 75,
+      "OfferPrice": "Rs. 99.00",
+      "DiscountPercent": "0%",
+      "Image": "https://tse1.mm.bing.net/th/id/OIP.ylEF1D1ERG-HvK34mGEBpAHaEK?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+      "Category": {
+        "CategoryId": "M001",
+        "CategoryName": "WHOLE MILLETS"
+      },
+      "Brand": "Manna",
+      "Size": "1kg",
+      "StockStatus": "In Stock",
+      "AvilableQty": 30,
+      "Batch_Id": "BATCH-10",
+      "batch_unit": "kg",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://tse1.mm.bing.net/th/id/OIP.ylEF1D1ERG-HvK34mGEBpAHaEK?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+        "alt": "Pearl Millet (Kambu)",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://tse1.mm.bing.net/th/id/OIP.ylEF1D1ERG-HvK34mGEBpAHaEK?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+          "alt": "Pearl Millet (Kambu) View 1",
+          "order": 1
+        },
+        {
+          "url": "https://tse1.mm.bing.net/th/id/OIP.ylEF1D1ERG-HvK34mGEBpAHaEK?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+          "alt": "Pearl Millet (Kambu) View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Premium quality Pearl Millet (Kambu)",
+        "Freshly packed product",
+        "Suitable for daily cooking"
+      ],
+      "Specifications": {
+        "brand": "Manna",
+        "category": "WHOLE MILLETS",
+        "batch_unit": "kg",
+        "size": "1kg"
+      },
+      "Components": {},
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 239.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "2",
+          "variantsName": "5 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 1000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "3",
+          "variantsName": "10 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 2000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "4",
+          "variantsName": "25 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 4500.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [],
+      "Support": {
+        "phone": "+91-9876543210",
+        "whatsapp": "+91-9876543210",
+        "email": "support@example.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-11",
+      "inventoryId": "INV-11",
+      "sellerid": "SELLER002",
+      "ProductName": "Fresh Cow Milk 1L",
+      "SellingPrice": 65,
+      "OfferPrice": "Rs. 75.00",
+      "DiscountPercent": "0%",
+      "Image": "https://th.bing.com/th/id/R.22365dc6f725f9b223ba517a37d16ef1?rik=NhOmf%2fG9xp15wg&riu=http%3a%2f%2frivercottagefarm.net%2fwp-content%2fplugins%2fwp-easycart-data%2fproducts%2fpics1%2f800x800-raw-milk_16efacbea330b8d903cebb4a45607a02.jpg&ehk=yqCQ7IfvX5V9IjzWPnjpxTMw1Y5%2fT2d38Ei%2bH%2beHMJY%3d&risl=&pid=ImgRaw&r=0",
+      "Category": {
+        "CategoryId": "DA001",
+        "CategoryName": "MILK"
+      },
+      "Brand": "Form Fresh",
+      "Size": "1L",
+      "StockStatus": "In Stock",
+      "AvilableQty": 40,
+      "Batch_Id": "BATCH-11",
+      "batch_unit": "L",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://th.bing.com/th/id/R.22365dc6f725f9b223ba517a37d16ef1?rik=NhOmf%2fG9xp15wg&riu=http%3a%2f%2frivercottagefarm.net%2fwp-content%2fplugins%2fwp-easycart-data%2fproducts%2fpics1%2f800x800-raw-milk_16efacbea330b8d903cebb4a45607a02.jpg&ehk=yqCQ7IfvX5V9IjzWPnjpxTMw1Y5%2fT2d38Ei%2bH%2beHMJY%3d&risl=&pid=ImgRaw&r=0",
+        "alt": "Fresh Cow Milk 1L",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://th.bing.com/th/id/R.22365dc6f725f9b223ba517a37d16ef1?rik=NhOmf%2fG9xp15wg&riu=http%3a%2f%2frivercottagefarm.net%2fwp-content%2fplugins%2fwp-easycart-data%2fproducts%2fpics1%2f800x800-raw-milk_16efacbea330b8d903cebb4a45607a02.jpg&ehk=yqCQ7IfvX5V9IjzWPnjpxTMw1Y5%2fT2d38Ei%2bH%2beHMJY%3d&risl=&pid=ImgRaw&r=0",
+          "alt": "Fresh Cow Milk 1L View 1",
+          "order": 1
+        },
+        {
+          "url": "https://th.bing.com/th/id/R.22365dc6f725f9b223ba517a37d16ef1?rik=NhOmf%2fG9xp15wg&riu=http%3a%2f%2frivercottagefarm.net%2fwp-content%2fplugins%2fwp-easycart-data%2fproducts%2fpics1%2f800x800-raw-milk_16efacbea330b8d903cebb4a45607a02.jpg&ehk=yqCQ7IfvX5V9IjzWPnjpxTMw1Y5%2fT2d38Ei%2bH%2beHMJY%3d&risl=&pid=ImgRaw&r=0",
+          "alt": "Fresh Cow Milk 1L View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Premium quality Fresh Cow Milk 1L",
+        "Freshly packed product",
+        "Suitable for daily cooking"
+      ],
+      "Specifications": {
+        "brand": "Form Fresh",
+        "category": "MILK",
+        "batch_unit": "L",
+        "size": "1L"
+      },
+      "Components": {},
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 239.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "2",
+          "variantsName": "5 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 1000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "3",
+          "variantsName": "10 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 2000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "4",
+          "variantsName": "25 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 4500.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [],
+      "Support": {
+        "phone": "+91-9876543210",
+        "whatsapp": "+91-9876543210",
+        "email": "support@example.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-12",
+      "inventoryId": "INV-12",
+      "sellerid": "SELLER002",
+      "ProductName": "Toned Milk 1L",
+      "SellingPrice": 58,
+      "OfferPrice": "Rs. 68.00",
+      "DiscountPercent": "0%",
+      "Image": "https://m.media-amazon.com/images/I/41KozjO+51L._SX300_SY300_.jpg",
+      "Category": {
+        "CategoryId": "DA001",
+        "CategoryName": "MILK"
+      },
+      "Brand": "Full Cream",
+      "Size": "1L",
+      "StockStatus": "In Stock",
+      "AvilableQty": 35,
+      "Batch_Id": "BATCH-12",
+      "batch_unit": "L",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://m.media-amazon.com/images/I/41KozjO+51L._SX300_SY300_.jpg",
+        "alt": "Toned Milk 1L",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://m.media-amazon.com/images/I/41KozjO+51L._SX300_SY300_.jpg",
+          "alt": "Toned Milk 1L View 1",
+          "order": 1
+        },
+        {
+          "url": "https://m.media-amazon.com/images/I/41KozjO+51L._SX300_SY300_.jpg",
+          "alt": "Toned Milk 1L View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Premium quality Toned Milk 1L",
+        "Freshly packed product",
+        "Suitable for daily cooking"
+      ],
+      "Specifications": {
+        "brand": "Full Cream",
+        "category": "MILK",
+        "batch_unit": "L",
+        "size": "1L"
+      },
+      "Components": {},
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 239.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "2",
+          "variantsName": "5 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 1000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "3",
+          "variantsName": "10 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 2000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "4",
+          "variantsName": "25 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 4500.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [],
+      "Support": {
+        "phone": "+91-9876543210",
+        "whatsapp": "+91-9876543210",
+        "email": "support@example.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-13",
+      "inventoryId": "INV-13",
+      "sellerid": "SELLER002",
+      "ProductName": "Fresh Curd 500ml",
+      "SellingPrice": 45,
+      "OfferPrice": "Rs. 55.00",
+      "DiscountPercent": "0%",
+      "Image": "https://m.media-amazon.com/images/I/51ECbU4D2eL._SX569_.jpg",
+      "Category": {
+        "CategoryId": "DA002",
+        "CategoryName": "CURD & PANEER"
+      },
+      "Brand": "Milky Mist",
+      "Size": "500ml",
+      "StockStatus": "In Stock",
+      "AvilableQty": 50,
+      "Batch_Id": "BATCH-13",
+      "batch_unit": "ml",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://m.media-amazon.com/images/I/51ECbU4D2eL._SX569_.jpg",
+        "alt": "Fresh Curd 500ml",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://m.media-amazon.com/images/I/51ECbU4D2eL._SX569_.jpg",
+          "alt": "Fresh Curd 500ml View 1",
+          "order": 1
+        },
+        {
+          "url": "https://m.media-amazon.com/images/I/51ECbU4D2eL._SX569_.jpg",
+          "alt": "Fresh Curd 500ml View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Premium quality Fresh Curd 500ml",
+        "Freshly packed product",
+        "Suitable for daily cooking"
+      ],
+      "Specifications": {
+        "brand": "Milky Mist",
+        "category": "CURD & PANEER",
+        "batch_unit": "ml",
+        "size": "500ml"
+      },
+      "Components": {},
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 239.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "2",
+          "variantsName": "5 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 1000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "3",
+          "variantsName": "10 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 2000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "4",
+          "variantsName": "25 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 4500.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [],
+      "Support": {
+        "phone": "+91-9876543210",
+        "whatsapp": "+91-9876543210",
+        "email": "support@example.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-14",
+      "inventoryId": null,
+      "sellerid": "SELLER002",
+      "ProductName": "Paneer Fresh 200g",
+      "SellingPrice": 89,
+      "OfferPrice": "Rs. 99.00",
+      "DiscountPercent": "0%",
+      "Image": "https://www.srirengatrading.com/cdn/shop/files/IMG_0063_7c2eb9d1-8e60-4e2e-9fe3-d9be9dea9e55.jpg?v=1757483376&width=990",
+      "Category": {
+        "CategoryId": "DA002",
+        "CategoryName": "CURD & PANEER"
+      },
+      "Brand": "Britannia",
+      "Size": "200g",
+      "StockStatus": "In Stock",
+      "AvilableQty": 28,
+      "Batch_Id": "BATCH-14",
+      "batch_unit": "g",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://www.srirengatrading.com/cdn/shop/files/IMG_0063_7c2eb9d1-8e60-4e2e-9fe3-d9be9dea9e55.jpg?v=1757483376&width=990",
+        "alt": "Paneer Fresh 200g",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://www.srirengatrading.com/cdn/shop/files/IMG_0063_7c2eb9d1-8e60-4e2e-9fe3-d9be9dea9e55.jpg?v=1757483376&width=990",
+          "alt": "Paneer Fresh 200g View 1",
+          "order": 1
+        },
+        {
+          "url": "https://www.srirengatrading.com/cdn/shop/files/IMG_0063_7c2eb9d1-8e60-4e2e-9fe3-d9be9dea9e55.jpg?v=1757483376&width=990",
+          "alt": "Paneer Fresh 200g View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Premium quality Paneer Fresh 200g",
+        "Freshly packed product",
+        "Suitable for daily cooking"
+      ],
+      "Specifications": {
+        "brand": "Britannia",
+        "category": "CURD & PANEER",
+        "batch_unit": "g",
+        "size": "200g"
+      },
+      "Components": {},
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 239.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "2",
+          "variantsName": "5 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 1000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "3",
+          "variantsName": "10 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 2000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "4",
+          "variantsName": "25 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 4500.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [],
+      "Support": {
+        "phone": "+91-9876543210",
+        "whatsapp": "+91-9876543210",
+        "email": "support@example.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-15",
+      "inventoryId": "INV-15",
+      "sellerid": "SELLER002",
+      "ProductName": "Amul Butter 100g",
+      "SellingPrice": 52,
+      "OfferPrice": "Rs. 62.00",
+      "DiscountPercent": "0%",
+      "Image": "https://imgwlns.gumlet.io/images/products/215958-1.jpg",
+      "Category": {
+        "CategoryId": "DA003",
+        "CategoryName": "BUTTER & GHEE"
+      },
+      "Brand": "Amul",
+      "Size": "100g",
+      "StockStatus": "In Stock",
+      "AvilableQty": 32,
+      "Batch_Id": "BATCH-15",
+      "batch_unit": "g",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://imgwlns.gumlet.io/images/products/215958-1.jpg",
+        "alt": "Amul Butter 100g",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://imgwlns.gumlet.io/images/products/215958-1.jpg",
+          "alt": "Amul Butter 100g View 1",
+          "order": 1
+        },
+        {
+          "url": "https://imgwlns.gumlet.io/images/products/215958-1.jpg",
+          "alt": "Amul Butter 100g View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Premium quality Amul Butter 100g",
+        "Freshly packed product",
+        "Suitable for daily cooking"
+      ],
+      "Specifications": {
+        "brand": "Amul",
+        "category": "BUTTER & GHEE",
+        "batch_unit": "g",
+        "size": "100g"
+      },
+      "Components": {},
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 239.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "2",
+          "variantsName": "5 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 1000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "3",
+          "variantsName": "10 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 2000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "4",
+          "variantsName": "25 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 4500.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [],
+      "Support": {
+        "phone": "+91-9876543210",
+        "whatsapp": "+91-9876543210",
+        "email": "support@example.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-16",
+      "inventoryId": "INV-16",
+      "sellerid": "SELLER002",
+      "ProductName": "Medimix Herbal Soap 125g",
+      "SellingPrice": 38,
+      "OfferPrice": "Rs. 45.00",
+      "DiscountPercent": "0%",
+      "Image": "https://th.bing.com/th/id/OIP.FsK2BtYVN-qQicbSFjZ8ogHaGg?w=215&h=189&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+      "Category": {
+        "CategoryId": "PC001",
+        "CategoryName": "SOAPS & BODY CARE"
+      },
+      "Brand": "Medmix",
+      "Size": "125g",
+      "StockStatus": "In Stock",
+      "AvilableQty": 60,
+      "Batch_Id": "BATCH-16",
+      "batch_unit": "g",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://th.bing.com/th/id/OIP.FsK2BtYVN-qQicbSFjZ8ogHaGg?w=215&h=189&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+        "alt": "Medimix Herbal Soap 125g",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://th.bing.com/th/id/OIP.FsK2BtYVN-qQicbSFjZ8ogHaGg?w=215&h=189&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+          "alt": "Medimix Herbal Soap 125g View 1",
+          "order": 1
+        },
+        {
+          "url": "https://th.bing.com/th/id/OIP.FsK2BtYVN-qQicbSFjZ8ogHaGg?w=215&h=189&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+          "alt": "Medimix Herbal Soap 125g View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Premium quality Medimix Herbal Soap 125g",
+        "Freshly packed product",
+        "Suitable for daily cooking"
+      ],
+      "Specifications": {
+        "brand": "Medmix",
+        "category": "SOAPS & BODY CARE",
+        "batch_unit": "g",
+        "size": "125g"
+      },
+      "Components": {},
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 239.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "2",
+          "variantsName": "5 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 1000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "3",
+          "variantsName": "10 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 2000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "4",
+          "variantsName": "25 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 4500.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [],
+      "Support": {
+        "phone": "+91-9876543210",
+        "whatsapp": "+91-9876543210",
+        "email": "support@example.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-17",
+      "inventoryId": "INV-17",
+      "sellerid": "SELLER002",
+      "ProductName": "Dove Moisturizing Soap 100g",
+      "SellingPrice": 42,
+      "OfferPrice": "Rs. 52.00",
+      "DiscountPercent": "0%",
+      "Image": "https://th.bing.com/th/id/OIP.E1sSQzn5kznmkdMMTdzeVgHaHa?w=200&h=200&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+      "Category": {
+        "CategoryId": "PC001",
+        "CategoryName": "SOAPS & BODY CARE"
+      },
+      "Brand": "Dove",
+      "Size": "100g",
+      "StockStatus": "In Stock",
+      "AvilableQty": 55,
+      "Batch_Id": "BATCH-17",
+      "batch_unit": "g",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://th.bing.com/th/id/OIP.E1sSQzn5kznmkdMMTdzeVgHaHa?w=200&h=200&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+        "alt": "Dove Moisturizing Soap 100g",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://th.bing.com/th/id/OIP.E1sSQzn5kznmkdMMTdzeVgHaHa?w=200&h=200&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+          "alt": "Dove Moisturizing Soap 100g View 1",
+          "order": 1
+        },
+        {
+          "url": "https://th.bing.com/th/id/OIP.E1sSQzn5kznmkdMMTdzeVgHaHa?w=200&h=200&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+          "alt": "Dove Moisturizing Soap 100g View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Premium quality Dove Moisturizing Soap 100g",
+        "Freshly packed product",
+        "Suitable for daily cooking"
+      ],
+      "Specifications": {
+        "brand": "Dove",
+        "category": "SOAPS & BODY CARE",
+        "batch_unit": "g",
+        "size": "100g"
+      },
+      "Components": {},
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 239.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "2",
+          "variantsName": "5 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 1000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "3",
+          "variantsName": "10 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 2000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "4",
+          "variantsName": "25 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 4500.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [],
+      "Support": {
+        "phone": "+91-9876543210",
+        "whatsapp": "+91-9876543210",
+        "email": "support@example.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-18",
+      "inventoryId": "INV-18",
+      "sellerid": "SELLER002",
+      "ProductName": "Clinic Plus Shampoo 180ml",
+      "SellingPrice": 95,
+      "OfferPrice": "Rs. 115.00",
+      "DiscountPercent": "0%",
+      "Image": "https://th.bing.com/th/id/OIP.-Lvug476pRO-N0gqHvIMmwHaHa?w=196&h=196&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+      "Category": {
+        "CategoryId": "PC002",
+        "CategoryName": "HAIR CARE"
+      },
+      "Brand": "Clinic Plus",
+      "Size": "180ml",
+      "StockStatus": "In Stock",
+      "AvilableQty": 40,
+      "Batch_Id": "BATCH-18",
+      "batch_unit": "ml",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://th.bing.com/th/id/OIP.-Lvug476pRO-N0gqHvIMmwHaHa?w=196&h=196&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+        "alt": "Clinic Plus Shampoo 180ml",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://th.bing.com/th/id/OIP.-Lvug476pRO-N0gqHvIMmwHaHa?w=196&h=196&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+          "alt": "Clinic Plus Shampoo 180ml View 1",
+          "order": 1
+        },
+        {
+          "url": "https://th.bing.com/th/id/OIP.-Lvug476pRO-N0gqHvIMmwHaHa?w=196&h=196&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+          "alt": "Clinic Plus Shampoo 180ml View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Premium quality Clinic Plus Shampoo 180ml",
+        "Freshly packed product",
+        "Suitable for daily cooking"
+      ],
+      "Specifications": {
+        "brand": "Clinic Plus",
+        "category": "HAIR CARE",
+        "batch_unit": "ml",
+        "size": "180ml"
+      },
+      "Components": {},
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 239.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "2",
+          "variantsName": "5 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 1000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "3",
+          "variantsName": "10 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 2000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "4",
+          "variantsName": "25 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 4500.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [],
+      "Support": {
+        "phone": "+91-9876543210",
+        "whatsapp": "+91-9876543210",
+        "email": "support@example.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-19",
+      "inventoryId": "INV-19",
+      "sellerid": "SELLER002",
+      "ProductName": "Colgate Strong Teeth 100g",
+      "SellingPrice": 55,
+      "OfferPrice": "Rs. 65.00",
+      "DiscountPercent": "0%",
+      "Image": "https://www.arogga.com/_next/image?url=https%3A%2F%2Fcdn2.arogga.com%2FeyJidWNrZXQiOiJhcm9nZ2EiLCJrZXkiOiJQcm9kdWN0LXBfaW1hZ2VzXC8zMzAyNlwvMzMwMjYtQ29sZ2F0ZS1TdHJvbmctVGVldGgtRGVudGFsLUNyZWFtLVRvb3RocGFzdGUtMTAwZy1xaDF0YnMud2VicCIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6MTAwMCwiaGVpZ2h0IjoxMDAwLCJmaXQiOiJvdXRzaWRlIn0sIm92ZXJsYXlXaXRoIjp7ImJ1Y2tldCI6ImFyb2dnYSIsImtleSI6Im1pc2NcL3dtLnBuZyIsImFscGhhIjo5MH19fQ%3D%3D&w=1280&q=75",
+      "Category": {
+        "CategoryId": "PC003",
+        "CategoryName": "ORAL CARE"
+      },
+      "Brand": "Colgate",
+      "Size": "100g",
+      "StockStatus": "In Stock",
+      "AvilableQty": 70,
+      "Batch_Id": "BATCH-19",
+      "batch_unit": "g",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://www.arogga.com/_next/image?url=https%3A%2F%2Fcdn2.arogga.com%2FeyJidWNrZXQiOiJhcm9nZ2EiLCJrZXkiOiJQcm9kdWN0LXBfaW1hZ2VzXC8zMzAyNlwvMzMwMjYtQ29sZ2F0ZS1TdHJvbmctVGVldGgtRGVudGFsLUNyZWFtLVRvb3RocGFzdGUtMTAwZy1xaDF0YnMud2VicCIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6MTAwMCwiaGVpZ2h0IjoxMDAwLCJmaXQiOiJvdXRzaWRlIn0sIm92ZXJsYXlXaXRoIjp7ImJ1Y2tldCI6ImFyb2dnYSIsImtleSI6Im1pc2NcL3dtLnBuZyIsImFscGhhIjo5MH19fQ%3D%3D&w=1280&q=75",
+        "alt": "Colgate Strong Teeth 100g",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://www.arogga.com/_next/image?url=https%3A%2F%2Fcdn2.arogga.com%2FeyJidWNrZXQiOiJhcm9nZ2EiLCJrZXkiOiJQcm9kdWN0LXBfaW1hZ2VzXC8zMzAyNlwvMzMwMjYtQ29sZ2F0ZS1TdHJvbmctVGVldGgtRGVudGFsLUNyZWFtLVRvb3RocGFzdGUtMTAwZy1xaDF0YnMud2VicCIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6MTAwMCwiaGVpZ2h0IjoxMDAwLCJmaXQiOiJvdXRzaWRlIn0sIm92ZXJsYXlXaXRoIjp7ImJ1Y2tldCI6ImFyb2dnYSIsImtleSI6Im1pc2NcL3dtLnBuZyIsImFscGhhIjo5MH19fQ%3D%3D&w=1280&q=75",
+          "alt": "Colgate Strong Teeth 100g View 1",
+          "order": 1
+        },
+        {
+          "url": "https://www.arogga.com/_next/image?url=https%3A%2F%2Fcdn2.arogga.com%2FeyJidWNrZXQiOiJhcm9nZ2EiLCJrZXkiOiJQcm9kdWN0LXBfaW1hZ2VzXC8zMzAyNlwvMzMwMjYtQ29sZ2F0ZS1TdHJvbmctVGVldGgtRGVudGFsLUNyZWFtLVRvb3RocGFzdGUtMTAwZy1xaDF0YnMud2VicCIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6MTAwMCwiaGVpZ2h0IjoxMDAwLCJmaXQiOiJvdXRzaWRlIn0sIm92ZXJsYXlXaXRoIjp7ImJ1Y2tldCI6ImFyb2dnYSIsImtleSI6Im1pc2NcL3dtLnBuZyIsImFscGhhIjo5MH19fQ%3D%3D&w=1280&q=75",
+          "alt": "Colgate Strong Teeth 100g View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Premium quality Colgate Strong Teeth 100g",
+        "Freshly packed product",
+        "Suitable for daily cooking"
+      ],
+      "Specifications": {
+        "brand": "Colgate",
+        "category": "ORAL CARE",
+        "batch_unit": "g",
+        "size": "100g"
+      },
+      "Components": {},
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 239.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "2",
+          "variantsName": "5 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 1000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "3",
+          "variantsName": "10 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 2000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "4",
+          "variantsName": "25 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 4500.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [],
+      "Support": {
+        "phone": "+91-9876543210",
+        "whatsapp": "+91-9876543210",
+        "email": "support@example.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-20",
+      "inventoryId": "INV-20",
+      "sellerid": "SELLER002",
+      "ProductName": "Sensodyne Fresh Mint 75g",
+      "SellingPrice": 99,
+      "OfferPrice": "Rs. 119.00",
+      "DiscountPercent": "0%",
+      "Image": "https://www.pobara.com/images/thumbs/0010830_sensodyne-fresh-mint-toothpaste-75g_510.jpeg",
+      "Category": {
+        "CategoryId": "PC003",
+        "CategoryName": "ORAL CARE"
+      },
+      "Brand": "Sensodyne",
+      "Size": "75g",
+      "StockStatus": "In Stock",
+      "AvilableQty": 45,
+      "Batch_Id": "BATCH-20",
+      "batch_unit": "g",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://www.pobara.com/images/thumbs/0010830_sensodyne-fresh-mint-toothpaste-75g_510.jpeg",
+        "alt": "Sensodyne Fresh Mint 75g",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://www.pobara.com/images/thumbs/0010830_sensodyne-fresh-mint-toothpaste-75g_510.jpeg",
+          "alt": "Sensodyne Fresh Mint 75g View 1",
+          "order": 1
+        },
+        {
+          "url": "https://www.pobara.com/images/thumbs/0010830_sensodyne-fresh-mint-toothpaste-75g_510.jpeg",
+          "alt": "Sensodyne Fresh Mint 75g View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Premium quality Sensodyne Fresh Mint 75g",
+        "Freshly packed product",
+        "Suitable for daily cooking"
+      ],
+      "Specifications": {
+        "brand": "Sensodyne",
+        "category": "ORAL CARE",
+        "batch_unit": "g",
+        "size": "75g"
+      },
+      "Components": {},
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 239.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "2",
+          "variantsName": "5 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 1000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "3",
+          "variantsName": "10 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 2000.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        },
+        {
+          "variantsid": "4",
+          "variantsName": "25 kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 4500.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 199,
+          "AvilableQty": 10,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [],
+      "Support": {
+        "phone": "+91-9876543210",
+        "whatsapp": "+91-9876543210",
+        "email": "support@example.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-21",
+      "inventoryId": "INV-21",
+      "sellerid": "SELLER002",
+      "ProductName": "RAW RICE Value Pack",
+      "SellingPrice": 75,
+      "OfferPrice": "Rs. 218.00",
+      "DiscountPercent": "15%",
+      "Image": "https://unsplash.com/photos/white-rice-grains-on-brown-wooden-table--LdilhDx3sk",
+      "Category": {
+        "CategoryId": "R003",
+        "CategoryName": "RAW RICE"
+      },
+      "Brand": "TATA",
+      "Size": "1kg",
+      "StockStatus": "In Stock",
+      "AvilableQty": 100,
+      "Batch_Id": "BATCH-1778095859043-21",
+      "batch_unit": "kg",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.043Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://unsplash.com/photos/white-rice-grains-on-brown-wooden-table--LdilhDx3sk",
+        "alt": "RAW RICE Value Pack",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://unsplash.com/photos/white-rice-grains-on-brown-wooden-table--LdilhDx3sk",
+          "alt": "RAW RICE Value Pack View 1",
+          "order": 1
+        },
+        {
+          "url": "https://unsplash.com/photos/white-rice-grains-on-brown-wooden-table--LdilhDx3sk",
+          "alt": "RAW RICE Value Pack View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Premium quality RAW RICE Value Pack",
+        "Freshly packed product",
+        "Suitable for daily cooking"
+      ],
+      "Specifications": {
+        "brand": "TATA",
+        "category": "RAW RICE",
+        "batch_unit": "kg",
+        "size": "1kg"
+      },
+      "Components": {},
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 218.00",
+          "DiscountPercent": "15%",
+          "SellingPrice": 75,
+          "AvilableQty": 100,
+          "Brand": "TATA"
+        }
+      ],
+      "SimilarProducts": [],
+      "Support": {
+        "phone": "+91-9876543210",
+        "whatsapp": "+91-9876543210",
+        "email": "support@example.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-21",
+      "inventoryId": "INV-21",
+      "sellerid": "SELLER002",
+      "ProductName": "Surf Excel Easy Wash 1kg",
+      "SellingPrice": 125,
+      "OfferPrice": "Rs. 145.00",
+      "DiscountPercent": "0%",
+      "Image": "https://tse3.mm.bing.net/th/id/OIP.k-wrRlrr1zk-pqe2s6VT4wHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+      "Category": {
+        "CategoryId": "H001",
+        "CategoryName": "DETERGENTS"
+      },
+      "Brand": "Surf Excel",
+      "Size": "1kg",
+      "StockStatus": "In Stock",
+      "AvilableQty": 50,
+      "Batch_Id": "BATCH-21",
+      "batch_unit": "kg",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://tse3.mm.bing.net/th/id/OIP.k-wrRlrr1zk-pqe2s6VT4wHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+        "alt": "Surf Excel Easy Wash 1kg",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://tse3.mm.bing.net/th/id/OIP.k-wrRlrr1zk-pqe2s6VT4wHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+          "alt": "Surf Excel Easy Wash 1kg View 1",
+          "order": 1
+        },
+        {
+          "url": "https://tse3.mm.bing.net/th/id/OIP.k-wrRlrr1zk-pqe2s6VT4wHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+          "alt": "Surf Excel Easy Wash 1kg View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Premium quality Surf Excel Easy Wash 1kg",
+        "Freshly packed product",
+        "Suitable for daily cooking"
+      ],
+      "Specifications": {
+        "brand": "Surf Excel",
+        "category": "DETERGENTS",
+        "batch_unit": "kg",
+        "size": "1kg"
+      },
+      "Components": {},
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 145.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 125,
+          "AvilableQty": 50,
+          "Brand": "Surf Excel"
+        }
+      ],
+      "SimilarProducts": [],
+      "Support": {
+        "phone": "+91-9876543210",
+        "whatsapp": "+91-9876543210",
+        "email": "support@example.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-22",
+      "inventoryId": "INV-22",
+      "sellerid": "SELLER002",
+      "ProductName": "Ariel Matic Front Load 1kg",
+      "SellingPrice": 165,
+      "OfferPrice": "Rs. 185.00",
+      "DiscountPercent": "0%",
+      "Image": "https://tse4.mm.bing.net/th/id/OIP.a65SKY8ck2IGB8z7QdhmpgAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+      "Category": {
+        "CategoryId": "H001",
+        "CategoryName": "DETERGENTS"
+      },
+      "Brand": "Swamy's",
+      "Size": "1kg",
+      "StockStatus": "In Stock",
+      "AvilableQty": 35,
+      "Batch_Id": "BATCH-22",
+      "batch_unit": "kg",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://tse4.mm.bing.net/th/id/OIP.a65SKY8ck2IGB8z7QdhmpgAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+        "alt": "Ariel Matic Front Load 1kg",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://tse4.mm.bing.net/th/id/OIP.a65SKY8ck2IGB8z7QdhmpgAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+          "alt": "Ariel Matic Front Load 1kg View 1",
+          "order": 1
+        },
+        {
+          "url": "https://tse4.mm.bing.net/th/id/OIP.a65SKY8ck2IGB8z7QdhmpgAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+          "alt": "Ariel Matic Front Load 1kg View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Premium quality Ariel Matic Front Load 1kg",
+        "Freshly packed product",
+        "Suitable for daily cooking"
+      ],
+      "Specifications": {
+        "brand": "Swamy's",
+        "category": "DETERGENTS",
+        "batch_unit": "kg",
+        "size": "1kg"
+      },
+      "Components": {},
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1kg",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 185.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 165,
+          "AvilableQty": 35,
+          "Brand": "Swamy's"
+        }
+      ],
+      "SimilarProducts": [],
+      "Support": {
+        "phone": "+91-9876543210",
+        "whatsapp": "+91-9876543210",
+        "email": "support@example.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-23",
+      "inventoryId": "INV-23",
+      "sellerid": "SELLER002",
+      "ProductName": "Vim Dishwash Liquid 500ml",
+      "SellingPrice": 55,
+      "OfferPrice": "Rs. 65.00",
+      "DiscountPercent": "0%",
+      "Image": "https://media.wishque.com/data/images/products/7362/55514597_431632884674_0.28434900-1605672228.png",
+      "Category": {
+        "CategoryId": "H002",
+        "CategoryName": "DISHWASH"
+      },
+      "Brand": "Vim",
+      "Size": "500ml",
+      "StockStatus": "In Stock",
+      "AvilableQty": 80,
+      "Batch_Id": "BATCH-23",
+      "batch_unit": "ml",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://media.wishque.com/data/images/products/7362/55514597_431632884674_0.28434900-1605672228.png",
+        "alt": "Vim Dishwash Liquid 500ml",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://media.wishque.com/data/images/products/7362/55514597_431632884674_0.28434900-1605672228.png",
+          "alt": "Vim Dishwash Liquid 500ml View 1",
+          "order": 1
+        },
+        {
+          "url": "https://media.wishque.com/data/images/products/7362/55514597_431632884674_0.28434900-1605672228.png",
+          "alt": "Vim Dishwash Liquid 500ml View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Premium quality Vim Dishwash Liquid 500ml",
+        "Freshly packed product",
+        "Suitable for daily cooking"
+      ],
+      "Specifications": {
+        "brand": "Vim",
+        "category": "DISHWASH",
+        "batch_unit": "ml",
+        "size": "500ml"
+      },
+      "Components": {},
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "500ml",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 65.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 55,
+          "AvilableQty": 80,
+          "Brand": "Vim"
+        }
+      ],
+      "SimilarProducts": [],
+      "Support": {
+        "phone": "+91-9876543210",
+        "whatsapp": "+91-9876543210",
+        "email": "support@example.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-24",
+      "inventoryId": "INV-24",
+      "sellerid": "SELLER002",
+      "ProductName": "Harpic Bathroom Cleaner 500ml",
+      "SellingPrice": 95,
+      "OfferPrice": "Rs. 115.00",
+      "DiscountPercent": "0%",
+      "Image": "https://tse3.mm.bing.net/th/id/OIP.ez9rj8-AkDFOrzB83R9Y6wHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+      "Category": {
+        "CategoryId": "H003",
+        "CategoryName": "CLEANERS"
+      },
+      "Brand": "Harpic",
+      "Size": "500ml",
+      "StockStatus": "In Stock",
+      "AvilableQty": 45,
+      "Batch_Id": "BATCH-24",
+      "batch_unit": "ml",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://tse3.mm.bing.net/th/id/OIP.ez9rj8-AkDFOrzB83R9Y6wHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+        "alt": "Harpic Bathroom Cleaner 500ml",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://tse3.mm.bing.net/th/id/OIP.ez9rj8-AkDFOrzB83R9Y6wHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+          "alt": "Harpic Bathroom Cleaner 500ml View 1",
+          "order": 1
+        },
+        {
+          "url": "https://tse3.mm.bing.net/th/id/OIP.ez9rj8-AkDFOrzB83R9Y6wHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+          "alt": "Harpic Bathroom Cleaner 500ml View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Premium quality Harpic Bathroom Cleaner 500ml",
+        "Freshly packed product",
+        "Suitable for daily cooking"
+      ],
+      "Specifications": {
+        "brand": "Harpic",
+        "category": "CLEANERS",
+        "batch_unit": "ml",
+        "size": "500ml"
+      },
+      "Components": {},
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "500ml",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 115.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 95,
+          "AvilableQty": 45,
+          "Brand": "Harpic"
+        }
+      ],
+      "SimilarProducts": [],
+      "Support": {
+        "phone": "+91-9876543210",
+        "whatsapp": "+91-9876543210",
+        "email": "support@example.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    },
+    {
+      "ProductId": "PROD-25",
+      "inventoryId": "INV-25",
+      "sellerid": "SELLER002",
+      "ProductName": "Lizol Floor Cleaner 1L",
+      "SellingPrice": 145,
+      "OfferPrice": "Rs. 165.00",
+      "DiscountPercent": "0%",
+      "Image": "https://rokbucket.rokomari.io/ProductNew20190903/260X372/Lizol_Floor_Cleaner_1L_Citrus_3240688-Lizol-38944-328500.jpg",
+      "Category": {
+        "CategoryId": "H003",
+        "CategoryName": "CLEANERS"
+      },
+      "Brand": "Lizol",
+      "Size": "1L",
+      "StockStatus": "In Stock",
+      "AvilableQty": 38,
+      "Batch_Id": "BATCH-25",
+      "batch_unit": "L",
+      "Gender": null,
+      "Speed": null,
+      "isService": false,
+      "addons": null,
+      "isAttributePresent": false,
+      "CreatedAt": "2026-05-06T19:30:59.042Z",
+      "availability": {
+        "in_stock": true,
+        "delivery_check": true
+      },
+      "InStock": true,
+      "DefaultImage": {
+        "url": "https://rokbucket.rokomari.io/ProductNew20190903/260X372/Lizol_Floor_Cleaner_1L_Citrus_3240688-Lizol-38944-328500.jpg",
+        "alt": "Lizol Floor Cleaner 1L",
+        "order": 1
+      },
+      "SubImages": [
+        {
+          "url": "https://rokbucket.rokomari.io/ProductNew20190903/260X372/Lizol_Floor_Cleaner_1L_Citrus_3240688-Lizol-38944-328500.jpg",
+          "alt": "Lizol Floor Cleaner 1L View 1",
+          "order": 1
+        },
+        {
+          "url": "https://rokbucket.rokomari.io/ProductNew20190903/260X372/Lizol_Floor_Cleaner_1L_Citrus_3240688-Lizol-38944-328500.jpg",
+          "alt": "Lizol Floor Cleaner 1L View 2",
+          "order": 2
+        }
+      ],
+      "Highlights": [
+        "Premium quality Lizol Floor Cleaner 1L",
+        "Freshly packed product",
+        "Suitable for daily cooking"
+      ],
+      "Specifications": {
+        "brand": "Lizol",
+        "category": "CLEANERS",
+        "batch_unit": "L",
+        "size": "1L"
+      },
+      "Components": {},
+      "variants": [
+        {
+          "variantsid": "1",
+          "variantsName": "1L",
+          "StockStatus": "In Stock",
+          "OfferPrice": "Rs. 165.00",
+          "DiscountPercent": "0%",
+          "SellingPrice": 145,
+          "AvilableQty": 38,
+          "Brand": "Lizol"
+        }
+      ],
+      "SimilarProducts": [],
+      "Support": {
+        "phone": "+91-9876543210",
+        "whatsapp": "+91-9876543210",
+        "email": "support@example.com"
+      },
+      "UpdatedAt": "2026-05-20T00:00:00Z"
+    }
+  ]
+}

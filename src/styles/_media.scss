@@ -1,0 +1,258 @@
+// =============================================================================
+// MEDIA QUERY MIXINS
+// =============================================================================
+// Modern SCSS media query system for Angular 19
+// Compatible with Web, Capacitor Android/iOS
+
+@use 'breakpoints' as *;
+
+// =============================================================================
+// CORE RESPONSIVE MIXINS
+// =============================================================================
+
+// Applies styles for viewports at or above the specified breakpoint
+// Usage: @include up(md) { ... }
+@mixin up($breakpoint) {
+  $min: breakpoint($breakpoint);
+  
+  @if $min == 0 {
+    @content;
+  } @else {
+    @media (min-width: $min) {
+      @content;
+    }
+  }
+}
+
+// Applies styles for viewports below the specified breakpoint
+// Usage: @include down(md) { ... }
+@mixin down($breakpoint) {
+  $max: breakpoint($breakpoint);
+  
+  @if $max == 0 {
+    @error "Cannot use 'down' with xs breakpoint. Use 'only(xs)' instead.";
+  }
+  
+  // Subtract 0.02px to avoid overlap with 'up' mixin
+  @media (max-width: calc($max - 0.02px)) {
+    @content;
+  }
+}
+
+// Applies styles for viewports between two breakpoints
+// Usage: @include between(sm, lg) { ... }
+@mixin between($min-breakpoint, $max-breakpoint) {
+  $min: breakpoint($min-breakpoint);
+  $max: breakpoint($max-breakpoint);
+  
+  @if $max <= $min {
+    @error "Max breakpoint '#{$max-breakpoint}' must be larger than min breakpoint '#{$min-breakpoint}'";
+  }
+  
+  @if $min == 0 {
+    @media (max-width: calc($max - 0.02px)) {
+      @content;
+    }
+  } @else {
+    @media (min-width: $min) and (max-width: calc($max - 0.02px)) {
+      @content;
+    }
+  }
+}
+
+// Applies styles for a single breakpoint range only
+// Usage: @include only(md) { ... }
+@mixin only($breakpoint) {
+  $next: breakpoint-next($breakpoint);
+  
+  @if $next {
+    @include between($breakpoint, $next) {
+      @content;
+    }
+  } @else {
+    @include up($breakpoint) {
+      @content;
+    }
+  }
+}
+
+// =============================================================================
+// SEMANTIC ALIASES (for better readability)
+// =============================================================================
+
+// Mobile-first approach: xs to sm-1
+@mixin mobile-only {
+  @include down(sm) {
+    @content;
+  }
+}
+
+// Tablet range: sm to md-1
+@mixin tablet-only {
+  @include between(sm, md) {
+    @content;
+  }
+}
+
+// Desktop and above: md+
+@mixin desktop {
+  @include up(md) {
+    @content;
+  }
+}
+
+// Large desktop: lg+
+@mixin desktop-large {
+  @include up(lg) {
+    @content;
+  }
+}
+
+// Mobile and tablet (below desktop)
+@mixin mobile-tablet {
+  @include down(md) {
+    @content;
+  }
+}
+
+// =============================================================================
+// ORIENTATION MIXINS
+// =============================================================================
+
+// Portrait orientation
+// Usage: @include portrait { ... }
+@mixin portrait {
+  @media (orientation: portrait) {
+    @content;
+  }
+}
+
+// Landscape orientation
+// Usage: @include landscape { ... }
+@mixin landscape {
+  @media (orientation: landscape) {
+    @content;
+  }
+}
+
+// Combine breakpoint with orientation
+// Usage: @include portrait-up(md) { ... }
+@mixin portrait-up($breakpoint) {
+  $min: breakpoint($breakpoint);
+  
+  @if $min == 0 {
+    @include portrait {
+      @content;
+    }
+  } @else {
+    @media (min-width: $min) and (orientation: portrait) {
+      @content;
+    }
+  }
+}
+
+@mixin landscape-up($breakpoint) {
+  $min: breakpoint($breakpoint);
+  
+  @if $min == 0 {
+    @include landscape {
+      @content;
+    }
+  } @else {
+    @media (min-width: $min) and (orientation: landscape) {
+      @content;
+    }
+  }
+}
+
+// =============================================================================
+// HIGH-DPI (RETINA) MIXINS
+// =============================================================================
+
+// Retina displays (2x density)
+// Usage: @include retina { ... }
+@mixin retina {
+  @media (-webkit-min-device-pixel-ratio: 2),
+         (min-resolution: 192dpi),
+         (min-resolution: 2dppx) {
+    @content;
+  }
+}
+
+// High-density displays (1.5x and above)
+@mixin high-dpi {
+  @media (-webkit-min-device-pixel-ratio: 1.5),
+         (min-resolution: 144dpi),
+         (min-resolution: 1.5dppx) {
+    @content;
+  }
+}
+
+// Ultra-high density (3x, for latest mobile devices)
+@mixin retina-3x {
+  @media (-webkit-min-device-pixel-ratio: 3),
+         (min-resolution: 288dpi),
+         (min-resolution: 3dppx) {
+    @content;
+  }
+}
+
+// =============================================================================
+// MOBILE SAFE AREA (iOS NOTCH SUPPORT)
+// =============================================================================
+
+// Apply safe area padding for iOS devices with notches
+// Usage: @include safe-area-padding { ... }
+@mixin safe-area-padding {
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+}
+
+// Individual safe area helpers
+@mixin safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+@mixin safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@mixin safe-area-left {
+  padding-left: env(safe-area-inset-left);
+}
+
+@mixin safe-area-right {
+  padding-right: env(safe-area-inset-right);
+}
+
+// =============================================================================
+// UTILITY MIXINS
+// =============================================================================
+
+// Hide element at specific breakpoint and above
+// Usage: @include hide-up(md) { ... }
+@mixin hide-up($breakpoint) {
+  @include up($breakpoint) {
+    display: none !important;
+  }
+}
+
+// Hide element below specific breakpoint
+// Usage: @include hide-down(md) { ... }
+@mixin hide-down($breakpoint) {
+  @include down($breakpoint) {
+    display: none !important;
+  }
+}
+
+// Show element only at specific breakpoint range
+// Usage: @include show-only(md) { ... }
+@mixin show-only($breakpoint) {
+  display: none !important;
+  
+  @include only($breakpoint) {
+    display: block !important;
+  }
+}

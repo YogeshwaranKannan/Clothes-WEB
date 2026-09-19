@@ -1,0 +1,10 @@
+.admin-layout {
+  display: flex;
+  height: calc(100vh - 60px); /* minus header */
+}
+
+.admin-content {
+  flex: 1;
+  padding: 1rem;
+  overflow: auto;
+}

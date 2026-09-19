@@ -1,0 +1,17 @@
+<div class="success-container">
+  <h2>Order placed successfully!</h2>
+
+  <p>
+    Ref No:
+    <span class="ref-link">
+      {{ refno }}
+    </span>
+  </p>
+
+  <div class="loading-section" *ngIf="loading">
+    <div class="spinner"></div>
+    <p class="wait-text">Fetching order details, please wait...</p>
+  </div>
+
+   
+</div>

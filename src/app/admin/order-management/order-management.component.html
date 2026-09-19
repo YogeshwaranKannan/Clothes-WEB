@@ -1,0 +1,31 @@
+<div class="orders-layout">
+  <section class="orders-content">
+    <app-grid
+      [config]="gridConfig"
+       (viewDetail)="onViewDetail($event)"
+      [features]="features"
+      [labels]="labels"
+      (cellAction)="onGridCellAction($event)"   
+      (saveRequested)="onSaveFromGrid()"
+      (resetRequested)="onResetFromGrid()"
+      (changeSet)="onGridChangeSet($event)"
+      (rowEdited)="onRowEdited($event)"
+      (rowDeleted)="onRowDeleted($event)"
+      (rowAdded)="onRowAdded($event)"
+      (rowReverted)="onRowReverted($event)"
+    ></app-grid>
+  </section>
+</div>
+
+<app-drawer
+  [state]="drawerState"
+  (stateChange)="onDrawerChange($event)"
+>
+  <div class="drawer-content">
+    <app-seller-order-details
+      [orderId]="selectedOrderId"
+      (close)="drawerState = DrawerState.Hidden"
+    ></app-seller-order-details>
+  </div>
+</app-drawer>
+

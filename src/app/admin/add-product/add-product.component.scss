@@ -1,0 +1,260 @@
+.product-detail {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+
+  /* ✅ Top toolbar rectangle */
+  .top-toolbar {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;            /* single row */
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  }
+
+  .toolbar-left {
+    flex: 1;
+    max-width: 420px;
+    min-width: 260px;
+  }
+
+  .toolbar-right {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn.small {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.85rem;
+    background: #eee;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  /* Layout */
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 460px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  /* Viewer */
+  .viewer-frame {
+    position: relative;
+  }
+
+  .image-controls-top {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 8px;
+    background: rgba(255,255,255,0.88);
+    padding: 6px;
+    border-radius: 8px;
+    z-index: 5;
+  }
+
+  .viewer-stage {
+    width: 100%;
+    height: 520px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    perspective: 1000px;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .auto-wrap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: center center;
+  }
+
+  @keyframes spinZ {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .auto-wrap.spinning {
+    animation: spinZ 3s linear infinite;
+  }
+
+  .manual-wrap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: center center;
+    transition: transform 250ms ease;
+  }
+
+  /* Flip card (safe flip so it doesn't vanish) */
+  .flip-card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+  }
+
+  .flip-face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backface-visibility: hidden;
+  }
+
+  .flip-back {
+    transform: rotateY(180deg);
+  }
+
+  @keyframes flipY360Safe {
+    0%   { transform: rotateY(0deg) scaleX(1); }
+    25%  { transform: rotateY(90deg) scaleX(0.20); }
+    50%  { transform: rotateY(180deg) scaleX(1); }
+    75%  { transform: rotateY(270deg) scaleX(0.20); }
+    100% { transform: rotateY(360deg) scaleX(1); }
+  }
+
+  .flip-card.flipping {
+    animation: flipY360Safe 3.2s ease-in-out;
+  }
+
+  .viewer-image {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 10px;
+    user-select: none;
+  }
+
+  /* Thumbs */
+  .thumbs {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 10px 2px 0;
+    margin-top: 10px;
+  }
+
+  .thumbnail {
+    width: 78px;
+    height: 78px;
+    flex: 0 0 auto;
+    object-fit: contain; /* not cut left/right */
+    background: #fff;
+    padding: 6px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 150ms ease;
+  }
+
+  .thumbnail:hover { border-color: #0b5ed7; }
+  .thumbnail.active { border-color: #2563eb; }
+
+  /* Upload under thumbs */
+  .media-actions {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+ 
+  .upload-btn:hover {
+    background: #0514dd;
+  }
+
+  .upload-hint {
+    color: #6c757d;
+    font-size: 0.82rem;
+  }
+
+  /* Right side */
+  .info {
+    max-width: 720px;
+  }
+
+  /* Labels always visible */
+  .field-row {
+    display: grid;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .field-row label {
+    font-size: 0.82rem;
+    color: #6c757d;
+    font-weight: 600;
+  }
+
+  input, select, textarea {
+    padding: 0.45rem 0.55rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* View mode boxes */
+  .field-box {
+    min-height: 40px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #fff;
+    white-space: pre-wrap;
+  }
+
+  .field-box.textarea-like {
+    min-height: 90px;
+    background: #fafafa;
+  }
+
+  .field-box.empty {
+    background: #fafafa;
+  }
+
+  @media (max-width: 900px) {
+    .detail-grid {
+      grid-template-columns: 1fr;
+    }
+    .viewer-stage {
+      height: 440px;
+    }
+    .toolbar-left {
+      max-width: 100%;
+    }
+  }
+}

@@ -1,0 +1,35 @@
+<div class="menu-container" [class.collapsed]="collapsed">
+
+  <!-- Header -->
+  <div class="menu-header">
+    <span class="title" *ngIf="!collapsed">Menu</span>
+
+    <button class="collapse-btn" (click)="toggleSidebar()">
+      {{ collapsed ? '›' : '‹' }}
+    </button>
+  </div>
+
+  <!-- Menu -->
+  <div class="menu-item" *ngFor="let item of menu">
+
+    <div class="menu-parent" (click)="toggle(item)">
+      <span class="left">
+        <span class="icon">{{ item.icon }}</span>
+        <span class="label" *ngIf="!collapsed">{{ item.label }}</span>
+      </span>
+
+      <span class="chevron" *ngIf="!collapsed">
+        {{ item.expanded ? '˄' : '˅' }}
+      </span>
+    </div>
+
+    <div class="submenu" *ngIf="item.expanded && !collapsed">
+     <div class="submenu-item"
+     *ngFor="let child of item.children"
+     (click)="select(child.route)">
+  {{ child.label }}
+</div>
+    </div>
+
+  </div>
+</div>

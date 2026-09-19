@@ -1,0 +1,38 @@
+<div class="pd-root" (click)="$event.stopPropagation()">
+
+    <button type="button" class="pd-toggle" (click)="toggleOpen($event)" aria-haspopup="true" [attr.aria-expanded]="isOpen">
+    <!-- <span class="pd-icon">📍</span> -->
+    <span class="pd-label track-label">{{ label }}</span>
+    <span class="pd-caret">▾</span>
+  </button>
+
+  <div class="pd-dropdown" *ngIf="isOpen" role="dialog" aria-label="Choose Delivery or Pickup">
+
+      <div class="pd-tabs">
+        <button type="button" class="pd-tab" [class.active]="activeTab === 'DELIVERY'" (click)="openFor('DELIVERY', $event)">Delivery Area</button>
+        <button type="button" class="pd-tab" [class.active]="activeTab === 'PICKUP'" (click)="openFor('PICKUP', $event)">Pickup Points</button>
+      </div>
+
+      <div class="pd-list">
+        <div *ngIf="activeTab === 'DELIVERY'">
+          <div class="pd-search">
+            <input type="text" [(ngModel)]="searchDelivery" placeholder="Search delivery (area or pincode)" />
+          </div>
+          <div *ngFor="let item of filteredDelivery" class="pd-item"  (click)="select(item)">
+            <div class="pd-item-title">{{ item.address.city }} - {{ item.address.pincode }}</div>
+          </div>
+        </div>
+
+        <div *ngIf="activeTab === 'PICKUP'">
+          <div class="pd-search">
+            <input type="text" [(ngModel)]="searchPickup" placeholder="Search pickup (area or pincode)" />
+          </div>
+          <div *ngFor="let item of filteredPickup" class="pd-item" [class.selected]="isSelected(item)" (click)="select(item)">
+            <div class="pd-item-title">{{ item.address.areaName }} - {{ item.address.pincode }}</div>
+          </div>
+        </div>
+      </div>
+
+  </div>
+
+</div>

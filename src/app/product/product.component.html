@@ -1,0 +1,480 @@
+ <app-loading-screen
+  [show]="isLoading"
+  [fullScreen]="false"
+  message="Loading Product..."
+></app-loading-screen>
+<div class="product-detail container py-4">
+  <ng-container *ngIf="product$ | async as p; else noProduct">
+    <!-- ── Page header — Row 1: back (left) + search icon (right), unchanged.
+       Row 2: product title, its own full-width centered row. ── -->
+    <header class="page-header">
+      <div class="page-header__glow"></div>
+
+      <!-- Row 1 — untouched: same elements, same click handlers -->
+      <div class="page-header__content">
+        <div class="page-header__left">
+          <button class="back" (click)="goBack()">‹ Back</button>
+        </div>
+        <div class="page-header__right">
+          <!-- Mobile-only — shown by default (isOpen$ starts false). Tapping
+             it expands <app-product-suggest> in the navbar via
+             MobileSearchToggleService; this button hides itself once that
+             happens. -->
+          <button
+            type="button"
+            class="mobile-search-toggle-btn"
+            *ngIf="!(mobileSearchToggle.isOpen$ | async)"
+            aria-label="Open search"
+            (click)="onMobileSearchIconClick($event)"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              [attr.aria-hidden]="true"
+            >
+              <circle
+                cx="11"
+                cy="11"
+                r="7"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <line
+                x1="21"
+                y1="21"
+                x2="16.65"
+                y2="16.65"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <!-- Row 2 — title, centered, full width -->
+    </header>
+
+    <div class="page-header__title-row">
+      <h1 class="page-header__title">{{ p.ProductName | uppercase }}</h1>
+    </div>
+    <div class="detail-grid">
+      <div class="media">
+        <!-- product.component.html (insert in the media/image area) -->
+        <div class="viewer-frame">
+          <!-- Controls floating at top-right of the image -->
+          <!-- <div class="image-controls-top">
+    <button class="btn small" (click)="rotate90()">Rotate 90°</button>
+    <button class="btn small" (click)="toggleAutoRotate()">
+      {{ autoRotate ? 'Stop' : 'Auto Rotate' }}
+    </button>
+    <button class="btn small" (click)="flipOnce()">Flip</button>
+    <button class="btn small" (click)="resetRotation()">Reset</button>
+  </div> -->
+
+          <!-- Discount badge — inside viewer-frame so .viewer-frame .discount CSS applies -->
+          <span class="discount" *ngIf="+(p.OfferPrice ?? 0) > 0"
+            >- {{ p.DiscountPercent }}%</span
+          >
+          <!-- Stage keeps size; inner wrappers handle animations/transforms -->
+          <div class="viewer-stage">
+            <!-- When auto-rotating, apply spinning class; else manual transform -->
+            <div
+              class="auto-wrap"
+              [class.spinning]="autoRotate"
+              [style.transform]="manualRotateTransform"
+            >
+              <div class="manual-wrap">
+                <!-- Flip container (3D) -->
+                <div class="flip-card" [class.flipping]="isFlipping">
+                  <!-- Front face -->
+                  <div class="flip-face flip-front">
+                    <img
+                      class="viewer-image"
+                      *ngIf="selectedImage"
+                      [src]="selectedImage"
+                      [alt]="product?.ProductName || 'Product image'"
+                    />
+                  </div>
+                  <!-- Back face (optional: reuse same image or a placeholder) -->
+                  <div class="flip-face flip-back">
+                    <img
+                      class="viewer-image"
+                      *ngIf="selectedImage"
+                      [src]="selectedImage"
+                      [alt]="product?.ProductName || 'Product image (back)'"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- your existing thumbnails can stay as-is -->
+          <!-- Example: -->
+
+          <ng-container *ngIf="product$ | async as p">
+            <div class="thumbs" *ngIf="(p?.SubImages?.length || 0) > 0">
+              <img
+                *ngFor="let s of p?.SubImages || [] | slice: 0 : 8"
+                [src]="s.url"
+                [class.active]="selectedImage === s.url"
+                (click)="selectImage(s.url)"
+                alt="thumb"
+                loading="lazy"
+              />
+            </div>
+          </ng-container>
+        </div>
+
+        <!-- <img
+      [src]="selectedImage"
+      [alt]="p.ProductName"
+      class="main-image"
+      loading="lazy"
+    />
+
+    <div class="thumbs" *ngIf="p.SubImages?.length">
+      <img
+        *ngFor="let img of p.SubImages"
+        [src]="img.url"
+        [alt]="img.alt || p.ProductName"
+        [class.active]="selectedImage === img.url"
+        (click)="selectImage(img.url)"
+      />
+    </div> -->
+      </div>
+
+      <div class="info">
+        <!-- <div class="prices">
+
+      <ng-container *ngIf="+(p.OfferPrice ?? 0) > 0; else normalPrice">
+
+        <span class="mrp">
+          {{ p.SellingPrice | currency:'INR':'symbol' }}
+        </span>
+
+        <span class="offer">
+          {{ p.OfferPrice | currency:'INR':'symbol' }}
+        </span>
+
+      </ng-container>
+
+
+      <ng-template #normalPrice>
+
+        <span class="offer">
+          {{ p.SellingPrice | currency:'INR':'symbol' }}
+        </span>
+
+      </ng-template>
+
+      </div> -->
+
+        <div class="prices">
+          <!-- VARIANT PRICE -->
+          <ng-container *ngIf="selectedVariant as sv; else productPrice">
+            <ng-container
+              *ngIf="parsePrice(sv.OfferPrice) > 0; else variantNormalPrice"
+            >
+              <span class="mrp">
+                {{ parsePrice(sv.SellingPrice) | currency: "INR" : "symbol" }}
+              </span>
+
+              <span class="offer">
+                {{ parsePrice(sv.OfferPrice) | currency: "INR" : "symbol" }}
+              </span>
+            </ng-container>
+
+            <ng-template #variantNormalPrice>
+              <span class="offer">
+                {{ parsePrice(sv.SellingPrice) | currency: "INR" : "symbol" }}
+              </span>
+            </ng-template>
+          </ng-container>
+
+          <!-- NORMAL PRODUCT PRICE -->
+          <ng-template #productPrice>
+            <ng-container *ngIf="+(p.OfferPrice ?? 0) > 0; else normalPrice">
+              <span class="mrp">
+                {{ p.SellingPrice | currency: "INR" : "symbol" }}
+              </span>
+
+              <span class="offer">
+                {{ p.OfferPrice | currency: "INR" : "symbol" }}
+              </span>
+            </ng-container>
+
+            <ng-template #normalPrice>
+              <span class="offer">
+                {{ p.SellingPrice | currency: "INR" : "symbol" }}
+              </span>
+            </ng-template>
+          </ng-template>
+        </div>
+
+        <!-- Unified Add to Cart / Stepper — only needed for products WITHOUT variants.
+             Variant products get per-row radio + Add/stepper in the panel below. -->
+        <ng-container *ngIf="cartQtyMap$ | async as qtyMap">
+          <div
+            class="variant-actions"
+            style="margin: 12px 0"
+            *ngIf="!p.variants?.length"
+          >
+            <ng-container
+              *ngIf="getBaseProductQty(p, qtyMap) > 0; else baseAddBtn"
+            >
+              <div class="qty-stepper" (click)="$event.stopPropagation()">
+                <button
+                  class="qty-btn"
+                  type="button"
+                  (click)="decreaseBaseProduct(p, qtyMap, $event)"
+                >
+                  −
+                </button>
+
+                <input
+                  class="qty-input"
+                  type="number"
+                  min="1"
+                  (keydown)="allowOnlyIntegers($event)"
+                  maxlength="4"
+                  pattern="[0-9]*"
+                  [value]="getBaseProductQty(p, qtyMap)"
+                  (click)="$event.stopPropagation()"
+                  (blur)="updateBaseProductQtyFromInput(p, qtyMap, $event)"
+                  (keyup.enter)="
+                    updateBaseProductQtyFromInput(p, qtyMap, $event)
+                  "
+                />
+
+                <button
+                  class="qty-btn"
+                  type="button"
+                  (click)="increaseBaseProduct(p, qtyMap, $event)"
+                >
+                  +
+                </button>
+              </div>
+            </ng-container>
+            <ng-template #baseAddBtn>
+              <button
+                class="btn primary"
+                type="button"
+                (click)="onAddToCart(); $event.stopPropagation()"
+              >
+                Add to Cart
+              </button>
+            </ng-template>
+          </div>
+
+          <!-- Inline Variant Panel — radio + per-row Add / stepper (only shown when variants exist) -->
+          <ng-container *ngIf="p.variants?.length">
+            <div
+              class="vm-panel vm-panel--inline"
+              (click)="$event.stopPropagation()"
+            >
+              <div class="vm-body">
+                <div
+                  *ngFor="let v of p.variants; trackBy: trackByVariantId"
+                  class="vm-row"
+                  [class.vm-row--selected]="
+                    selectedVariant?.variantsid === v.variantsid
+                  "
+                  role="option"
+                  [attr.aria-selected]="
+                    selectedVariant?.variantsid === v.variantsid
+                  "
+                  (click)="selectVariantInline(p, v)"
+                >
+                  <span
+                    class="vm-radio"
+                    [class.vm-radio--checked]="
+                      selectedVariant?.variantsid === v.variantsid
+                    "
+                  >
+                    <span class="vm-radio__dot"></span>
+                  </span>
+
+                  <div class="vm-row__info">
+                    <span class="vm-row__name">{{ v.variantsName }}</span>
+                    <div class="vm-row__prices">
+                   
+
+                        <!-- Offer price: show only when > 0 -->
+                        <span
+                          class="vm-row__offer"
+                          *ngIf="parsePrice(v.OfferPrice) > 0"
+                        >
+                          {{
+                            parsePrice(v.OfferPrice)
+                              | currency: "INR" : "symbol" : "1.0-0"
+                          }}
+                        </span>
+
+                        <!-- Selling price: strike only when offer exists -->
+                        <span
+                          class="vm-row__mrp"
+                          [class.vm-row__mrp--strike]="parsePrice(v.OfferPrice) > 0"
+                        >
+                          {{
+                            parsePrice(v.SellingPrice)
+                              | currency: "INR" : "symbol" : "1.0-0"
+                          }}
+                        </span>
+
+ 
+                      <span
+                        class="vm-row__badge"
+                        *ngIf="variantOfferText(v) as badge"
+                        >{{ badge }}</span
+                      >
+                    </div>
+                  </div>
+
+                  <!-- Per-row qty control — also selects this variant so the top price updates -->
+                  <div
+                    class="vm-row__actions"
+                    (click)="$event.stopPropagation()"
+                  >
+                    <ng-container
+                      *ngIf="rowVariantInCart(p, v, qtyMap); else vmRowAddBtn"
+                    >
+                      <div class="qty-stepperVariant">
+                        <button
+                          class="qty-btn"
+                          type="button"
+                          (click)="
+                            selectVariantInline(p, v);
+                            decreaseRowVariant(p, v, qtyMap, $event)
+                          "
+                        >
+                          −
+                        </button>
+
+                        <input
+                          class="qty-input"
+                          type="number"
+                          min="1"
+                          maxlength="4"
+                          pattern="[0-9]*"
+                          inputmode="numeric"
+                          (keydown)="allowOnlyIntegers($event)"
+                          [value]="getRowVariantQty(p, v, qtyMap)"
+                          (click)="$event.stopPropagation()"
+                          (focus)="selectVariantInline(p, v)"
+                          (blur)="
+                            updateRowVariantQtyFromInput(p, v, qtyMap, $event)
+                          "
+                          (keyup.enter)="
+                            updateRowVariantQtyFromInput(p, v, qtyMap, $event)
+                          "
+                        />
+
+                        <button
+                          class="qty-btn"
+                          type="button"
+                          (click)="
+                            selectVariantInline(p, v);
+                            increaseRowVariant(p, v, qtyMap, $event)
+                          "
+                        >
+                          +
+                        </button>
+                      </div>
+                    </ng-container>
+
+                    <ng-template #vmRowAddBtn>
+                      <button
+                        type="button"
+                        class="vm-row-add-btn"
+                        (click)="
+                          selectVariantInline(p, v);
+                          addRowVariantToCart(p, v, $event)
+                        "
+                      >
+                        Add
+                      </button>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+
+   
+
+        <section class="sections">
+          <h3>Product Details</h3>
+          <ul>
+            <li>Description : {{ p.ProductDescription }}</li>
+            <!-- <li>Expiry...</li>
+          <li>Other Product attributes...</li> -->
+          </ul>
+
+          <!-- <h3>Specifications</h3>
+        <ul>
+          <li>Bike Type: Hybrid</li>
+          <li>Frame: Aluminium</li>
+          <li>Fork: Carbon</li>
+          <li>Brakes: Hydraulic Disc</li>
+        </ul> -->
+
+          <!-- <h3>Components</h3>
+        <ul>
+          <li>Groupset: Shimano Deore</li>
+          <li>Wheels: Bontrager Alloy</li>
+          <li>Tyres: Bontrager H2</li>
+        </ul> -->
+
+          <!-- <h3>Additional Info</h3>
+        <p>Product additional info...</p>
+
+        <h3>Returns Policy</h3>
+        <p>7-day easy return policy.</p>
+
+        <h3>Reviews</h3>
+        <p>★★★★☆ — Quality is more important than quantity. One home run is much better than two doubles.</p> -->
+        </section>
+      </div>
+    </div>
+
+    <div class="toast">Added to cart</div>
+  </ng-container>
+  <ng-template #noProduct>
+    <p>Product not found.</p>
+  </ng-template>
+
+  <!-- Similar products rail -->
+  <!-- <app-similar-products [similarProductIds]="similarProductIds" [railTitle]="'Similar Products'"></app-similar-products> -->
+</div>
+
+<app-drawer
+  [isPublic]="true"
+  [title]="drawerTitle"
+  [state]="drawerState"
+  (stateChange)="onDrawerChange($event)"
+  [showBack]="isCheckout"
+  (back)="onDrawerBack()"
+>
+  <div class="cart-in-drawer">
+    <ng-container *ngIf="drawerContent === 'cart'">
+      <app-cart
+        [inDrawer]="true"
+        (openCheckout)="openCheckoutInDrawer()"
+        (continueShopping)="closeDrawer()"
+      >
+      </app-cart>
+    </ng-container>
+    <ng-container *ngIf="drawerContent === 'checkout'">
+      <ng-container *ngIf="checkoutComponent; else loadingCheckout">
+        <ng-container *ngComponentOutlet="checkoutComponent"></ng-container>
+      </ng-container>
+      <ng-template #loadingCheckout>
+        <div class="loading-checkout-placeholder">Loading checkout…</div>
+      </ng-template>
+    </ng-container>
+  </div>
+</app-drawer>

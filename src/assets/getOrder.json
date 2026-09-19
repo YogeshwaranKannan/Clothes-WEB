@@ -1,0 +1,48 @@
+{
+  "orders": [
+    {
+      "order_id": "ORD-2001",
+      "items": [
+        { "item_name": "iPhone 15", "qty": 1, "price": 80000 },
+        { "item_name": "Protective Case", "qty": 1, "price": 999 }
+      ],
+      "tot_order_value": "80999",
+      "order_status": "Order Placed"
+    },
+    {
+      "order_id": "ORD-2002",
+      "items": [
+        { "item_name": "Galaxy S23", "qty": 1, "price": 70000 }
+      ],
+      "tot_order_value": "70000",
+      "order_status": "Shipment Ready"
+    },
+    {
+      "order_id": "ORD-2003",
+      "items": [
+        { "item_name": "Samsung TV 55inch", "qty": 1, "price": 55000 },
+        { "item_name": "HDMI Cable", "qty": 1, "price": 499 }
+      ],
+      "tot_order_value": "55499",
+      "order_status": "Processing"
+    },
+    {
+      "order_id": "ORD-2004",
+      "items": [
+        { "item_name": "Samsung TV 55inch", "qty": 1, "price": 55000 },
+        { "item_name": "HDMI Cable", "qty": 1, "price": 499 }
+      ],
+      "tot_order_value": "55499",
+      "order_status": "Out for Delivery"
+    },
+    {
+      "order_id": "ORD-2005",
+      "items": [
+        { "item_name": "Samsung TV 55inch", "qty": 1, "price": 55000 },
+        { "item_name": "HDMI Cable", "qty": 1, "price": 499 }
+      ],
+      "tot_order_value": "55499",
+      "order_status": "Delivered"
+    }
+  ]
+}

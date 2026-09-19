@@ -1,0 +1,66 @@
+:host {
+  display: block;
+}
+
+.ticker {
+  // ── Theme-aware dark panel ──────────────────────────────────────────────
+  // --nav-bg is defined on :root and every theme body class in _theme.scss.
+  // It is always the darkest surface token (navbar-level darkness), so it
+  // gives the ticker a solid, anchored look without hardcoding any colour.
+  background: var(--nav-bg);
+
+  // --nav-foreground is the paired legible text colour for --nav-bg across
+  // all themes, ensuring contrast is maintained automatically.
+  color: var(--nav-foreground);
+
+  //  border-bottom: 1px solid var(--app-border);
+
+  // Fixed height to avoid layout shift
+  --ticker-height: calc(30px + 1rem);
+  font-size: var(--text-lg);               // fluid: clamp(16px, 1.25vw, 20px)
+  font-weight: var(--fw-semi);             // 600 — semi-bold for strong readability
+  letter-spacing: var(--tracking-wide);    // 0.04em — aids legibility on dark bg
+}
+
+.ticker-inner {
+  position: relative;
+  height: var(--ticker-height);
+  overflow: hidden;
+  display: block;
+  padding: 10px 1rem;
+}
+
+.track {
+  display: flex;
+  width: 100%;
+  transform: translateX(0);
+  transition: transform var(--anim-duration, 600ms) linear;
+}
+
+.track.animating { transition-timing-function: linear; }
+
+.track.no-transition { transition: none !important; }
+
+.ticker-item {
+  flex: 0 0 100%;
+  box-sizing: border-box;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .ticker-item,
+  .ticker-inner {
+    transition: none !important;
+  }
+}
+
+/* Small screens: reduce padding */
+@media (max-width: 575.98px) {
+  .ticker-inner {
+  //  padding: 0.3rem 0.75rem;
+  }
+}

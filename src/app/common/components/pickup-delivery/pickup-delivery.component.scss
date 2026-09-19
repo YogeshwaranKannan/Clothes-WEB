@@ -1,0 +1,194 @@
+// =============================================================================
+// PICKUP-DELIVERY COMPONENT STYLES
+// =============================================================================
+// All colours use the same CSS variable tokens as navbar.component.scss:
+//
+//   --primary-color        brand text / border / icon colour
+//   --primary-dark         darker shade for hover text
+//   --primary-light        tinted fill for hover / active backgrounds
+//   --nav-hover-foreground text on filled backgrounds (usually #fff)
+//   --app-surface          input / surface background
+//   --app-border           input border colour
+//
+// Fallbacks mirror the navbar fallback chain so both components look identical
+// even when only some tokens are defined.
+// =============================================================================
+
+.pd-root {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+// ─── Toggle button — matches .navbar-brand outlined style ────────────────────
+.pd-toggle {
+  display: flex;
+  
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  // Outline on hover matches .all-categories-toggle pattern
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 6px;
+  // Use primary-color for text — same as navbar-brand
+  color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+
+  &:hover, &:focus {
+    //border-color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+    background: var(--primary-dark, rgba(184, 74, 26, 0.08));
+    //color: var(--primary-dark, var(--nav-hover-background, #8a3210));
+    //outline: none;
+  }
+}
+
+.pd-icon { font-size: 16px; }
+
+// ─── Label + caret — primary-color text, matching navbar link text ────────────
+.pd-label {
+  font-size: 13px;
+  font-weight: 600;
+  //color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+}
+
+.pd-caret {
+  opacity: 0.7;
+  color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+}
+
+// ─── Dropdown panel — matches .mega-menu surface ──────────────────────────────
+.pd-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 320px;
+  // White background + theme border — same as mega-menu
+  background: #fff;
+  color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.13);
+  z-index: 1100;        // same z-index tier as mega-menu
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  
+}
+
+// ─── Tabs — match mega-left heading style ─────────────────────────────────────
+.pd-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.pd-tab {
+  flex: 1;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  // Primary-color text — matches mega-left__item
+  color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+  transition: background 0.12s ease, color 0.12s ease;
+
+  &:hover {
+    background: var(--primary-light, rgba(184, 74, 26, 0.08));
+    color: var(--primary-dark, var(--nav-hover-background, #8a3210));
+  }
+
+  // Active tab — matches mega-left__item.is-active fill
+  &.active {
+    background: var(--primary-light, rgba(184, 74, 26, 0.10));
+    color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+    // Left accent border mirrors mega-left__item.is-active border-left
+    box-shadow: inset 0 -2px 0 var(--primary-color, var(--nav-hover-background, #b84a1a));
+  }
+}
+
+// ─── Item list ────────────────────────────────────────────────────────────────
+.pd-list { max-height: 320px; overflow: auto; padding: 8px; }
+
+.pd-item {
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border: 1px solid transparent;
+  transition: background 0.12s ease, border-color 0.12s ease;
+
+  & + & { margin-top: 6px; }
+
+  // Hover — matches .mobile-cat-row:hover / .mega-left__item:hover
+  &:hover {
+    background: var(--primary-light, rgba(184, 74, 26, 0.08));
+    color: var(--primary-dark, var(--nav-hover-background, #8a3210));
+  }
+
+  // Selected — matches mega-left__item.is-active
+  &.selected {
+    background: var(--primary-light, rgba(184, 74, 26, 0.10));
+    border-color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+    color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+    font-weight: 600;
+  }
+}
+
+// ─── Item title — primary-color (was already correct, preserved + made explicit)
+.pd-item-title {
+  font-size: 13px;
+  color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+}
+
+// ─── Search input — matches .search-input token usage ─────────────────────────
+.pd-search { padding: 8px; }
+
+.pd-search input {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 9999px;
+  border: 2.5px solid var(--app-border, var(--bs-border-color, #e6e6e6));
+  //background: var(--app-surface, #fff);
+  color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.15s ease;
+
+  &::placeholder {
+    color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+    opacity: 0.45;
+  }
+
+  &:focus {
+    // Matches .search-input:focus — primary-color border on focus
+    border-color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+  }
+}
+
+// ─── Mobile: full-width panel ─────────────────────────────────────────────────
+// Breakpoint mirrors navbar media.down(md) — keeps parity with offcanvas sidebar
+@media (max-width: 640px) {
+  .pd-dropdown {
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    top: 64px;
+    width: auto;
+    max-height: 360px;
+    height: auto;
+    border-radius: 10px;
+  }
+
+  .pd-list { max-height: 260px; padding: 12px; }
+
+  .pd-item {
+    padding: 12px;
+    font-size: 15px;
+  }
+}

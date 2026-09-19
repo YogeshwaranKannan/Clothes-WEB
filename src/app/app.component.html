@@ -1,0 +1,21 @@
+ <app-ticker
+    [items]="[
+      'Order at your convenience',
+      'Save on every order',
+      'Be sharp, Save smart',
+    ]"
+  ></app-ticker>
+ <app-header></app-header>
+<app-navbar [categories]="categories"></app-navbar> 
+<!-- ✅ Home-only sections — rendered only when isHomePage is true.
+     *ngIf removes them from the DOM entirely on other routes (not just
+     visually hidden), so no extra HTTP calls or animations run on
+     product-list / category / product-detail pages. -->
+<ng-container *ngIf="isHomePage">
+  <app-hero-banner></app-hero-banner>
+</ng-container>
+
+
+<router-outlet>
+    
+</router-outlet>

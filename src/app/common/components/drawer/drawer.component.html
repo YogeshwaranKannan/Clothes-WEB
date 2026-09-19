@@ -1,0 +1,99 @@
+ 
+<!-- <div
+  class="drawer-backdrop"
+  *ngIf="isPublic && state !== DrawerState.Hidden"
+  (click)="hide()">
+</div> -->
+
+<div
+  class="drawer-backdrop"
+  [class.public]="isPublic"
+  *ngIf="isPublic && state !== DrawerState.Hidden"
+  (click)="hide()">
+</div>
+
+<div
+  class="drawer"
+  [class.public]="isPublic"
+  [class.hidden]="state === DrawerState.Hidden"
+  [class.half]="state === DrawerState.Half"
+  [class.full]="state === DrawerState.Full"
+>
+  <div class="drawer-header" *ngIf="state !== DrawerState.Hidden">
+  <!-- Left column -->
+<div class="header-cell header-cell--left">
+
+  <!-- Back button (always rendered) -->
+  <button
+    type="button"
+    class="corner-btn back"
+    [class.hidden]="!(isPublic && showBack)"
+    (click)="back.emit()"
+    aria-label="Back">
+    &lt; Back
+  </button>
+
+  <!-- Admin chevron (always rendered) -->
+  <button
+    type="button"
+    class="corner-btn chevron-toggle"
+    [class.hidden]="isPublic"
+    [attr.aria-label]="state === DrawerState.Half ? 'Expand drawer' : 'Collapse drawer'"
+    (click)="toggleSize()"
+  >
+    <ng-container [ngSwitch]="state">
+
+      <!-- Half → expand: double chevron pointing left (open wider) -->
+      <svg *ngSwitchCase="DrawerState.Half"
+        width="20" height="20" viewBox="0 0 20 20" fill="none"
+        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M12 14l-4-4 4-4" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M16 14l-4-4 4-4" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+
+      <!-- Full → collapse: double chevron pointing right (close back) -->
+      <svg *ngSwitchCase="DrawerState.Full"
+        width="20" height="20" viewBox="0 0 20 20" fill="none"
+        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M8 14l4-4-4-4" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M4 14l4-4-4-4" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+
+    </ng-container>
+  </button>
+
+</div>
+
+  <!-- Center column (title/banner) -->
+  <div class="header-cell header-cell--center" style="justify-content:center;">
+    
+    <app-title-banner
+      *ngIf="showTitleBanner"
+      [pageTitle]="title"
+      [showBreadcrumb]="false"
+      class="drawer-title-banner">
+    </app-title-banner>
+  </div>
+
+  <!-- Right column -->
+  <div class="header-cell header-cell--right">
+    <button
+      type="button"
+      class="corner-btn corner-btn--close"
+      (click)="hide()"
+      aria-label="Close drawer"
+      title="Close">
+      ✕
+    </button>
+  </div>
+</div>
+
+
+  <div class="drawer-content">
+    <ng-content></ng-content>
+  </div>
+</div>

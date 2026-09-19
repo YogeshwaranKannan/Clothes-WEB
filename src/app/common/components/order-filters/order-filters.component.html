@@ -1,0 +1,272 @@
+<!-- ══════════════════════════════════════════════════════
+     ORDER FILTERS — Desktop top bar
+     Mirrors the exact pattern of user-filters.component
+════════════════════════════════════════════════════════ -->
+<div class="filters-topbar">
+  <div class="top-filters filters-box" role="region" aria-label="Order Filters" (click)="$event.stopPropagation()">
+
+    <!-- Backdrop closes any open panel when user clicks outside -->
+    <div class="filter-backdrop" *ngIf="openPanel" (click)="openPanel = null"></div>
+
+    <div class="filter-row">
+
+      <!-- ── Global Search ── -->
+      <div class="order-search-wrap">
+        <input
+          class="order-search-input"
+          type="search"
+          placeholder="Search JC, site name…"
+          [value]="searchTerm"
+          (input)="onSearchInput($any($event.target).value)"
+          aria-label="Search orders"
+        />
+        <button *ngIf="searchTerm" class="search-clear-btn" type="button" (click)="clearSearch()" aria-label="Clear search">✕</button>
+      </div>
+
+      <!-- ── Amt Received filter ── -->
+      <div class="filter-chip" (click)="$event.stopPropagation(); togglePanel('amtReceived')">
+        <button type="button" class="chip-btn" [class.chip-active]="isRangeActive('amtReceived')" [attr.aria-expanded]="openPanel === 'amtReceived'">
+          AMT RECEIVED <span class="chev">{{ openPanel === 'amtReceived' ? '▴' : '▾' }}</span>
+        </button>
+        <div class="filter-panel" *ngIf="openPanel === 'amtReceived'" (click)="$event.stopPropagation()">
+          <div class="panel-body">
+            <ng-container *ngTemplateOutlet="rangePanel; context: { key: 'amtReceived', label: 'Amt Received' }"></ng-container>
+          </div>
+          <div class="panel-actions">
+            <button class="btn" type="button" (click)="closePanel()">Apply</button>
+            <button class="btn btn-outline" type="button" (click)="clearRange('amtReceived')">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Site Expenses filter ── -->
+      <div class="filter-chip" (click)="$event.stopPropagation(); togglePanel('siteExpenses')">
+        <button type="button" class="chip-btn" [class.chip-active]="isRangeActive('siteExpenses')" [attr.aria-expanded]="openPanel === 'siteExpenses'">
+          SITE EXPENSES <span class="chev">{{ openPanel === 'siteExpenses' ? '▴' : '▾' }}</span>
+        </button>
+        <div class="filter-panel" *ngIf="openPanel === 'siteExpenses'" (click)="$event.stopPropagation()">
+          <div class="panel-body">
+            <ng-container *ngTemplateOutlet="rangePanel; context: { key: 'siteExpenses', label: 'Site Expenses' }"></ng-container>
+          </div>
+          <div class="panel-actions">
+            <button class="btn" type="button" (click)="closePanel()">Apply</button>
+            <button class="btn btn-outline" type="button" (click)="clearRange('siteExpenses')">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Balance Amount filter ── -->
+      <div class="filter-chip" (click)="$event.stopPropagation(); togglePanel('balance')">
+        <button type="button" class="chip-btn" [class.chip-active]="isRangeActive('balance')" [attr.aria-expanded]="openPanel === 'balance'">
+          BALANCE <span class="chev">{{ openPanel === 'balance' ? '▴' : '▾' }}</span>
+        </button>
+        <div class="filter-panel" *ngIf="openPanel === 'balance'" (click)="$event.stopPropagation()">
+          <div class="panel-body">
+            <ng-container *ngTemplateOutlet="rangePanel; context: { key: 'balance', label: 'Balance' }"></ng-container>
+          </div>
+          <div class="panel-actions">
+            <button class="btn" type="button" (click)="closePanel()">Apply</button>
+            <button class="btn btn-outline" type="button" (click)="clearRange('balance')">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Delivery Date filter ── -->
+      <div class="filter-chip" (click)="$event.stopPropagation(); togglePanel('deliveryDate')">
+        <button type="button" class="chip-btn" [class.chip-active]="isDateActive()" [attr.aria-expanded]="openPanel === 'deliveryDate'">
+          DELIVERY DATE <span class="chev">{{ openPanel === 'deliveryDate' ? '▴' : '▾' }}</span>
+        </button>
+        <div class="filter-panel" *ngIf="openPanel === 'deliveryDate'" (click)="$event.stopPropagation()">
+          <div class="panel-body">
+            <div class="date-range">
+              <label class="date-label">From
+                <input type="date" [value]="dateFrom" (change)="onDateFrom($any($event.target).value)" />
+              </label>
+              <label class="date-label">To
+                <input type="date" [value]="dateTo" (change)="onDateTo($any($event.target).value)" />
+              </label>
+            </div>
+          </div>
+          <div class="panel-actions">
+            <button class="btn" type="button" (click)="closePanel()">Apply</button>
+            <button class="btn btn-outline" type="button" (click)="clearDate()">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Sort + Clear All ── -->
+      <div class="filter-controls">
+        <label class="sort-label">Sort</label>
+        <select [value]="sortValue" (change)="onSortChange($any($event.target).value)" aria-label="Sort orders">
+          <option value="">Default</option>
+          <option value="order_id-asc">JC: A → Z</option>
+          <option value="order_id-desc">JC: Z → A</option>
+          <option value="customerSiteName-asc">Site Name: A → Z</option>
+          <option value="customerSiteName-desc">Site Name: Z → A</option>
+          <option value="amountReceived-asc">Amt Received: Low → High</option>
+          <option value="amountReceived-desc">Amt Received: High → Low</option>
+          <option value="siteExpenses-asc">Expenses: Low → High</option>
+          <option value="siteExpenses-desc">Expenses: High → Low</option>
+          <option value="balanceAmount-asc">Balance: Low → High</option>
+          <option value="balanceAmount-desc">Balance: High → Low</option>
+          <option value="deliveryDate-asc">Delivery Date: Earliest</option>
+          <option value="deliveryDate-desc">Delivery Date: Latest</option>
+        </select>
+        <button class="btn clear-all-btn" type="button" (click)="clearAll()">Clear All</button>
+      </div>
+
+    </div><!-- /.filter-row -->
+  </div><!-- /.filters-box -->
+</div><!-- /.filters-topbar -->
+
+
+<!-- ══════════════════════════════════════════════════════
+     Mobile: Filter button (shown only on mobile)
+════════════════════════════════════════════════════════ -->
+<div class="mobile-bar">
+  <div class="order-search-wrap mobile-search">
+    <input
+      class="order-search-input"
+      type="search"
+      placeholder="Search JC, site name…"
+      [value]="searchTerm"
+      (input)="onSearchInput($any($event.target).value)"
+      aria-label="Search orders"
+    />
+    <button *ngIf="searchTerm" class="search-clear-btn" type="button" (click)="clearSearch()" aria-label="Clear search">✕</button>
+  </div>
+  <button class="btn mobile-filter-btn" type="button" (click)="openMobileDrawer()">
+    Filter <span *ngIf="activeFilterCount > 0" class="filter-badge">{{ activeFilterCount }}</span>
+  </button>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════
+     Mobile drawer
+════════════════════════════════════════════════════════ -->
+<div class="drawer-backdrop" *ngIf="mobileDrawerOpen" (click)="closeMobileDrawer()"></div>
+<aside class="mobile-drawer" [class.open]="mobileDrawerOpen" [attr.aria-hidden]="!mobileDrawerOpen">
+  <div class="drawer-header">
+    <button class="back" *ngIf="mobileActiveGroup" (click)="mobileActiveGroup = null" aria-label="Back">◀</button>
+    <h3 class="drawer-title">{{ mobileActiveGroup ? mobileGroupLabel(mobileActiveGroup) : 'REFINE BY' }}</h3>
+    <button class="drawer-close" (click)="closeMobileDrawer()" aria-label="Close">✕</button>
+  </div>
+
+  <div class="drawer-body">
+
+    <!-- Group list -->
+    <ul class="group-list" *ngIf="!mobileActiveGroup">
+      <li (click)="mobileActiveGroup = 'amtReceived'">AMT RECEIVED <span class="chev">›</span></li>
+      <li (click)="mobileActiveGroup = 'siteExpenses'">SITE EXPENSES <span class="chev">›</span></li>
+      <li (click)="mobileActiveGroup = 'balance'">BALANCE <span class="chev">›</span></li>
+      <li (click)="mobileActiveGroup = 'deliveryDate'">DELIVERY DATE <span class="chev">›</span></li>
+      <li (click)="mobileActiveGroup = 'sort'">SORT <span class="chev">›</span></li>
+    </ul>
+
+    <!-- Amt Received panel -->
+    <div *ngIf="mobileActiveGroup === 'amtReceived'" class="group-panel">
+      <div class="panel-actions-row"><button class="btn mobile-clear-btn" type="button" (click)="clearRange('amtReceived')">Clear</button></div>
+      <div class="panel-body">
+        <ng-container *ngTemplateOutlet="rangePanel; context: { key: 'amtReceived', label: 'Amt Received' }"></ng-container>
+      </div>
+    </div>
+
+    <!-- Site Expenses panel -->
+    <div *ngIf="mobileActiveGroup === 'siteExpenses'" class="group-panel">
+      <div class="panel-actions-row"><button class="btn mobile-clear-btn" type="button" (click)="clearRange('siteExpenses')">Clear</button></div>
+      <div class="panel-body">
+        <ng-container *ngTemplateOutlet="rangePanel; context: { key: 'siteExpenses', label: 'Site Expenses' }"></ng-container>
+      </div>
+    </div>
+
+    <!-- Balance panel -->
+    <div *ngIf="mobileActiveGroup === 'balance'" class="group-panel">
+      <div class="panel-actions-row"><button class="btn mobile-clear-btn" type="button" (click)="clearRange('balance')">Clear</button></div>
+      <div class="panel-body">
+        <ng-container *ngTemplateOutlet="rangePanel; context: { key: 'balance', label: 'Balance' }"></ng-container>
+      </div>
+    </div>
+
+    <!-- Delivery Date panel -->
+    <div *ngIf="mobileActiveGroup === 'deliveryDate'" class="group-panel">
+      <div class="panel-actions-row"><button class="btn mobile-clear-btn" type="button" (click)="clearDate()">Clear</button></div>
+      <div class="panel-body">
+        <div class="date-range">
+          <label class="date-label">From
+            <input type="date" [value]="dateFrom" (change)="onDateFrom($any($event.target).value)" />
+          </label>
+          <label class="date-label">To
+            <input type="date" [value]="dateTo" (change)="onDateTo($any($event.target).value)" />
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sort panel -->
+    <div *ngIf="mobileActiveGroup === 'sort'" class="group-panel">
+      <div class="panel-body">
+        <ul class="sort-list">
+          <li *ngFor="let opt of sortOptions"
+              class="sort-option"
+              [class.sort-option--active]="sortValue === opt.value"
+              (click)="onSortChange(opt.value); mobileActiveGroup = null">
+            {{ opt.label }}
+            <span *ngIf="sortValue === opt.value" class="sort-check">✓</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div><!-- /.drawer-body -->
+
+  <div class="drawer-footer">
+    <button class="btn" type="button" (click)="clearAll(); closeMobileDrawer()">Clear All</button>
+    <button class="btn btn-primary" type="button" (click)="closeMobileDrawer()">Show results ({{ resultCount }})</button>
+  </div>
+</aside>
+
+
+<!-- ══════════════════════════════════════════════════════
+     Shared range-input template (reused for all 3 amount chips)
+════════════════════════════════════════════════════════ -->
+<ng-template #rangePanel let-key="key" let-label="label">
+  <div class="price-panel">
+    <div class="price-inputs">
+      <label class="price-input">
+        <span class="prefix">₹</span>
+        <input type="number" min="0"
+               [value]="getRangeMin(key)"
+               (input)="onRangeMin(key, $any($event.target).value)"
+               [attr.aria-label]="'Min ' + label" />
+      </label>
+      <span class="dash">–</span>
+      <label class="price-input">
+        <span class="prefix">₹</span>
+        <input type="number" min="0"
+               [value]="getRangeMax(key)"
+               (input)="onRangeMax(key, $any($event.target).value)"
+               [attr.aria-label]="'Max ' + label" />
+      </label>
+    </div>
+    <div class="price-display">
+      ₹ {{ getRangeMin(key) | number:'1.0-0' }} &nbsp;–&nbsp; ₹ {{ getRangeMax(key) | number:'1.0-0' }}
+    </div>
+    <div class="price-slider two-sliders">
+      <div class="slider-track" [style.background]="sliderTrackBg(key)"></div>
+      <div class="single-range">
+        <input type="range" class="range-min"
+               [min]="getBound(key).min" [max]="getBound(key).max"
+               [value]="getRangeMin(key)"
+               (input)="onRangeMin(key, $any($event.target).value)"
+               [attr.aria-label]="'Min ' + label + ' slider'" />
+      </div>
+      <div class="single-range">
+        <input type="range" class="range-max"
+               [min]="getBound(key).min" [max]="getBound(key).max"
+               [value]="getRangeMax(key)"
+               (input)="onRangeMax(key, $any($event.target).value)"
+               [attr.aria-label]="'Max ' + label + ' slider'" />
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,295 @@
+// ─────────────────────────────────────────────
+// ADDONS-SUGGEST — "You might also need" strip
+// Full-image visible (no crop), horizontal scroll
+// ─────────────────────────────────────────────
+
+// Design tokens
+$card-width-mobile  : 160px;
+$card-width-desktop : 200px;
+$img-height-mobile  : 130px;
+$img-height-desktop : 160px;
+$gap-mobile         : 12px;
+$gap-desktop        : 16px;
+
+$radius-card        : 14px;
+$radius-img         : 12px;
+$btn-size           : 36px;
+
+$shadow-card        : 0 2px 10px rgba(0, 0, 0, 0.09);
+$shadow-btn         : 0 2px 6px rgba(0, 0, 0, 0.18);
+
+$color-accent       : #e03131;
+$color-text         : #1a1a1a;
+$color-muted        : #6b6b6b;
+$color-bg-card      : #ffffff;
+$color-bg-img       : #f6f6f6;   // soft backdrop behind contained image
+$color-btn          : #ffffff;
+
+// ─────────────────────────────────────────────
+// HOST / SECTION
+// ─────────────────────────────────────────────
+:host {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+.addons-suggest {
+  width: 100%;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+// ─────────────────────────────────────────────
+// TITLE
+// ─────────────────────────────────────────────
+.as-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: $color-text;
+  margin: 0 0 16px 0;
+  padding: 0 4px;
+  letter-spacing: -0.01em;
+}
+
+// ─────────────────────────────────────────────
+// HORIZONTAL SCROLL TRACK
+// Mobile: scrolls when > 2 cards
+// Desktop: scrolls when > 3 cards
+// ─────────────────────────────────────────────
+.as-scroll-track {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: $gap-mobile;
+  padding: 4px 4px 12px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 4px;
+  overscroll-behavior-x: contain;
+
+  // Hide scrollbar (cross-browser) but keep scrolling
+  scrollbar-width: none;             // Firefox
+  -ms-overflow-style: none;          // IE/Edge legacy
+  &::-webkit-scrollbar { display: none; } // Chrome/Safari
+}
+
+// ─────────────────────────────────────────────
+// CARD
+// ─────────────────────────────────────────────
+.as-card {
+  flex: 0 0 $card-width-mobile;
+  width: $card-width-mobile;
+  background: $color-bg-card;
+  border-radius: $radius-card;
+  box-shadow: $shadow-card;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  scroll-snap-align: start;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  }
+}
+
+// ─────────────────────────────────────────────
+// IMAGE WRAPPER  ← KEY FIX
+// Use object-fit: contain so the WHOLE image is visible.
+// A neutral background fills any letterbox space, keeping
+// uniform card height while preserving aspect ratio.
+// ─────────────────────────────────────────────
+.as-img-wrap {
+  position: relative;
+  width: 100%;
+  height: $img-height-mobile;
+  background: $color-bg-img;
+  border-top-left-radius: $radius-card;
+  border-top-right-radius: $radius-card;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.as-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;        // <- show entire image, no crop
+  object-position: center;
+  display: block;
+  padding: 8px;               // breathing room around product
+  box-sizing: border-box;
+}
+
+// ─────────────────────────────────────────────
+// BADGES
+// ─────────────────────────────────────────────
+.as-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+
+.as-badge--promo {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: $color-accent;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(224, 49, 49, 0.35);
+}
+
+.as-badge--discount {
+  margin-top: 6px;
+  background: rgba(224, 49, 49, 0.1);
+  color: $color-accent;
+}
+
+// ─────────────────────────────────────────────
+// FLOATING ADD BUTTON
+// ─────────────────────────────────────────────
+.as-add-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: $btn-size;
+  height: $btn-size;
+  border-radius: 50%;
+  border: none;
+  background: $color-btn;
+  color: $color-text;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: $shadow-btn;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, background 0.15s ease;
+
+  &:hover {
+    transform: scale(1.08);
+    background: #fafafa;
+  }
+  &:active { transform: scale(0.96); }
+}
+
+// ─────────────────────────────────────────────
+// CARD BODY
+// ─────────────────────────────────────────────
+.as-body {
+  padding: 10px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.as-name {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: $color-text;
+  line-height: 1.25;
+  // Clamp to 2 lines for consistent card height
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.3em;
+}
+
+.as-pricing {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.as-price {
+  font-size: 1rem;
+  font-weight: 800;
+  color: $color-text;
+}
+
+.as-original {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: $color-muted;
+  text-decoration: line-through;
+}
+
+// ─────────────────────────────────────────────
+// RESPONSIVE BEHAVIOR
+//   • Mobile (<=600px): card sized so ~2 fit; 3rd peeks → scroll
+//   • Desktop (>=768px): card sized so ~3 fit; 4th peeks → scroll
+// ─────────────────────────────────────────────
+
+// MOBILE — scroll kicks in when more than 2 cards
+@media (max-width: 600px) {
+  .as-scroll-track { gap: $gap-mobile; }
+
+  .as-card {
+    // ~45% of viewport => 2 full cards + small peek of the 3rd
+    flex: 0 0 calc(50% - #{$gap-mobile});
+    width: calc(50% - #{$gap-mobile});
+    max-width: 220px;
+  }
+
+  .as-img-wrap { height: $img-height-mobile; }
+}
+
+// DESKTOP — scroll kicks in when more than 3 cards
+@media (min-width: 768px) {
+  .as-scroll-track {
+    gap: $gap-desktop;
+    padding: 4px 4px 16px;
+
+    // ── Desktop scroll fix ───────────────────────────────────────────────
+    // 'mandatory' snap locks out continuous trackpad/mouse-wheel input on
+    // desktop because the browser suppresses scroll events that can't land
+    // cleanly on a snap point. Switch to 'proximity' so snapping only
+    // triggers when near a boundary — natural trackpad/mouse scrolling works
+    // freely in between.
+    scroll-snap-type: x proximity;
+
+    // Force the scrollbar track to always exist so the browser registers
+    // the element as scrollable before the first user interaction.
+    // (Inside a drawer the container may be measured before cards render,
+    // leaving scrollWidth === clientWidth and blocking wheel events.)
+    overflow-x: scroll;
+  }
+
+  .as-card {
+    flex: 0 0 $card-width-desktop;
+    width: $card-width-desktop;
+  }
+
+  .as-img-wrap { height: $img-height-desktop; }
+
+  .as-name  { font-size: 0.98rem; }
+  .as-price { font-size: 1.05rem; }
+}
+
+// Large desktop — keep cards crisp, still scroll past 3
+@media (min-width: 1200px) {
+  .as-card {
+    flex: 0 0 220px;
+    width: 220px;
+  }
+  .as-img-wrap { height: 180px; }
+}

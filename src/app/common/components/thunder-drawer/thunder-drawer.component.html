@@ -1,0 +1,23 @@
+<div class="thunder-drawer-container" *ngIf="open">
+  <!-- Overlay/Backdrop -->
+  <div class="thunder-drawer-overlay" (click)="onOverlayClick()"></div>
+
+  <!-- Drawer Panel -->
+  <div class="thunder-drawer-panel">
+    <!-- Close Button -->
+    <div class="thunder-drawer-header">
+      <button
+        class="thunder-drawer-close-btn"
+        (click)="onCloseClick()"
+        aria-label="Close drawer"
+        type="button">
+        <span class="close-icon">×</span>
+      </button>
+    </div>
+
+    <!-- Content Projection -->
+    <div class="thunder-drawer-content">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

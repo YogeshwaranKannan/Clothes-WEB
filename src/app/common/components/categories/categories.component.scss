@@ -1,0 +1,838 @@
+/* =========================
+   PRODUCT PRICE
+   ========================= */
+
+.prices {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+.prices .offer {
+  font-weight: 700;
+  color: #064e3b;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.prices .mrp {
+  color: #666;
+  text-decoration: line-through;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+
+/* =========================
+   CATEGORY RAIL PRICE
+   ========================= */
+
+.cat-rail .prices {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start;   /* IMPORTANT */
+  gap: 8px;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.cat-rail .prices .offer {
+  font-weight: 700;
+  color: #064e3b;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.cat-rail .prices .mrp {
+  color: #666;
+  text-decoration: line-through;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.vm-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  gap: 12px;
+  cursor: default;
+  border-bottom: 1px solid var(--color-border, rgba(0,0,0,0.08));
+  transition: none;
+}
+.vm-row:last-child { border-bottom: none; }
+.vm-row:hover { background: transparent; } /* no more hover-highlight since rows aren't selectable */
+
+.vm-row__actions { flex-shrink: 0; }
+
+.vm-row-add-btn {
+  min-width: 60px;
+  height: 30px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 6px;
+
+  background: var(--color-primary, #0b5ed7);
+  color: var(--color-on-primary, #fff);
+
+  font-size: 0.82rem;
+  font-weight: var(--fw-semi, 600);
+  letter-spacing: var(--tracking-wide, 0.04em);
+  cursor: pointer;
+  transition: background 150ms ease, transform 100ms ease;
+
+  &:hover {
+    background: var(--color-primary-hover, #0a51b8);
+    transform: translateY(-1px);
+  }
+  &:active { transform: translateY(0); }
+}
+
+// Compact per-row stepper (distinct from the old shared .qty-stepper used elsewhere)
+.qty-stepperVariant {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--primary-color, var(--nav-hover-background, #b84a1a));
+  border-radius: 6px;
+  overflow: hidden;
+  height: 30px;
+
+  .qty-btn {
+    width: 26px;
+    height: 100%;
+    border: none;
+    background: transparent;
+    color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .qty-input {
+    width: 34px;
+    height: 100%;
+    border: none;
+    border-left: 1px solid var(--primary-color, var(--nav-hover-background, #b84a1a));
+    border-right: 1px solid var(--primary-color, var(--nav-hover-background, #b84a1a));
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    outline: none;
+    background: var(--color-card-bg, #fff);
+    color: var(--color-text, #111);
+    -moz-appearance: textfield;
+  }
+
+  .qty-input::-webkit-outer-spin-button,
+  .qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+.qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #22c55e;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.qty-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #fff;
+  color: #22c55e;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.qty-input {
+  width: 40px;
+  height: 32px;
+  border: none;
+  text-align: center;
+  font-size: 14px;
+  outline: none;
+  -moz-appearance: textfield;
+}
+
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.cat-rail .actions .qty-stepper {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  height: 36px;
+  border: 1.5px solid var(--color-primary, #0b5ed7);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.cat-rail .actions .qty-input {
+  flex: 1;
+  width: 50px;
+  text-align: center;
+  border: none;
+  outline: none;
+  font-size: var(--text-sm, 0.82rem);
+  font-weight: 700;
+  color: var(--color-text, #111);
+  background: var(--color-card-bg, #fff);
+  border-left: 1px solid var(--color-primary, #0b5ed7);
+  border-right: 1px solid var(--color-primary, #0b5ed7);
+
+  /* Hide browser spinner */
+  -moz-appearance: textfield;
+}
+
+.cat-rail .actions .qty-input::-webkit-outer-spin-button,
+.cat-rail .actions .qty-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.top-category {
+  text-align: center;
+  margin: 3rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Section title & description (unchanged) */
+.title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: var(--font-family-title);
+  font-size: var(--text-2xl);  
+}
+.description {
+  color: black;
+}
+
+.desc-header1,
+.desc-header2,
+.desc-items,
+.desc-items li {
+  color: black;
+}
+
+.description {
+  max-width: 900px;
+  margin: 0.5rem auto 1.5rem;
+  color: var(--color-primary, #0b5ed7);   // theme accent — distinct from body text
+  font-size: var(--text-md, 1.05rem); 
+  font-family: var(--font-family-title);    // one step up from --text-base
+  font-weight: var(--fw-medium, 500);     // slight weight to reinforce prominence
+  line-height: var(--leading-relaxed, 1.65);
+  width: 100%;
+  text-align: center;
+}
+
+.products-section {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+/* ====== Grid Container ======
+   Desktop: 4-up
+   Tablet:  2-up
+   Phone:   2-up (1-up below 360px)
+*/
+.items {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(4, 1fr);  /* desktop */
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Each card fills its grid cell (no flex sizing here) */
+.item {
+  width: 100%;
+  max-width: none;
+  cursor: pointer;
+}
+
+/* Image wrapper occupies full card width */
+.image-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+  outline: none;
+  width: 100%;
+}
+
+.item:focus .image-wrapper,
+.item:focus-visible .image-wrapper {
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Desktop/tablet default image sizing */
+.image-wrapper img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Overlay label */
+.overlay {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.25);
+  padding: 0.4rem 0.8rem;
+  border-radius: 3px;
+}
+
+/* ====== Breakpoints ====== */
+
+/* Tablet: 2-up, slightly shorter image */
+@media (max-width: 900px) {
+  .items { grid-template-columns: repeat(2, 1fr); }
+  .image-wrapper img { height: 200px; }
+}
+
+/* Phone: keep 2-up; use aspect-ratio to keep both cards equal height */
+@media (max-width: 600px) {
+  .items {
+    grid-template-columns: repeat(2, 1fr);
+    padding-left: 12px;    /* optional edge padding for nicer alignment */
+    padding-right: 12px;
+  }
+
+  .image-wrapper {
+    aspect-ratio: 4 / 5;   /* drives height responsively from width */
+  }
+
+  /* Fill the ratio box (do not mix with fixed pixel height here) */
+  .image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* Ultra-narrow: 1-up fallback */
+@media (max-width: 360px) {
+  .items { grid-template-columns: 1fr; }
+}
+
+/* ====== Structured description sub-styles ====== */
+
+// "Dear Patron's" — smaller, muted intro line
+.desc-header1 {
+  display: block;
+  font-size: var(--text-sm, 0.8rem);
+  color: var(--primary-color, #b84a1a);
+  margin-bottom: 0.2rem;
+}
+
+// "12.03.2026 THURSDAY Meal Menu" — prominent date/title line
+.desc-header2 {
+  display: block;
+  font-size: var(--text-base, 1rem);
+  font-weight: var(--fw-semi, 600);
+  color: var(--primary-color, #b84a1a);
+  margin-bottom: 0.5rem;
+}
+
+// Menu item list — "=> ITEM" style
+.desc-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.2rem 1.2rem;
+
+  li {
+    font-size: var(--text-sm, 0.85rem);
+    color: var(--app-text, #333);
+
+    &::before {
+      content: '⇒ ';
+      color: var(--app-primary, #0b5ed7);
+      font-weight: var(--fw-bold, 700);
+    }
+  }
+}
+
+/* ====== Category product rail ====== */
+
+.products-section {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Controls bar: >> and More sit right-aligned above the rail */
+.rail-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0 4px;
+}
+
+.rail-scroll-btn {
+  background: transparent;
+  border: 1px solid var(--color-border, #e6e6e6);
+  border-radius: 6px;
+  padding: 0.3rem 0.7rem;
+  font-size: var(--text-base, 1rem);
+  font-weight: var(--fw-bold, 700);
+  color: var(--color-text, #0b2540);
+  cursor: pointer;
+  line-height: 1;
+  transition: background 150ms ease, border-color 150ms ease;
+
+  &:hover {
+    background: var(--color-filter-bg, #f8f9fb);
+    border-color: var(--color-primary, #0b5ed7);
+    color: var(--color-primary, #0b5ed7);
+  }
+}
+
+.rail-more-btn {
+  background: var(--btn-bg, #111);
+  color: var(--color-on-primary, #fff);
+  border: none;
+  border-radius: 6px;
+  padding: 0.3rem 0.9rem;
+  font-size: var(--text-sm, 0.85rem);
+  font-weight: var(--fw-semi, 600);
+  cursor: pointer;
+  transition: background 150ms ease;
+
+  &:hover { background: var(--btn-hover-bg, #333); }
+}
+
+/* =====================================================================
+   The scroll container
+   KEY FIX: padding-top: 30px gives the absolute-positioned discount
+   badge (top: 8px on the card, which itself may be near the rail top)
+   enough room to paint without being clipped by the rail's overflow.
+   overflow-y: visible is declared but browsers coerce it to 'auto' when
+   overflow-x is also set — so padding-top is the reliable solution.
+   ===================================================================== */
+.cat-rail {
+  display: flex;
+  flex-wrap: nowrap;           /* ✅ cards always stay in a single row */
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  padding-top: 30px;       /* ✅ FIX: room for badge above card top edge */
+  padding-bottom: 8px;     /* room for scrollbar on desktop */
+
+  /* ✅ FIX vertical-scroll-on-touch: declare both pan axes at the container level.
+     Without this, the browser sees overflow-x:auto and assumes this element
+     "owns" all touch gestures — vertical swipes starting inside the rail get
+     swallowed before they can propagate up to the page scroller.
+     pan-x pan-y tells the browser: honour both directions and choose based on
+     the initial swipe angle (horizontal → rail scrolls, vertical → page scrolls). */
+  touch-action: pan-x pan-y;
+
+  /* Hide scrollbar visually but keep it functional */
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+/* Each card: fixed width matching product-list card size on desktop (240px, min 200px) */
+.cat-rail .card {
+  flex: 0 0 240px;
+  max-width: 240px;
+  min-width: 200px;
+  scroll-snap-align: start;
+
+  /* Reuse product-list card tokens */
+  background:#ffffff;
+  //border: 1px solid var(--color-border, rgba(0,0,0,0.06));
+  border-radius: 8px;
+  overflow: visible;       /* ✅ allows badge to paint above card boundary */
+  position: relative;      /* ✅ anchors the absolute badge */
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  /* ✅ Both axes: vertical swipe scrolls the page, horizontal swipe scrolls the rail */
+  touch-action: pan-x pan-y;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  }
+}
+
+/* Image — same ratio as product-list */
+.cat-rail .img-wrap {
+  border-radius: 8px 8px 0 0;   /* top corners match card */
+  overflow: hidden;              /* clips only the image, not the badge */
+  position: relative;
+  /* ✅ Both axes: touch on image allows page scroll (vertical) and rail scroll (horizontal) */
+  touch-action: pan-x pan-y;
+  background: var(--color-surface, #fafafa);
+  display: block;
+  aspect-ratio: 4 / 3;
+  width: 100%;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+}
+
+/* =====================================================================
+   Discount badge — matches product-list exactly.
+   top: 8px places it inside the card's top edge (on top of the image).
+   The card is position:relative + overflow:visible so the badge and its
+   ::after arrow notch are never clipped.
+   ===================================================================== */
+.cat-rail .discount {
+  position: absolute;
+  top: -10px;
+  left: 8px;
+
+  background: #fff;
+  color: var(--color-on-discount);
+
+  border: 1px solid var(--color-on-discount);
+  border-radius: 4px;
+
+  padding: 3px 7px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.5;
+
+  white-space: nowrap;
+  z-index: 20;
+
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* Card body */
+.cat-rail .card-body {
+  padding: 0.75rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1 1 auto;
+}
+
+.cat-rail .meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs, 0.8rem);
+  color: var(--color-text-muted, #6c757d);
+}
+
+.cat-rail .card-title {
+  margin: 0;
+  font-size: var(--text-md, 0.85rem);
+  letter-spacing: 0.02em;
+  color: var(--color-text, #0b2540);
+  font-weight: var(--fw-semi, 600);
+}
+
+// .cat-rail .prices {
+//   display: flex;
+//   gap: 0.5rem;
+//   align-items: baseline;
+// }
+.cat-rail .prices {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+.cat-rail .vm-row__in-cart {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+  white-space: nowrap;
+}
+
+
+.cat-rail .mrp {
+  text-decoration: line-through;
+  color: var(--color-text-muted, #6c757d);
+  font-size: var(--text-xs, 0.8rem);
+}
+
+.cat-rail .offer {
+  font-weight: var(--fw-bold, 700);
+  color: var(--color-text, #0b2540);
+  font-size: var(--text-sm, 0.85rem);
+}
+
+.cat-rail .emi {
+  color: var(--color-text-muted, #6c757d);
+  font-size: var(--text-xs, 0.78rem);
+}
+
+.cat-rail .rating { color: #d4a017; }
+
+.cat-rail .actions { margin-top: auto; }
+
+.cat-rail .btn {
+  display: inline-block;
+  background: var(--btn-bg, #111);
+  color: var(--btn-color, #fff);
+  padding: 0.4rem 0.75rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: var(--text-sm, 0.85rem);
+  transition: background 150ms ease;
+
+  &:hover { background: var(--btn-hover-bg, #333); }
+}
+
+.cat-rail .btn-cart {
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  background: var(--color-primary, #0b5ed7);
+  color: var(--color-on-primary, #fff);
+  font-weight: var(--fw-semi, 600);
+  letter-spacing: var(--tracking-wide, 0.04em);
+  transition: background 150ms ease, transform 100ms ease;
+
+  &:hover {
+    background: var(--color-primary-hover, #0a51b8);
+    transform: translateY(-1px);
+  }
+  &:active { transform: translateY(0); }
+}
+
+// ── Qty stepper — visually identical to Product List's .actions .qty-stepper ──
+.cat-rail .actions .qty-stepper {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  height: 36px;
+  border: 1.5px solid var(--color-primary, #0b5ed7);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.cat-rail .actions .qty-btn {
+  flex: 0 0 40px;
+  height: 100%;
+  background: transparent;
+  border: none;
+  color: var(--color-primary, #0b5ed7);
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 100ms ease;
+
+  &:hover  { background: var(--color-primary-light, #e8f0fe); }
+  &:active { background: var(--color-primary, #0b5ed7); color: #fff; }
+}
+
+.cat-rail .actions .qty-val {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-sm, 0.82rem);
+  font-weight: 700;
+  color: var(--color-text, #111);
+  background: var(--color-card-bg, #fff);
+  border-left:  1px solid var(--color-primary, #0b5ed7);
+  border-right: 1px solid var(--color-primary, #0b5ed7);
+  height: 100%;
+}
+
+/* ── Desktop: clip rail to exactly 4 cards, align controls width ── */
+@media (min-width: 901px) {
+  .products-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .rail-controls,
+  .cat-rail {
+    width: calc(4 * 240px + 3 * 1rem);   /* 1008px — 4 cards + 3 gaps */
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .cat-rail {
+    overflow-x: hidden;   /* hard-clip: no partial 5th card */
+  }
+}
+
+/* ── Mobile qty stepper sizing ── */
+@media (max-width: 600px) {
+  .cat-rail .actions .qty-stepper { height: 32px; }
+  .cat-rail .actions .qty-btn     { flex: 0 0 34px; font-size: 1rem; }
+  .cat-rail .actions .qty-val     { font-size: 0.75rem; }
+}
+
+/* ── Tablet: 2 visible cards, scroll for more ── */
+@media (max-width: 900px) {
+  .cat-rail .card {
+    flex: 0 0 calc(50% - 0.5rem);
+    max-width: none;
+    min-width: 0;
+  }
+}
+
+/* ── Mobile: 2 visible cards, tighter gap ── */
+@media (max-width: 600px) {
+  .cat-rail {
+    gap: 0.75rem;
+    padding: 30px 12px 8px;   /* ✅ keep padding-top: 30px even on mobile */
+    width: 100%;
+    box-sizing: border-box;
+    /* ✅ FIX: was overflow-x:hidden which blocked scrolling entirely.
+       Restore auto so touch-swipe works on mobile. */
+    overflow-x: auto;
+    /* Smooth momentum scrolling on iOS Safari */
+    -webkit-overflow-scrolling: touch;
+    /* ✅ FIX: pan-x alone blocks vertical page scroll when touch starts on a card.
+       pan-x pan-y lets the browser honour both directions and decide based on
+       swipe angle — horizontal swipe scrolls the rail, vertical swipe scrolls the page. */
+    touch-action: pan-x pan-y;
+  }
+  .cat-rail .card {
+    flex: 0 0 calc(50% - 0.375rem);
+    max-width: none;
+    min-width: 0;
+    border-radius: 10px;
+  }
+  .cat-rail .img-wrap {
+    aspect-ratio: 4 / 5;
+  }
+  .cat-rail .card-body {
+    padding: 0.6rem 0.7rem 0.75rem;
+    gap: 0.4rem;
+  }
+  .cat-rail .card-title { font-size: var(--text-sm, 0.8rem); line-height: 1.2 }
+  .cat-rail .emi { font-size: var(--text-xs, 0.75rem); }
+  .cat-rail .btn { padding: 0.35rem 0.6rem; font-size: var(--text-xs, 0.8rem); }
+
+   .rail-controls {
+    justify-content: flex-end;
+  }
+}
+
+/* ====== GLOBAL VARIANT MODAL STYLES (fixed overlay to avoid clipping) ====== */
+.vm-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(1px);
+}
+
+.vm-panel {
+  position: fixed;
+ z-index: 11001;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(92vw, 440px);
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  background:  var(--color-background,#ffffff);
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 20px 60px rgba(0,0,0,0.22);
+  overflow: hidden;
+}
+
+.vm-header { display:flex; align-items:flex-start; justify-content:space-between; padding:16px 18px 12px; 
+  background:var(--color-background,#fafafa); gap:12px;border-bottom:2px solid var(--color-border, rgba(0,0,0,0.08)); gap:10px; }
+.vm-header__category { display:block; font-size:0.7rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--primary-color, var(--nav-hover-background, #b84a1a)); margin-bottom:3px; }
+.vm-header__name { margin:0; font-size:1rem; font-weight:700; color:var(--color-text,#111); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.3; }
+.vm-close { background:none; border:none; cursor:pointer; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.85rem; color:var(--color-text-muted,#888); }
+.vm-close:hover{ background:var(--color-surface,#f0f0f0); color:var(--color-text,#111); }
+.vm-body { overflow-y:auto; flex:1; padding:8px 0; overscroll-behavior:contain; }
+.vm-row { display:flex; align-items:center; padding:12px 18px; gap:12px; cursor:pointer; transition:background 100ms ease; border-left:3px solid transparent; }
+.vm-row:hover{ background:var(--color-surface,#fafafa); }
+.vm-row--selected{ background:var(--primary-light, rgba(184,74,26,0.06)); border-left-color:var(--primary-color, var(--nav-hover-background, #b84a1a)); }
+.vm-row__info{ flex:1; min-width:0; }
+.vm-row__name{ display:block; font-size:0.9rem; font-weight:500; color:var(--color-text,#111); margin-bottom:4px; }
+.vm-row__prices{ display:flex; align-items:baseline; flex-wrap:wrap; gap:5px; }
+.vm-row__offer{ font-size:0.9rem; font-weight:700; color:var(--color-text,#111); }
+.vm-row__mrp{ font-size:0.82rem; color:var(--color-text-muted,#888); }
+.vm-row__mrp--strike{ text-decoration:line-through; }
+.vm-row__badge{ font-size:0.7rem; font-weight:700; color:#fff; background:var(--primary-color, var(--nav-hover-background, #b84a1a)); padding:2px 6px; border-radius:4px; white-space:nowrap; }
+.vm-row__in-cart{ font-size:0.7rem; font-weight:600; color:var(--primary-color, var(--nav-hover-background, #b84a1a)); white-space:nowrap; flex-shrink:0; }
+.vm-radio{ flex-shrink:0; width:18px; height:18px; border-radius:50%; border:2px solid var(--color-border, rgba(0,0,0,0.25)); display:flex; align-items:center; justify-content:center; }
+.vm-radio--checked{ border-color:var(--primary-color, var(--nav-hover-background, #b84a1a)); }
+.vm-radio__dot{ width:8px; height:8px; border-radius:50%; background:transparent; }
+.vm-radio--checked .vm-radio__dot{ background:var(--primary-color, var(--nav-hover-background, #b84a1a)); }
+.vm-footer__offer {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-text, #111);
+}
+
+.vm-footer__mrp {
+  font-size: 0.82rem;
+  color: var(--color-text-muted, #888);
+}
+
+.vm-footer__mrp--strike {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+.vm-footer{ 
+  display:flex; 
+  align-items:center; 
+  justify-content:space-between; 
+  padding:14px 18px; 
+  border-top:2px solid var(--color-border, rgba(0,0,0,0.08)); 
+  background:var(--color-background,#fafafa); gap:12px; }
+
+.vm-footer__variant-name{ display:block; font-size:0.8rem; color:var(--color-text-muted,#888); margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.vm-stepper{ display:flex; align-items:center; gap:0; border:1.5px solid var(--app-primary, var(--nav-hover-background, #b84a1a)); border-radius:8px; overflow:hidden; }
+.vm-stepper__btn{ background:none; border:none; width:36px; height:36px; font-size:1.1rem; font-weight:700; cursor:pointer; color:var(--primary-color, var(--nav-hover-background, #b84a1a)); }
+.vm-stepper__btn:hover{ background:var(--primary-light, rgba(184,74,26,0.08)); }
+.vm-stepper__val{ min-width:32px; text-align:center; font-size:0.9rem; font-weight:600; color:var(--color-text,#111); padding:0 4px; line-height:36px; }
+.vm-add-btn{ padding:9px 22px; background:var(--primary-color, var(--nav-hover-background, #b84a1a)); color:#fff; border:none; border-radius:8px; font-size:0.88rem; font-weight:700; cursor:pointer; }
+
+@media (max-width: 600px) {
+  .vm-panel { width:96vw; max-height:88vh; top:auto; left:0; right:0; bottom:0; transform:none; border-radius:20px 20px 0 0; }
+  .vm-row{ padding:11px 16px; }
+  .vm-header{ padding:14px 16px 10px; }
+  .vm-footer{ padding:12px 16px; }
+}

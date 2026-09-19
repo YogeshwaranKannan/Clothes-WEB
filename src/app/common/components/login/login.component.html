@@ -1,0 +1,624 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-card__left">
+      <h1 class="auth-title">Welcome back</h1>
+      <p class="auth-sub">Sign in to access your account, orders and saved items.</p>
+
+      <nav class="tabs" role="tablist" aria-label="Auth tabs">
+        <button
+          type="button"
+          class="tab" [class.active]="activeTab === 'login'"
+          (click)="selectTab('login')"
+          [attr.aria-selected]="activeTab === 'login'"
+          role="tab">Login</button>
+
+        <button
+          type="button"
+          class="tab" [class.active]="activeTab === 'signup'"
+          (click)="selectTab('signup')"
+          [attr.aria-selected]="activeTab === 'signup'"
+          role="tab">Sign up</button>
+      </nav>
+
+     <section *ngIf="activeTab === 'login' && !forgotPasswordMode" class="panel" role="tabpanel">
+        <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
+          
+          <div class="form-row">
+            <label for="identifier">WhatsApp Mobile </label>
+             <input id="rphone" type="tel" formControlName="identifier" [attr.maxlength]="INPUT_LENGTH.MOBILE.max" inputmode="numeric" autocomplete="tel"/>
+
+            <div class="error" *ngIf="identifier?.touched && identifier?.invalid">
+              Phone is required.
+            </div>
+       
+          </div>
+
+          <div class="form-row">
+            <label for="password">Password</label>
+            <!-- <input id="password" type="password" formControlName="password" autocomplete="current-password" [attr.maxlength]="INPUT_LENGTH.PASSWORD.max"/> -->
+      
+          <div class="password-input-box">
+            <input
+              id="password"
+              [type]="showLoginPassword ? 'text' : 'password'"
+              formControlName="password"
+              autocomplete="current-password"
+              [attr.maxlength]="INPUT_LENGTH.PASSWORD.max"
+            />
+
+            <button
+              type="button"
+              class="eye-btn"
+              (click)="showLoginPassword = !showLoginPassword">
+
+           
+              <span class="eye-icon">
+              {{ showLoginPassword? 'Hide' : 'Show' }}
+            </span>
+
+            </button>
+          </div>
+        
+            
+            <div class="error" *ngIf="password?.touched && password?.errors">
+              <span *ngIf="password?.errors?.['required']">Password is required.</span>
+              <span *ngIf="password?.errors?.['minlength']">Minimum 6 characters.</span>
+            </div>
+          </div>
+           
+         
+          <div class="error" *ngIf="loginError">{{ loginError }}</div>
+
+          <div class="continue-browsing">
+            <button type="submit" class="btn-primary btn-compact">Sign in</button>
+          </div>
+          <div class="forgot-password forgot-password--center">
+            <a href="javascript:void(0)" (click)="showForgotPassword()">
+              Forgot Password?
+            </a>
+          </div>
+           <div class="continue-browsing">
+            <a class="link-continue" routerLink="/">Continue browsing</a>
+          </div>
+          
+        </form>
+      </section>
+
+      <section *ngIf="forgotPasswordMode" class="panel">
+        <div class="form-row">
+          <!-- <label>Email</label>
+         
+          <input
+            type="email"
+            [(ngModel)]="forgotEmail"
+            [ngModelOptions]="{standalone:true}"
+            [readonly]="otpVerified"
+            [attr.maxlength]="INPUT_LENGTH.EMAIL.max"  
+            [attr.minlength]="INPUT_LENGTH.EMAIL.min"
+              /> -->
+              <label>WhatsApp Mobile</label>
+              <input
+                id="forgot-mobile"
+                type="tel"
+                [(ngModel)]="forgotMobile"
+                [ngModelOptions]="{standalone:true}"
+                [attr.maxlength]="INPUT_LENGTH.MOBILE.max"
+                inputmode="numeric"
+                autocomplete="tel"
+              />
+        </div>
+        
+
+       <!-- <button
+        *ngIf="!otpSent"
+        class="btn-primary"
+        [disabled]="isSendingOtp"
+        (click)="generateOtp()">
+
+        <span *ngIf="!isSendingOtp">Send OTP</span>
+        <span *ngIf="isSendingOtp">⏳ Sending OTP...</span>
+      </button> -->
+      <button
+        type="button"
+        class="btn-primary"
+        [disabled]="
+                    isSendingOtp ||
+                    !forgotMobile ||
+                    forgotMobile.length !== 10
+                  "
+        (click)="generateForgotOtp()">
+
+        <span *ngIf="isSendingOtp">
+            ⏳ Sending OTP...
+        </span>
+
+        <span *ngIf="!isSendingOtp && !otpSent">
+            Send OTP
+        </span>
+
+        <span *ngIf="!isSendingOtp && otpSent && !otpVerified">
+            Resend OTP
+        </span>
+
+        <span *ngIf="otpVerified">
+            ✓ Verified
+        </span>
+
+    </button>
+
+        <!-- <div *ngIf="otpSent && !otpVerified">
+
+          <div class="form-row">
+            <label>OTP</label>
+            <input
+              type="text"
+              maxlength="6"
+              [(ngModel)]="otp" />
+          </div>
+          <button
+            class="btn-primary"
+            [disabled]="isVerifyingOtp"
+            (click)="verifyOtp()">
+
+            <span *ngIf="!isVerifyingOtp">Verify OTP</span>
+            <span *ngIf="isVerifyingOtp">⏳ Verifying OTP...</span>
+
+          </button>
+
+        </div> -->
+        <div *ngIf="otpSent && !otpVerified">
+
+    <div class="form-row">
+        <label>OTP</label>
+
+        <input
+            type="text"
+            maxlength="6"
+            [(ngModel)]="otp"
+            [ngModelOptions]="{standalone:true}" />
+    </div>
+
+        <button
+          type="button"
+          class="btn-primary"
+          [disabled]="isVerifyingOtp || !otp"
+          
+          (click)="verifyForgotOtp()">
+
+              <span *ngIf="!isVerifyingOtp">
+                  Verify OTP
+              </span>
+
+              <span *ngIf="isVerifyingOtp">
+                  ⏳ Verifying OTP...
+              </span>
+
+          </button>
+
+      </div>
+        <div *ngIf="otpVerified">
+
+ 
+
+          <!-- New Password -->
+            <div class="form-row password-wrapper">
+
+              <label>New Password</label>
+
+              <div class="password-input-box">
+
+                <input
+                  [type]="showNewPassword ? 'text' : 'password'"
+                  [(ngModel)]="newPassword"
+                  name="newPassword"
+                  required
+                  minlength="6"
+                  (input)="checkNewPasswordStrength()"
+                />
+
+                <button
+                  type="button"
+                  class="eye-btn"
+                  (click)="showNewPassword = !showNewPassword">
+
+                 <span class="eye-icon">
+                    {{ showNewPassword ? 'Hide' : 'Show' }}
+                  </span>
+
+                </button>
+
+                <span
+                  class="strong-tick"
+                  *ngIf="newPasswordStrong">
+                  ✓
+                </span>
+
+              </div>
+
+              <div class="password-strength">
+                <div class="strength-bar">
+                  <div
+                    class="strength-fill"
+                    [style.width.%]="newPasswordStrengthPercent">
+                  </div>
+                </div>
+
+                <small>{{ newPasswordStrengthText }}</small>
+              </div>
+
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-row">
+
+              <label>Confirm Password</label>
+
+              <div class="password-input-box">
+
+                <input
+                  [type]="showConfirmPassword ? 'text' : 'password'"
+                  [(ngModel)]="confirmPassword"
+                  name="confirmPassword"
+                  required
+                />
+
+                <button
+                  type="button"
+                  class="eye-btn"
+                  (click)="showConfirmPassword = !showConfirmPassword">
+
+              
+                  <span class="eye-icon">
+                  {{showConfirmPassword ? 'Hide' : 'Show'  }}
+                </span>
+
+                </button>
+
+              </div>
+
+              <div
+                class="error"
+                *ngIf="confirmPassword && newPassword !== confirmPassword">
+                Passwords do not match.
+              </div>
+
+            </div>
+
+
+
+          <button
+            class="btn-primary"
+
+            [disabled]="
+              !newPasswordStrong ||
+              !confirmPassword ||
+              newPassword !== confirmPassword
+            "
+
+            (click)="resetPassword()">
+
+            Update Password
+
+          </button>
+
+
+        </div>
+ 
+
+        <div class="error" *ngIf="forgotError">
+          {{ forgotError }}
+        </div>
+
+        <div class="success" *ngIf="forgotSuccess">
+          {{ forgotSuccess }}
+        </div>
+
+      </section>
+
+      <!-- <section *ngIf="activeTab === 'signup'" class="panel" role="tabpanel">
+        <form [formGroup]="registerForm" (ngSubmit)="register()" novalidate>
+          <div class="form-row">
+            <label for="rname">Name</label>
+            <input id="rname" type="text" formControlName="name" />
+            <div class="error" *ngIf="rName?.touched && rName?.invalid">Name is required.</div>
+          </div>
+
+          <div class="form-row">
+            <label for="remail">Email</label>
+            <input id="remail" type="email" formControlName="email" />
+            <div class="error" *ngIf="rEmail?.touched && rEmail?.errors">Enter a valid email.</div>
+          </div>
+
+          <div class="form-row">
+            <label for="rphone">Phone</label>
+            <input id="rphone" type="tel" formControlName="phone" />
+            <div class="error" *ngIf="rPhone?.touched && rPhone?.invalid">Phone is required.</div>
+          </div>
+
+          <div class="form-row">
+            <label for="rpassword">Password</label>
+            <input id="rpassword" type="password" formControlName="password" />
+            <div class="error" *ngIf="rPassword?.touched && rPassword?.errors">Minimum 6 characters.</div>
+          </div>
+
+          <div class="form-row">
+            <label for="rconfirm">Confirm Password</label>
+            <input id="rconfirm" type="password" formControlName="confirmPassword" />
+            <div class="error" *ngIf="rConfirm?.touched && rConfirm?.errors">Confirm your password.</div>
+          </div>
+
+          <div class="actions-row actions-row--center">
+            <button type="submit" class="btn-primary btn-compact">Create account</button>
+          </div>
+
+          <div class="continue-browsing">
+            <a class="link-continue" routerLink="/">Continue browsing</a>
+          </div>
+           <div class="error" *ngIf="loginError">{{ loginError }}</div>
+        </form>
+      </section> -->
+    <section *ngIf="activeTab === 'signup'" class="panel" role="tabpanel">
+        <form [formGroup]="registerForm" (ngSubmit)="register()" novalidate>
+
+          
+
+          <div class="form-row">
+            <label for="rfirstname">Customer Name</label>
+            <input id="rfirstname" type="text" formControlName="firstName"  [attr.maxlength]="INPUT_LENGTH.NAME.max" [attr.minlength]="INPUT_LENGTH.NAME.min"/>
+
+            <div class="error" *ngIf="rFirstName?.touched && rFirstName?.invalid">
+              Customer Name is required.
+            </div>
+          </div>
+
+
+          <!-- <div class="form-row">
+            <label for="rlastname">Last Name</label>
+            <input id="rlastname" type="text" formControlName="lastName"  [attr.maxlength]="INPUT_LENGTH.LASTNAME.max" [attr.minlength]="INPUT_LENGTH.LASTNAME.min"/>
+
+            <div class="error" *ngIf="rLastName?.touched && rLastName?.invalid">
+              Last Name is required.
+            </div>
+          </div> -->
+
+
+          <!-- <div class="form-row">
+            <label for="remail">Email</label>
+            <input
+              id="remail"
+              type="email"
+              formControlName="email"
+              [disabled]="signupOtpVerified"
+              [attr.maxlength]="INPUT_LENGTH.EMAIL.max">
+            
+
+            <div
+              *ngIf="
+                registerForm.get('email')?.touched &&
+                registerForm.get('email')?.invalid
+              "
+              class="error-text"
+            >
+              <span *ngIf="registerForm.get('email')?.errors?.['emailStrict']">
+                Enter a valid email address.
+              </span>
+            </div>
+           
+          </div> -->
+          
+
+
+          <div class="form-row">
+            <label for="rphone">WhatsApp Mobile</label>
+            <input id="rphone" type="tel" formControlName="phone"   [attr.maxlength]="INPUT_LENGTH.MOBILE.max"/>
+
+            <div class="error" *ngIf="rPhone?.touched && rPhone?.invalid">
+              Phone is required.
+            </div>
+
+             <button
+              type="button"
+              class="btn-primary"
+              [disabled]="isSendingOtp || rEmail?.invalid || signupOtpVerified"
+              (click)="generateOtp()">
+
+              <span *ngIf="isSendingOtp">
+                  ⏳ Sending OTP...
+              </span>
+
+              <span *ngIf="!isSendingOtp && !signupOtpSent && !signupOtpVerified">
+                  Send OTP
+              </span>
+
+              <span *ngIf="!isSendingOtp && signupOtpSent && !signupOtpVerified">
+                  Resend OTP
+              </span>
+
+              <span *ngIf="signupOtpVerified">
+                  ✓ Verified
+              </span>
+
+          </button>
+                <!-- <button
+                  *ngIf="!otpSent"
+                  class="btn-primary"
+                  [disabled]="isSendingOtp"
+                  (click)="generateOtp()">
+
+                  <span *ngIf="!isSendingOtp">Send OTP</span>
+                  <span *ngIf="isSendingOtp">⏳ Sending OTP...</span>
+              </button> -->
+              
+             <div *ngIf="signupOtpSent && !signupOtpVerified">
+
+              <div class="form-row">
+                  <label>OTP</label>
+
+                  <input
+                      type="text"
+                      maxlength="6"
+                      [(ngModel)]="signupOtp"
+                      [ngModelOptions]="{standalone:true}">
+              </div>
+
+              <button
+                  type="button"
+                  class="btn-primary"
+                  [disabled]="isVerifyingOtp"
+                  (click)="verifyOtp()">
+
+                  <span *ngIf="!isVerifyingOtp">Verify OTP</span>
+                  <span *ngIf="isVerifyingOtp">⏳ Verifying OTP...</span>
+
+              </button>
+
+          </div>
+              <div class="success" *ngIf="signupOtpSuccess">
+                {{ signupOtpSuccess }}
+              </div>
+
+              <div class="error" *ngIf="signupOtpError">
+                {{ signupOtpError }}
+              </div>
+          </div>
+                   <!-- Password + Confirm Password + Submit only appear once mobile OTP is verified -->
+          <ng-container *ngIf="signupOtpVerified">
+
+            <!-- Password -->
+            <div class="form-row password-wrapper">
+              <label for="rpassword">Password</label>
+
+              <div class="password-input-box">
+                <input
+                    id="rpassword"
+                    [type]="showRegisterPassword ? 'text' : 'password'"
+                    formControlName="password"
+                    [attr.maxlength]="INPUT_LENGTH.PASSWORD.max"
+                    (input)="checkPasswordStrength()"
+                />
+
+                <button
+                    type="button"
+                    class="eye-btn"
+                    (click)="showRegisterPassword=!showRegisterPassword">
+                    <span class="eye-icon">
+                      {{ showRegisterPassword ? 'Hide' : 'Show' }}
+                    </span>
+                </button>
+
+                <span class="strong-tick" *ngIf="passwordStrong">✓</span>
+              </div>
+
+              <div class="password-strength">
+                <div class="strength-bar">
+                  <div class="strength-fill" [style.width.%]="passwordStrengthPercent"></div>
+                </div>
+                <small>{{ passwordStrengthText }}</small>
+              </div>
+
+              <div class="error" *ngIf="rPassword?.touched && rPassword?.errors">
+                Minimum 6 characters.
+              </div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-row">
+              <label for="rconfirm">Confirm Password</label>
+
+              <div class="password-input-box">
+                <input
+                    id="rconfirm"
+                    [type]="showRegisterConfirmPassword ? 'text' : 'password'"
+                    formControlName="confirmPassword"
+                    [attr.maxlength]="INPUT_LENGTH.PASSWORD.max"/>
+
+                <button
+                    type="button"
+                    class="eye-btn"
+                    (click)="showRegisterConfirmPassword=!showRegisterConfirmPassword">
+                    <span class="eye-icon">
+                      {{ showRegisterConfirmPassword ? 'Hide' : 'Show' }}
+                    </span>
+                </button>
+              </div>
+
+              <div class="error" *ngIf="rConfirm?.touched && rConfirm?.errors?.['required']">
+                Confirm your password.
+              </div>
+
+              <div class="error" *ngIf="rConfirm?.touched && rConfirm?.errors?.['mismatch']">
+                Passwords do not match.
+              </div>
+            </div>
+
+            <div class="actions-row actions-row--center">
+              <button
+                type="submit"
+                class="btn-primary btn-compact"
+                [disabled]="registerForm.invalid || !signupOtpVerified">
+                Create account
+              </button>
+            </div>
+
+          </ng-container>
+
+          <div class="continue-browsing" *ngIf="!signupOtpVerified">
+            <small class="muted">Verify your WhatsApp mobile number to continue</small>
+          </div>
+
+          <div class="continue-browsing">
+
+            <a
+              class="link-continue"
+              routerLink="/">
+
+              Continue browsing
+
+            </a>
+
+          </div>
+
+
+          <div class="error"
+            *ngIf="loginError">
+
+            {{ loginError }}
+
+          </div>
+
+
+        </form>
+
+      </section>
+    
+    </div>
+
+    <!-- <aside class="auth-card__right">
+      <h2 class="samples-title">Sample accounts</h2>
+
+      <div class="sample-group">
+        <h3>Buyers</h3>
+        <ul>
+          <li *ngFor="let u of buyers">
+            <button type="button" class="sample-btn" (click)="selectSampleUser(u)">
+              <strong>{{ u.name }}</strong>
+              <span class="muted">{{ u.email }} · {{ u.phone }}</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sample-group">
+        <h3>Sellers</h3>
+        <ul>
+          <li *ngFor="let u of sellers">
+            <button type="button" class="sample-btn" (click)="selectSampleUser(u)">
+              <strong>{{ u.name }}</strong>
+              <span class="muted">{{ u.email }} · {{ u.phone }}</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </aside> -->
+  </div>
+</div>

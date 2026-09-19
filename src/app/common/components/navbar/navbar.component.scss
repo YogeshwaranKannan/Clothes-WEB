@@ -1,0 +1,1131 @@
+// =============================================================================
+// NAVBAR COMPONENT STYLES
+// =============================================================================
+@use '../../../../styles/media' as media;
+
+// =============================================================================
+// MOBILE MENU FOOTER (My Orders / Profile / Cart / Logout, or Login / Sign Up)
+// =============================================================================
+
+@include media.down(md) {
+  .mobile-menu-panel__footer {
+    display: flex;
+    flex-direction: column;
+
+    margin: 0.5rem 0.75rem 0;
+    padding-top: 0.5rem;
+
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .menu-item {
+    display: flex;
+    align-items: center;
+
+    gap: 0.65rem;
+
+    width: 100%;
+
+    padding: 0.65rem 0.75rem;
+
+    background: transparent;
+    border: none;
+    border-radius: 0.375rem;
+
+    color: var(
+      --primary-color,
+      var(--nav-hover-background, #b84a1a)
+    );
+
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    text-align: left;
+    cursor: pointer;
+
+    transition:
+      background 0.15s ease,
+      color 0.15s ease;
+
+    &:hover,
+    &:focus {
+      background: var(
+        --primary-light,
+        rgba(184, 74, 26, 0.08)
+      );
+
+      color: var(
+        --primary-dark,
+        var(--nav-hover-background, #8a3210)
+      );
+
+      outline: none;
+    }
+
+    &.danger {
+      color: #dc3545;
+
+      &:hover,
+      &:focus {
+        background: rgba(220, 53, 69, 0.08);
+        color: #b02a37;
+      }
+    }
+  }
+
+  .menu-item-icon {
+    width: 18px;
+    height: 18px;
+
+    flex-shrink: 0;
+  }
+}
+
+// =============================================================================
+// DESIGN TOKENS
+// =============================================================================
+// --primary-color           Main brand colour
+// --primary-dark            Darker shade for hover
+// --primary-light           Light tinted hover background
+// --nav-hover-background    Fallback hover background
+// --nav-hover-foreground    Text colour on filled background
+// =============================================================================
+
+// =============================================================================
+// HOST SHELL
+// =============================================================================
+
+:host {
+  display: block;
+}
+
+// White navbar background — desktop and mobile
+:host > nav,
+.navbar {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+// =============================================================================
+// SEARCH
+// =============================================================================
+
+.search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  min-width: 400px;
+
+  border: 1px solid var(--bs-border-color, var(--app-border));
+  padding: 0.9rem 4.2rem 0.9rem 1.2rem;
+  border-radius: 9999px;
+
+  background: var(--app-surface);
+  font-size: 0.95rem;
+
+  outline: none;
+  box-shadow: none;
+
+  transition: border-color 0.15s ease;
+
+  &:focus {
+    border-color: var(--app-primary);
+  }
+}
+
+.search-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--search-icon-color, var(--muted, #6b6b6b));
+
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 1000;
+}
+
+// =============================================================================
+// NAV CONTAINER
+// =============================================================================
+
+.navbar .container-fluid {
+  justify-content: space-between;
+  gap: 0.25rem;
+  flex-wrap: nowrap;
+}
+
+// =============================================================================
+// DESKTOP NAV SPACER
+// =============================================================================
+
+.desktop-nav-spacer {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+// =============================================================================
+// STATIC NAV LINKS
+// =============================================================================
+
+.navbar-brand {
+  font-weight: 600;
+  font-size: 0.95rem;
+
+  color: var(
+    --primary-color,
+    var(--nav-hover-background, #b84a1a)
+  ) !important;
+
+  text-decoration: none;
+
+  padding: 0.5rem 0.9rem;
+  border-radius: 0.25rem;
+
+  white-space: nowrap;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+
+  &:hover,
+  &:focus {
+    color: var(
+      --primary-dark,
+      var(--nav-hover-background, #8a3210)
+    ) !important;
+
+    background: var(
+      --primary-light,
+      rgba(184, 74, 26, 0.08)
+    );
+
+    outline: none;
+  }
+}
+
+@include media.down(md) {
+  .navbar-brand.desktop-only {
+    display: none !important;
+  }
+}
+
+// =============================================================================
+// ALL CATEGORIES
+// =============================================================================
+
+.all-categories-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.all-categories-toggle {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 0.4rem;
+
+  padding: 0.45rem 1rem;
+
+  background: transparent;
+
+  border: 1.5px solid
+    var(
+      --primary-color,
+      var(--nav-hover-background, #b84a1a)
+    );
+
+  border-radius: 0.375rem;
+
+  color: var(
+    --primary-color,
+    var(--nav-hover-background, #b84a1a)
+  );
+
+  font-weight: 700;
+  font-size: 0.9rem;
+
+  cursor: pointer;
+  white-space: nowrap;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+
+  &:hover,
+  &:focus {
+    background: var(
+      --primary-color,
+      var(--nav-hover-background, #b84a1a)
+    );
+
+    color: var(--nav-hover-foreground, #fff);
+
+    outline: none;
+  }
+}
+
+// =============================================================================
+// MASTER / DETAIL MEGA MENU
+// =============================================================================
+
+.mega-menu {
+  display: none;
+
+  position: absolute;
+
+  top: calc(100% + 1px);
+  left: 0;
+
+  z-index: 1100;
+
+  // Default: only left column
+  grid-template-columns: 240px;
+
+  width: max-content;
+
+  max-width: min(700px, calc(100vw - 2rem));
+  max-height: 420px;
+
+  background: #fff;
+
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.13);
+
+  overflow: hidden;
+
+  &.show {
+    display: grid;
+  }
+
+  // Two columns only when the right panel has content
+  &.show:has(.mega-right:not(.mega-right--hidden)) {
+    grid-template-columns: 240px minmax(420px, 680px);
+  }
+}
+
+// =============================================================================
+// MEGA MENU — LEFT COLUMN
+// =============================================================================
+
+.mega-left {
+  list-style: none;
+
+  margin: 0;
+  padding: 0.5rem 0;
+
+  background: #faf8f6;
+
+  border-right: 1px solid rgba(0, 0, 0, 0.07);
+
+  overflow-y: auto;
+  max-height: 420px;
+
+  display: flex;
+  flex-direction: column;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0.6rem 1rem;
+
+    cursor: pointer;
+
+    font-size: 0.875rem;
+    font-weight: 500;
+
+    color: var(
+      --primary-color,
+      var(--nav-hover-background, #b84a1a)
+    );
+
+    border-left: 3px solid transparent;
+
+    transition:
+      background 0.12s ease,
+      border-color 0.12s ease,
+      color 0.12s ease;
+
+    &:hover {
+      background: var(
+        --primary-light,
+        rgba(184, 74, 26, 0.08)
+      );
+
+      color: var(
+        --primary-dark,
+        var(--nav-hover-background, #8a3210)
+      );
+    }
+
+    &.is-active {
+      background: #fff;
+
+      border-left-color: var(
+        --primary-color,
+        var(--nav-hover-background, #b84a1a)
+      );
+
+      color: var(
+        --primary-color,
+        var(--nav-hover-background, #b84a1a)
+      );
+
+      font-weight: 700;
+    }
+  }
+
+  &__label {
+    flex: 1;
+  }
+
+  &__arrow {
+    font-size: 1.15rem;
+    font-weight: 700;
+
+    line-height: 1;
+
+    opacity: 0.7;
+
+    margin-left: 0.4rem;
+
+    color: var(
+      --primary-color,
+      var(--nav-hover-background, #b84a1a)
+    );
+
+    transition:
+      opacity 0.12s ease,
+      transform 0.12s ease;
+  }
+
+  &__item.is-active &__arrow {
+    opacity: 1;
+    transform: translateX(2px);
+  }
+
+  // View All stays at the bottom
+  &__view-all-item {
+    margin-top: auto;
+
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+
+    padding: 0.3rem 0 0;
+  }
+
+  &__view-all {
+    display: flex;
+    align-items: center;
+
+    gap: 0.3rem;
+
+    padding: 0.55rem 1rem;
+
+    font-size: 0.82rem;
+    font-weight: 700;
+
+    color: var(
+      --primary-color,
+      var(--nav-hover-background, #b84a1a)
+    );
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    border-left: 3px solid transparent;
+
+    transition:
+      background 0.12s ease,
+      border-color 0.12s ease;
+
+    &::after {
+      content: '→';
+
+      font-size: 0.88rem;
+
+      opacity: 0.7;
+    }
+
+    &:hover {
+      background: var(
+        --primary-light,
+        rgba(184, 74, 26, 0.08)
+      );
+
+      border-left-color: var(
+        --primary-color,
+        var(--nav-hover-background, #b84a1a)
+      );
+    }
+  }
+}
+
+// =============================================================================
+// MEGA MENU — RIGHT COLUMN
+// =============================================================================
+
+.mega-right {
+  padding: 0.75rem 1.25rem 1rem;
+
+  overflow-y: auto;
+
+  max-height: 420px;
+  min-width: 0;
+
+  // Completely hide right panel when there are no children
+  &--hidden {
+    display: none !important;
+
+    padding: 0;
+    width: 0;
+  }
+
+  &__heading {
+    font-size: 0.68rem;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+
+    color: var(--primary-color, #b84a1a);
+
+    opacity: 0.6;
+
+    margin: 0 0 0.65rem;
+    padding-bottom: 0.45rem;
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  }
+
+  &__list {
+    list-style: none;
+
+    margin: 0;
+    padding: 0;
+
+    display: grid;
+
+    grid-template-columns:
+      repeat(auto-fill, minmax(155px, 1fr));
+
+    gap: 0.2rem 0.5rem;
+  }
+
+  &__link {
+    display: block;
+
+    padding: 0.42rem 0.55rem;
+
+    font-size: 0.875rem;
+
+    color: var(
+      --primary-color,
+      var(--nav-hover-background, #b84a1a)
+    );
+
+    text-decoration: none;
+
+    border-radius: 0.25rem;
+
+    transition:
+      background 0.12s ease,
+      color 0.12s ease;
+
+    &:hover,
+    &:focus {
+      background: var(
+        --primary-color,
+        var(--nav-hover-background, #b84a1a)
+      );
+
+      color: var(--nav-hover-foreground, #fff);
+
+      outline: none;
+    }
+  }
+}
+
+// =============================================================================
+// DESKTOP SEARCH WRAPPER
+// =============================================================================
+
+.desktop-search-wrapper {
+  flex: 1 1 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 0 0.75rem;
+
+  min-width: 0;
+}
+
+.desktop-search {
+  width: 100%;
+  max-width: 600px;
+}
+
+.mobile-search-wrapper {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+@include media.down(md) {
+  .desktop-search-wrapper {
+    display: none !important;
+  }
+
+  .search-input {
+    min-width: 0;
+  }
+}
+
+// =============================================================================
+// MOBILE OFFCANVAS SIDEBAR
+// =============================================================================
+
+.offcanvas {
+  position: fixed;
+
+  top: 50px;
+  bottom: 0;
+
+  left: 0;
+  right: auto;
+
+  width: 300px;
+  height: auto;
+
+  background-color: #ffffff;
+  color: #1a1a1a;
+
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.13);
+
+  transform: translateX(-100%);
+
+  transition: transform 0.28s ease-in-out;
+
+  z-index: 1045;
+
+  display: flex;
+  flex-direction: column;
+
+  &.show {
+    transform: translateX(0);
+  }
+}
+
+// =============================================================================
+// OFFCANVAS HEADER
+// =============================================================================
+
+.offcanvas-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0.9rem 1.25rem;
+
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+  flex-shrink: 0;
+}
+
+.offcanvas-title {
+  font-size: 1rem;
+  font-weight: 700;
+
+  color: var(
+    --primary-color,
+    var(--nav-hover-background, #b84a1a)
+  );
+}
+
+.offcanvas-close {
+  background: transparent;
+  border: none;
+
+  color: var(
+    --primary-color,
+    var(--nav-hover-background, #b84a1a)
+  );
+
+  font-size: 1.15rem;
+
+  cursor: pointer;
+
+  padding: 0.3rem 0.6rem;
+
+  border-radius: 0.25rem;
+
+  line-height: 1;
+
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: var(
+      --primary-light,
+      rgba(184, 74, 26, 0.1)
+    );
+  }
+}
+
+// =============================================================================
+// OFFCANVAS BODY
+// =============================================================================
+
+.offcanvas-body {
+  padding: 0.5rem 0;
+
+  overflow-y: auto;
+
+  flex: 1;
+}
+
+// =============================================================================
+// MOBILE STATIC LINKS
+// =============================================================================
+
+.mobile-static-links {
+  list-style: none;
+
+  margin: 0;
+  padding: 0 0.75rem;
+
+  li a {
+    display: block;
+
+    padding: 0.65rem 0.75rem;
+
+    color: var(
+      --primary-color,
+      var(--nav-hover-background, #b84a1a)
+    );
+
+    text-decoration: none;
+
+    font-weight: 600;
+    font-size: 0.9rem;
+
+    border-radius: 0.375rem;
+
+    transition:
+      background 0.15s ease,
+      color 0.15s ease;
+
+    &:hover {
+      background: var(
+        --primary-light,
+        rgba(184, 74, 26, 0.08)
+      );
+
+      color: var(
+        --primary-dark,
+        var(--nav-hover-background, #8a3210)
+      );
+    }
+  }
+}
+
+.mobile-divider {
+  border: none;
+
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+  margin: 0.5rem 0.75rem;
+}
+
+// =============================================================================
+// MOBILE CATEGORY ACCORDION
+// =============================================================================
+
+.mobile-cat-list {
+  list-style: none;
+
+  margin: 0;
+  padding: 0 0.75rem;
+}
+
+.mobile-cat-item {
+  margin-bottom: 0.1rem;
+}
+
+.mobile-cat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0.6rem 0.75rem;
+
+  border-radius: 0.375rem;
+
+  cursor: pointer;
+
+  transition: background 0.12s ease;
+
+  &:hover {
+    background: var(
+      --primary-light,
+      rgba(184, 74, 26, 0.07)
+    );
+  }
+
+  &.is-open {
+    background: var(
+      --primary-light,
+      rgba(184, 74, 26, 0.1)
+    );
+  }
+}
+
+.mobile-cat-label {
+  flex: 1;
+
+  font-size: 0.875rem;
+  font-weight: 600;
+
+  color: var(
+    --primary-color,
+    var(--nav-hover-background, #b84a1a)
+  );
+}
+
+.mobile-cat-chevron {
+  font-size: 1rem;
+  font-weight: 700;
+
+  color: var(
+    --primary-color,
+    var(--nav-hover-background, #b84a1a)
+  );
+
+  opacity: 0.55;
+
+  margin-left: 0.5rem;
+}
+
+// =============================================================================
+// MOBILE SUBCATEGORY
+// =============================================================================
+
+.mobile-sub-list {
+  list-style: none;
+
+  margin: 0.1rem 0 0.2rem 1rem;
+  padding: 0;
+
+  border-left: 2px solid
+    var(
+      --primary-color,
+      rgba(184, 74, 26, 0.3)
+    );
+}
+
+.mobile-sub-link {
+  display: block;
+
+  padding: 0.45rem 1rem;
+
+  font-size: 0.84rem;
+
+  color: var(
+    --primary-color,
+    var(--nav-hover-background, #b84a1a)
+  );
+
+  text-decoration: none;
+
+  border-radius: 0.25rem;
+
+  transition:
+    background 0.12s ease,
+    color 0.12s ease;
+
+  &:hover,
+  &:focus {
+    background: var(
+      --primary-color,
+      var(--nav-hover-background, #b84a1a)
+    );
+
+    color: var(--nav-hover-foreground, #fff);
+
+    outline: none;
+  }
+}
+
+// =============================================================================
+// MOBILE TRACK ORDER
+// =============================================================================
+
+.mobile-track-menu-item {
+  margin: 0.5rem 0.75rem 0;
+
+  padding-top: 0.5rem;
+
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.mobile-menu-track-btn {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0.65rem 0.75rem;
+
+  background: transparent;
+
+  border: none;
+  border-radius: 0.375rem;
+
+  color: var(
+    --primary-color,
+    var(--nav-hover-background, #b84a1a)
+  );
+
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  text-align: left;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+
+  &:hover,
+  &:focus {
+    background: var(
+      --primary-light,
+      rgba(184, 74, 26, 0.08)
+    );
+
+    color: var(
+      --primary-dark,
+      var(--nav-hover-background, #8a3210)
+    );
+
+    outline: none;
+  }
+}
+
+.mobile-menu-track-left {
+  display: flex;
+  align-items: center;
+
+  gap: 0.65rem;
+
+  svg {
+    flex-shrink: 0;
+
+    color: var(
+      --primary-color,
+      var(--nav-hover-background, #b84a1a)
+    );
+  }
+}
+
+.track-chevron {
+  font-size: 1.1rem;
+  font-weight: 700;
+
+  line-height: 1;
+
+  color: var(
+    --primary-color,
+    var(--nav-hover-background, #b84a1a)
+  );
+
+  opacity: 0.65;
+}
+
+// =============================================================================
+// MOBILE TRACK ORDER INPUT
+// =============================================================================
+
+.mobile-track-input-wrap {
+  display: flex;
+  align-items: center;
+
+  gap: 0.45rem;
+
+  padding: 0.55rem 0.75rem 0.75rem;
+
+  animation: mobileTrackOpen 0.18s ease;
+}
+
+.mobile-track-input {
+  flex: 1;
+  min-width: 0;
+
+  height: 38px;
+
+  padding: 0.45rem 0.7rem;
+
+  border: 1px solid
+    var(
+      --bs-border-color,
+      rgba(0, 0, 0, 0.15)
+    );
+
+  border-radius: 0.375rem;
+
+  background: #fff;
+  color: #1a1a1a;
+
+  font-size: 0.84rem;
+
+  outline: none;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &::placeholder {
+    color: #888;
+  }
+
+  &:focus {
+    border-color: var(
+      --primary-color,
+      var(--nav-hover-background, #b84a1a)
+    );
+
+    box-shadow:
+      0 0 0 2px
+      var(
+        --primary-light,
+        rgba(184, 74, 26, 0.1)
+      );
+  }
+}
+
+.mobile-track-search-btn {
+  flex-shrink: 0;
+
+  height: 38px;
+
+  padding: 0 0.85rem;
+
+  border: 1px solid
+    var(
+      --primary-color,
+      var(--nav-hover-background, #b84a1a)
+    );
+
+  border-radius: 0.375rem;
+
+  background: var(
+    --primary-color,
+    var(--nav-hover-background, #b84a1a)
+  );
+
+  color: var(
+    --nav-hover-foreground,
+    #fff
+  );
+
+  font-size: 0.82rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    opacity 0.15s ease;
+
+  &:hover,
+  &:focus {
+    background: var(
+      --primary-dark,
+      var(--nav-hover-background, #8a3210)
+    );
+
+    border-color: var(
+      --primary-dark,
+      var(--nav-hover-background, #8a3210)
+    );
+
+    outline: none;
+  }
+
+  &:active {
+    opacity: 0.85;
+  }
+}
+
+// =============================================================================
+// ANIMATIONS
+// =============================================================================
+
+@keyframes mobileTrackOpen {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+// =============================================================================
+// MOBILE BACKDROP
+// =============================================================================
+
+.offcanvas-backdrop {
+  position: fixed;
+
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background: rgba(0, 0, 0, 0.4);
+
+  z-index: 1044;
+
+  animation: fadeIn 0.22s ease;
+}
+
+// =============================================================================
+// MOBILE — HIDE DESKTOP MEGA MENU
+// =============================================================================
+
+@include media.mobile-only {
+  .all-categories-wrap {
+    display: none !important;
+  }
+}

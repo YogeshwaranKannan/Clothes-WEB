@@ -1,0 +1,78 @@
+{
+  "sitePaymentDetailsHeader": {
+    "jobCard": 287,
+    "customerSiteName": "Sambantham",
+    "jobValue": 689986
+  },
+  "sitePaymentDetails": [
+    {
+      "paymentId": 1,
+      "jobCard": 287,
+      "customerSiteName": "Sambantham",
+      "jobValue": 689986,
+      "cashInDate": "05 Apr 2025",
+      "paymentMode": "Bank",
+      "description": "Advance Received in current accoun",
+      "paymentRefNumber": "",
+      "amountReceived": 100000,
+      "balanceDue": -589986,
+      "entryBy":"Karthick"
+    },
+    {
+      "paymentId": 2,
+      "jobCard": 287,
+      "customerSiteName": "Sambantham",
+      "jobValue": 689986,
+      "cashInDate": "17 Jne 2025",
+      "paymentMode": "Bank",
+      "description": "Payment receved in current account",
+      "paymentRefNumber": "",
+      "amountReceived": 373486,
+      "balanceDue": -216500,
+       "entryBy":"Karthick"
+    },
+    {
+      "paymentId": 3,
+      "jobCard": 287,
+      "customerSiteName": "Sambantham",
+      "jobValue": 689986,
+      "cashInDate": "10 Jun 2025",
+      "paymentMode": "Bank",
+      "description": "Payment received in Divya SBI account",
+      "paymentRefNumber": "",
+      "amountReceived": 99000,
+      "balanceDue": -117500,
+       "entryBy":"Karthick"
+    },
+    {
+      "paymentId": 4,
+      "jobCard": 287,
+      "customerSiteName": "Sambantham",
+      "jobValue": 689986,
+      "cashInDate": "28 Jun 2025",
+      "paymentMode": "Bank",
+      "description": "Payment received in Divya SBI account",
+      "paymentRefNumber": "",
+      "amountReceived": 98500,
+      "balanceDue": -19000,
+       "entryBy":"Karthick"
+    },
+    {
+      "paymentId": 5,
+      "jobCard": 287,
+      "customerSiteName": "Sambantham",
+      "jobValue": 689986,
+      "cashInDate": "02 Jun 2025",
+      "paymentMode": "Cash",
+      "description": "Cash received",
+      "paymentRefNumber": "",
+      "amountReceived": 19000,
+      "balanceDue": 0,
+       "entryBy":"Karthick"
+    }
+  ],
+  "sitePaymentDetailsTrailer": {
+    "totalRecords": 5,
+    "currentAmountDue": 0
+  }
+}

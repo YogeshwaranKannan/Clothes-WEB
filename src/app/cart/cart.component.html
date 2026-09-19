@@ -1,0 +1,79 @@
+<div class="container my-4 cart-container">
+  <div *ngIf="(cartCount$ | async) == 0 else hasItems" class="text-center py-5">
+    <div class="empty-cart-msg mb-3">Your cart is empty</div>
+    <div>
+      
+    <a class="btn btn-primary continue-center"  (click)="onContinueShopping()">
+      ← Continue Shopping
+    </a>
+
+    </div>
+  </div>
+
+  <ng-template #hasItems>
+
+  <div class="cart-layout">
+
+    <!-- CART LIST -->
+    <div class="cart-left">
+
+      <!-- <div class="cart-grid-header d-none d-lg-grid">
+        <div>PRODUCT</div>
+        <div class="right">PRICE</div>
+        <div class="center">QUANTITY</div>
+        <div class="right">TOTAL</div>
+        <div></div>
+      </div> -->
+       <div class="d-flex justify-content-between align-items-center m-lg-2">
+        <h2 class="summary-card__title mb-0">
+          {{ cartCount$ | async }}
+          {{ (cartCount$ | async) === 1 ? 'Item' : 'Items' }}
+        </h2>
+        <span 
+          class="summary-card__items clear-all"
+          (click)="clearCart()">
+          Clear All
+        </span>
+       </div>
+
+      <div class="py-3">
+        <app-cart-list></app-cart-list>
+      </div>
+
+    </div>
+
+    <!-- CART SUMMARY BELOW -->
+    <div class="cart-right">
+      <div class="cart-right-inner">
+        
+        <app-cart-summary
+          (proceed)="onProceedToCheckout()"
+          (continue)="onContinueShopping()"> 
+        </app-cart-summary>
+      </div>
+    </div>
+
+  </div>
+
+</ng-template>
+<div class="checkout-footer">
+  <a (click)="openInNewTab('data-protection')">
+  Data Protection
+</a>
+
+<a (click)="openInNewTab('contact-us')">
+  Contact Us
+</a>
+
+<a (click)="openInNewTab('refund-policy')">
+  Refund Policy
+</a>
+
+<a (click)="openInNewTab('shipping-policy')">
+  Shipping Policy
+</a>
+</div>
+
+</div>
+
+ 

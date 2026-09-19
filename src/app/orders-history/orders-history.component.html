@@ -1,0 +1,21 @@
+<div class="container orders-history">
+  <div *ngIf="loading">Loading orders…</div>
+  <div *ngIf="error" class="error">{{error}}</div>
+  <div *ngIf="!loading && !orders?.length">No orders found.</div>
+
+  <div class="orders-grid" *ngIf="orders?.length">
+    <div *ngFor="let order of orders">
+    <div class="order-card" *ngFor="let item of order.items">
+      <div class="order-img">
+        <img [src]="getImage(item) || 'assets/no-image.png'" [alt]="getName(order)" />
+      </div>
+      <div class="order-info">
+        <div class="title">{{ item.title }}</div>
+        <div class="price">{{ getDealPrice(item) | currency }}</div>
+        <div class="order-id">Order ID: {{ order.orderId}}</div>
+        <div class="placed">Quantity: {{ item.quantity }}</div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>

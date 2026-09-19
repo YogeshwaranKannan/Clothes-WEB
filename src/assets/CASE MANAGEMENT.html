@@ -1,0 +1,2003 @@
+<!DOCTYPE html>
+<!-- saved from url=(0035)http://localhost:4200/order-history -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="module" src="./CASE MANAGEMENT_files/client"></script>
+
+  
+  <title>CASE MANAGEMENT</title>
+  <!--<base href="/">--><base href=".">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="http://localhost:4200/favicon.ico">
+<link rel="stylesheet" href="./CASE MANAGEMENT_files/styles.css"><style>@charset "UTF-8";
+
+
+
+.pc-header[_ngcontent-ng-c3823198599] {
+  background: var(--app-bg);
+  color: var(--app-primary);
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+  position: relative;
+  z-index: 30;
+  border-top: 15px solid var(--nav-bg);
+}
+.pc-header__container[_ngcontent-ng-c3823198599] {
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+.pc-header__inner[_ngcontent-ng-c3823198599] {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 0;
+}
+#search-desktop[_ngcontent-ng-c3823198599], 
+.search-desktop[_ngcontent-ng-c3823198599] {
+  flex: 1 1 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  min-width: 0;
+}
+.search-form[_ngcontent-ng-c3823198599] {
+  width: 100%;
+  max-width: 400px;
+}
+#logo[_ngcontent-ng-c3823198599], 
+.logo[_ngcontent-ng-c3823198599] {
+  flex: 0 0 auto;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logo[_ngcontent-ng-c3823198599]   .logo-img[_ngcontent-ng-c3823198599] {
+  max-height: 125px;
+  max-width: 400px;
+  width: auto;
+  object-fit: contain;
+}
+#headerSummary[_ngcontent-ng-c3823198599], 
+.actions[_ngcontent-ng-c3823198599] {
+  flex: 1 1 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-width: 0;
+}
+@media (max-width: 767.98px) {
+  #search-desktop[_ngcontent-ng-c3823198599], 
+   .search-desktop[_ngcontent-ng-c3823198599] {
+    display: none !important;
+  }
+  .pc-header__inner[_ngcontent-ng-c3823198599] {
+    flex-direction: column;
+    align-items: center;
+  }
+  #logo[_ngcontent-ng-c3823198599], 
+   .logo[_ngcontent-ng-c3823198599] {
+    margin: 0;
+    order: 1;
+  }
+  #headerSummary[_ngcontent-ng-c3823198599], 
+   .actions[_ngcontent-ng-c3823198599] {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    order: 2;
+    padding: 0.25rem 0;
+  }
+  .logo[_ngcontent-ng-c3823198599]   .logo-img[_ngcontent-ng-c3823198599] {
+    max-width: 80%;
+    height: auto;
+  }
+}
+.actions[_ngcontent-ng-c3823198599] {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  order: 3;
+}
+#headerSummary[_ngcontent-ng-c3823198599] {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+.icon-btn[_ngcontent-ng-c3823198599] {
+  background: transparent;
+  border: none;
+  padding: 0.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+}
+.icon-btn[_ngcontent-ng-c3823198599]   svg[_ngcontent-ng-c3823198599] {
+  color: var(--app-primary);
+}
+.cart-btn[_ngcontent-ng-c3823198599] {
+  position: relative;
+}
+.badge[_ngcontent-ng-c3823198599] {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--app-primary);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.7rem;
+  line-height: 1;
+  min-width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0 4px;
+}
+.wish-badge[_ngcontent-ng-c3823198599] {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--app-primary);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.7rem;
+  line-height: 1;
+  min-width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0 4px;
+}
+.wishlist-icon[_ngcontent-ng-c3823198599] {
+  font-size: 20px;
+  line-height: 1;
+  transition: transform 0.15s ease;
+}
+.wishlist-icon[_ngcontent-ng-c3823198599]   .heart[_ngcontent-ng-c3823198599] {
+  color: #9ca3af;
+  transition: color 0.2s ease;
+}
+.wishlist-icon[_ngcontent-ng-c3823198599]   .heart.active[_ngcontent-ng-c3823198599] {
+  color: #e11d48;
+}
+@media (hover: hover) {
+  .wishlist-icon[_ngcontent-ng-c3823198599]:hover   .heart[_ngcontent-ng-c3823198599] {
+    color: #e11d48;
+  }
+  .wishlist-icon[_ngcontent-ng-c3823198599]:hover {
+    transform: scale(1.1);
+  }
+}
+.wishlist-icon[_ngcontent-ng-c3823198599]:active {
+  transform: scale(0.95);
+}
+.backdrop[_ngcontent-ng-c3823198599] {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease-in-out;
+  z-index: 50;
+}
+.backdrop.open[_ngcontent-ng-c3823198599] {
+  opacity: 1;
+  pointer-events: auto;
+}
+.mobile-item-row[_ngcontent-ng-c3823198599] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.user-name[_ngcontent-ng-c3823198599] {
+  padding-right: 10px;
+  font-weight: 600;
+}
+@media (max-width: 767.98px) {
+  .user-welcome[_ngcontent-ng-c3823198599] {
+    display: none;
+  }
+}
+@media (max-width: 767.98px) {
+  .search-desktop[_ngcontent-ng-c3823198599] {
+    display: none;
+  }
+  .icon-search-desktop[_ngcontent-ng-c3823198599] {
+    display: none;
+  }
+  .icon-search-mobile[_ngcontent-ng-c3823198599] {
+    display: inline-flex;
+  }
+  .pc-header__inner[_ngcontent-ng-c3823198599] {
+    justify-content: space-between;
+  }
+  .actions[_ngcontent-ng-c3823198599] {
+    margin-left: auto;
+  }
+  .logo[_ngcontent-ng-c3823198599] {
+    font-size: 1rem;
+  }
+}
+@media (min-width: 768px) {
+  .search-desktop[_ngcontent-ng-c3823198599] {
+    display: flex;
+  }
+  .icon-search-desktop[_ngcontent-ng-c3823198599] {
+    display: inline-flex;
+  }
+  .icon-search-mobile[_ngcontent-ng-c3823198599] {
+    display: none;
+  }
+  .icon-hamburger[_ngcontent-ng-c3823198599] {
+    display: none;
+  }
+  .pc-nav[_ngcontent-ng-c3823198599] {
+    display: block;
+  }
+  .mobile-search-panelinner[_ngcontent-ng-c3823198599] {
+    justify-content: flex-start;
+  }
+  .logo[_ngcontent-ng-c3823198599] {
+    margin-right: 1.5rem;
+  }
+  .actions[_ngcontent-ng-c3823198599] {
+    margin-left: 1rem;
+  }
+}
+/*# sourceMappingURL=/header.component.css.map */</style><style>
+
+[_nghost-ng-c1976929207]    > nav[_ngcontent-ng-c1976929207] {
+  color: var(--nav-foreground) !important;
+}
+@media (min-width: 768px) {
+  [_nghost-ng-c1976929207]    > nav[_ngcontent-ng-c1976929207] {
+    background-color: var(--nav-bg) !important;
+  }
+}
+.navbar[_ngcontent-ng-c1976929207]   .container-fluid[_ngcontent-ng-c1976929207] {
+  justify-content: flex-start;
+}
+@media (min-width: 768px) {
+  .navbar[_ngcontent-ng-c1976929207]   .container-fluid[_ngcontent-ng-c1976929207] {
+    justify-content: center;
+  }
+}
+.navbar[_ngcontent-ng-c1976929207]   .navbar-brand[_ngcontent-ng-c1976929207] {
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--nav-foreground);
+  text-decoration: none;
+  margin-right: 1.5rem;
+  padding: 10px;
+}
+.navbar[_ngcontent-ng-c1976929207]   .navbar-brand[_ngcontent-ng-c1976929207]:hover, 
+.navbar[_ngcontent-ng-c1976929207]   .navbar-brand[_ngcontent-ng-c1976929207]:focus {
+  background: var(--nav-hover-background);
+  color: var(--nav-hover-foreground);
+  text-decoration: none;
+  outline: none;
+}
+.navbar-nav[_ngcontent-ng-c1976929207] {
+  flex-direction: row;
+  align-items: center;
+  margin-left: 0;
+}
+.nav-item[_ngcontent-ng-c1976929207] {
+  position: relative;
+}
+.nav-item[_ngcontent-ng-c1976929207]:not(.dropdown-submenu)    > .nav-link[_ngcontent-ng-c1976929207] {
+  padding: 10px 20px;
+}
+.nav-link[_ngcontent-ng-c1976929207], 
+.dropdown-item[_ngcontent-ng-c1976929207] {
+  cursor: pointer;
+  color: var(--nav-foreground);
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+.nav-link[_ngcontent-ng-c1976929207]:hover, 
+.nav-link[_ngcontent-ng-c1976929207]:focus, 
+.dropdown-item[_ngcontent-ng-c1976929207]:hover, 
+.dropdown-item[_ngcontent-ng-c1976929207]:focus {
+  background: var(--nav-hover-background);
+  color: var(--nav-hover-foreground);
+  outline: none;
+}
+[_nghost-ng-c1976929207]    > nav[_ngcontent-ng-c1976929207]   .navbar-nav[_ngcontent-ng-c1976929207]   .nav-link.active[_ngcontent-ng-c1976929207], 
+[_nghost-ng-c1976929207]    > nav[_ngcontent-ng-c1976929207]   .navbar-nav[_ngcontent-ng-c1976929207]   .nav-link.show[_ngcontent-ng-c1976929207] {
+  color: var(--nav-hover-foreground) !important;
+}
+.dropdown-menu[_ngcontent-ng-c1976929207] {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: none;
+  min-width: 14rem;
+  z-index: 1000;
+  background-color: var(--nav-bg) !important;
+}
+.nav-item.show[_ngcontent-ng-c1976929207]    > .dropdown-menu[_ngcontent-ng-c1976929207] {
+  display: block;
+}
+.dropdown-submenu[_ngcontent-ng-c1976929207]    > .dropdown-menu[_ngcontent-ng-c1976929207] {
+  top: 0;
+  left: 100%;
+  margin-left: 0.25rem;
+}
+.offcanvas[_ngcontent-ng-c1976929207] {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 100%;
+  background-color: var(--bs-card-bg);
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1045;
+}
+.offcanvas.show[_ngcontent-ng-c1976929207] {
+  transform: translateX(0);
+}
+.offcanvas-header[_ngcontent-ng-c1976929207] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+.offcanvas-header[_ngcontent-ng-c1976929207]   .offcanvas-title[_ngcontent-ng-c1976929207] {
+  margin-bottom: 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+.offcanvas-header[_ngcontent-ng-c1976929207]   .btn-close[_ngcontent-ng-c1976929207] {
+  padding: 0.5rem;
+  margin: -0.5rem -0.5rem -0.5rem auto;
+}
+.offcanvas-body[_ngcontent-ng-c1976929207] {
+  padding: 1rem;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+.offcanvas-backdrop[_ngcontent-ng-c1976929207] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+.offcanvas-backdrop.show[_ngcontent-ng-c1976929207] {
+  opacity: 1;
+}
+.navbar-nav-mobile[_ngcontent-ng-c1976929207] {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: var(--nav-bg);
+}
+.navbar-nav-mobile[_ngcontent-ng-c1976929207]   .nav-item-mobile[_ngcontent-ng-c1976929207] {
+  margin-bottom: 0.5rem;
+  border-radius: 0.25rem;
+}
+.navbar-nav-mobile[_ngcontent-ng-c1976929207]   .nav-item-mobile[_ngcontent-ng-c1976929207]   .nav-link-mobile[_ngcontent-ng-c1976929207] {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: var(--nav-foreground);
+  text-decoration: none;
+  border-radius: 0.25rem;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+.navbar-nav-mobile[_ngcontent-ng-c1976929207]   .nav-item-mobile[_ngcontent-ng-c1976929207]   .nav-link-mobile[_ngcontent-ng-c1976929207]:hover, 
+.navbar-nav-mobile[_ngcontent-ng-c1976929207]   .nav-item-mobile[_ngcontent-ng-c1976929207]   .nav-link-mobile[_ngcontent-ng-c1976929207]:focus, 
+.navbar-nav-mobile[_ngcontent-ng-c1976929207]   .nav-item-mobile[_ngcontent-ng-c1976929207]   .nav-link-mobile[_ngcontent-ng-c1976929207]:focus-visible {
+  background-color: var(--nav-hover-background) !important;
+  color: var(--nav-hover-foreground) !important;
+  outline: none;
+}
+.navbar-nav-mobile[_ngcontent-ng-c1976929207]   .nav-item-mobile[_ngcontent-ng-c1976929207]   .nav-link-mobile.active[_ngcontent-ng-c1976929207] {
+  font-weight: 500;
+}
+.navbar-nav-mobile[_ngcontent-ng-c1976929207]   .nav-item-mobile[_ngcontent-ng-c1976929207]   .nav-link-mobile[_ngcontent-ng-c1976929207]   .toggle-icon[_ngcontent-ng-c1976929207] {
+  font-weight: bold;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+.navbar-nav-mobile[_ngcontent-ng-c1976929207]   .nav-item-mobile[_ngcontent-ng-c1976929207]   .submenu-mobile[_ngcontent-ng-c1976929207] {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+.navbar-toggler[_ngcontent-ng-c1976929207] {
+  border: 1px solid rgba(var(--bs-body-color-rgb), 0.12);
+  padding: 0.25rem 0.5rem;
+  font-size: 1.25rem;
+  border-radius: 0.25rem;
+}
+.navbar-toggler[_ngcontent-ng-c1976929207]:focus-visible {
+  box-shadow: 0 0 0 0.25rem rgba(var(--app-primary-rgb, 11, 94, 215), 0.25);
+}
+@media (max-width: 575.98px) {
+  .navbar-toggler[_ngcontent-ng-c1976929207] {
+  }
+  .navbar-toggler[_ngcontent-ng-c1976929207]   .mobile-search-wrapper[_ngcontent-ng-c1976929207] {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: calc(100% - 48px);
+  }
+  .navbar-toggler[_ngcontent-ng-c1976929207]   app-product-suggest[_ngcontent-ng-c1976929207] {
+    width: 100%;
+    min-width: 0;
+  }
+  .navbar-toggler[_ngcontent-ng-c1976929207]   .navbar-toggler[_ngcontent-ng-c1976929207] {
+    flex: 0 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.25rem;
+  }
+}
+.navbar-toggler[_ngcontent-ng-c1976929207]   .navbar-toggler-icon[_ngcontent-ng-c1976929207] {
+  width: 1.5em;
+  height: 1.5em;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+}
+/*# sourceMappingURL=/navbar.component.css.map */</style><style>
+
+[_nghost-ng-c163881108] {
+  display: block;
+}
+.ticker[_ngcontent-ng-c163881108] {
+  background: var(--app-surface);
+  color: var(--app-text);
+  border-bottom: 1px solid var(--nav-bg);
+  --ticker-height: calc(30px + 1rem);
+  font-size: 18px;
+  font-weight: 500;
+}
+.ticker-inner[_ngcontent-ng-c163881108] {
+  position: relative;
+  height: var(--ticker-height);
+  overflow: hidden;
+  display: block;
+  padding: 15px 1rem;
+}
+.track[_ngcontent-ng-c163881108] {
+  display: flex;
+  width: 100%;
+  transform: translateX(0);
+  transition: transform var(--anim-duration, 600ms) linear;
+}
+.track.animating[_ngcontent-ng-c163881108] {
+  transition-timing-function: linear;
+}
+.track.no-transition[_ngcontent-ng-c163881108] {
+  transition: none !important;
+}
+.ticker-item[_ngcontent-ng-c163881108] {
+  flex: 0 0 100%;
+  box-sizing: border-box;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticker-item[_ngcontent-ng-c163881108], 
+   .ticker-inner[_ngcontent-ng-c163881108] {
+    transition: none !important;
+  }
+}
+@media (max-width: 575.98px) {
+  .ticker-inner[_ngcontent-ng-c163881108] {
+    padding: 0.3rem 0.75rem;
+  }
+}
+/*# sourceMappingURL=/ticker.component.css.map */</style><style>
+
+[_nghost-ng-c3011837957] {
+  display: block;
+  position: relative;
+}
+.search-input-wrap[_ngcontent-ng-c3011837957] {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.search-input[_ngcontent-ng-c3011837957] {
+  width: 100%;
+  min-width: 400px;
+  border: 1px solid var(--bs-border-color);
+  padding: 0.9rem 4.2rem 0.9rem 1.2rem;
+  border-radius: 9999px;
+  border: 1px solid var(--bs-border-color, var(--app-border));
+  background: var(--app-surface);
+  font-size: 0.95rem;
+  outline: none;
+  box-shadow: none;
+}
+.search-input[_ngcontent-ng-c3011837957]:focus {
+  border-color: var(--app-primary);
+}
+.search-icon[_ngcontent-ng-c3011837957] {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--search-icon-color, var(--muted, #6b6b6b));
+  pointer-events: none;
+}
+.suggestions[_ngcontent-ng-c3011837957] {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--bs-card-bg);
+  border: 1px solid var(--bs-border-color, var(--app-border));
+  box-shadow: 0 8px 30px rgba(16, 24, 40, 0.08);
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0;
+  border-radius: 8px;
+  z-index: 40;
+}
+.suggestions.mobile[_ngcontent-ng-c3011837957] {
+  left: 0;
+  right: 0;
+  max-height: 220px;
+  overflow: auto;
+  z-index: 1000;
+}
+.suggestions[_ngcontent-ng-c3011837957]   li[_ngcontent-ng-c3011837957] {
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+.suggestions[_ngcontent-ng-c3011837957]   li[_ngcontent-ng-c3011837957]:hover, 
+.suggestions[_ngcontent-ng-c3011837957]   li.active[_ngcontent-ng-c3011837957] {
+  background: rgba(var(--bs-body-color-rgb), 0.04);
+}
+.suggestions[_ngcontent-ng-c3011837957]   .name[_ngcontent-ng-c3011837957] {
+  font-size: 0.95rem;
+  color: var(--bs-body-color);
+}
+.suggestion-item[_ngcontent-ng-c3011837957] {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.suggestion-item[_ngcontent-ng-c3011837957]   .thumb[_ngcontent-ng-c3011837957] {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.suggestion-item[_ngcontent-ng-c3011837957]   .meta[_ngcontent-ng-c3011837957] {
+  flex: 1;
+}
+.suggestion-item[_ngcontent-ng-c3011837957]   .name[_ngcontent-ng-c3011837957] {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.suggestion-item[_ngcontent-ng-c3011837957]   .meta-bottom[_ngcontent-ng-c3011837957] {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.suggestion-item[_ngcontent-ng-c3011837957]   .meta-bottom[_ngcontent-ng-c3011837957]   .id[_ngcontent-ng-c3011837957] {
+  color: rgba(var(--bs-body-color-rgb), 0.7);
+  font-size: 0.85rem;
+}
+.s-price[_ngcontent-ng-c3011837957] {
+  color: var(--app-primary);
+  font-size: 0.85rem;
+}
+.suggestion-item[_ngcontent-ng-c3011837957]   .thumb[_ngcontent-ng-c3011837957]   img[_ngcontent-ng-c3011837957] {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+.mobile-search-panel[_ngcontent-ng-c3011837957] {
+  max-height: 0;
+  transition: max-height 240ms ease-in-out;
+  background: var(--bs-card-bg);
+  z-index: 900;
+}
+.mobile-search-panel[_ngcontent-ng-c3011837957]:not(.open) {
+  overflow: hidden;
+}
+.mobile-search-panel[_ngcontent-ng-c3011837957]:not(.open)   .search-icon[_ngcontent-ng-c3011837957] {
+  display: none;
+}
+.mobile-search-panel.open[_ngcontent-ng-c3011837957] {
+  max-height: 160px;
+}
+.mobile-search-inner[_ngcontent-ng-c3011837957] {
+  padding: 0.75rem 1rem 1rem 1rem;
+}
+.mobile-search-inner[_ngcontent-ng-c3011837957]   .search-input[_ngcontent-ng-c3011837957] {
+  border: 1px solid var(--bs-border-color);
+  padding-right: 3.6rem;
+}
+@media (max-width: 575.98px) {
+  [_nghost-ng-c3011837957] {
+    display: flex;
+    align-items: center;
+  }
+  .search-input[_ngcontent-ng-c3011837957] {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+  }
+  .search-input-wrap[_ngcontent-ng-c3011837957] {
+    min-width: 100%;
+  }
+}
+.wishlist-btn[_ngcontent-ng-c3011837957] {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 20px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+}
+.wishlist-btn[_ngcontent-ng-c3011837957]   span[_ngcontent-ng-c3011837957] {
+  color: #9ca3af;
+  transition: color 0.2s ease;
+}
+.wishlist-btn[_ngcontent-ng-c3011837957]   span.active[_ngcontent-ng-c3011837957] {
+  color: #e11d48;
+}
+.wishlist-btn[_ngcontent-ng-c3011837957]:active {
+  transform: scale(0.95);
+}
+@media (hover: hover) {
+  .wishlist-btn[_ngcontent-ng-c3011837957]:hover   span[_ngcontent-ng-c3011837957] {
+    color: #e11d48;
+  }
+  .wishlist-btn[_ngcontent-ng-c3011837957]:hover {
+    transform: scale(1.1);
+  }
+}
+.wishlist-btn[_ngcontent-ng-c3011837957]   .faved[_ngcontent-ng-c3011837957] {
+  color: var(--app-primary);
+}
+.wishlist-btn[_ngcontent-ng-c3011837957]:hover   span[_ngcontent-ng-c3011837957] {
+  color: var(--app-primary);
+}
+.close-mobile[_ngcontent-ng-c3011837957] {
+  margin-top: 0.5rem;
+  background: transparent;
+  border: none;
+  color: rgba(var(--bs-body-color-rgb), 0.6);
+  cursor: pointer;
+}
+/*# sourceMappingURL=/product-suggest.component.css.map */</style><style>@charset "UTF-8";
+
+
+
+.user-menu-host[_ngcontent-ng-c4130075729] {
+  position: relative;
+  display: inline-block;
+}
+.avatar-btn[_ngcontent-ng-c4130075729] {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  height: 40px;
+  border-radius: 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.avatar-icon[_ngcontent-ng-c4130075729] {
+  font-size: 18px;
+  line-height: 1;
+}
+.backdrop[_ngcontent-ng-c4130075729] {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.36);
+}
+.user-menu[_ngcontent-ng-c4130075729] {
+  position: fixed;
+  z-index: 1000;
+  background: var(--nav-background, #000000);
+  color: var(--nav-foreground, #fff);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  padding: 6px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transform-origin: top right;
+}
+.menu-item[_ngcontent-ng-c4130075729] {
+  background: transparent;
+  color: inherit;
+  border: 0;
+  text-align: left;
+  padding: 10px 12px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.menu-item[_ngcontent-ng-c4130075729]:focus, 
+.menu-item[_ngcontent-ng-c4130075729]:hover {
+  background: rgba(255, 255, 255, 0.06);
+  outline: none;
+}
+.sr-only[_ngcontent-ng-c4130075729] {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.avatar-caret[_ngcontent-ng-c4130075729] {
+  width: 0;
+  height: 0;
+  margin-left: 4px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #000;
+  transform-origin: 50% 45%;
+}
+.user-welcome[_ngcontent-ng-c4130075729] {
+  color: #0b2540;
+  font-size: 0.95rem;
+  margin-right: 0.25rem;
+}
+.user-name[_ngcontent-ng-c4130075729] {
+  color: #0b5ed7;
+  font-weight: 600;
+}
+@media (min-width: 1024px) {
+  .user-menu[_ngcontent-ng-c4130075729] {
+    min-width: 220px;
+  }
+}
+@media (max-width: 767px) {
+  .user-menu[_ngcontent-ng-c4130075729] {
+    min-width: calc(100% - 32px);
+    left: 16px !important;
+    right: 16px;
+  }
+  .menu-item[_ngcontent-ng-c4130075729] {
+    min-height: 52px;
+    font-size: 16px;
+  }
+}
+/*# sourceMappingURL=/user-menu.component.css.map */</style><style>
+
+[_nghost-ng-c731352037] {
+  --drawer-header-height: 50px;
+  --header-side: 44px;
+  --header-gap: 8px;
+}
+.drawer-backdrop[_ngcontent-ng-c731352037] {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 9998;
+}
+.drawer[_ngcontent-ng-c731352037] {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 9999;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--app-bg);
+  box-shadow: -12px 0 24px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: width 0.25s ease;
+}
+.drawer.hidden[_ngcontent-ng-c731352037] {
+  width: 0;
+  box-shadow: none;
+}
+.drawer.public.half[_ngcontent-ng-c731352037] {
+  width: clamp(420px, 35vw, 680px);
+}
+.drawer.public.full[_ngcontent-ng-c731352037] {
+  width: clamp(600px, 55vw, 1000px);
+}
+@media (max-width: 991px) {
+  .drawer.public.half[_ngcontent-ng-c731352037], 
+   .drawer.public.full[_ngcontent-ng-c731352037] {
+    width: 75vw;
+  }
+}
+@media (max-width: 768px) {
+  .drawer.public.half[_ngcontent-ng-c731352037], 
+   .drawer.public.full[_ngcontent-ng-c731352037] {
+    width: 100vw;
+  }
+}
+.drawer[_ngcontent-ng-c731352037]:not(.public).half {
+  width: 50vw;
+}
+.drawer[_ngcontent-ng-c731352037]:not(.public).full {
+  width: 90vw;
+}
+@media (max-width: 991px) {
+  .drawer[_ngcontent-ng-c731352037]:not(.public).half {
+    width: 70vw;
+  }
+  .drawer[_ngcontent-ng-c731352037]:not(.public).full {
+    width: 95vw;
+  }
+}
+@media (max-width: 768px) {
+  .drawer[_ngcontent-ng-c731352037]:not(.public).half {
+    width: 85vw;
+  }
+  .drawer[_ngcontent-ng-c731352037]:not(.public).full {
+    width: 100vw;
+  }
+}
+.drawer-header[_ngcontent-ng-c731352037] {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: var(--drawer-header-height);
+  display: grid;
+  align-items: center;
+  grid-template-columns: 44px 1fr 44px;
+  text-align: center;
+  padding: 0 16px;
+  background-color: #000;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+.header-cell--left[_ngcontent-ng-c731352037] {
+  position: relative;
+  display: flex;
+  align-items: left;
+}
+.corner-btn.hidden[_ngcontent-ng-c731352037] {
+  visibility: hidden;
+  pointer-events: none;
+}
+.header-cell[_ngcontent-ng-c731352037] {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  min-width: 44px;
+}
+.header-cell--center[_ngcontent-ng-c731352037] {
+  overflow: hidden;
+}
+.drawer-title-banner[_ngcontent-ng-c731352037] {
+  text-align: center;
+  width: 100%;
+}
+.drawer-header[_ngcontent-ng-c731352037]   app-title-banner[_ngcontent-ng-c731352037], 
+.drawer-header[_ngcontent-ng-c731352037]   .drawer-title-banner[_ngcontent-ng-c731352037] {
+  flex: 1;
+  height: 100%;
+  display: block;
+  min-width: 0;
+}
+.drawer-content[_ngcontent-ng-c731352037] {
+  flex: 1 auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-width: 0;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding-top: calc(var(--drawer-header-height) + 5px);
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: calc(var(--drawer-header-height) + env(safe-area-inset-top, 0px) + 5px);
+}
+.corner-btn[_ngcontent-ng-c731352037] {
+  width: var(--header-side);
+  height: var(--header-side);
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  background: #000;
+  color: #fff;
+}
+.corner-btn[_ngcontent-ng-c731352037]:hover {
+  background: #e84f12;
+}
+.corner-btn[_ngcontent-ng-c731352037]:active {
+  background: #d94810;
+}
+.corner-btn--close[_ngcontent-ng-c731352037] {
+  background: #000;
+}
+.corner-btn--close[_ngcontent-ng-c731352037]:hover {
+  background: #e84f12;
+}
+.corner-btn.back[_ngcontent-ng-c731352037] {
+  font-size: 14px;
+  font-weight: 600;
+  background: transparent;
+  color: #fff;
+  padding: 0 12px;
+  white-space: nowrap;
+}
+.corner-btn.back[_ngcontent-ng-c731352037]:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+/*# sourceMappingURL=/drawer.component.css.map */</style><style>
+
+[_nghost-ng-c3457345140] {
+  display: block;
+}
+.cart-layout[_ngcontent-ng-c3457345140] {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.cart-container[_ngcontent-ng-c3457345140] {
+  max-width: 1320px;
+  padding: 0;
+}
+.cart-right-inner[_ngcontent-ng-c3457345140] {
+  position: sticky;
+  top: 1.5rem;
+}
+.cart-left[_ngcontent-ng-c3457345140] {
+  --cart-cols: 1.4fr 0.6fr 0.7fr 0.6fr 40px;
+  --accent-blue: #0a4db8;
+}
+.cart-grid-header[_ngcontent-ng-c3457345140] {
+  display: grid;
+  grid-template-columns: var(--cart-cols);
+  gap: 14px;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: #6b7280;
+  font-weight: 600;
+  background: #fff;
+  border: 1px solid #eef2f6;
+  border-top: 5px solid var(--accent-blue);
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+.right[_ngcontent-ng-c3457345140] {
+  text-align: right;
+}
+.center[_ngcontent-ng-c3457345140] {
+  text-align: center;
+}
+.cart-right[_ngcontent-ng-c3457345140] {
+  padding-left: 1rem;
+}
+@media (max-width: 991px) {
+  .cart-right-inner[_ngcontent-ng-c3457345140] {
+    position: static;
+    top: auto;
+    margin-top: 16px;
+  }
+  .cart-left[_ngcontent-ng-c3457345140] {
+    padding-right: 0;
+  }
+  .cart-right[_ngcontent-ng-c3457345140] {
+    padding-left: 0;
+  }
+  .cart-container[_ngcontent-ng-c3457345140] {
+    padding: 0 12px;
+  }
+  .cart-item[_ngcontent-ng-c3457345140] {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .price-col[_ngcontent-ng-c3457345140], 
+   .qty-col[_ngcontent-ng-c3457345140], 
+   .total-col[_ngcontent-ng-c3457345140] {
+    display: flex;
+    justify-content: space-between;
+    width: 100% !important;
+    text-align: left;
+  }
+  .price-col[_ngcontent-ng-c3457345140]::before {
+    content: "Price";
+  }
+  .qty-col[_ngcontent-ng-c3457345140]::before {
+    content: "Qty";
+  }
+  .total-col[_ngcontent-ng-c3457345140]::before {
+    content: "Total";
+  }
+  .price-col[_ngcontent-ng-c3457345140]::before, 
+   .qty-col[_ngcontent-ng-c3457345140]::before, 
+   .total-col[_ngcontent-ng-c3457345140]::before {
+    font-weight: 500;
+    color: #6b7280;
+  }
+  .item-img[_ngcontent-ng-c3457345140] {
+    width: 64px;
+    height: 64px;
+  }
+}
+.cart-header-row[_ngcontent-ng-c3457345140] {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  color: #6b7280;
+  font-weight: 600;
+  border-bottom: 1px solid #eef2f6;
+}
+.cart-header-row[_ngcontent-ng-c3457345140] {
+  border-radius: 8px;
+  border-top: 5px solid #0a4db8;
+  padding-right: 10px;
+}
+.cart-right-inner[_ngcontent-ng-c3457345140] {
+  border-radius: 8px;
+  border-top: 5px solid #0a4db8;
+}
+.empty-cart-msg[_ngcontent-ng-c3457345140] {
+  font-size: 20px;
+  color: #374151;
+}
+.continue-center[_ngcontent-ng-c3457345140] {
+  padding: 10px 24px;
+  border-radius: 28px;
+  background: #adb8c7;
+  border: none;
+  color: #fff;
+}
+.promo-input[_ngcontent-ng-c3457345140] {
+  border-radius: 15px;
+}
+/*# sourceMappingURL=/cart.component.css.map */</style><style>
+
+.cart-list[_ngcontent-ng-c1344449150] {
+  width: 100%;
+}
+.cart-item[_ngcontent-ng-c1344449150] {
+  display: flex;
+  gap: 16px;
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--app-bg);
+  border: 1px solid var(--app-border);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  min-width: 0;
+}
+@media (hover: hover) and (pointer: fine) {
+  .cart-item[_ngcontent-ng-c1344449150]:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+  }
+  .cart-item[_ngcontent-ng-c1344449150]:hover   .item-img[_ngcontent-ng-c1344449150] {
+    transform: scale(1.05);
+  }
+}
+.thumb[_ngcontent-ng-c1344449150] {
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+  background: var(--color-gray-100);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.item-img[_ngcontent-ng-c1344449150] {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+.item-content[_ngcontent-ng-c1344449150] {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+}
+.top-row[_ngcontent-ng-c1344449150] {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+.title[_ngcontent-ng-c1344449150] {
+  flex: 1;
+  font-weight: 600;
+  color: var(--app-text);
+  text-decoration: none;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+.remove-btn[_ngcontent-ng-c1344449150] {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--app-muted);
+  flex-shrink: 0;
+}
+.middle-row[_ngcontent-ng-c1344449150] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.qty-box[_ngcontent-ng-c1344449150] {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--app-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.qty-box[_ngcontent-ng-c1344449150]   button[_ngcontent-ng-c1344449150] {
+  border: none;
+  background: transparent;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+.qty-value[_ngcontent-ng-c1344449150] {
+  width: 30px;
+  text-align: center;
+  font-weight: 500;
+}
+.unit-price[_ngcontent-ng-c1344449150] {
+  color: var(--app-muted);
+}
+.bottom-row[_ngcontent-ng-c1344449150] {
+  margin-top: 8px;
+  font-weight: 600;
+  text-align: right;
+  color: var(--app-text);
+}
+.empty[_ngcontent-ng-c1344449150] {
+  padding: 20px;
+  text-align: center;
+  color: var(--app-muted);
+}
+@media (max-width: 768px) {
+  .cart-item[_ngcontent-ng-c1344449150] {
+    padding: 12px;
+    gap: 12px;
+    font-size: 0.92rem;
+  }
+  .thumb[_ngcontent-ng-c1344449150] {
+    width: 78px;
+    height: 78px;
+  }
+  .title[_ngcontent-ng-c1344449150] {
+    font-size: 0.95em;
+    line-height: 1.3;
+    font-weight: 600;
+  }
+  .middle-row[_ngcontent-ng-c1344449150] {
+    margin-top: 6px;
+    font-size: 0.9em;
+  }
+  .unit-price[_ngcontent-ng-c1344449150] {
+    font-size: 0.85em;
+  }
+  .qty-box[_ngcontent-ng-c1344449150]   button[_ngcontent-ng-c1344449150] {
+    width: 26px;
+    height: 26px;
+    font-size: 0.9em;
+  }
+  .qty-value[_ngcontent-ng-c1344449150] {
+    width: 26px;
+    font-size: 0.9em;
+  }
+  .bottom-row[_ngcontent-ng-c1344449150] {
+    margin-top: 6px;
+    font-size: 1em;
+    font-weight: 600;
+    text-align: right;
+  }
+  .remove-btn[_ngcontent-ng-c1344449150] {
+    font-size: 0.9em;
+  }
+}
+/*# sourceMappingURL=/cart-list.component.css.map */</style><style>
+
+[_nghost-ng-c1317781712] {
+  display: block;
+  width: 100%;
+}
+.card[_ngcontent-ng-c1317781712] {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #eef2f6;
+  box-shadow: 0 6px 14px rgba(16, 24, 40, 0.04);
+}
+.summary-title[_ngcontent-ng-c1317781712] {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+}
+.d-flex[_ngcontent-ng-c1317781712] {
+  font-size: 14px;
+  color: #374151;
+}
+.fw-bold[_ngcontent-ng-c1317781712] {
+  font-size: 18px;
+}
+.btn-primary[_ngcontent-ng-c1317781712] {
+  background: #0b5ed7;
+  border-color: #0b5ed7;
+  padding: 12px 18px;
+  border-radius: 28px;
+}
+.proceed-pill[_ngcontent-ng-c1317781712] {
+  padding: 12px 18px;
+  border-radius: 28px;
+}
+.continue-pill[_ngcontent-ng-c1317781712] {
+  display: inline-block;
+  background: #adb8c7;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 28px;
+  border: none;
+}
+.shipping-section[_ngcontent-ng-c1317781712]   .form-check[_ngcontent-ng-c1317781712] {
+  margin-bottom: 8px;
+  padding-left: 0px;
+}
+.shipping-section[_ngcontent-ng-c1317781712]   .form-check-input[_ngcontent-ng-c1317781712] {
+  margin-right: 8px;
+}
+.shipping-section[_ngcontent-ng-c1317781712]   .shipping-label[_ngcontent-ng-c1317781712] {
+  min-width: 80px;
+  color: #374151;
+  font-weight: 600;
+  font-size: 14px;
+}
+.shipping-section[_ngcontent-ng-c1317781712]   .shipping-options[_ngcontent-ng-c1317781712] {
+  display: block;
+}
+.shipping-section[_ngcontent-ng-c1317781712]   .form-check-label[_ngcontent-ng-c1317781712] {
+  font-size: 14px;
+}
+.shipping-section[_ngcontent-ng-c1317781712]   .text-end[_ngcontent-ng-c1317781712]   .form-check-input[_ngcontent-ng-c1317781712] {
+  margin-left: 0;
+}
+.shipping-section[_ngcontent-ng-c1317781712]   .form-check-input[type=radio][_ngcontent-ng-c1317781712] {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  appearance: auto;
+  transform: none;
+  margin: 0 8px 0 0;
+  cursor: pointer;
+}
+.icons-row[_ngcontent-ng-c1317781712] {
+  margin-top: 12px;
+  color: #6b7280;
+}
+/*# sourceMappingURL=/cart-summary.component.css.map */</style><style>
+
+.orders-history[_ngcontent-ng-c1819066902] {
+  padding: 12px;
+}
+.section-header[_ngcontent-ng-c1819066902] {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  padding: 0 10px;
+}
+.section-title[_ngcontent-ng-c1819066902] {
+  font-size: 14px;
+  color: #111827;
+}
+.step-indicator[_ngcontent-ng-c1819066902] {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #0b63ce;
+  color: #ffffff;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.orders-history[_ngcontent-ng-c1819066902]   .page-title[_ngcontent-ng-c1819066902] {
+  margin: 0 0 12px 0;
+  font-size: 20px;
+}
+.orders-list[_ngcontent-ng-c1819066902]   .list[_ngcontent-ng-c1819066902] {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.order-card[_ngcontent-ng-c1819066902] {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.order-card[_ngcontent-ng-c1819066902]:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(11, 94, 215, 0.2), 0 6px 18px rgba(15, 23, 42, 0.04);
+}
+.order-ref-text[_ngcontent-ng-c1819066902] {
+  color: #2606db;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+.order-ref-text[_ngcontent-ng-c1819066902]:hover {
+  text-decoration: underline;
+}
+.order-row[_ngcontent-ng-c1819066902] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+}
+.order-main[_ngcontent-ng-c1819066902] {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.order-id[_ngcontent-ng-c1819066902] {
+  font-size: 14px;
+  color: #111827;
+}
+.order-items[_ngcontent-ng-c1819066902] {
+  font-size: 13px;
+  color: #6b7280;
+}
+.order-meta[_ngcontent-ng-c1819066902] {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+.order-total[_ngcontent-ng-c1819066902] {
+  font-weight: 700;
+  color: #0b5ed7;
+}
+.order-status[_ngcontent-ng-c1819066902] {
+  font-size: 13px;
+  color: #374151;
+}
+@media (max-width: 700px) {
+  .order-row[_ngcontent-ng-c1819066902] {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .order-meta[_ngcontent-ng-c1819066902] {
+    align-items: flex-start;
+  }
+  .section-box[_ngcontent-ng-c1819066902] {
+    padding: 40px 14px 14px 14px;
+  }
+  .section-header[_ngcontent-ng-c1819066902] {
+    left: 14px;
+  }
+  .section-title[_ngcontent-ng-c1819066902] {
+    font-size: 14px;
+  }
+  .step-indicator[_ngcontent-ng-c1819066902] {
+    width: 50px;
+    height: 50px;
+    font-size: 13px;
+  }
+}
+@media (max-width: 768px) {
+  .section-box[_ngcontent-ng-c1819066902] {
+    padding: 40px 14px 14px 14px;
+  }
+  .section-header[_ngcontent-ng-c1819066902] {
+    left: 14px;
+  }
+  .section-title[_ngcontent-ng-c1819066902] {
+    font-size: 14px;
+  }
+  .step-indicator[_ngcontent-ng-c1819066902] {
+    width: 100px;
+    height: px;
+    font-size: 13px;
+  }
+}
+.order-card[_ngcontent-ng-c1819066902]:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+}
+.order-card[_ngcontent-ng-c1819066902]:active {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+/*# sourceMappingURL=/order-history.component.css.map */</style><style>@charset "UTF-8";
+
+
+
+.order-detail[_ngcontent-ng-c468589856] {
+  padding: 16px;
+  color: #222;
+  font-family:
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    "Liberation Sans",
+    sans-serif;
+}
+.order-ref-row[_ngcontent-ng-c468589856] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.order-ref-row[_ngcontent-ng-c468589856]   h4[_ngcontent-ng-c468589856] {
+  margin: 0;
+  color: #0b5ed7;
+}
+.order-ref-row[_ngcontent-ng-c468589856]   .order-status-pill[_ngcontent-ng-c468589856] {
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  background: #fff;
+}
+.order-ref-row[_ngcontent-ng-c468589856]   .order-status-pill.is-done[_ngcontent-ng-c468589856] {
+  background: #ecfdf5;
+  border-color: #10b981;
+  color: #065f46;
+}
+.timeline-shell[_ngcontent-ng-c468589856] {
+  margin: 8px 0 18px;
+}
+.timeline-container[_ngcontent-ng-c468589856] {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 88px;
+  margin: 12px 0;
+  padding: 0 8px;
+  overflow: visible;
+}
+.timeline-container[_ngcontent-ng-c468589856]::after {
+  content: "";
+  position: absolute;
+  top: 44px;
+  left: 8px;
+  right: 8px;
+  height: 0;
+  border-bottom: 2px dotted #bbb;
+  z-index: 1;
+}
+.timeline-container[_ngcontent-ng-c468589856]::before {
+  content: "";
+  position: absolute;
+  top: 44px;
+  left: 8px;
+  height: 0;
+  border-bottom: 2px solid #4caf50;
+  z-index: 2;
+  width: var(--completed-width, 0%);
+}
+.timeline-step[_ngcontent-ng-c468589856] {
+  flex: 1 1 0;
+  min-width: 88px;
+  text-align: center;
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.timeline-step[_ngcontent-ng-c468589856]   .label[_ngcontent-ng-c468589856] {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 12px;
+  white-space: nowrap;
+}
+.timeline-step[_ngcontent-ng-c468589856]   .dot[_ngcontent-ng-c468589856] {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ccc;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px #d1d5db;
+}
+.timeline-step.completed[_ngcontent-ng-c468589856]   .dot[_ngcontent-ng-c468589856] {
+  background: #4caf50;
+  box-shadow: 0 0 0 1px #4caf50;
+}
+.timeline-step[_ngcontent-ng-c468589856]   .date[_ngcontent-ng-c468589856] {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+}
+.moving-cycle[_ngcontent-ng-c468589856] {
+  position: absolute;
+  top: 44px;
+  left: 0%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  z-index: 4;
+  animation: _ngcontent-ng-c468589856_moveCycle 4s ease-out forwards;
+}
+@keyframes _ngcontent-ng-c468589856_moveCycle {
+  from {
+    left: 0%;
+  }
+  to {
+    left: var(--target-position, 0%);
+  }
+}
+.order-layout[_ngcontent-ng-c468589856] {
+  display: flex;
+  gap: 20px;
+  margin-top: 12px;
+}
+.order-items-section[_ngcontent-ng-c468589856] {
+  flex: 2;
+}
+.customer-delivery-info[_ngcontent-ng-c468589856] {
+  flex: 1;
+}
+.items-table[_ngcontent-ng-c468589856] {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 12px;
+}
+.items-table[_ngcontent-ng-c468589856]   th[_ngcontent-ng-c468589856], 
+.items-table[_ngcontent-ng-c468589856]   td[_ngcontent-ng-c468589856] {
+  text-align: left;
+  padding: 8px 6px;
+  border-bottom: 1px solid #eee;
+}
+.items-table[_ngcontent-ng-c468589856]   thead[_ngcontent-ng-c468589856]   th[_ngcontent-ng-c468589856] {
+  background: #f8fafc;
+  color: #111;
+  font-weight: 600;
+}
+.item-img[_ngcontent-ng-c468589856] {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+}
+.order-table[_ngcontent-ng-c468589856] {
+  width: 100%;
+  border-collapse: collapse;
+}
+.order-table[_ngcontent-ng-c468589856]   th[_ngcontent-ng-c468589856] {
+  text-align: left;
+  padding: 6px 0;
+  color: #666;
+  width: 160px;
+}
+.order-table[_ngcontent-ng-c468589856]   td[_ngcontent-ng-c468589856] {
+  padding: 6px 0;
+}
+.payment-info[_ngcontent-ng-c468589856] {
+  font-weight: 500;
+}
+.payment-info.paid[_ngcontent-ng-c468589856] {
+  color: #2e7d32;
+  font-weight: 700;
+}
+.info-card[_ngcontent-ng-c468589856] {
+  background: #fff;
+  padding: 14px 18px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+.info-card[_ngcontent-ng-c468589856]   h3[_ngcontent-ng-c468589856] {
+  font-size: 16px;
+  margin: 0 0 10px 0;
+  font-weight: 600;
+  color: #333;
+}
+.info-table.compact[_ngcontent-ng-c468589856] {
+  width: 100%;
+  border-collapse: collapse;
+}
+.info-table.compact[_ngcontent-ng-c468589856]   th[_ngcontent-ng-c468589856], 
+.info-table.compact[_ngcontent-ng-c468589856]   td[_ngcontent-ng-c468589856] {
+  padding: 4px 0;
+  font-size: 13px;
+  vertical-align: top;
+}
+.info-table.compact[_ngcontent-ng-c468589856]   th[_ngcontent-ng-c468589856] {
+  width: 42%;
+  color: #555;
+  font-weight: 600;
+}
+.info-table.compact[_ngcontent-ng-c468589856]   td[_ngcontent-ng-c468589856] {
+  color: #333;
+}
+.info-table.compact[_ngcontent-ng-c468589856]   tr[_ngcontent-ng-c468589856]    + tr[_ngcontent-ng-c468589856]   th[_ngcontent-ng-c468589856], 
+.info-table.compact[_ngcontent-ng-c468589856]   tr[_ngcontent-ng-c468589856]    + tr[_ngcontent-ng-c468589856]   td[_ngcontent-ng-c468589856] {
+  padding-top: 6px;
+  border-top: 1px solid #f0f0f0;
+}
+.loading[_ngcontent-ng-c468589856] {
+  color: #666;
+  padding: 12px 4px;
+}
+@media (max-width: 768px) {
+  .order-layout[_ngcontent-ng-c468589856] {
+    flex-direction: column;
+  }
+  .customer-delivery-info[_ngcontent-ng-c468589856] {
+    flex: 1 1 auto;
+  }
+  .timeline-container[_ngcontent-ng-c468589856] {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+  }
+  .timeline-step[_ngcontent-ng-c468589856] {
+    scroll-snap-align: center;
+    flex: 0 0 auto;
+    min-width: 128px;
+  }
+  .info-table.compact[_ngcontent-ng-c468589856]   th[_ngcontent-ng-c468589856], 
+   .info-table.compact[_ngcontent-ng-c468589856]   td[_ngcontent-ng-c468589856] {
+    word-break: break-word;
+  }
+}
+/*# sourceMappingURL=/order-detail.component.css.map */</style></head>
+<body>
+  <app-root ng-version="19.2.17"><app-header _nghost-ng-c3823198599=""><header _ngcontent-ng-c3823198599="" class="pc-header"><div _ngcontent-ng-c3823198599="" class="pc-header__container"><div _ngcontent-ng-c3823198599="" class="pc-header__inner"><app-product-suggest _ngcontent-ng-c3823198599="" id="search-desktop" class="search-desktop" _nghost-ng-c3011837957=""><div _ngcontent-ng-c3011837957="" role="search" class="search-input-wrap"><input _ngcontent-ng-c3011837957="" type="search" placeholder="Search products..." class="search-input"><span _ngcontent-ng-c3011837957="" aria-hidden="true" class="search-icon"><svg _ngcontent-ng-c3011837957="" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path _ngcontent-ng-c3011837957="" d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><circle _ngcontent-ng-c3011837957="" cx="11" cy="11" r="6" stroke="currentColor" stroke-width="2"></circle></svg></span><!--bindings={
+  "ng-reflect-ng-if": "0"
+}--></div><div _ngcontent-ng-c3011837957="" class="mobile-search-panel"><div _ngcontent-ng-c3011837957="" class="mobile-search-header"><input _ngcontent-ng-c3011837957="" type="search" placeholder="Search products..." class="search-input"><span _ngcontent-ng-c3011837957="" aria-hidden="true" class="search-icon"><svg _ngcontent-ng-c3011837957="" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path _ngcontent-ng-c3011837957="" d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><circle _ngcontent-ng-c3011837957="" cx="11" cy="11" r="6" stroke="currentColor" stroke-width="2"></circle></svg></span><button _ngcontent-ng-c3011837957="" class="close-mobile">Close</button></div><!--bindings={
+  "ng-reflect-ng-if": "0"
+}--></div></app-product-suggest><a _ngcontent-ng-c3823198599="" id="logo" routerlink="/" class="logo" ng-reflect-router-link="/" aria-label="product Catalogue home" href="http://localhost:4200/"><img _ngcontent-ng-c3823198599="" src="./CASE MANAGEMENT_files/Chennai-Cycles-Logo-For-Web.png" alt="product Catalogue" class="logo-img"></a><div _ngcontent-ng-c3823198599="" id="headerSummary" class="actions"><app-user-menu _ngcontent-ng-c3823198599="" _nghost-ng-c4130075729="" ng-reflect-show-profile="true" ng-reflect-user-name="arivazhagan selvaraj"><div _ngcontent-ng-c4130075729="" class="user-menu-host"><button _ngcontent-ng-c4130075729="" id="avatarBtnId" type="button" aria-haspopup="menu" class="avatar-btn" aria-expanded="false" aria-controls="user-menu-vfra3qi"><span _ngcontent-ng-c4130075729="" class="user-welcome">Welcome,&nbsp;<span _ngcontent-ng-c4130075729="" class="user-name">Guest</span></span><span _ngcontent-ng-c4130075729="" aria-hidden="true" class="avatar-icon"><svg _ngcontent-ng-c4130075729="" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path _ngcontent-ng-c4130075729="" d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="#0b5ed7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><circle _ngcontent-ng-c4130075729="" cx="12" cy="7" r="4" stroke="#0b5ed7" stroke-width="2"></circle></svg></span><span _ngcontent-ng-c4130075729="" aria-hidden="true" class="avatar-caret"></span><span _ngcontent-ng-c4130075729="" class="sr-only">User menu</span></button><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></div></app-user-menu><button _ngcontent-ng-c3823198599="" type="button" aria-label="Wishlist" class="icon-btn wishlist-icon"><!--bindings={
+  "ng-reflect-ng-if": "0"
+}--></button><button _ngcontent-ng-c3823198599="" type="button" aria-label="Cart" class="icon-btn cart-btn"><svg _ngcontent-ng-c3823198599="" width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path _ngcontent-ng-c3823198599="" d="M6 6h15l-1.5 9h-12L4 2H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><circle _ngcontent-ng-c3823198599="" cx="10" cy="20" r="1" fill="currentColor"></circle><circle _ngcontent-ng-c3823198599="" cx="18" cy="20" r="1" fill="currentColor"></circle></svg><span _ngcontent-ng-c3823198599="" class="badge"> 4 </span><!--bindings={
+  "ng-reflect-ng-if": "4"
+}--></button></div></div></div></header><app-drawer _ngcontent-ng-c3823198599="" _nghost-ng-c731352037="" ng-reflect-is-public="true" ng-reflect-title="Cart" ng-reflect-state="hidden" ng-reflect-show-back="false"><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><div _ngcontent-ng-c731352037="" class="drawer public hidden"><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><div _ngcontent-ng-c731352037="" class="drawer-content"><div _ngcontent-ng-c3823198599="" class="cart-in-drawer"><app-cart _ngcontent-ng-c3823198599="" _nghost-ng-c3457345140="" ng-reflect-in-drawer="true"><div _ngcontent-ng-c3457345140="" class="container my-4 cart-container"><div _ngcontent-ng-c3457345140="" class="cart-layout"><div _ngcontent-ng-c3457345140="" class="cart-left"><div _ngcontent-ng-c3457345140="" class="py-3"><app-cart-list _ngcontent-ng-c3457345140="" _nghost-ng-c1344449150=""><div _ngcontent-ng-c1344449150="" class="cart-list"><div _ngcontent-ng-c1344449150=""><div _ngcontent-ng-c1344449150="" class="cart-item"><a _ngcontent-ng-c1344449150="" class="thumb" ng-reflect-router-link="/product,102" href="http://localhost:4200/product/102"><img _ngcontent-ng-c1344449150="" class="item-img" src="./CASE MANAGEMENT_files/102a.webp"></a><div _ngcontent-ng-c1344449150="" class="item-content"><div _ngcontent-ng-c1344449150="" class="top-row"><a _ngcontent-ng-c1344449150="" class="title" ng-reflect-router-link="/product,102" href="http://localhost:4200/product/102"> Tata Merida Scultura Endurance </a><button _ngcontent-ng-c1344449150="" type="button" aria-label="Remove item" class="remove-btn"> ✕ </button></div><div _ngcontent-ng-c1344449150="" class="middle-row"><div _ngcontent-ng-c1344449150="" class="qty-box"><button _ngcontent-ng-c1344449150="" type="button">−</button><span _ngcontent-ng-c1344449150="" class="qty-value">1</span><button _ngcontent-ng-c1344449150="" type="button">+</button></div><div _ngcontent-ng-c1344449150="" class="unit-price"> × ₹109,990 </div></div><div _ngcontent-ng-c1344449150="" class="bottom-row"> ₹109,990 </div></div></div><div _ngcontent-ng-c1344449150="" class="cart-item"><a _ngcontent-ng-c1344449150="" class="thumb" ng-reflect-router-link="/product,1" href="http://localhost:4200/product/1"><img _ngcontent-ng-c1344449150="" class="item-img" src="./CASE MANAGEMENT_files/Trek-FX4-Sport-4-Lithium-Grey.jpg"></a><div _ngcontent-ng-c1344449150="" class="item-content"><div _ngcontent-ng-c1344449150="" class="top-row"><a _ngcontent-ng-c1344449150="" class="title" ng-reflect-router-link="/product,1" href="http://localhost:4200/product/1"> Aire Trek FX4 Sport 4 (Lithium Grey) </a><button _ngcontent-ng-c1344449150="" type="button" aria-label="Remove item" class="remove-btn"> ✕ </button></div><div _ngcontent-ng-c1344449150="" class="middle-row"><div _ngcontent-ng-c1344449150="" class="qty-box"><button _ngcontent-ng-c1344449150="" type="button">−</button><span _ngcontent-ng-c1344449150="" class="qty-value">1</span><button _ngcontent-ng-c1344449150="" type="button">+</button></div><div _ngcontent-ng-c1344449150="" class="unit-price"> × ₹12,340 </div></div><div _ngcontent-ng-c1344449150="" class="bottom-row"> ₹12,340 </div></div></div><div _ngcontent-ng-c1344449150="" class="cart-item"><a _ngcontent-ng-c1344449150="" class="thumb" ng-reflect-router-link="/product,17" href="http://localhost:4200/product/17"><img _ngcontent-ng-c1344449150="" class="item-img" src="./CASE MANAGEMENT_files/mountain_bike.jpg"></a><div _ngcontent-ng-c1344449150="" class="item-content"><div _ngcontent-ng-c1344449150="" class="top-row"><a _ngcontent-ng-c1344449150="" class="title" ng-reflect-router-link="/product,17" href="http://localhost:4200/product/17"> Aire Giant Rincon 2 27.5er (Blue) </a><button _ngcontent-ng-c1344449150="" type="button" aria-label="Remove item" class="remove-btn"> ✕ </button></div><div _ngcontent-ng-c1344449150="" class="middle-row"><div _ngcontent-ng-c1344449150="" class="qty-box"><button _ngcontent-ng-c1344449150="" type="button">−</button><span _ngcontent-ng-c1344449150="" class="qty-value">1</span><button _ngcontent-ng-c1344449150="" type="button">+</button></div><div _ngcontent-ng-c1344449150="" class="unit-price"> × ₹34,603 </div></div><div _ngcontent-ng-c1344449150="" class="bottom-row"> ₹34,603 </div></div></div><div _ngcontent-ng-c1344449150="" class="cart-item"><a _ngcontent-ng-c1344449150="" class="thumb" ng-reflect-router-link="/product,28" href="http://localhost:4200/product/28"><img _ngcontent-ng-c1344449150="" class="item-img" src="./CASE MANAGEMENT_files/elute-28t.jpg"></a><div _ngcontent-ng-c1344449150="" class="item-content"><div _ngcontent-ng-c1344449150="" class="top-row"><a _ngcontent-ng-c1344449150="" class="title" ng-reflect-router-link="/product,28" href="http://localhost:4200/product/28"> Kross Elute 28T </a><button _ngcontent-ng-c1344449150="" type="button" aria-label="Remove item" class="remove-btn"> ✕ </button></div><div _ngcontent-ng-c1344449150="" class="middle-row"><div _ngcontent-ng-c1344449150="" class="qty-box"><button _ngcontent-ng-c1344449150="" type="button">−</button><span _ngcontent-ng-c1344449150="" class="qty-value">1</span><button _ngcontent-ng-c1344449150="" type="button">+</button></div><div _ngcontent-ng-c1344449150="" class="unit-price"> × ₹15,013 </div></div><div _ngcontent-ng-c1344449150="" class="bottom-row"> ₹15,013 </div></div></div><!--bindings={
+  "ng-reflect-ng-for-of": "[object Object],[object Object"
+}--></div><!--bindings={
+  "ng-reflect-ng-if-else": "[object Object]"
+}--><!--container--><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "[object Object],[object Object"
+}--></div></app-cart-list></div></div><div _ngcontent-ng-c3457345140="" class="cart-right"><div _ngcontent-ng-c3457345140="" class="cart-right-inner"><app-cart-summary _ngcontent-ng-c3457345140="" _nghost-ng-c1317781712=""><div _ngcontent-ng-c1317781712="" class="card p-3"><div _ngcontent-ng-c1317781712="" class="summary-title mb-3">Order Summary</div><div _ngcontent-ng-c1317781712="" class="d-flex justify-content-between"><div _ngcontent-ng-c1317781712="">Subtotal</div><div _ngcontent-ng-c1317781712="">₹171,946</div></div><div _ngcontent-ng-c1317781712="" class="mt-2"><div _ngcontent-ng-c1317781712="" class="shipping-section"><div _ngcontent-ng-c1317781712="" class="d-flex align-items-start"><div _ngcontent-ng-c1317781712="" class="shipping-label me-3">Shipping</div><div _ngcontent-ng-c1317781712="" class="shipping-options flex-fill"><div _ngcontent-ng-c1317781712="" class="form-check text-end"><input _ngcontent-ng-c1317781712="" type="radio" name="shipping" id="standard" class="form-check-input"><label _ngcontent-ng-c1317781712="" for="standard" class="form-check-label">Standard Delivery - ₹4.99</label></div><div _ngcontent-ng-c1317781712="" class="form-check text-end"><input _ngcontent-ng-c1317781712="" type="radio" name="shipping" id="express" class="form-check-input"><label _ngcontent-ng-c1317781712="" for="express" class="form-check-label">Express Delivery - ₹12.99</label></div><div _ngcontent-ng-c1317781712="" class="form-check text-end"><input _ngcontent-ng-c1317781712="" type="radio" name="shipping" id="free" class="form-check-input"><label _ngcontent-ng-c1317781712="" for="free" class="form-check-label">Free (Orders over ₹300)</label></div></div></div></div><div _ngcontent-ng-c1317781712="" class="d-flex justify-content-between mt-3"><div _ngcontent-ng-c1317781712="">Tax</div><div _ngcontent-ng-c1317781712="">₹40.00</div></div><div _ngcontent-ng-c1317781712="" class="d-none d-flex justify-content-between"><div _ngcontent-ng-c1317781712="">Promo Discount</div><div _ngcontent-ng-c1317781712="" class="text-success">-₹0.00</div></div></div><!--bindings={
+  "ng-reflect-ng-if": "[object Object]"
+}--><hr _ngcontent-ng-c1317781712=""><div _ngcontent-ng-c1317781712="" class="d-flex justify-content-between fw-bold mb-3"><div _ngcontent-ng-c1317781712="">Total</div><div _ngcontent-ng-c1317781712=""> ₹171,986.00 </div></div><button _ngcontent-ng-c1317781712="" class="btn btn-primary w-100 proceed-pill">Proceed to Checkout</button><div _ngcontent-ng-c1317781712="" class="mt-3 text-center"><button _ngcontent-ng-c1317781712="" class="btn btn-primary w-100 continue-pill">← Continue Shopping</button></div></div></app-cart-summary></div></div></div><!--bindings={
+  "ng-reflect-ng-if-else": "[object Object]"
+}--><!--container--></div></app-cart><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "true"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></div></div></div></app-drawer></app-header><app-navbar _nghost-ng-c1976929207="" ng-reflect-categories="[object Object],[object Object"><nav _ngcontent-ng-c1976929207="" class="navbar shadow-sm"><div _ngcontent-ng-c1976929207="" class="container-fluid"><a _ngcontent-ng-c1976929207="" class="navbar-brand" ng-reflect-router-link="/" href="http://localhost:4200/">Home</a><ul _ngcontent-ng-c1976929207="" class="navbar-nav d-none d-md-flex"><li _ngcontent-ng-c1976929207="" class="nav-item" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-toggle nav-link"><span _ngcontent-ng-c1976929207="">CLIENTS</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-toggle nav-link"><span _ngcontent-ng-c1976929207="">JOBS</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-toggle nav-link"><span _ngcontent-ng-c1976929207="">Components</span></a><!--container--><ul _ngcontent-ng-c1976929207="" class="dropdown-menu"><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Tyres</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Tubes</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Drive Train</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Brake Set</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Pedals</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Saddles</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Seat Posts</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Wheels</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Frame Parts</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Forks</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><!--bindings={
+  "ng-reflect-ng-for-track-by": "trackById(_, item) {\n    retur"
+}--><!--bindings={
+  "ng-reflect-ng-template-outlet-context": "[object Object]"
+}--></ul><!--bindings={
+  "ng-reflect-ng-if": "true"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-toggle nav-link"><span _ngcontent-ng-c1976929207="">Accessories</span></a><!--container--><ul _ngcontent-ng-c1976929207="" class="dropdown-menu"><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Light</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Bag</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Fenders</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Helmets</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><!--bindings={
+  "ng-reflect-ng-for-track-by": "trackById(_, item) {\n    retur"
+}--><!--bindings={
+  "ng-reflect-ng-template-outlet-context": "[object Object]"
+}--></ul><!--bindings={
+  "ng-reflect-ng-if": "true"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-toggle nav-link"><span _ngcontent-ng-c1976929207="">Apparels</span></a><!--container--><ul _ngcontent-ng-c1976929207="" class="dropdown-menu"><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Gloves</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Shorts</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Jersey</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Footwear</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><!--bindings={
+  "ng-reflect-ng-for-track-by": "trackById(_, item) {\n    retur"
+}--><!--bindings={
+  "ng-reflect-ng-template-outlet-context": "[object Object]"
+}--></ul><!--bindings={
+  "ng-reflect-ng-if": "true"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-toggle nav-link"><span _ngcontent-ng-c1976929207="">Training</span></a><!--container--><ul _ngcontent-ng-c1976929207="" class="dropdown-menu"><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Indoor</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Bicycle</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item dropdown-submenu" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-item dropdown-toggle"><span _ngcontent-ng-c1976929207="">Power Meter</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><!--bindings={
+  "ng-reflect-ng-for-track-by": "trackById(_, item) {\n    retur"
+}--><!--bindings={
+  "ng-reflect-ng-template-outlet-context": "[object Object]"
+}--></ul><!--bindings={
+  "ng-reflect-ng-if": "true"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item" ng-reflect-ng-class="[object Object]"><a _ngcontent-ng-c1976929207="" class="dropdown-toggle nav-link"><span _ngcontent-ng-c1976929207="">Tools &amp; Maintenance</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><!--bindings={
+  "ng-reflect-ng-for-track-by": "trackById(_, item) {\n    retur"
+}--><!--bindings={
+  "ng-reflect-ng-template-outlet-context": "[object Object]"
+}--><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "7"
+}--></ul><div _ngcontent-ng-c1976929207="" class="d-flex d-md-none w-100 align-items-center justify-content-between"><div _ngcontent-ng-c1976929207="" class="d-flex align-items-center flex-grow-1 me-2 mobile-search-wrapper"><app-product-suggest _ngcontent-ng-c1976929207="" class="w-100" _nghost-ng-c3011837957=""><div _ngcontent-ng-c3011837957="" role="search" class="search-input-wrap"><input _ngcontent-ng-c3011837957="" type="search" placeholder="Search products..." class="search-input"><span _ngcontent-ng-c3011837957="" aria-hidden="true" class="search-icon"><svg _ngcontent-ng-c3011837957="" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path _ngcontent-ng-c3011837957="" d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><circle _ngcontent-ng-c3011837957="" cx="11" cy="11" r="6" stroke="currentColor" stroke-width="2"></circle></svg></span><!--bindings={
+  "ng-reflect-ng-if": "0"
+}--></div><div _ngcontent-ng-c3011837957="" class="mobile-search-panel"><div _ngcontent-ng-c3011837957="" class="mobile-search-header"><input _ngcontent-ng-c3011837957="" type="search" placeholder="Search products..." class="search-input"><span _ngcontent-ng-c3011837957="" aria-hidden="true" class="search-icon"><svg _ngcontent-ng-c3011837957="" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path _ngcontent-ng-c3011837957="" d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><circle _ngcontent-ng-c3011837957="" cx="11" cy="11" r="6" stroke="currentColor" stroke-width="2"></circle></svg></span><button _ngcontent-ng-c3011837957="" class="close-mobile">Close</button></div><!--bindings={
+  "ng-reflect-ng-if": "0"
+}--></div></app-product-suggest></div><button _ngcontent-ng-c1976929207="" type="button" role="button" aria-label="Open navigation menu" aria-controls="mobileSidebar" class="navbar-toggler d-md-none" aria-expanded="false"><span _ngcontent-ng-c1976929207="" aria-hidden="true" class="navbar-toggler-icon"></span></button></div></div></nav><div _ngcontent-ng-c1976929207="" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel" class="offcanvas offcanvas-end" style="visibility: hidden;"><div _ngcontent-ng-c1976929207="" class="offcanvas-header"><button _ngcontent-ng-c1976929207="" type="button" aria-label="Close" class="btn-close"></button></div><div _ngcontent-ng-c1976929207="" class="offcanvas-body"><ul _ngcontent-ng-c1976929207="" class="navbar-nav-mobile"><li _ngcontent-ng-c1976929207="" class="nav-item-mobile" style="padding-left: 0px;"><a _ngcontent-ng-c1976929207="" class="nav-link-mobile d-flex justify-content-between align-items-center"><span _ngcontent-ng-c1976929207="">CLIENTS</span><span _ngcontent-ng-c1976929207="" class="toggle-icon">+</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item-mobile" style="padding-left: 0px;"><a _ngcontent-ng-c1976929207="" class="nav-link-mobile d-flex justify-content-between align-items-center"><span _ngcontent-ng-c1976929207="">JOBS</span><span _ngcontent-ng-c1976929207="" class="toggle-icon">+</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item-mobile" style="padding-left: 0px;"><a _ngcontent-ng-c1976929207="" class="nav-link-mobile d-flex justify-content-between align-items-center"><span _ngcontent-ng-c1976929207="">Components</span><span _ngcontent-ng-c1976929207="" class="toggle-icon">+</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item-mobile" style="padding-left: 0px;"><a _ngcontent-ng-c1976929207="" class="nav-link-mobile d-flex justify-content-between align-items-center"><span _ngcontent-ng-c1976929207="">Accessories</span><span _ngcontent-ng-c1976929207="" class="toggle-icon">+</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item-mobile" style="padding-left: 0px;"><a _ngcontent-ng-c1976929207="" class="nav-link-mobile d-flex justify-content-between align-items-center"><span _ngcontent-ng-c1976929207="">Apparels</span><span _ngcontent-ng-c1976929207="" class="toggle-icon">+</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item-mobile" style="padding-left: 0px;"><a _ngcontent-ng-c1976929207="" class="nav-link-mobile d-flex justify-content-between align-items-center"><span _ngcontent-ng-c1976929207="">Training</span><span _ngcontent-ng-c1976929207="" class="toggle-icon">+</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><li _ngcontent-ng-c1976929207="" class="nav-item-mobile" style="padding-left: 0px;"><a _ngcontent-ng-c1976929207="" class="nav-link-mobile d-flex justify-content-between align-items-center"><span _ngcontent-ng-c1976929207="">Tools &amp; Maintenance</span><span _ngcontent-ng-c1976929207="" class="toggle-icon">+</span></a><!--container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></li><!--ng-container--><!--bindings={
+  "ng-reflect-ng-for-track-by": "trackById(_, item) {\n    retur"
+}--><!--bindings={
+  "ng-reflect-ng-template-outlet-context": "[object Object]"
+}--><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "7"
+}--></ul></div></div><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--container--><!--container--></app-navbar><app-ticker _nghost-ng-c163881108="" ng-reflect-items="Expand Your Life Cycle!,Welcom"><div _ngcontent-ng-c163881108="" role="region" aria-label="Announcements" aria-live="polite" aria-atomic="true" class="ticker"><div _ngcontent-ng-c163881108="" class="ticker-inner" style="--anim-duration: 600ms;"><div _ngcontent-ng-c163881108="" class="track" style="transform: translateX(-300%);"><div _ngcontent-ng-c163881108="" class="ticker-item">Expand Your Life Cycle!</div><div _ngcontent-ng-c163881108="" class="ticker-item">Welcome to Chennai Cycles!</div><div _ngcontent-ng-c163881108="" class="ticker-item">Fuel Your Dreams</div><div _ngcontent-ng-c163881108="" class="ticker-item">Explore Life!</div><!--bindings={
+  "ng-reflect-ng-for-of": "Expand Your Life Cycle!,Welcom"
+}--><div _ngcontent-ng-c163881108="" class="ticker-item">Expand Your Life Cycle!</div><!--bindings={
+  "ng-reflect-ng-if": "4"
+}--></div></div></div></app-ticker><router-outlet></router-outlet><app-order-history _nghost-ng-c2485678768="" _nghost-ng-c3399775369="" _nghost-ng-c3536964142="" _nghost-ng-c4059065698="" _nghost-ng-c1819066902=""><div _ngcontent-ng-c1819066902="" class="orders-history container"><h2 _ngcontent-ng-c1819066902="" class="page-title">Order History</h2><section _ngcontent-ng-c1819066902="" class="orders-list"><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><div _ngcontent-ng-c1819066902="" class="list"><article _ngcontent-ng-c1819066902="" tabindex="0" role="button" class="card order-card" aria-label="Open order detail for ORD-2001"><div _ngcontent-ng-c1819066902="" class="order-row"><div _ngcontent-ng-c1819066902="" class="order-main"><div _ngcontent-ng-c1819066902="" class="order-id"> JC: <div _ngcontent-ng-c1819066902="" class="order-items">Items: 2</div></div><div _ngcontent-ng-c1819066902="" class="order-meta"></div><div _ngcontent-ng-c1819066902="" class="step-indicator"><span _ngcontent-ng-c1819066902="" class="order-ref"><strong _ngcontent-ng-c1819066902=""> ORD-2001 </strong></span></div><div _ngcontent-ng-c1819066902="" class="order-total">₹ 80,999</div><div _ngcontent-ng-c1819066902="" class="order-status">Order Placed</div><!--bindings={
+  "ng-reflect-ng-if": "Order Placed"
+}--></div></div></article><article _ngcontent-ng-c1819066902="" tabindex="0" role="button" class="card order-card" aria-label="Open order detail for ORD-2002"><div _ngcontent-ng-c1819066902="" class="order-row"><div _ngcontent-ng-c1819066902="" class="order-main"><div _ngcontent-ng-c1819066902="" class="order-id"> JC: <div _ngcontent-ng-c1819066902="" class="order-items">Items: 1</div></div><div _ngcontent-ng-c1819066902="" class="order-meta"></div><div _ngcontent-ng-c1819066902="" class="step-indicator"><span _ngcontent-ng-c1819066902="" class="order-ref"><strong _ngcontent-ng-c1819066902=""> ORD-2002 </strong></span></div><div _ngcontent-ng-c1819066902="" class="order-total">₹ 70,000</div><div _ngcontent-ng-c1819066902="" class="order-status">Shipment Ready</div><!--bindings={
+  "ng-reflect-ng-if": "Shipment Ready"
+}--></div></div></article><article _ngcontent-ng-c1819066902="" tabindex="0" role="button" class="card order-card" aria-label="Open order detail for ORD-2003"><div _ngcontent-ng-c1819066902="" class="order-row"><div _ngcontent-ng-c1819066902="" class="order-main"><div _ngcontent-ng-c1819066902="" class="order-id"> JC: <div _ngcontent-ng-c1819066902="" class="order-items">Items: 2</div></div><div _ngcontent-ng-c1819066902="" class="order-meta"></div><div _ngcontent-ng-c1819066902="" class="step-indicator"><span _ngcontent-ng-c1819066902="" class="order-ref"><strong _ngcontent-ng-c1819066902=""> ORD-2003 </strong></span></div><div _ngcontent-ng-c1819066902="" class="order-total">₹ 55,499</div><div _ngcontent-ng-c1819066902="" class="order-status">Processing</div><!--bindings={
+  "ng-reflect-ng-if": "Processing"
+}--></div></div></article><article _ngcontent-ng-c1819066902="" tabindex="0" role="button" class="card order-card" aria-label="Open order detail for ORD-2004"><div _ngcontent-ng-c1819066902="" class="order-row"><div _ngcontent-ng-c1819066902="" class="order-main"><div _ngcontent-ng-c1819066902="" class="order-id"> JC: <div _ngcontent-ng-c1819066902="" class="order-items">Items: 2</div></div><div _ngcontent-ng-c1819066902="" class="order-meta"></div><div _ngcontent-ng-c1819066902="" class="step-indicator"><span _ngcontent-ng-c1819066902="" class="order-ref"><strong _ngcontent-ng-c1819066902=""> ORD-2004 </strong></span></div><div _ngcontent-ng-c1819066902="" class="order-total">₹ 55,499</div><div _ngcontent-ng-c1819066902="" class="order-status">Out for Delivery</div><!--bindings={
+  "ng-reflect-ng-if": "Out for Delivery"
+}--></div></div></article><article _ngcontent-ng-c1819066902="" tabindex="0" role="button" class="card order-card" aria-label="Open order detail for ORD-2005"><div _ngcontent-ng-c1819066902="" class="order-row"><div _ngcontent-ng-c1819066902="" class="order-main"><div _ngcontent-ng-c1819066902="" class="order-id"> JC: <div _ngcontent-ng-c1819066902="" class="order-items">Items: 2</div></div><div _ngcontent-ng-c1819066902="" class="order-meta"></div><div _ngcontent-ng-c1819066902="" class="step-indicator"><span _ngcontent-ng-c1819066902="" class="order-ref"><strong _ngcontent-ng-c1819066902=""> ORD-2005 </strong></span></div><div _ngcontent-ng-c1819066902="" class="order-total">₹ 55,499</div><div _ngcontent-ng-c1819066902="" class="order-status">Delivered</div><!--bindings={
+  "ng-reflect-ng-if": "Delivered"
+}--></div></div></article><!--bindings={
+  "ng-reflect-ng-for-track-by": "trackById(_, item) {\n    retur"
+}--></div><!--bindings={
+  "ng-reflect-ng-if": "5"
+}--><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "[object Object],[object Object"
+}--><!--container--></section><app-drawer _ngcontent-ng-c1819066902="" _nghost-ng-c731352037="" ng-reflect-is-public="true" ng-reflect-state="hidden" ng-reflect-title="Order null"><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><div _ngcontent-ng-c731352037="" class="drawer public hidden"><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><div _ngcontent-ng-c731352037="" class="drawer-content"><app-order-detail _ngcontent-ng-c1819066902="" _nghost-ng-c468589856=""><div _ngcontent-ng-c468589856="" class="order-detail"><div _ngcontent-ng-c468589856="" class="loading">No order found.</div><!--bindings={
+  "ng-reflect-ng-if-else": "[object Object]"
+}--></div><!--bindings={
+  "ng-reflect-ng-if-else": "[object Object]"
+}--><!--container--><!--container--></app-order-detail></div></div></app-drawer></div></app-order-history><!--container--></app-root>
+<script src="./CASE MANAGEMENT_files/polyfills.js" type="module"></script><script src="./CASE MANAGEMENT_files/main.js" type="module"></script>
+
+<vite-error-overlay><template shadowrootmode="open"><div class="backdrop" part="backdrop"><div class="window" part="window"><pre class="message" part="message"><span class="plugin" part="plugin"></span><span class="message-body" part="message-body">NG5002: Unexpected closing tag "article". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags</span></pre><pre class="file" part="file">src<a class="file-link">/app/order-history/order-history.component.html:38:0</a></pre><pre class="frame" part="frame"></pre><pre class="stack" part="stack"></pre><div class="tip" part="tip">Click outside, press <kbd>Esc</kbd> key, or fix the code to dismiss.<br></div></div><style>
+:host {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+  --monospace: 'SFMono-Regular', Consolas,
+  'Liberation Mono', Menlo, Courier, monospace;
+  --red: #ff5555;
+  --yellow: #e2aa53;
+  --purple: #cfa4ff;
+  --cyan: #2dd9da;
+  --dim: #c9c9c9;
+
+  --window-background: #181818;
+  --window-color: #d8d8d8;
+}
+
+.backdrop {
+  position: fixed;
+  z-index: 99999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  margin: 0;
+  background: rgba(0, 0, 0, 0.66);
+}
+
+.window {
+  font-family: var(--monospace);
+  line-height: 1.5;
+  max-width: 80vw;
+  color: var(--window-color);
+  box-sizing: border-box;
+  margin: 30px auto;
+  padding: 2.5vh 4vw;
+  position: relative;
+  background: var(--window-background);
+  border-radius: 6px 6px 8px 8px;
+  box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+  overflow: hidden;
+  border-top: 8px solid var(--red);
+  direction: ltr;
+  text-align: left;
+}
+
+pre {
+  font-family: var(--monospace);
+  font-size: 16px;
+  margin-top: 0;
+  margin-bottom: 1em;
+  overflow-x: scroll;
+  scrollbar-width: none;
+}
+
+pre::-webkit-scrollbar {
+  display: none;
+}
+
+pre.frame::-webkit-scrollbar {
+  display: block;
+  height: 5px;
+}
+
+pre.frame::-webkit-scrollbar-thumb {
+  background: #999;
+  border-radius: 5px;
+}
+
+pre.frame {
+  scrollbar-width: thin;
+}
+
+.message {
+  line-height: 1.3;
+  font-weight: 600;
+  white-space: pre-wrap;
+}
+
+.message-body {
+  color: var(--red);
+}
+
+.plugin {
+  color: var(--purple);
+}
+
+.file {
+  color: var(--cyan);
+  margin-bottom: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.frame {
+  color: var(--yellow);
+}
+
+.stack {
+  font-size: 13px;
+  color: var(--dim);
+}
+
+.tip {
+  font-size: 13px;
+  color: #999;
+  border-top: 1px dotted #999;
+  padding-top: 13px;
+  line-height: 1.8;
+}
+
+code {
+  font-size: 13px;
+  font-family: var(--monospace);
+  color: var(--yellow);
+}
+
+.file-link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+kbd {
+  line-height: 1.5;
+  font-family: ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background-color: rgb(38, 40, 44);
+  color: rgb(166, 167, 171);
+  padding: 0.15rem 0.3rem;
+  border-radius: 0.25rem;
+  border-width: 0.0625rem 0.0625rem 0.1875rem;
+  border-style: solid;
+  border-color: rgb(54, 57, 64);
+  border-image: initial;
+}
+</style></div></template></vite-error-overlay></body></html>

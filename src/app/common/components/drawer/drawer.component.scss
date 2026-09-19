@@ -1,0 +1,280 @@
+:host {
+  --drawer-header-height: 50px;
+  --header-side: 44px;
+  --header-gap: 8px;
+}
+
+/* was: */
+.corner-btn.hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* now: collapse the box, don't just hide it */
+.corner-btn.hidden {
+  width: 0;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ============================= */
+/* BACKDROP                      */
+/* ============================= */
+
+.drawer-backdrop.public {
+  pointer-events: none;
+}
+
+
+/* ============================= */
+/* DRAWER BASE                   */
+/* ============================= */
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 11000;
+
+  height: 100vh;
+  height: 100dvh;
+
+  background: var(--app-bg);
+  color: var(--app-text);
+  box-shadow: -12px 0 24px rgba(0, 0, 0, 0.12);
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: width 0.25s ease;
+}
+
+/* ============================= */
+/* STATE SYSTEM                  */
+/* ============================= */
+
+.drawer.hidden {
+  width: 0;
+  box-shadow: none;
+}
+
+/* ===================================================== */
+/* PUBLIC SITE WIDTHS (Cart / Public Drawer)             */
+/* ===================================================== */
+
+.drawer.public.half {
+  width: clamp(420px, 35vw, 680px);
+}
+
+.drawer.public.full {
+  width: clamp(600px, 55vw, 1000px);
+}
+
+@media (max-width: 991px) {
+  .drawer.public.half,
+  .drawer.public.full { width: 75vw; }
+}
+
+@media (max-width: 768px) {
+  .drawer.public.half,
+  .drawer.public.full { width: 100vw; }
+}
+
+/* ===================================================== */
+/* ADMIN SITE WIDTHS                                     */
+/* ===================================================== */
+
+.drawer:not(.public).half { width: 50vw; }
+.drawer:not(.public).full { width: 90vw; }
+
+@media (max-width: 991px) {
+  .drawer:not(.public).half { width: 70vw; }
+  .drawer:not(.public).full { width: 95vw; }
+}
+
+@media (max-width: 768px) {
+  .drawer:not(.public).half { width: 85vw; }
+  .drawer:not(.public).full { width: 100vw; }
+}
+
+
+/* ============================= */
+/* HEADER                        */
+/* ============================= */
+
+.drawer-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: var(--drawer-header-height);
+  display: grid;
+  align-items: center;
+  grid-template-columns: minmax(44px, auto) 1fr minmax(44px, auto);
+  text-align: center;
+  padding: 0 16px;
+
+  background-color: var(--color-card-bg);
+  border-bottom: 1px solid var(--app-border);
+}
+
+.header-cell--left {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  padding-left: 2px;
+}
+
+.corner-btn.hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.header-cell {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  min-width: 44px;
+}
+
+.header-cell--center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ✅ CONSOLIDATED: single source of truth for the title banner —
+   previously split across 3 conflicting blocks (display kept flipping
+   between flex/block depending on declaration order) */
+.drawer-title-banner {
+  display: block;
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  max-width: 100%;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--app-text);
+}
+
+/* Keep only if text-align doesn't reach the text inside
+   app-title-banner's own encapsulated template — test in devtools
+   first and remove if not needed */
+::ng-deep .drawer-title-banner {
+  text-align: center;
+}
+
+
+/* ============================= */
+/* CONTENT                       */
+/* ============================= */
+
+.drawer-content {
+  flex: 1 auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-width: 0;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+
+/* ============================= */
+/* BUTTONS                       */
+/* ============================= */
+
+.corner-btn {
+  width: var(--header-side);
+  height: var(--header-side);
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 700;
+  font-size: 16px;
+
+  color: var(--color-primary);
+}
+
+.corner-btn:hover {
+  background: var(--nav-hover-background);
+  color: var(--nav-hover-foreground);
+}
+
+.corner-btn:active {
+  background: var(--nav-hover-background);
+  color: var(--nav-hover-foreground);
+  opacity: 0.85;
+}
+
+.corner-btn--close {
+}
+
+.corner-btn--close:hover {
+  background: var(--nav-hover-background);
+  color: var(--nav-hover-foreground);
+}
+
+/* Back style button */
+.corner-btn.back {
+  font-size: 14px;
+  font-weight: 600;
+  background: transparent;
+  color: black;
+  padding: 0 12px;
+  white-space: nowrap;
+}
+
+.corner-btn.back:hover {
+  background: var(--nav-hover-background);
+  color: var(--nav-hover-foreground);
+}
+
+/* ── Expand / Collapse chevron (admin only) ── */
+.corner-btn.chevron-toggle {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.10);
+  color: var(--nav-foreground);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+
+  svg {
+    display: block;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.20);
+    border-color: rgba(255, 255, 255, 0.35);
+    transform: scale(1.08);
+  }
+
+  &:active {
+    background: var(--nav-hover-background);
+    border-color: var(--nav-hover-background);
+    transform: scale(0.96);
+  }
+}

@@ -1,0 +1,172 @@
+ .free-delivery-banner {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #e8f5e9, #d4f4dd, #e8f5e9);
+  background-size: 200% 100%;
+  padding: 8px 12px;
+  text-align: center;
+
+  &__track {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scroll-text 8s linear infinite;
+  }
+
+  &__text {
+    display: inline-block;
+    color: #1b7a3d;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+}
+
+@keyframes scroll-text {
+  0%, 15% {
+    transform: translateX(0);
+  }
+  85%, 100% {
+    transform: translateX(0);
+  }
+  /* gentle pulse instead of a true marquee — see note below */
+}
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* Make card full width of its column */
+.card {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #eef2f6;
+  box-shadow: 0 6px 14px rgba(16, 24, 40, 0.04);
+}
+
+/* ==============================
+   HEADER
+============================== */
+
+.summary-title {
+  font-size: 16px;   /* match cart-list title size */
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* ==============================
+   ROW TEXT
+============================== */
+
+.d-flex {
+  font-size: 14px;   /* match cart-list pricing size */
+  color: #374151;
+}
+
+.fw-bold {
+  font-size: 18px;   /* match cart total size */
+}
+
+/* ==============================
+   BUTTONS
+============================== */
+
+.btn-primary {
+  background: #0b5ed7;
+  border-color: #0b5ed7;
+  padding: 12px 18px;
+  border-radius: 28px;
+}
+
+.proceed-pill {
+  padding: 12px 18px;
+  border-radius: 28px;
+}
+
+.continue-pill {
+  display: inline-block;
+  background: #adb8c7;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 28px;
+  border: none;
+}
+
+// success draft 
+.save-success-banner {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #10b981;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  animation: fadeIn 0.3s ease;
+  margin-top: 10px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==============================
+   SHIPPING
+============================== */
+
+.shipping-section .form-check {
+  margin-bottom: 8px;
+  padding-left: 0px;
+}
+
+.shipping-section .form-check-input {
+  margin-right: 8px;
+}
+
+.shipping-section .shipping-label {
+  min-width: 80px;
+  color: #374151;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.shipping-section .shipping-options {
+  display: block;
+}
+
+.shipping-section .form-check-label {
+  font-size: 14px;
+}
+
+.shipping-section .text-end .form-check-input {
+  margin-left: 0;
+  
+}
+
+
+.shipping-section .form-check-input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;    /* ensures perfect round shape */
+  appearance: auto;      /* uses the normal radio look */
+  transform: none;       /* overwrite earlier distortion */
+  margin: 0 8px 0 0;     /* right spacing, left clean */
+  cursor: pointer;
+}
+
+/* ==============================
+   ICON ROW
+============================== */
+
+.icons-row {
+  margin-top: 12px;
+  color: #6b7280;
+}

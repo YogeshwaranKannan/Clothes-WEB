@@ -1,0 +1,277 @@
+<div class="section-box" [class.section-box--collapsed]="!isOpen">
+
+  <!-- Header sitting on border -->
+  <div class="section-header" (click)="toggleOpen()">
+    <div class="step-indicator">1</div>
+    <div class="section-title">
+      Customer Information
+    </div>
+    <span class="collapse-chevron" [class.open]="isOpen">▾</span>
+  </div>
+
+  <ng-container *ngIf="isOpen">
+
+    <div class="section-content" [formGroup]="customerForm">
+
+       
+
+      <!-- Customer Name -->
+      <div class="material-field">
+        <input
+          type="text"
+          formControlName="customerName"
+          placeholder=" "
+        />
+
+        <label>
+          Customer Name<span class="required">*</span>
+        </label>
+
+        <div
+          *ngIf="
+            customerForm.get('customerName')?.touched &&
+            customerForm.get('customerName')?.invalid
+          "
+          class="error-text"
+        >
+          Customer name is required.
+        </div>
+      </div>
+
+
+        <!-- Email -->
+        <div class="material-field">
+        <input type="email" formControlName="email" placeholder=" " />
+
+        <label>
+          Email
+        </label>
+
+        <div
+          *ngIf="
+            customerForm.get('email')?.touched &&
+            customerForm.get('email')?.invalid
+          "
+          class="error-text"
+        >
+          <span *ngIf="customerForm.get('email')?.errors?.['email']">
+            Enter a valid email address.
+          </span>
+        </div>
+        </div>
+
+
+ 
+
+        <!-- Phone -->
+      <div class="material-field">
+        <input
+          type="text"
+          maxlength="15"
+          inputmode="numeric"
+          formControlName="phone"
+          placeholder=" "
+        />
+        <label>
+          Phone<span class="required">*</span>
+        </label>
+
+        <div
+          *ngIf="customerForm.get('phone')?.touched && customerForm.get('phone')?.invalid"
+          class="error-text"
+        >
+          <span *ngIf="customerForm.get('phone')?.errors?.['required']">
+            Phone is required.
+          </span>
+          <span *ngIf="customerForm.get('phone')?.errors?.['digitsOnly']">
+            Use digits only.
+          </span>
+          <span *ngIf="customerForm.get('phone')?.errors?.['maxLength']">
+            Max length is 15.
+          </span>
+        </div>
+      </div>
+
+            <!-- DELIVERY / PICKUP SELECTION -->
+        <div class="delivery-mode-wrapper">
+
+          <div class="delivery-mode-row">
+            <label class="radio-option">
+              <input
+                type="radio"
+                value="DELIVERY"
+              [(ngModel)]="selectedMode"
+              [ngModelOptions]="{standalone: true}"
+                (change)="onModeChange()"
+                name="deliveryMode"
+              />
+              <span>Delivery</span>
+            </label>
+
+            <label class="radio-option">
+              <input
+                type="radio"
+                value="PICKUP"
+              [(ngModel)]="selectedMode"
+              [ngModelOptions]="{standalone: true}"
+                (change)="onModeChange()"
+                name="deliveryMode"
+              />
+              <span>Pickup</span>
+            </label>
+          </div>
+
+          <!-- Selected Address -->
+
+          <div  *ngIf="selectedMode === 'DELIVERY' && deliveryList.length > 0"    class="material-field">
+
+          <label>Select Delivery Area</label>
+
+          <div class="delivery-select material-field">
+            <label>Select Delivery Area</label>
+
+            <select
+              [ngModel]="selectedOrder"
+              [ngModelOptions]="{ standalone: true }"
+              (ngModelChange)="onDeliverySelected($event)"
+            >
+              <option
+                *ngFor="let item of deliveryList"
+                [ngValue]="item"
+              >
+                {{ item.address.city }} - {{ item.address.pincode }}
+              </option>
+            </select>
+          </div>
+
+        </div>
+
+     <div  *ngIf="selectedMode === 'PICKUP' && pickupList.length > 0" class="delivery-select material-field">
+        <label>Select Pickup Point</label>
+
+        <select
+          [ngModel]="selectedOrder"
+          [ngModelOptions]="{ standalone: true }"
+          (ngModelChange)="onPickupSelected($event)"
+        >
+          <option
+            *ngFor="let item of pickupList"
+            [ngValue]="item"
+          >
+            {{ item.address.areaName }} - {{ item.address.pincode }}
+          </option>
+        </select>
+      </div>
+
+     <div
+        class="selected-address-label"
+        *ngIf="selectedAddressLabel">
+        {{ selectedAddressLabel }}
+      </div>
+
+
+  </div>
+
+
+      <div *ngIf="selectedMode === 'DELIVERY'">
+
+    <!-- Street Address -->
+    <div class="material-field">
+      <label for="street">
+        Street Address<span class="required">*</span>
+      </label>
+
+      <input
+        id="street"
+        type="text"
+        formControlName="streetAddress"
+        [attr.maxlength]="INPUT_LENGTH.STREETADDRESS.max"
+        [attr.minlength]="INPUT_LENGTH.STREETADDRESS.min"
+        [class.invalid]="customerForm.get('streetAddress')?.invalid && customerForm.get('streetAddress')?.touched"
+      />
+
+      <div
+        class="error-text"
+        *ngIf="customerForm.get('streetAddress')?.touched && customerForm.get('streetAddress')?.invalid"
+      >
+        Street address is required.
+      </div>
+    </div>
+
+    <!-- City -->
+    <div class="material-field">
+      <label for="city">
+        City<span class="required">*</span>
+      </label>
+
+      <input
+        id="city"
+        type="text"
+        formControlName="city"
+         [attr.maxlength]="INPUT_LENGTH.CITY.max"
+          [attr.minlength]="INPUT_LENGTH.CITY.min"
+        [class.invalid]="customerForm.get('city')?.invalid && customerForm.get('city')?.touched"
+      />
+
+      <div
+        class="error-text"
+        *ngIf="customerForm.get('city')?.touched && customerForm.get('city')?.invalid"
+      >
+        City is required.
+      </div>
+    </div>
+
+    <!-- Postal Code -->
+    <div class="material-field">
+      <label for="postalCode">
+        Postal Code<span class="required">*</span>
+      </label>
+
+      <input
+        id="postalCode"
+        type="text"
+        formControlName="zipCode"
+        [attr.maxlength]="INPUT_LENGTH.POSTALCODE.max"
+        [attr.minlength]="INPUT_LENGTH.POSTALCODE.min"
+        [class.invalid]="customerForm.get('zipCode')?.invalid && customerForm.get('zipCode')?.touched"
+      />
+
+      <div
+        class="error-text"
+        *ngIf="customerForm.get('zipCode')?.touched && customerForm.get('zipCode')?.invalid"
+      >
+        Postal code is required.
+      </div>
+    </div>
+
+    <!-- State -->
+    <div class="material-field">
+      <label for="state">
+        State<span class="required">*</span>
+      </label>
+
+      <input
+        id="state"
+        type="text"
+        formControlName="state"
+        [attr.maxlength]="INPUT_LENGTH.STATE.max"
+        [attr.minlength]="INPUT_LENGTH.STATE.min"
+        [class.invalid]="customerForm.get('state')?.invalid && customerForm.get('state')?.touched"
+      />
+
+      <div
+        class="error-text"
+        *ngIf="customerForm.get('state')?.touched && customerForm.get('state')?.invalid"
+      >
+        State is required.
+      </div>
+    </div>
+
+  </div>
+
+
+
+    </div>
+
+  </ng-container>
+</div>

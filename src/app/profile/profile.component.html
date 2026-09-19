@@ -1,0 +1,131 @@
+ 
+<div class="checkout-wrapper">
+  <div class="checkout-left">
+
+    <div class="section-box">
+
+      <!-- Header -->
+      <div class="section-header">
+        <div class="step-indicator">1</div>
+        <div class="section-title">Customer Information</div>
+      </div>
+
+      <!-- FORM START -->
+      <div class="section-content" [formGroup]="customerForm">
+
+        <!-- Phone -->
+        <div class="material-field">
+          <input
+            type="text"
+            formControlName="phone"
+            placeholder=" "
+            readonly
+            class="readonly-input"
+          />
+          <label>Phone <span class="required-star">*</span></label>
+        </div>
+
+        <!-- Email -->
+         <!-- Email -->
+<div class="material-field">
+  <input
+    type="email"
+    formControlName="email"
+    placeholder=" "
+  />
+  <label>Email</label>
+  <div
+    class="field-error"
+    *ngIf="customerForm.get('email')?.invalid && customerForm.get('email')?.touched"
+  >
+    Please enter a valid email address.
+  </div>
+</div>
+        <!-- <div class="material-field">
+          <input
+            type="email"
+            formControlName="email"
+            placeholder=" "
+          />
+          <label>Email  </label>
+        </div> -->
+
+        <!-- First Name -->
+        <div class="material-field">
+          <input
+            type="text"
+            formControlName="firstName"
+            placeholder=" "
+          />
+          <label>Full Name <span class="required-star">*</span></label>
+        </div>
+
+        <!-- Last Name -->
+        <!-- <div class="material-field">
+          <input
+            type="text"
+            formControlName="lastName"
+            placeholder=" "
+          />
+          <label>Last Name <span class="required-star">*</span></label>
+        </div> -->
+
+        <div class="material-field">
+          <input
+            type="text"
+            formControlName="streetAddress"
+            placeholder=" "
+          />
+          <label>Street Address <span class="required-star">*</span></label>
+        </div>
+
+        <div class="material-field">
+          <input
+            type="text"
+            formControlName="city"
+            placeholder=" "
+          />
+          <label>City <span class="required-star">*</span></label>
+        </div>
+
+        <div class="material-field">
+          <input
+            type="text"
+            formControlName="zipCode"
+            placeholder=" "
+          />
+          <label>Postal Code <span class="required-star">*</span></label>
+        </div>
+
+        <div class="material-field">
+          <input
+            type="text"
+            formControlName="state"
+            placeholder=" "
+          />
+          <label>State <span class="required-star">*</span></label>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="profile-actions">
+      <button
+        class="btn-update"
+        [disabled]="isUpdating"
+        (click)="onUpdateProfile()">
+
+        <span *ngIf="!isUpdating">Update</span>
+        <span *ngIf="isUpdating">⏳ Updating...</span>
+      </button>
+
+      <button class="btn-cancel" (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+
+  </div>
+</div>
+ 
+ 

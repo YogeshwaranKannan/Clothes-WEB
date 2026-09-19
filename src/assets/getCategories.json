@@ -1,0 +1,62 @@
+{
+  "categories": [
+    {
+      "id": "CAT001",
+      "category": "PULSES & LEGUMES",
+      "parent": null,
+      "children": [
+        { "id": "P001", "category": "WHOLE PULSES" },
+        { "id": "P002", "category": "SPLIT DAL" },
+        { "id": "P003", "category": "PULSE FLOURS" },
+        { "id": "P004", "category": "ROASTED ITEMS" },
+        { "id": "P005", "category": "PULSE PRODUCTS" }
+      ]
+    },
+    {
+      "id": "CAT002",
+      "category": "MILLETS",
+      "parent": null,
+      "children": [
+        { "id": "M001", "category": "WHOLE MILLETS" }
+      ]
+    },
+    {
+      "id": "CAT003",
+      "category": "DAIRY & PRODUCTS",
+      "parent": null,
+      "children": [
+        { "id": "DA001", "category": "MILK" },
+        { "id": "DA002", "category": "CURD & PANEER" },
+        { "id": "DA003", "category": "BUTTER & GHEE" }
+      ]
+    },
+    {
+      "id": "CAT004",
+      "category": "PERSONAL CARE",
+      "parent": null,
+      "children": [
+        { "id": "PC001", "category": "SOAPS & BODY CARE" },
+        { "id": "PC002", "category": "HAIR CARE" },
+        { "id": "PC003", "category": "ORAL CARE" }
+      ]
+    },
+    {
+      "id": "CAT005",
+      "category": "HOUSEHOLD & CLEANING",
+      "parent": null,
+      "children": [
+        { "id": "H001", "category": "DETERGENTS" },
+        { "id": "H002", "category": "DISHWASH" },
+        { "id": "H003", "category": "CLEANERS" }
+      ]
+    },
+    {
+      "id": "CAT006",
+      "category": "RICE",
+      "parent": null,
+      "children": [
+        { "id": "R003", "category": "RAW RICE" }
+      ]
+    }
+  ]
+}

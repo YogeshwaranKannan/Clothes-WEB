@@ -1,0 +1,99 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+/* Container */
+.menu-container {
+  width: 240px;
+  height: 100%;
+  background: var(--nav-bg);
+  color: var(--nav-foreground);
+  padding: 12px;
+  transition: width 0.25s ease, background-color 0.2s ease;
+  border-right: 1px solid var(--app-border);
+}
+
+.menu-container.collapsed {
+  width: 72px;
+}
+
+/* Header */
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 20px;
+  color: var(--nav-foreground);
+}
+
+/* Collapse button */
+.collapse-btn {
+  background: none;
+  border: 1px solid var(--nav-hover-background);
+  color: var(--nav-foreground);
+  border-radius: 10px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.collapse-btn:hover {
+  background: var(--nav-hover-background);
+  color: var(--nav-hover-foreground);
+}
+
+/* Menu items */
+.menu-item {
+  margin-bottom: 8px;
+}
+
+.menu-parent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.menu-parent:hover {
+  background: var(--nav-hover-background);
+  color: var(--nav-hover-foreground);
+}
+
+/* Left section */
+.left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon {
+  font-size: 18px;
+}
+
+/* Submenu */
+.submenu {
+  margin-left: 34px;
+  margin-top: 6px;
+}
+
+.submenu-item {
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--app-muted);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.submenu-item:hover {
+  background: var(--nav-hover-background);
+  color: var(--nav-hover-foreground);
+}

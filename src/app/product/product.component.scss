@@ -1,0 +1,803 @@
+// Positions this component as the containing block for its
+// <app-loading-screen [fullScreen]="false"> overlay (see
+// loading-screen.component.scss's .loader-overlay styles) so the
+// "Loading Product…" spinner covers only this page's own content — never
+// the persistent <app-header>/<app-navbar> shell rendered above it in
+// app.component.html.
+:host {
+  position: relative;
+  display: block;
+  min-height: 120px;
+}
+
+.vm-row__prices {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.vm-row__offer {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text, #111);
+}
+
+.vm-row__mrp {
+  font-size: 0.85rem;
+  color: var(--color-text-muted, #777);
+}
+
+/* Strike Selling Price only when OfferPrice > 0 */
+.vm-row__mrp--strike {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  text-decoration-color: currentColor;
+}
+.vm-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  gap: 12px;
+  cursor: pointer;
+  transition: background 100ms ease;
+  border-left: 3px solid transparent;
+  border-bottom: 1px solid var(--color-border, rgba(0,0,0,0.08));
+}
+.vm-row:last-child { border-bottom: none; }
+.vm-row:hover { background: var(--color-surface, #fafafa); }
+.vm-row--selected {
+  background: var(--primary-light, rgba(184,74,26,0.06));
+  border-left-color: var(--primary-color, #b84a1a);
+}
+
+.vm-radio {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border, rgba(0,0,0,0.25));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vm-radio--checked { border-color: var(--primary-color, #b84a1a); }
+.vm-radio__dot { width: 8px; height: 8px; border-radius: 50%; background: transparent; }
+.vm-radio--checked .vm-radio__dot { background: var(--primary-color, #b84a1a); }
+
+.vm-row__actions { flex-shrink: 0; }
+
+.vm-row-add-btn {
+  min-width: 60px;
+  height: 30px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 6px;
+  background: var(--primary-color, var(--nav-hover-background, #b84a1a));
+  color: var(--nav-hover-foreground, #fff);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.08s ease;
+
+  &:hover, &:focus {
+    background: var(--primary-dark, var(--nav-hover-background, #8a3210));
+    outline: none;
+  }
+  &:active { transform: scale(0.98); }
+}
+
+.qty-stepperVariant {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--primary-color, var(--nav-hover-background, #b84a1a));
+  border-radius: 6px;
+  overflow: hidden;
+  height: 30px;
+
+  .qty-btn {
+    width: 26px;
+    height: 100%;
+    border: none;
+    background: transparent;
+    color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .qty-input {
+    width: 34px;
+    height: 100%;
+    border: none;
+    border-left: 1px solid var(--primary-color, var(--nav-hover-background, #b84a1a));
+    border-right: 1px solid var(--primary-color, var(--nav-hover-background, #b84a1a));
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    outline: none;
+    background: var(--color-surface, #fff);
+    color: var(--color-text, #111);
+    -moz-appearance: textfield;
+  }
+
+  .qty-input::-webkit-outer-spin-button,
+  .qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+.product-detail {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+
+  /* TOP */
+  .top-row {
+    margin-bottom: 0.75rem;
+  }
+
+
+  .back {
+    background: transparent;
+   border: 1.5px solid var(--primary-color, var(--nav-hover-background, #b84a1a));
+   border-radius: 6px;
+    font-size: 0.88rem;
+    cursor: pointer;
+    color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+    font-weight: 700;
+    padding: 0.35rem 0.75rem;
+    transition: background 0.15s ease, color 0.15s ease;
+
+    &:hover, &:focus {
+      background: var(--primary-color, var(--nav-hover-background, #b84a1a));
+      color: var(--nav-hover-foreground, #fff);
+      outline: none;
+    }
+  }
+
+  /* GRID */
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 520px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  /* MEDIA */
+  .media {
+    img {
+      width: 100%;
+      max-height: 560px;
+      object-fit: contain;
+      background: #fafafa;
+      border-radius: 6px;
+      padding: 10px;
+    }
+  }
+
+  .thumbs {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 0.75rem;
+
+    img {
+      width: 64px;
+      height: 52px;
+      object-fit: cover;
+      border-radius: 4px;
+      background: #f5f5f5;
+      cursor: pointer;
+      border: 1px solid var(--color-border, rgba(0,0,0,0.10));
+
+      &:hover, &.active {
+        border-color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+      }
+    }
+  }
+
+  /* INFO COLUMN */
+  .info {
+    max-width: 680px;
+  }
+
+  .title {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin: 0 0 0.75rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+.prices {
+  display: flex;
+  gap: 0.6rem;
+  align-items: baseline;
+  margin-bottom: 0.75rem;
+
+  .mrp {
+    text-decoration: line-through;
+    color: var(--color-text-muted, #777);
+    font-size: 0.9rem;
+    margin-right: 8px;
+  }
+
+  .offer {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text, #111);
+  }
+}
+
+  .emi {
+    font-size: 0.85rem;
+    color: var(--color-text-muted, #555);
+    margin-bottom: 1rem;
+  }
+
+  /* SELECTORS */
+  .selectors {
+    margin-bottom: 1rem;
+
+    label {
+      font-size: 0.85rem;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    select {
+      padding: 0.45rem 0.7rem;
+      border-radius: 6px;
+      border: 1.5px solid var(--color-border, rgba(0,0,0,0.18));
+      width: 180px;
+      font-size: 0.9rem;
+      color: var(--color-text, #111);
+      background: var(--color-surface, #fff);
+      transition: border-color 0.15s ease;
+      outline: none;
+
+      &:focus {
+        border-color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+      }
+    }
+  }
+
+  /* PINCODE */
+  .delivery {
+    margin-bottom: 1rem;
+  }
+
+  .pincode-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0.4rem;
+  }
+
+  // PIN code input — themed via .theme-input class applied in HTML
+  .theme-input {
+    padding: 0.45rem 0.75rem;
+    border-radius: 6px;
+    border: 1.5px solid var(--color-border, rgba(0,0,0,0.18));
+    font-size: 0.9rem;
+    color: var(--color-text, #111);
+    background: var(--color-surface, #fff);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    outline: none;
+
+    &:focus {
+      border-color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+      box-shadow: 0 0 0 3px var(--primary-light, rgba(184,74,26,0.12));
+    }
+  }
+
+  // Viewer control buttons (Rotate 90° / Auto Rotate / Flip / Reset)
+  // Styled as outlined secondary — matches theme outlined pattern
+  .btn.small {
+    padding: 0.32rem 0.7rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: transparent;
+    border: 1.5px solid var(--primary-color, var(--nav-hover-background, #b84a1a));
+    border-radius: 6px;
+    color: var(--primary-color, var(--nav-hover-background, #b84a1a));
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.13s ease, color 0.13s ease;
+
+    &:hover, &:focus {
+      background: var(--primary-color, var(--nav-hover-background, #b84a1a));
+      color: var(--nav-hover-foreground, #fff);
+      outline: none;
+    }
+    &:active { opacity: 0.85; }
+  }
+
+  /* ACTIONS */
+  .actions {
+    margin-top: 1.25rem;
+  }
+
+  // Variant-actions wrapper — spacing was previously inline style="margin:12px 0"
+  .variant-actions {
+    margin: 12px 0;
+  }
+  .qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #22c55e;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  height: 32px;
+}
+
+.qty-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: #22c55e;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: rgba(34, 197, 94, 0.08);
+  }
+}
+
+.qty-input {
+  width: 40px;
+  height: 32px;
+  border: none;
+  outline: none;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  background: transparent;
+
+  /* Remove browser arrows */
+  -moz-appearance: textfield;
+}
+
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+  // Quantity row — replaces inline style="margin:12px 0" on the wrapper div
+  .quantity-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 12px 0;
+  }
+
+  .qty-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text-muted, #555);
+    margin: 0;
+  }
+
+  // Quantity number input — width was previously inline style="width:80px"
+  // .qty-input {
+  //   width: 80px;
+  //   text-align: center;
+  // }
+
+  // Primary action buttons: Add to Cart, Buy Now, Check
+  // Uses theme primary colour — consistent with btn-cart and vm-add-btn
+  .btn.primary {
+    background: var(--primary-color, var(--nav-hover-background, #b84a1a));
+    color: var(--nav-hover-foreground, #fff);
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+    transition: background 0.15s ease, transform 0.08s ease;
+
+    &:hover, &:focus {
+      background: var(--primary-dark, var(--nav-hover-background, #8a3210));
+      outline: none;
+    }
+    &:active { transform: scale(0.98); }
+  }
+
+  /* SECTIONS */
+  .sections {
+    margin-top: 2rem;
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      margin: 1.75rem 0 0.5rem;
+      text-transform: uppercase;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: var(--color-text, #333);
+      line-height: 1.55;
+      margin: 0 0 0.5rem;
+    }
+
+    ul {
+      margin: 0.25rem 0 0.75rem 1.2rem;
+      padding: 0;
+
+      li {
+        font-size: 0.9rem;
+        color: var(--color-text, #333);
+        line-height: 1.6;
+        margin-bottom: 0.3rem;
+      }
+    }
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background: var(--primary-color, var(--nav-hover-background, #b84a1a));
+    color: var(--nav-hover-foreground, #fff);
+    padding: 0.6rem 0.85rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+  }
+
+  /* MOBILE */
+  @media (max-width: 900px) {
+    .detail-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .info {
+      max-width: 100%;
+    }
+  }
+}
+/* product.component.scss (additions) */
+
+/* Floating button group (top-right) */
+.image-controls-top {
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  display: flex;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.88);
+  padding: 6px;
+  border-radius: 8px;
+  z-index: 5;
+}
+
+/* Stage & wrappers */
+.viewer-frame {
+  position: relative;
+
+  // ✅ Discount badge — exact same ribbon style as product-list .discount
+  
+
+   .discount {
+ position: absolute;
+  top: -10px;
+  left: 8px;
+
+  background: #fff;
+  color: var(--color-on-discount);
+
+  border: 1px solid var(--color-on-discount);
+  border-radius: 4px;
+
+  padding: 3px 7px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.5;
+
+  white-space: nowrap;
+  z-index: 20;
+
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  }
+
+
+}
+
+.viewer-stage {
+  width: 100%;
+  height: 560px; /* aligns with your max-height from current CSS */
+  background: #f8f9fa;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  perspective: 1000px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.auto-wrap,
+.manual-wrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center center;
+}
+
+.manual-wrap {
+  transition: transform 250ms ease;
+}
+
+/* Auto-rotate animation */
+@keyframes spinZ {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.auto-wrap.spinning {
+  animation: spinZ 3s linear infinite;
+}
+
+/* Flip card with safe 3D effect */
+.flip-card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.flip-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+}
+.flip-back {
+  transform: rotateY(180deg);
+}
+
+/* Flip animation */
+@keyframes flipY360Safe {
+  0% {
+    transform: rotateY(0deg) scaleX(1);
+  }
+  25% {
+    transform: rotateY(90deg) scaleX(0.2);
+  }
+  50% {
+    transform: rotateY(180deg) scaleX(1);
+  }
+  75% {
+    transform: rotateY(270deg) scaleX(0.2);
+  }
+  100% {
+    transform: rotateY(360deg) scaleX(1);
+  }
+}
+.flip-card.flipping {
+  animation: flipY360Safe 3.2s ease-in-out;
+}
+
+/* Image itself */
+.viewer-image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 10px;
+  user-select: none;
+}
+
+/* .btn.small — defined inside .product-detail above; deduped here */
+
+/* Inline variant panel styles (subset copied from product-list for reuse) */
+.vm-panel.vm-panel--inline {
+  position: static;
+  z-index: auto;
+  width: 100%;
+  max-height: none;
+  display: block;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid var(--color-border, rgba(0,0,0,0.06));
+  box-shadow: none;
+  overflow: visible;
+  padding: 6px 0;
+}
+
+.vm-body {
+  max-height: none;
+  overflow: visible;
+  padding: 0;
+}
+
+.vm-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  gap: 12px;
+  cursor: pointer;
+  transition: background 100ms ease;
+  border-left: 3px solid transparent;
+}
+.vm-row--selected { background: var(--primary-light, rgba(184,74,26,0.06)); border-left-color: var(--primary-color, #b84a1a); }
+.vm-row__info { flex: 1; min-width: 0; }
+.vm-row__name { display: block; font-size: 0.95rem; font-weight: 500; margin-bottom: 4px; }
+.vm-row__prices { display:flex; align-items:baseline; gap:6px; }
+.vm-row__offer { font-weight:700; }
+.vm-row__mrp { color: var(--color-text-muted, #777); }
+.vm-row__in-cart { font-size:0.8rem; color: var(--primary-color, #b84a1a); flex-shrink:0; }
+
+.vm-radio { width:18px; height:18px; border-radius:50%; border:2px solid var(--color-border, rgba(0,0,0,0.25)); display:flex; align-items:center; justify-content:center; }
+.vm-radio--checked { border-color: var(--primary-color, #b84a1a); }
+.vm-radio__dot { width:8px; height:8px; border-radius:50%; background: transparent; }
+.vm-radio--checked .vm-radio__dot { background: var(--primary-color, #b84a1a); }
+
+.vm-stepper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 1.5px solid var(--primary-color, #b84a1a);
+  border-radius: 8px;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.vm-stepper__btn {
+  background: none;
+  border: none;
+  width: 28px;      // reduced from 36px
+  height: 28px;     // reduced from 36px
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--primary-color, #b84a1a);
+  padding: 0;
+}
+
+.vm-stepper__val {
+  min-width: 24px;  // reduced from 32px
+  text-align: center;
+  font-weight: 600;
+  padding: 0 4px;
+  line-height: 28px; // match button height
+}
+
+// .vm-stepper { display:flex; align-items:center; gap:0; border:1.5px solid var(--primary-color, #b84a1a); border-radius:8px; overflow:hidden; }
+// .vm-stepper__btn { background:none; border:none; width:36px; height:36px; font-size:1.1rem; font-weight:700; cursor:pointer; color:var(--primary-color, #b84a1a); }
+// .vm-stepper__val { min-width:32px; text-align:center; font-weight:600; padding:0 6px; line-height:36px; }
+// ── Page header — mirrors product-list.component page-header ─────────────────
+// Scoped inside .product-detail so it doesn't leak to other components.
+.product-detail {
+  .page-header {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+     background: var(--color-card-bg);
+    // background: linear-gradient(
+    // 135deg,
+    // var(--oh-header-tint-a, #e8f4fd)  0%,   // Blue default: #e8f4fd
+    // var(--oh-header-tint-b, #ddeeff)  40%,  // Blue default: #ddeeff
+    // var(--oh-header-tint-a, #e8f4fd)  70%,
+    // var(--oh-header-tint-c, #f0f7ff)  100%  // Blue default: #f0f7ff
+    // );
+    padding: 1rem 1.25rem;
+  }
+
+  // Decorative glow — same as product-list
+  .page-header__glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 60% 50%, rgba(255,255,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  // Three-column flex row: back | title (center) | spacer
+  .page-header__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .page-header__left  { flex: 0 0 auto; }
+  .page-header__right { flex: 0 0 auto; }
+
+  // Center column grows and centres its child
+  .page-header__center {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  // Product name in header
+  .page-header__title {
+    margin: 0;
+    font-size: var(--text-4xl);
+    font-weight: var(--fw-black);
+    letter-spacing: 0.04em;
+    color: var(--color-text, #fff);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // Back button inside header — override the standalone .back colours
+  // to contrast against the dark header background
+  .page-header .back {
+  background: transparent;
+  border-color: var(--primary-color, #b84a1a);
+  color: var(--primary-color, #b84a1a);
+
+  &:hover,
+  &:focus {
+    background: var(--primary-color, #b84a1a);
+    color: #fff;
+  }
+}
+
+  // ── Mobile search toggle icon (Product page, mobile only) ────────────────
+  // Hidden entirely above 768px — desktop keeps the navbar's search bar
+  // always visible, exactly as before, so this icon never needs to appear
+  // there regardless of MobileSearchToggleService's state.
+  .mobile-search-toggle-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    background: transparent;
+    border: 1.5px solid var(--primary-color, #b84a1a);
+    border-radius: 8px;
+    color: var(--primary-color, #b84a1a);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+
+    svg { width: 18px; height: 18px; }
+
+    &:hover, &:focus-visible {
+      background: var(--primary-color, #b84a1a);
+      color: #fff;
+      outline: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .mobile-search-toggle-btn {
+      display: inline-flex;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .page-header { padding: 0.75rem 1rem; border-radius: 8px; }
+    .page-header__title {  font-size: var(--text-2xl);}
+  }
+}
