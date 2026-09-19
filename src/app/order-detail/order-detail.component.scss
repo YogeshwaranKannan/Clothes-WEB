@@ -1,8 +1,17 @@
- /* Container & header */
+/* Container & header */
 .order-detail {
   padding: 16px;
   color: #222;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    "Liberation Sans",
+    sans-serif;
 }
 
 .seller-price {
@@ -16,10 +25,15 @@
 }
 
 .order-ref-row {
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 12px;
 
-  h4 { margin: 0; color: #0b5ed7; }
+  h4 {
+    margin: 0;
+    color: #0b5ed7;
+  }
 
   .order-status-pill {
     border: 1px solid #e5e7eb;
@@ -37,7 +51,9 @@
 }
 
 /* ---------- TIMELINE: robust defaults so it's always visible ---------- */
-.timeline-shell { margin: 8px 0 18px; }
+.timeline-shell {
+  margin: 8px 0 18px;
+}
 
 .timeline-container {
   position: relative;
@@ -45,7 +61,7 @@
   justify-content: space-between;
   gap: 12px;
 
-  min-height: 88px;       /* space for line + dots */
+  min-height: 88px; /* space for line + dots */
   margin: 12px 0;
   padding: 0 8px;
 
@@ -57,7 +73,9 @@
 .timeline-container::after {
   content: "";
   position: absolute;
-  top: 44px; left: 8px; right: 8px;
+  top: 44px;
+  left: 8px;
+  right: 8px;
   height: 0;
   border-bottom: 2px dotted #bbb;
   z-index: 1;
@@ -67,11 +85,12 @@
 .timeline-container::before {
   content: "";
   position: absolute;
-  top: 44px; left: 8px;
+  top: 44px;
+  left: 8px;
   height: 0;
   border-bottom: 2px solid #4caf50;
   z-index: 2;
-  width: var(--completed-width, 0%);  /* bound from template */
+  width: var(--completed-width, 0%); /* bound from template */
 }
 
 /* Steps */
@@ -113,14 +132,20 @@
 /* Moving cycle icon */
 .moving-cycle {
   position: absolute;
-  top: 44px; left: 0%;
+  top: 44px;
+  left: 0%;
   transform: translate(-50%, -50%);
-  font-size: 18px; z-index: 4;
-  animation: moveCycle 4.0s ease-out forwards;
+  font-size: 18px;
+  z-index: 4;
+  animation: moveCycle 4s ease-out forwards;
 }
 @keyframes moveCycle {
-  from { left: 0%; }
-  to   { left: var(--target-position, 0%); }
+  from {
+    left: 0%;
+  }
+  to {
+    left: var(--target-position, 0%);
+  }
 }
 
 /* ==========================================================
@@ -138,7 +163,9 @@
   background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 14px;
-  box-shadow: 0 1px 2px rgba(16, 24, 22, 0.04), 0 1px 8px rgba(16, 24, 22, 0.05);
+  box-shadow:
+    0 1px 2px rgba(16, 24, 22, 0.04),
+    0 1px 8px rgba(16, 24, 22, 0.05);
   overflow: hidden;
 }
 
@@ -183,7 +210,10 @@
     color: #065f46;
   }
 
-  svg { width: 15px; height: 15px; }
+  svg {
+    width: 15px;
+    height: 15px;
+  }
 }
 
 .acc-title-group {
@@ -252,19 +282,31 @@
   font-size: 13.5px;
   font-weight: 700;
 
-  span:last-child { color: #065f46; }
+  span:last-child {
+    color: #065f46;
+  }
 }
 
 /* Items table (inside Order Summary card) */
-.items-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
-.items-table th, .items-table td {
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 4px;
+}
+.items-table th,
+.items-table td {
   text-align: left;
   padding: 8px 6px;
   border-bottom: 1px solid #eee;
 }
-.items-table thead th { background: #f8fafc; color: #111; font-weight: 600; }
+.items-table thead th {
+  background: #f8fafc;
+  color: #111;
+  font-weight: 600;
+}
 .item-img {
-  width: 64px; height: 64px;
+  width: 64px;
+  height: 64px;
   object-fit: contain;
   border-radius: 6px;
   border: 1px solid #e5e7eb;
@@ -272,24 +314,58 @@
 }
 
 /* Rewards mini-table (inside Order Summary card) */
-.order-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-.order-table th { text-align: left; padding: 6px 0; color: #666; width: 160px; }
-.order-table td { padding: 6px 0; }
-
-/* Info tables (Customer / Delivery / Status cards) */
-.info-table.compact { width: 100%; border-collapse: collapse; }
-.info-table.compact th, .info-table.compact td { padding: 6px 0; font-size: 13px; vertical-align: top; }
-.info-table.compact th { width: 42%; color: #555; font-weight: 600; }
-.info-table.compact td { color: #333; }
-.info-table.compact tr + tr th, .info-table.compact tr + tr td {
-  padding-top: 8px; border-top: 1px solid #f0f0f0;
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+.order-table th {
+  text-align: left;
+  padding: 6px 0;
+  color: #666;
+  width: 160px;
+}
+.order-table td {
+  padding: 6px 0;
 }
 
-.payment-info { font-weight: 500; }
-.payment-info.paid { color: #2e7d32; font-weight: 700; }
-.payment-info.unpaid { color: #b5720a; font-weight: 700; }
+/* Info tables (Customer / Delivery / Status cards) */
+.info-table.compact {
+  width: 100%;
+  border-collapse: collapse;
+}
+.info-table.compact th,
+.info-table.compact td {
+  padding: 6px 0;
+  font-size: 13px;
+  vertical-align: top;
+}
+.info-table.compact th {
+  width: 42%;
+  color: #555;
+  font-weight: 600;
+}
+.info-table.compact td {
+  color: #333;
+}
+.info-table.compact tr + tr th,
+.info-table.compact tr + tr td {
+  padding-top: 8px;
+  border-top: 1px solid #f0f0f0;
+}
 
- 
+.payment-info {
+  font-weight: 500;
+}
+.payment-info.paid {
+  color: #2e7d32;
+  font-weight: 700;
+}
+.payment-info.unpaid {
+  color: #b5720a;
+  font-weight: 700;
+}
+
 /* Footer links */
 .checkout-footer {
   display: flex;
@@ -312,10 +388,12 @@
     }
   }
 }
- 
 
 /* Loading / not found */
-.loading { color: #666; padding: 12px 4px; }
+.loading {
+  color: #666;
+  padding: 12px 4px;
+}
 
 /* ---- Mobile behavior ---- */
 @media (max-width: 768px) {
@@ -333,5 +411,8 @@
   }
 
   /* Long text wrapping in info tables */
-  .info-table.compact th, .info-table.compact td { word-break: break-word; }
+  .info-table.compact th,
+  .info-table.compact td {
+    word-break: break-word;
+  }
 }
