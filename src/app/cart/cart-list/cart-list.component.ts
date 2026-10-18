@@ -13,7 +13,11 @@ import { parseMoneyToNumber } from "../../common/utils/price.util";
 
 //import { AddonsSuggestComponent } from "../../addons-suggest/addons-suggest.component";
 import { AddonModel } from "../../common/models/cart/addon.model";
-import { Product_URL, Service_URL } from "../../common/utils/constant";
+import {
+  isS3Enabled,
+  Product_URL,
+  Service_URL,
+} from "../../common/utils/constant";
 import { ImageUrlService } from "../../common/utils/ImageUrlService";
 // What the template receives per cart item
 interface CartItemVm {
@@ -35,6 +39,7 @@ export class CartListComponent implements OnInit {
 
   suggestedAddons$!: Observable<AddonModel[]>;
 
+  isS3Enabled = false;
   constructor(
     private store: Store,
     private productService: ProductService,
@@ -42,6 +47,7 @@ export class CartListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isS3Enabled = isS3Enabled;
     const cartItems$ = this.store.select(selectCartItems);
     const allProducts$ = this.productService.getProducts();
 
@@ -229,11 +235,19 @@ export class CartListComponent implements OnInit {
     );
   }
 
+  private imgCache = new Map<string, Promise<string>>();
+
   buildImageUrl(
     relative?: string,
     inventoryId?: string,
-    isService?: boolean,
-  ): string {
-    return this.imageUrlService.buildImageUrl(relative, inventoryId, isService);
+    isService: boolean = false,
+  ): Promise<string> {
+    const key = `${relative ?? ""}|${inventoryId ?? ""}|${isService}`;
+    let p = this.imgCache.get(key);
+    if (!p) {
+      p = this.imageUrlService.buildImageUrl(relative, inventoryId, isService);
+      this.imgCache.set(key, p);
+    }
+    return p;
   }
 }

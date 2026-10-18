@@ -4,84 +4,6 @@
 @use '../../../../styles/media' as media;
 
 // =============================================================================
-// MOBILE MENU FOOTER (My Orders / Profile / Cart / Logout, or Login / Sign Up)
-// =============================================================================
-
-@include media.down(md) {
-  .mobile-menu-panel__footer {
-    display: flex;
-    flex-direction: column;
-
-    margin: 0.5rem 0.75rem 0;
-    padding-top: 0.5rem;
-
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
-  }
-
-  .menu-item {
-    display: flex;
-    align-items: center;
-
-    gap: 0.65rem;
-
-    width: 100%;
-
-    padding: 0.65rem 0.75rem;
-
-    background: transparent;
-    border: none;
-    border-radius: 0.375rem;
-
-    color: var(
-      --primary-color,
-      var(--nav-hover-background, #b84a1a)
-    );
-
-    font-size: 0.9rem;
-    font-weight: 600;
-
-    text-align: left;
-    cursor: pointer;
-
-    transition:
-      background 0.15s ease,
-      color 0.15s ease;
-
-    &:hover,
-    &:focus {
-      background: var(
-        --primary-light,
-        rgba(184, 74, 26, 0.08)
-      );
-
-      color: var(
-        --primary-dark,
-        var(--nav-hover-background, #8a3210)
-      );
-
-      outline: none;
-    }
-
-    &.danger {
-      color: #dc3545;
-
-      &:hover,
-      &:focus {
-        background: rgba(220, 53, 69, 0.08);
-        color: #b02a37;
-      }
-    }
-  }
-
-  .menu-item-icon {
-    width: 18px;
-    height: 18px;
-
-    flex-shrink: 0;
-  }
-}
-
-// =============================================================================
 // DESIGN TOKENS
 // =============================================================================
 // --primary-color           Main brand colour
@@ -218,6 +140,13 @@
 @include media.down(md) {
   .navbar-brand.desktop-only {
     display: none !important;
+  }
+
+  // Every child of the bar is desktop-only, so on mobile it would render as
+  // an empty strip (Bootstrap .navbar padding + border + shadow) between the
+  // header and the hero. The offcanvas sidebar lives outside <nav>.
+  :host > nav.navbar {
+    display: none;
   }
 }
 
@@ -600,103 +529,298 @@
 // =============================================================================
 // MOBILE OFFCANVAS SIDEBAR
 // =============================================================================
+// Layout: fixed header → scrollable body (flex: 1) → fixed footer.
+// Sidebar-scoped tokens live on .offcanvas so they can be themed in one place.
+// =============================================================================
 
 .offcanvas {
+  --sm-accent: var(--brand-green, #1b5e20);
+  --sm-accent-hover: #144a18;
+  --sm-accent-soft: rgba(27, 94, 32, 0.08);
+  --sm-accent-softer: rgba(27, 94, 32, 0.05);
+  --sm-surface: #f4f8ef;
+  --sm-surface-border: rgba(27, 94, 32, 0.12);
+  --sm-text: #1f2a1f;
+  --sm-muted: #5f6b5f;
+  --sm-danger: #c62828;
+  --sm-danger-soft: rgba(198, 40, 40, 0.08);
+  --sm-radius: 0.625rem;
+
   position: fixed;
 
-  top: 50px;
+  top: 0;
   bottom: 0;
 
   left: 0;
   right: auto;
 
-  width: 300px;
+  width: 84vw;
+  max-width: 380px;
   height: auto;
 
   background-color: #ffffff;
-  color: #1a1a1a;
+  color: var(--sm-text);
 
-  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.13);
+  box-shadow: 6px 0 28px rgba(0, 0, 0, 0.14);
 
   transform: translateX(-100%);
 
   transition: transform 0.28s ease-in-out;
 
-  z-index: 1045;
+  z-index: 1250; // above the sticky mobile header (.pc-header: 1200), below the cart drawer (11000)
 
   display: flex;
   flex-direction: column;
 
+  overflow: hidden;
+
   &.show {
     transform: translateX(0);
   }
-}
 
-// =============================================================================
-// OFFCANVAS HEADER
-// =============================================================================
+  @include media.up(sm) {
+    width: 400px;
+    max-width: 70vw;
+  }
 
-.offcanvas-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 0.9rem 1.25rem;
-
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-
-  flex-shrink: 0;
-}
-
-.offcanvas-title {
-  font-size: 1rem;
-  font-weight: 700;
-
-  color: var(
-    --primary-color,
-    var(--nav-hover-background, #b84a1a)
-  );
-}
-
-.offcanvas-close {
-  background: transparent;
-  border: none;
-
-  color: var(
-    --primary-color,
-    var(--nav-hover-background, #b84a1a)
-  );
-
-  font-size: 1.15rem;
-
-  cursor: pointer;
-
-  padding: 0.3rem 0.6rem;
-
-  border-radius: 0.25rem;
-
-  line-height: 1;
-
-  transition: background 0.15s ease;
-
-  &:hover {
-    background: var(
-      --primary-light,
-      rgba(184, 74, 26, 0.1)
-    );
+  @include media.up(lg) {
+    width: 420px;
   }
 }
 
 // =============================================================================
-// OFFCANVAS BODY
+// OFFCANVAS HEADER (fixed)
+// =============================================================================
+// Rows: branding + close → user (logged-in only) → quick links.
+// Height is content-driven (no fixed height), so long names simply wrap.
+// =============================================================================
+
+.offcanvas-header {
+  flex-shrink: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.9rem;
+
+  padding: calc(0.85rem + env(safe-area-inset-top, 0px)) 1rem 1rem;
+
+  background: var(--sm-surface);
+  border-bottom: 1px solid var(--sm-surface-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+  position: relative;
+  z-index: 1;
+
+  @include media.up(sm) {
+    gap: 1rem;
+    padding: calc(1rem + env(safe-area-inset-top, 0px)) 1.5rem 1.15rem;
+  }
+}
+
+.offcanvas-header__brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+
+  min-width: 0;
+}
+
+.offcanvas-logo {
+  display: block;
+
+  height: 56px; // 2:1 logo — taller than the reference so it stays legible
+  width: auto;
+  max-width: calc(100% - 48px); // always leaves room for the close button
+
+  object-fit: contain;
+  object-position: left center;
+
+  border-radius: 0.375rem;
+
+  @include media.up(sm) {
+    height: 64px;
+  }
+}
+
+.offcanvas-close {
+  flex-shrink: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
+
+  background: #ffffff;
+  border: 1px solid var(--sm-surface-border);
+  border-radius: 50%;
+
+  color: var(--sm-text);
+
+  font-size: 0.95rem;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--sm-accent);
+    border-color: var(--sm-accent);
+    color: #ffffff;
+    outline: none;
+  }
+}
+
+// Logged-in greeting + rewards
+.mobile-user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  padding: 0.65rem 0.75rem;
+
+  background: #ffffff;
+  border: 1px solid var(--sm-surface-border);
+  border-radius: var(--sm-radius);
+
+  .mobile-user-avatar {
+    flex-shrink: 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 44px;
+    height: 44px;
+
+    border-radius: 50%;
+
+    background: var(--sm-accent);
+    color: #ffffff;
+
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+
+    box-shadow: 0 2px 6px rgba(27, 94, 32, 0.25);
+  }
+
+  .mobile-user-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .mobile-user-greeting {
+    margin: 0;
+
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.3;
+
+    color: var(--sm-text);
+
+    // Long names wrap instead of being clipped
+    overflow-wrap: anywhere;
+  }
+
+  .mobile-user-rewards {
+    margin: 0.15rem 0 0;
+
+    font-size: 0.75rem;
+    line-height: 1.35;
+    color: var(--sm-muted);
+
+    strong {
+      color: var(--sm-accent);
+      font-weight: 700;
+    }
+  }
+}
+
+// =============================================================================
+// OFFCANVAS BODY (scrollable)
 // =============================================================================
 
 .offcanvas-body {
-  padding: 0.5rem 0;
+  flex: 1 1 auto;
+  min-height: 0;
+
+  padding: 0.75rem 0 1rem;
 
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
 
-  flex: 1;
+// =============================================================================
+// QUICK LINKS (header) + SECTION TITLE (body)
+// =============================================================================
+
+.mobile-quick-links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+
+  padding: 0;
+
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 40px;
+    padding: 0.4rem 0.5rem;
+
+    border: 1px solid var(--sm-surface-border);
+    border-radius: 999px;
+
+    background: #ffffff;
+    color: var(--sm-accent);
+
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+      background 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--sm-accent-soft);
+      border-color: var(--sm-accent);
+      outline: none;
+    }
+
+    &:active {
+      background: var(--sm-accent);
+      color: #ffffff;
+    }
+  }
+}
+
+.mobile-section-title {
+  margin: 0.35rem 1.25rem 0.35rem;
+
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  color: var(--sm-muted);
 }
 
 // =============================================================================
@@ -710,46 +834,33 @@
   padding: 0 0.75rem;
 
   li a {
-    display: block;
+    display: flex;
+    align-items: center;
 
-    padding: 0.65rem 0.75rem;
+    min-height: 44px;
+    padding: 0.6rem 0.75rem;
 
-    color: var(
-      --primary-color,
-      var(--nav-hover-background, #b84a1a)
-    );
+    color: var(--sm-accent);
 
     text-decoration: none;
 
-    font-weight: 600;
-    font-size: 0.9rem;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
 
-    border-radius: 0.375rem;
+    border-radius: var(--sm-radius);
+
+    cursor: pointer;
 
     transition:
       background 0.15s ease,
       color 0.15s ease;
 
     &:hover {
-      background: var(
-        --primary-light,
-        rgba(184, 74, 26, 0.08)
-      );
-
-      color: var(
-        --primary-dark,
-        var(--nav-hover-background, #8a3210)
-      );
+      background: var(--sm-accent-soft);
+      color: var(--sm-accent-hover);
     }
   }
-}
-
-.mobile-divider {
-  border: none;
-
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-
-  margin: 0.5rem 0.75rem;
 }
 
 // =============================================================================
@@ -764,7 +875,7 @@
 }
 
 .mobile-cat-item {
-  margin-bottom: 0.1rem;
+  margin-bottom: 0.15rem;
 }
 
 .mobile-cat-row {
@@ -772,53 +883,73 @@
   align-items: center;
   justify-content: space-between;
 
-  padding: 0.6rem 0.75rem;
+  min-height: 44px;
+  padding: 0 0.25rem 0 0.75rem;
 
-  border-radius: 0.375rem;
+  border-radius: var(--sm-radius);
 
   cursor: pointer;
 
   transition: background 0.12s ease;
 
   &:hover {
-    background: var(
-      --primary-light,
-      rgba(184, 74, 26, 0.07)
-    );
+    background: var(--sm-accent-softer);
   }
 
   &.is-open {
-    background: var(
-      --primary-light,
-      rgba(184, 74, 26, 0.1)
-    );
+    background: var(--sm-accent-soft);
+
+    .mobile-cat-label,
+    .mobile-cat-chevron {
+      color: var(--sm-accent);
+    }
   }
 }
 
 .mobile-cat-label {
   flex: 1;
 
-  font-size: 0.875rem;
+  padding: 0.6rem 0;
+
+  font-size: 0.9rem;
   font-weight: 600;
 
-  color: var(
-    --primary-color,
-    var(--nav-hover-background, #b84a1a)
-  );
+  color: var(--sm-text);
 }
 
 .mobile-cat-chevron {
-  font-size: 1rem;
-  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  color: var(
-    --primary-color,
-    var(--nav-hover-background, #b84a1a)
-  );
-
-  opacity: 0.55;
+  width: 36px;
+  height: 36px;
 
   margin-left: 0.5rem;
+
+  border-radius: 50%;
+
+  font-size: 1.05rem;
+  font-weight: 700;
+
+  color: var(--sm-muted);
+
+  transition: background 0.12s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.8);
+  }
+}
+
+@include media.up(sm) {
+  .mobile-cat-row,
+  .mobile-static-links li a {
+    min-height: 48px;
+  }
+
+  .mobile-cat-label {
+    font-size: 0.95rem;
+  }
 }
 
 // =============================================================================
@@ -828,31 +959,30 @@
 .mobile-sub-list {
   list-style: none;
 
-  margin: 0.1rem 0 0.2rem 1rem;
-  padding: 0;
+  margin: 0.2rem 0 0.4rem 1.1rem;
+  padding: 0 0 0 0.25rem;
 
-  border-left: 2px solid
-    var(
-      --primary-color,
-      rgba(184, 74, 26, 0.3)
-    );
+  border-left: 2px solid var(--sm-surface-border);
+
+  animation: mobileTrackOpen 0.18s ease;
 }
 
 .mobile-sub-link {
-  display: block;
+  display: flex;
+  align-items: center;
 
-  padding: 0.45rem 1rem;
+  min-height: 40px;
+  padding: 0.45rem 0.9rem;
 
-  font-size: 0.84rem;
+  font-size: 0.85rem;
 
-  color: var(
-    --primary-color,
-    var(--nav-hover-background, #b84a1a)
-  );
+  color: var(--sm-muted);
 
   text-decoration: none;
 
-  border-radius: 0.25rem;
+  border-radius: 0.375rem;
+
+  cursor: pointer;
 
   transition:
     background 0.12s ease,
@@ -860,107 +990,14 @@
 
   &:hover,
   &:focus {
-    background: var(
-      --primary-color,
-      var(--nav-hover-background, #b84a1a)
-    );
-
-    color: var(--nav-hover-foreground, #fff);
-
+    background: var(--sm-accent-soft);
+    color: var(--sm-accent);
     outline: none;
   }
 }
 
 // =============================================================================
-// MOBILE TRACK ORDER
-// =============================================================================
-
-.mobile-track-menu-item {
-  margin: 0.5rem 0.75rem 0;
-
-  padding-top: 0.5rem;
-
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-.mobile-menu-track-btn {
-  width: 100%;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 0.65rem 0.75rem;
-
-  background: transparent;
-
-  border: none;
-  border-radius: 0.375rem;
-
-  color: var(
-    --primary-color,
-    var(--nav-hover-background, #b84a1a)
-  );
-
-  font-size: 0.9rem;
-  font-weight: 600;
-
-  cursor: pointer;
-
-  text-align: left;
-
-  transition:
-    background 0.15s ease,
-    color 0.15s ease;
-
-  &:hover,
-  &:focus {
-    background: var(
-      --primary-light,
-      rgba(184, 74, 26, 0.08)
-    );
-
-    color: var(
-      --primary-dark,
-      var(--nav-hover-background, #8a3210)
-    );
-
-    outline: none;
-  }
-}
-
-.mobile-menu-track-left {
-  display: flex;
-  align-items: center;
-
-  gap: 0.65rem;
-
-  svg {
-    flex-shrink: 0;
-
-    color: var(
-      --primary-color,
-      var(--nav-hover-background, #b84a1a)
-    );
-  }
-}
-
-.track-chevron {
-  font-size: 1.1rem;
-  font-weight: 700;
-
-  line-height: 1;
-
-  color: var(
-    --primary-color,
-    var(--nav-hover-background, #b84a1a)
-  );
-
-  opacity: 0.65;
-}
-
-// =============================================================================
-// MOBILE TRACK ORDER INPUT
+// MOBILE TRACK ORDER INPUT (fixed footer)
 // =============================================================================
 
 .mobile-track-input-wrap {
@@ -978,22 +1015,18 @@
   flex: 1;
   min-width: 0;
 
-  height: 38px;
+  height: 42px;
 
-  padding: 0.45rem 0.7rem;
+  padding: 0.45rem 0.8rem;
 
-  border: 1px solid
-    var(
-      --bs-border-color,
-      rgba(0, 0, 0, 0.15)
-    );
+  border: 1px solid var(--sm-surface-border);
 
-  border-radius: 0.375rem;
+  border-radius: var(--sm-radius);
 
   background: #fff;
-  color: #1a1a1a;
+  color: var(--sm-text);
 
-  font-size: 0.84rem;
+  font-size: 1rem; // 16px prevents iOS zoom-on-focus
 
   outline: none;
 
@@ -1002,50 +1035,29 @@
     box-shadow 0.15s ease;
 
   &::placeholder {
-    color: #888;
+    color: #8a948a;
   }
 
   &:focus {
-    border-color: var(
-      --primary-color,
-      var(--nav-hover-background, #b84a1a)
-    );
-
-    box-shadow:
-      0 0 0 2px
-      var(
-        --primary-light,
-        rgba(184, 74, 26, 0.1)
-      );
+    border-color: var(--sm-accent);
+    box-shadow: 0 0 0 3px var(--sm-accent-soft);
   }
 }
 
 .mobile-track-search-btn {
   flex-shrink: 0;
 
-  height: 38px;
+  height: 42px;
 
-  padding: 0 0.85rem;
+  padding: 0 1rem;
 
-  border: 1px solid
-    var(
-      --primary-color,
-      var(--nav-hover-background, #b84a1a)
-    );
+  border: 1px solid var(--sm-accent);
+  border-radius: var(--sm-radius);
 
-  border-radius: 0.375rem;
+  background: var(--sm-accent);
+  color: #ffffff;
 
-  background: var(
-    --primary-color,
-    var(--nav-hover-background, #b84a1a)
-  );
-
-  color: var(
-    --nav-hover-foreground,
-    #fff
-  );
-
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   font-weight: 600;
 
   cursor: pointer;
@@ -1056,23 +1068,143 @@
     opacity 0.15s ease;
 
   &:hover,
-  &:focus {
-    background: var(
-      --primary-dark,
-      var(--nav-hover-background, #8a3210)
-    );
-
-    border-color: var(
-      --primary-dark,
-      var(--nav-hover-background, #8a3210)
-    );
-
+  &:focus-visible {
+    background: var(--sm-accent-hover);
+    border-color: var(--sm-accent-hover);
     outline: none;
   }
 
   &:active {
     opacity: 0.85;
   }
+}
+
+// =============================================================================
+// FIXED FOOTER (Login / Sign Up / Track Order, or My Orders / Profile / Logout)
+// =============================================================================
+
+.mobile-menu-panel__footer {
+  flex-shrink: 0;
+
+  padding: 0.6rem 0.75rem calc(0.6rem + env(safe-area-inset-bottom, 0px));
+
+  background: var(--sm-surface);
+  border-top: 1px solid var(--sm-surface-border);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+
+  .mobile-track-input-wrap {
+    padding: 0.15rem 0.15rem 0.6rem;
+  }
+
+  @include media.up(sm) {
+    padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.footer-actions {
+  display: grid;
+  gap: 0.5rem;
+
+  &--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  &--4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+// Footer action tile: icon centred above label
+.menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+
+  min-height: 64px;
+  min-width: 0;
+  padding: 0.55rem 0.25rem;
+
+  background: #ffffff;
+  border: 1px solid var(--sm-surface-border);
+  border-radius: var(--sm-radius);
+
+  color: var(--sm-accent);
+
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.2;
+
+  text-align: center;
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--sm-accent-soft);
+    border-color: var(--sm-accent);
+    box-shadow: 0 2px 6px rgba(27, 94, 32, 0.1);
+    outline: none;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &.is-active {
+    background: var(--sm-accent);
+    border-color: var(--sm-accent);
+    color: #ffffff;
+  }
+
+  // Full-width row (Track Order for guests)
+  &--wide {
+    grid-column: 1 / -1;
+  }
+
+  &.danger {
+    color: var(--sm-danger);
+
+    &:hover,
+    &:focus-visible {
+      background: var(--sm-danger-soft);
+      border-color: var(--sm-danger);
+      box-shadow: 0 2px 6px rgba(198, 40, 40, 0.1);
+    }
+  }
+
+  @include media.up(sm) {
+    min-height: 72px;
+    font-size: 0.85rem;
+  }
+}
+
+.menu-item-icon {
+  width: 22px;
+  height: 22px;
+
+  flex-shrink: 0;
+}
+
+.menu-item-label {
+  max-width: 100%;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 // =============================================================================
@@ -1108,14 +1240,14 @@
 .offcanvas-backdrop {
   position: fixed;
 
-  top: 50px;
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
 
   background: rgba(0, 0, 0, 0.4);
 
-  z-index: 1044;
+  z-index: 1249; // just below .offcanvas
 
   animation: fadeIn 0.22s ease;
 }

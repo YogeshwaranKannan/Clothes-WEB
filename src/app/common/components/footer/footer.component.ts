@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component } from "@angular/core";
 import { companyname } from "../../utils/constant";
 
 @Component({
@@ -9,14 +9,6 @@ import { companyname } from "../../utils/constant";
   styleUrls: ["./footer.component.scss"],
 })
 export class FooterComponent {
-  openInNewTab(route: string): void {
-    const cleanCompany = companyname.replace(/^\/+|\/+$/g, "");
-    const cleanRoute = route.replace(/^\/+/, "");
-
-    const url = `${window.location.origin}/${cleanCompany}/${cleanRoute}`;
-
-    console.log("Opening:", url);
-
-    window.open(url, "_blank");
-  }
+  // Real hrefs (not click handlers) so search engines can follow these links
+  readonly legalBase = `/${companyname.replace(/^\/+|\/+$/g, "")}`;
 }

@@ -1,4 +1,5 @@
  <app-loading-screen
+  [fullScreen]="false"
   [show]="isLoading"
   message="Loading products..."
 >
@@ -44,12 +45,12 @@
           aria-label="Scroll right"
           *ngIf="entry.products.length > 4"
         >&gt;&gt;</button> -->
-        <button
-          class="rail-more-btn"
-          type="button"
-          (click)="goToCategory(entry.group)"
-          *ngIf="entry.products.length > 4"
-        >View All</button>
+       <button
+  class="rail-more-btn"
+  type="button"
+  (click)="goToCategory(entry.group)"
+  *ngIf="entry.hasMore"
+>View All</button>
       </div>
 
       <!-- Horizontal scroll rail — shows 4 on desktop, 2 on mobile -->
@@ -61,7 +62,7 @@
           (click)="openProduct(String(p.ProductId ?? ''))"
           role="listitem"
         >
-         <div class="discount" *ngIf="+(p.OfferPrice ?? 0) > 0">- {{ p.DiscountPercent }}%</div>
+       <div class="discount" *ngIf="hasDiscount(p)">- {{ p.DiscountPercent }}%</div>
           <picture class="img-wrap">
             <ng-container *ngIf="$any(p).ImageWebp as webp">
               <source [srcset]="buildImageUrl(webp)" type="image/webp" />
@@ -99,7 +100,7 @@
               <!-- <span>{{ p.Category?.CategoryName }}</span> -->
               <!-- <span class="rating">★ ★ ★ ★ ★</span> -->
             </div>
-            <h3 class="card-title">{{ p.ProductName | uppercase }}</h3>
+            <h3 class="card-title"><a class="card-link" [routerLink]="['/product', p.ProductId]" (click)="$event.stopPropagation()">{{ p.ProductName | uppercase }}</a></h3>
             <div class="prices">
               <ng-container *ngIf="parsePrice(p.OfferPrice) > 0; else normalPrice">
 
@@ -130,19 +131,28 @@
             <div class="actions" (click)="$event.stopPropagation()">
               <!-- Wrap in cartQtyMap$ so we can check cart state per product -->
               <ng-container *ngIf="cartQtyMap$ | async as qtyMap">
-                <ng-container *ngIf="p.variants?.length; else noVariants">
-                  
-                  <!-- <app-variant-dropdown [product]="p"[selectedVariant]="getSelectedVariant(p)"(open)="openVariantPopup(p)"></app-variant-dropdown> -->
-                  <ng-container *ngIf="p.variants?.length; else noVariants">
-                  <button
-                    class="btn btn-cart"
-                    type="button"
-                    (click)="openVariantPopup(p)"
-                  >
-                    Add to Cart
-                  </button>
-                </ng-container>
-                </ng-container>
+               <ng-container *ngIf="p.variants?.length; else noVariants">
+
+       <div class="variant-price-range" *ngIf="getVariantPriceRange(p) as range">
+        <ng-container *ngIf="range.min !== range.max; else singlePrice">
+          <span class="price-range-label">Price range:</span>
+          {{ range.min | currency:'INR':'symbol':'1.2-2' }} - {{ range.max | currency:'INR':'symbol':'1.2-2' }}
+        </ng-container>
+        <ng-template #singlePrice>
+          <span class="price-range-label">Price:</span>
+          {{ range.min | currency:'INR':'symbol':'1.2-2' }}
+        </ng-template>
+      </div>
+
+      <button
+        class="btn btn-cart"
+        type="button"
+        (click)="openVariantPopup(p)"
+      >
+        Add to Cart
+      </button>
+
+              </ng-container>
 
                 <ng-template #noVariants>
                   <!-- Products WITHOUT variants: Add to Cart → stepper toggle -->

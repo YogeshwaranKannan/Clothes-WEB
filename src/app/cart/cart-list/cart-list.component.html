@@ -19,10 +19,22 @@
             
           <a [routerLink]="['/product', vm.item.productId]" class="thumb">
           <img
-            [src]="buildImageUrl(vm.item.imageUrl || vm.item.item.image_url, vm.item.item.inventoryId|| vm.item.item.inv_id, vm.item.isService)"
+            *ngIf="isS3Enabled; else legacyImg"
+            [src]="vm.item.item.imageUrl"
             class="item-img"
           />
-        </a>
+
+          <ng-template #legacyImg>
+            <img
+              [src]="buildImageUrl(
+                vm.item.imageUrl || vm.item.item.image_url,
+                vm.item.item.inventoryId || vm.item.item.inv_id,
+                vm.item.isService
+              ) | async"
+              class="item-img"
+            />
+          </ng-template>
+                  </a>
           
 
           <!-- CONTENT -->

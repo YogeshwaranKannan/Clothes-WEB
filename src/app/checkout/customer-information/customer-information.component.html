@@ -63,15 +63,19 @@
 
  
 
-        <!-- Phone -->
+          <!-- Phone -->
       <div class="material-field">
         <input
-          type="text"
-          maxlength="15"
+          type="tel"
+          maxlength="10"
           inputmode="numeric"
+          autocomplete="tel-national"
           formControlName="phone"
           placeholder=" "
+          (input)="onPhoneInput($event)"
+          (blur)="onPhoneBlur()"
         />
+
         <label>
           Phone<span class="required">*</span>
         </label>
@@ -83,15 +87,11 @@
           <span *ngIf="customerForm.get('phone')?.errors?.['required']">
             Phone is required.
           </span>
-          <span *ngIf="customerForm.get('phone')?.errors?.['digitsOnly']">
-            Use digits only.
-          </span>
-          <span *ngIf="customerForm.get('phone')?.errors?.['maxLength']">
-            Max length is 15.
+          <span *ngIf="customerForm.get('phone')?.errors?.['pattern']">
+            Enter a valid 10-digit mobile number.
           </span>
         </div>
       </div>
-
             <!-- DELIVERY / PICKUP SELECTION -->
         <div class="delivery-mode-wrapper">
 

@@ -32,8 +32,6 @@ export class OrderService {
   getAllOrders(): Observable<Order[]> {
     const buyerId = this.auth.user()?.id;
 
-    console.log("Buyer Id:", buyerId);
-
     return this.http.post<Order[]>(this.url, {
       buyerid: buyerId,
     });
@@ -184,8 +182,11 @@ export class OrderService {
   }
 
   /** Fetch order details from the live API using a ref number. */
-  getOrderByRef(refno: string, companyid: string): Observable<any> {
+  getOrderByRef(
+    refno: string,
+    companyid: string,
+  ): Observable<OrderDetail | null> {
     const apiUrl = `${BASE_URL}/ViewOrderDetails`;
-    return this.http.post<any>(apiUrl, { companyid, refno });
+    return this.http.post<OrderDetail | null>(apiUrl, { companyid, refno });
   }
 }

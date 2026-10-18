@@ -21,7 +21,12 @@ export class DrawerService {
   setState(s: DrawerState) {
     this.state$.next(s);
   }
+
+  getTitle(): string {
+    return this.title$.getValue();
+  }
   setTitle(t: string) {
+    console.log("setTitle ->", t);
     this.title$.next(t);
   }
   setContent(c: DrawerContent) {

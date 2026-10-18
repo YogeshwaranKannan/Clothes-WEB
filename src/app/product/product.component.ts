@@ -753,8 +753,15 @@ import {
   Router,
   RouterModule,
 } from "@angular/router";
-import { Observable } from "rxjs";
-import { map, switchMap, tap, shareReplay, finalize } from "rxjs/operators";
+import { from, Observable, of } from "rxjs";
+import {
+  map,
+  switchMap,
+  tap,
+  shareReplay,
+  finalize,
+  catchError,
+} from "rxjs/operators";
 import { Store } from "@ngrx/store";
 import { FormsModule } from "@angular/forms";
 import { parseMoneyToNumber } from "../common/utils/price.util";
@@ -791,6 +798,7 @@ import { LoadingScreenComponent } from "../common/components/loading-screen/load
 //    icon on this page, mobile only.
 import { MobileSearchToggleService } from "../common/services/mobile-search-toggle.service";
 import { ImageUrlService } from "../common/utils/ImageUrlService";
+import { SeoService, SITE_URL } from "../core/services/seo.service";
 
 @Component({
   selector: "app-product",
@@ -809,6 +817,7 @@ import { ImageUrlService } from "../common/utils/ImageUrlService";
 })
 export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
   private productService = inject(ProductService);
+  private seo = inject(SeoService);
   private route = inject(ActivatedRoute);
   private location = inject(Location);
   private store = inject(Store);
@@ -857,21 +866,29 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
     private imageUrlService: ImageUrlService,
   ) {}
 
+  // buildImageUrl(
+  //   relative?: string,
+  //   productname?: string,
+  //   isService?: boolean,
+  //   serviceFolder?: string,
+  // ): string {
+  //   const result = this.imageUrlService.buildImageUrl(
+  //     relative,
+  //     productname,
+  //     isService,
+  //   );
+
+  //   // console.log("buildImageUrl OUTPUT →", result);
+
+  //   return result;
+  // }
+
   buildImageUrl(
     relative?: string,
-    productname?: string,
-    isService?: boolean,
-    serviceFolder?: string,
-  ): string {
-    const result = this.imageUrlService.buildImageUrl(
-      relative,
-      productname,
-      isService,
-    );
-
-    // console.log("buildImageUrl OUTPUT →", result);
-
-    return result;
+    inventoryId?: string,
+    isService: boolean = false,
+  ): Promise<string> {
+    return this.imageUrlService.buildImageUrl(relative, inventoryId, isService);
   }
 
   private mapSubImages(images: string[]): SubImage[] {
@@ -969,19 +986,67 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
   //   );
   // }
 
+  /** Per-product title/description/OG tags plus schema.org Product JSON-LD. */
+  private applyProductSeo(p: any): void {
+    if (!p?.ProductId) return;
+
+    const path = `/product/${encodeURIComponent(p.ProductId)}`;
+    const image = this.selectedImage || undefined;
+    const variant = p.variants?.[0];
+    const price = parseMoneyToNumber(variant?.SellingPrice ?? p.SellingPrice);
+    const inStock =
+      String(variant?.StockStatus ?? p.StockStatus ?? "").toLowerCase() ===
+      "in stock";
+    // Seller-entered descriptions are often a few words ("Good product") – too thin for search snippets
+    const ownDescription = String(p.ProductDescription ?? "").trim();
+    const description = (
+      (ownDescription.length >= 50 && ownDescription) ||
+      `Buy ${p.ProductName}${p.Size ? ` (${p.Size})` : ""} online from Dolphin Naturals. Natural, quality groceries delivered to your door.`
+    )
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 160);
+
+    this.seo.update({
+      title: p.ProductName,
+      description,
+      path,
+      image,
+      type: "product",
+    });
+
+    this.seo.setJsonLd("ld-product", {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: p.ProductName,
+      ...(image && { image: [image] }),
+      description,
+      sku: String(p.ProductId),
+      ...(p.Brand && { brand: { "@type": "Brand", name: p.Brand } }),
+      ...(price > 0 && {
+        offers: {
+          "@type": "Offer",
+          url: SITE_URL + path,
+          priceCurrency: "INR",
+          price: price.toFixed(2),
+          availability: inStock
+            ? "https://schema.org/InStock"
+            : "https://schema.org/OutOfStock",
+        },
+      }),
+    });
+  }
+
   ngOnInit(): void {
     this.isLoading = true;
 
     this.product$ = this.route.paramMap.pipe(
-      map((pm: ParamMap) => {
-        const id = pm.get("id") ?? "";
-        return id;
-      }),
+      map((pm: ParamMap) => pm.get("id") ?? ""),
 
       switchMap((id: string) => this.productService.getProductById(id as any)),
 
       switchMap((p: any) => {
-        console.log("P ==", p);
+        if (!p) return of(null); // product not found
 
         const cleanFolder = (this.SellerService.getServiceImageFolder() || "")
           .replace(/^\/+/, "")
@@ -991,93 +1056,75 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
           .getFullImages(
             cleanFolder,
             p.isService ? "uploadsServiceImages" : "uploadsProductImages",
-            p?.inventoryId,
+            p.inventoryId,
             this.SellerService.getCompanyName(),
           )
           .pipe(
-            map((images: string[]) => {
-              console.log("Full Images : ", images);
-              p.SubImages = images.map((img: string, index: number) => ({
-                url: Imagehost + "/" + img,
-                alt: `Product Image ${index + 1}`,
-                order: index + 1,
-              }));
+            catchError(() => of([] as string[])), // a failed gallery must not kill the page
+            switchMap((images: string[]) => {
+              p.SubImages = (images || []).map(
+                (img: string, index: number) => ({
+                  // S3 returns full URLs, local returns relative paths
+                  url: /^https?:\/\//i.test(img) ? img : Imagehost + "/" + img,
+                  alt: `Product Image ${index + 1}`,
+                  order: index + 1,
+                }),
+              );
 
-              return p;
+              if (p.SubImages.length) return of(p);
+
+              // No gallery: resolve the main image (correct args: inventoryId, not name)
+              return from(
+                this.imageUrlService.buildImageUrl(
+                  p.ImageUrl,
+                  p.inventoryId,
+                  p.isService,
+                ),
+              ).pipe(
+                map((url: string) => {
+                  p.resolvedImage = url;
+                  return p;
+                }),
+              );
             }),
           );
       }),
 
       tap((p: any) => {
+        if (!p) {
+          this.isLoading = false;
+          return;
+        }
+
         this.product = p;
-
-        this.selectedVariant = p?.variants?.[0] ?? null;
-
-        this.similarProductIds = Array.isArray(p?.SimilarProducts)
+        this.selectedVariant = p.variants?.[0] ?? null;
+        this.similarProductIds = Array.isArray(p.SimilarProducts)
           ? p.SimilarProducts.slice()
           : [];
 
-        console.log("IMAGE DATA:", {
-          ProductName: p?.ProductName,
-          ImageUrl: p?.ImageUrl,
-          SubImages: p?.SubImages,
-        });
-
-        if (p?.SubImages?.length) {
-          const defaultImageName = String(p?.ImageUrl || "")
-            .split("/")
-            .pop()
-            ?.trim()
-            .toLowerCase();
-
-          console.log("DEFAULT IMAGE NAME:", defaultImageName);
-
-          const defaultImage = p.SubImages.find((img: any) => {
-            const imageUrl = String(img?.url || "");
-
-            const imageName = imageUrl
+        if (p.SubImages?.length) {
+          const nameOf = (u: string) =>
+            String(u || "")
+              .split("?")[0]
               .split("/")
               .pop()
-              ?.split("?")[0]
-              .trim()
+              ?.trim()
               .toLowerCase();
 
-            console.log("CHECK IMAGE:", {
-              imageName,
-              defaultImageName,
-              match: imageName === defaultImageName,
-            });
-
-            return imageName === defaultImageName;
-          });
-
-          if (defaultImage) {
-            this.selectedImage = defaultImage.url;
-
-            console.log("✅ DEFAULT IMAGE SELECTED:", this.selectedImage);
-          } else {
-            // fallback
-            this.selectedImage = p.SubImages[0].url;
-
-            console.log(
-              "⚠️ DEFAULT IMAGE NOT FOUND, USING FIRST:",
-              this.selectedImage,
-            );
-          }
-        } else {
-          this.selectedImage = this.buildImageUrl(
-            p.ImageUrl,
-            p.ProductName,
-            p.isService,
+          const defaultName = nameOf(p.ImageUrl);
+          const defaultImage = p.SubImages.find(
+            (img: any) => nameOf(img.url) === defaultName,
           );
 
-          console.log("BUILT IMAGE URL:", this.selectedImage);
+          this.selectedImage = (defaultImage ?? p.SubImages[0]).url;
+        } else {
+          this.selectedImage = p.resolvedImage || this.fallbackImg;
         }
 
-        console.log("🔥 FINAL SELECTED IMAGE:", this.selectedImage);
-
+        this.applyProductSeo(p);
         this.isLoading = false;
       }),
+
       finalize(() => {
         this.isLoading = false;
       }),
@@ -1466,6 +1513,13 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
 
   selectImage(url: string) {
     this.selectedImage = url;
+  }
+  readonly fallbackImg = "/assets/placeholder-bike.png";
+
+  onImgError(ev: Event) {
+    const img = ev.target as HTMLImageElement;
+    if (!img || img.src.includes("placeholder-bike.png")) return;
+    img.src = this.fallbackImg;
   }
 
   // === Image viewer state (copied/minified from expected) ===

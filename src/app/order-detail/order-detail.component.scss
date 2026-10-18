@@ -1,21 +1,64 @@
-/* Container & header */
+ /* Container & header */
+.timeline-step.active .dot {
+  animation: dotPulse 1.6s ease-out 3;   // 3 pulses, then stops
+}
+
+@keyframes dotPulse {
+  0%   { box-shadow: 0 0 0 1px #4caf50, 0 0 0 0 rgba(76, 175, 80, 0.55); }
+  100% { box-shadow: 0 0 0 1px #4caf50, 0 0 0 12px rgba(76, 175, 80, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline-step.active .dot { animation: none; }
+}
+
+.fee-row .free {
+  color: #10b981;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+}
+.reward-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 6px 0;
+
+  .reward-label { font-weight: 600;   }
+  .reward-value { font-weight: 600;   }
+}
+
+.acc-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .total-amounts { display: inline-flex; gap: 8px; align-items: baseline; }
+  .seller-price { text-decoration: line-through; color: #888; font-weight: 400; }
+}
+// Delivery Fee row: no dotted line above or below
+.acc-total-row.fee-row {
+  border-top: none;
+  border-bottom: none;
+
+   
+
+  // Total Value row that follows it: drop its top dotted line
+  + .acc-total-row {
+    border-top: none;
+  }
+}
+
+// .fee-row { font-weight: 500; color: #555; }
 .order-detail {
   padding: 16px;
   color: #222;
-  font-family:
-    system-ui,
-    -apple-system,
-    Segoe UI,
-    Roboto,
-    "Helvetica Neue",
-    Arial,
-    "Noto Sans",
-    "Liberation Sans",
-    sans-serif;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
 }
 
 .seller-price {
   text-decoration: line-through;
+  font-size: 11px;
   color: #888;
   margin-right: 8px;
 }
@@ -25,15 +68,10 @@
 }
 
 .order-ref-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: flex; align-items: center; justify-content: space-between;
   margin-bottom: 12px;
 
-  h4 {
-    margin: 0;
-    color: #0b5ed7;
-  }
+  h4 { margin: 0; color: #0b5ed7; }
 
   .order-status-pill {
     border: 1px solid #e5e7eb;
@@ -50,47 +88,46 @@
   }
 }
 
-/* ---------- TIMELINE: robust defaults so it's always visible ---------- */
-.timeline-shell {
-  margin: 8px 0 18px;
-}
+/* ---------- TIMELINE ----------
+   The line, dots and bike all live inside .timeline-track, so they share one
+   coordinate space (this also keeps them aligned when the mobile view scrolls).
+   Dots sit at the centre of each equal-width step: with 5 steps that is
+   10% → 90% of the track, so the line is inset by 10% on both sides and the
+   progress width is (80% × --progress).  --progress is a 0–1 number set from
+   the template.  If the number of stages changes: inset = 100% / (2 × steps). */
+.timeline-shell { margin: 8px 0 18px; }
 
 .timeline-container {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-
-  min-height: 88px; /* space for line + dots */
   margin: 12px 0;
   padding: 0 8px;
+}
 
-  /* Don't clip pseudo-elements */
-  overflow: visible;
+.timeline-track {
+  position: relative;
+  display: flex;
+  min-height: 88px;       /* space for line + dots */
+  overflow: visible;      /* don't clip pseudo-elements */
 }
 
 /* Dotted baseline (future) */
-.timeline-container::after {
+.timeline-track::after {
   content: "";
   position: absolute;
-  top: 44px;
-  left: 8px;
-  right: 8px;
+  top: 44px; left: 10%; right: 10%;
   height: 0;
   border-bottom: 2px dotted #bbb;
   z-index: 1;
 }
 
 /* Solid completed line (past → current) */
-.timeline-container::before {
+.timeline-track::before {
   content: "";
   position: absolute;
-  top: 44px;
-  left: 8px;
+  top: 44px; left: 10%;
   height: 0;
   border-bottom: 2px solid #4caf50;
   z-index: 2;
-  width: var(--completed-width, 0%); /* bound from template */
+  width: calc(80% * var(--progress, 0));
 }
 
 /* Steps */
@@ -132,20 +169,14 @@
 /* Moving cycle icon */
 .moving-cycle {
   position: absolute;
-  top: 44px;
-  left: 0%;
+  top: 44px; left: 10%;
   transform: translate(-50%, -50%);
-  font-size: 18px;
-  z-index: 4;
-  animation: moveCycle 4s ease-out forwards;
+  font-size: 18px; z-index: 4;
+  animation: moveCycle 4.0s ease-out forwards;
 }
 @keyframes moveCycle {
-  from {
-    left: 0%;
-  }
-  to {
-    left: var(--target-position, 0%);
-  }
+  from { left: 10%; }
+  to   { left: calc(10% + 80% * var(--progress, 0)); }
 }
 
 /* ==========================================================
@@ -163,9 +194,7 @@
   background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 14px;
-  box-shadow:
-    0 1px 2px rgba(16, 24, 22, 0.04),
-    0 1px 8px rgba(16, 24, 22, 0.05);
+  box-shadow: 0 1px 2px rgba(16, 24, 22, 0.04), 0 1px 8px rgba(16, 24, 22, 0.05);
   overflow: hidden;
 }
 
@@ -181,6 +210,12 @@
   font: inherit;
   text-align: left;
   color: inherit;
+}
+
+.acc-head:focus-visible {
+  outline: 2px solid #0b5ed7;
+  outline-offset: -2px;
+  border-radius: 14px;
 }
 
 .acc-head-left {
@@ -210,10 +245,7 @@
     color: #065f46;
   }
 
-  svg {
-    width: 15px;
-    height: 15px;
-  }
+  svg { width: 15px; height: 15px; }
 }
 
 .acc-title-group {
@@ -257,20 +289,29 @@
   transform: rotate(180deg);
 }
 
+/* Grid-row animation: grows to fit any number of items (no max-height cap).
+   visibility keeps collapsed content out of the tab order / screen readers. */
 .acc-body {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition: grid-template-rows 0.3s ease, visibility 0s linear 0.3s;
 }
 
 .acc-card.open .acc-body {
-  max-height: 900px;
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition: grid-template-rows 0.3s ease, visibility 0s;
 }
 
 .acc-body-inner {
-  padding: 0 18px 18px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.acc-body-content {
+  padding: 14px 18px 18px;
   border-top: 1px solid #eee;
-  padding-top: 14px;
 }
 
 .acc-total-row {
@@ -282,31 +323,19 @@
   font-size: 13.5px;
   font-weight: 700;
 
-  span:last-child {
-    color: #065f46;
-  }
+  span:last-child { color: #065f46; }
 }
 
 /* Items table (inside Order Summary card) */
-.items-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 4px;
-}
-.items-table th,
-.items-table td {
+.items-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+.items-table th, .items-table td {
   text-align: left;
   padding: 8px 6px;
   border-bottom: 1px solid #eee;
 }
-.items-table thead th {
-  background: #f8fafc;
-  color: #111;
-  font-weight: 600;
-}
+.items-table thead th { background: #f8fafc; color: #111; font-weight: 600; }
 .item-img {
-  width: 64px;
-  height: 64px;
+  width: 64px; height: 64px;
   object-fit: contain;
   border-radius: 6px;
   border: 1px solid #e5e7eb;
@@ -314,58 +343,24 @@
 }
 
 /* Rewards mini-table (inside Order Summary card) */
-.order-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 12px;
-}
-.order-table th {
-  text-align: left;
-  padding: 6px 0;
-  color: #666;
-  width: 160px;
-}
-.order-table td {
-  padding: 6px 0;
-}
+.order-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+.order-table th { text-align: left; padding: 6px 0; color: #666; width: 160px; }
+.order-table td { padding: 6px 0; }
 
 /* Info tables (Customer / Delivery / Status cards) */
-.info-table.compact {
-  width: 100%;
-  border-collapse: collapse;
-}
-.info-table.compact th,
-.info-table.compact td {
-  padding: 6px 0;
-  font-size: 13px;
-  vertical-align: top;
-}
-.info-table.compact th {
-  width: 42%;
-  color: #555;
-  font-weight: 600;
-}
-.info-table.compact td {
-  color: #333;
-}
-.info-table.compact tr + tr th,
-.info-table.compact tr + tr td {
-  padding-top: 8px;
-  border-top: 1px solid #f0f0f0;
+.info-table.compact { width: 100%; border-collapse: collapse; }
+.info-table.compact th, .info-table.compact td { padding: 6px 0; font-size: 13px; vertical-align: top; }
+.info-table.compact th { width: 42%; color: #555; font-weight: 600; }
+.info-table.compact td { color: #333; }
+.info-table.compact tr + tr th, .info-table.compact tr + tr td {
+  // padding-top: 8px; border-top: 1px solid #f0f0f0;
 }
 
-.payment-info {
-  font-weight: 500;
-}
-.payment-info.paid {
-  color: #2e7d32;
-  font-weight: 700;
-}
-.payment-info.unpaid {
-  color: #b5720a;
-  font-weight: 700;
-}
+.payment-info { font-weight: 500; }
+.payment-info.paid { color: #2e7d32; font-weight: 700; }
+.payment-info.unpaid { color: #b5720a; font-weight: 700; }
 
+ 
 /* Footer links */
 .checkout-footer {
   display: flex;
@@ -382,37 +377,37 @@
     cursor: pointer;
     transition: color 180ms ease;
 
+    &:focus-visible { outline: 2px solid #0b5ed7; outline-offset: 2px; border-radius: 2px; }
+
     &:hover {
       color: #084298;
       text-decoration: underline;
     }
   }
 }
+ 
 
 /* Loading / not found */
-.loading {
-  color: #666;
-  padding: 12px 4px;
-}
+.loading { color: #666; padding: 12px 4px; }
 
 /* ---- Mobile behavior ---- */
 @media (max-width: 768px) {
-  /* swipe timeline */
+  /* swipe timeline: the container scrolls, the track keeps a fixed width so the
+     line, dots and bike scroll together */
   .timeline-container {
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     padding-bottom: 8px;
   }
-  .timeline-step {
-    scroll-snap-align: center;
-    flex: 0 0 auto;
-    min-width: 128px;
-  }
+  .timeline-track { min-width: 640px; }   /* 5 steps × 128px */
+  .timeline-step  { scroll-snap-align: center; }
 
   /* Long text wrapping in info tables */
-  .info-table.compact th,
-  .info-table.compact td {
-    word-break: break-word;
-  }
+  .info-table.compact th, .info-table.compact td { overflow-wrap: anywhere; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .moving-cycle { animation: none; left: calc(10% + 80% * var(--progress, 0)); }
+  .acc-body, .acc-card.open .acc-body, .acc-chevron { transition: none; }
 }

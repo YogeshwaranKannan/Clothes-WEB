@@ -1,297 +1,3 @@
-// import { CommonModule } from "@angular/common";
-// import {
-//   Component,
-//   HostListener,
-//   inject,
-//   Input,
-//   OnChanges,
-//   OnDestroy,
-//   OnInit,
-//   SimpleChanges,
-// } from "@angular/core";
-// import {
-//   NavigationEnd,
-//   Router,
-//   RouterLink,
-//   RouterLinkActive,
-// } from "@angular/router";
-
-// // ✅ Both Category and CategoryNavState come from the shared model file.
-// //    navbar no longer owns the type — product-list imports from the same place.
-// import { Category, CategoryNavState } from "../../models/category.model";
-// import { ProductSuggestComponent } from "../product-suggest/product-suggest.component";
-// import { ProductService } from "../../services/product.service copy";
-// import { filter } from "rxjs/operators";
-// import { Subject, takeUntil } from "rxjs";
-// // ✅ Sidebar open/close state is now shared with <app-header>, which owns the
-// //    mobile-only trigger button. Navbar still owns the offcanvas markup and
-// //    the category logic; it just no longer owns the boolean by itself.
-// import { MobileMenuService } from "../../services/mobile-menu.service";
-
-// @Component({
-//   selector: "app-navbar",
-//   standalone: true,
-//   imports: [
-//     CommonModule,
-//     RouterLink,
-//     RouterLinkActive,
-//     ProductSuggestComponent,
-//   ],
-//   templateUrl: "./navbar.component.html",
-//   styleUrls: ["./navbar.component.scss"],
-// })
-// export class NavbarComponent implements OnChanges, OnInit, OnDestroy {
-//   productService = inject(ProductService);
-//   private mobileMenu = inject(MobileMenuService);
-//   private readonly destroy$ = new Subject<void>();
-
-//   @Input() categories: Category[] = [];
-
-//   // Desktop mega-menu
-//   isMegaMenuOpen = false;
-//   activeCategoryId: string | null = null;
-
-//   // Mobile sidebar
-//   // isSidebarOpen mirrors MobileMenuService.isOpen$ so the existing template
-//   // bindings ([class.show], [style.visibility], *ngIf) don't need to change —
-//   // it's now driven by the header's hamburger button instead of a local toggle.
-//   mobileOpenIds = new Set<string>();
-//   isSidebarOpen = false;
-
-//   searchMode: "product" | "order" = "product";
-
-//   constructor(private router: Router) {
-//     this.router.events
-//       .pipe(filter((event) => event instanceof NavigationEnd))
-//       .subscribe(() => {
-//         this.updateSearchMode();
-//       });
-
-//     this.updateSearchMode();
-//   }
-
-//   ngOnInit(): void {
-//     this.mobileMenu.isOpen$
-//       .pipe(takeUntil(this.destroy$))
-//       .subscribe((open) => {
-//         this.isSidebarOpen = open;
-//         this.toggleBodyScroll();
-//         if (!open) {
-//           this.mobileOpenIds.clear();
-//         }
-//       });
-//   }
-
-//   ngOnDestroy(): void {
-//     this.destroy$.next();
-//     this.destroy$.complete();
-//   }
-
-//   private updateSearchMode(): void {
-//     const url = this.router.url;
-
-//     if (url.startsWith("/order-history")) {
-//       this.searchMode = "order";
-//     } else {
-//       this.searchMode = "product";
-//     }
-//   }
-
-//   // ── Lifecycle ─────────────────────────────────────────────────────────────
-
-//   ngOnChanges(changes: SimpleChanges): void {
-//     if (changes["categories"] && this.categories?.length) {
-//       this.activeCategoryId = this.categories[0].id;
-//     }
-//   }
-
-//   // ── Desktop mega-menu helpers ─────────────────────────────────────────────
-
-//   get activeCategory(): Category | undefined {
-//     return this.categories?.find((c) => c.id === this.activeCategoryId);
-//   }
-
-//   setActiveCategory(cat: Category): void {
-//     this.activeCategoryId = cat.id;
-//   }
-
-//   openMegaMenu(): void {
-//     this.isMegaMenuOpen = true;
-//     if (!this.activeCategoryId && this.categories?.length) {
-//       this.activeCategoryId = this.categories[0].id;
-//     }
-//   }
-//   onHomeClick(): void {
-//     console.log("Click Home");
-//     this.closeSidebar();
-
-//     this.productService.Deals = false;
-//     this.productService.NewArrival = false;
-//     this.productService.triggerRefresh();
-//   }
-//   onDealsClick(): void {
-//     console.log("Click deals");
-//     this.closeSidebar();
-
-//     this.productService.Deals = true;
-//     this.productService.NewArrival = false;
-//     this.productService.triggerRefresh();
-//   }
-
-//   onNewArrivalsClick(): void {
-//     console.log("Click new arrivals");
-//     this.closeSidebar();
-
-//     this.productService.Deals = false;
-//     this.productService.NewArrival = true;
-
-//     this.productService.triggerRefresh();
-//   }
-
-//   closeMegaMenu(): void {
-//     this.isMegaMenuOpen = false;
-//   }
-
-//   // ── Navigation ────────────────────────────────────────────────────────────
-
-//   /**
-//    * "All Categories" static button clicked.
-//    * Navigates to /category/ALL with category: null in state so product-list
-//    * knows to load every product with no category filter applied.
-//    */
-//   navigateAll(): void {
-//     this.closeMegaMenu();
-//     this.router.navigate(["/category", "ALL"], { state: { category: null } });
-//     console.log("nav >> ALL categories");
-//   }
-
-//   /**
-//    * Top-level parent category clicked.
-//    * parentCategory is always null — the clicked item IS the root.
-//    */
-//   navigateCategory(cat: Category): void {
-//     this.closeMegaMenu();
-
-//     const state: CategoryNavState = {
-//       id: cat.id,
-//       category: cat.category,
-//       parentCategory: null,
-
-//       children: cat.children ?? [],
-//     };
-
-//     this.router.navigate(["/category", cat.id], { state: { category: state } });
-//     console.log("nav >> parent:", state);
-//   }
-
-//   /**
-//    * Child sub-category clicked.
-//    * Finds the parent from the categories tree, then builds an immutable
-//    * CategoryNavState that includes both child and parent details.
-//    * Original Category objects are never mutated.
-//    */
-//   navigateChild(child: Category): void {
-//     const parent = this.getParentCategory(child);
-
-//     const state: CategoryNavState = {
-//       id: child.id,
-//       category: child.category,
-//       parentCategory: parent
-//         ? { id: parent.id, category: parent.category, parentCategory: null }
-//         : null,
-//     };
-
-//     this.router.navigate(["/category", child.id], {
-//       state: { category: state },
-//     });
-//     console.log("nav >> child:", state);
-//   }
-
-//   // ── Tree helper ───────────────────────────────────────────────────────────
-
-//   /**
-//    * Finds the direct parent of `child` by scanning the top-level
-//    * categories tree (one level deep — matches the current data shape).
-//    *
-//    * Returns null if `child` is itself top-level or not found.
-//    */
-//   getParentCategory(child: Category): Category | null {
-//     if (!this.categories?.length) return null;
-
-//     for (const parent of this.categories) {
-//       if (!parent.children?.length) continue;
-//       if (parent.children.some((c) => c.id === child.id)) return parent;
-//     }
-
-//     return null;
-//   }
-
-//   // ── Mobile sidebar helpers ────────────────────────────────────────────────
-
-//   isMobileOpen(categoryId: string): boolean {
-//     return this.mobileOpenIds.has(categoryId);
-//   }
-
-//   /**
-//    * Mobile category row tap handler.
-//    * • Category has children  → toggle accordion (expand / collapse)
-//    * • Category has no children → navigate directly and close the sidebar
-//    */
-//   onMobileCategoryRowClick(cat: Category, event: Event): void {
-//     if (cat.children?.length) {
-//       // Has sub-categories — toggle the accordion, do not navigate
-//       this.toggleMobileCategory(cat, event);
-//     } else {
-//       // Leaf category — navigate and close the sidebar
-//       this.navigateCategory(cat);
-//       this.onMobileMenuItemClick();
-//     }
-//   }
-
-//   toggleMobileCategory(cat: Category, event: Event): void {
-//     event.preventDefault();
-//     event.stopPropagation();
-
-//     if (this.mobileOpenIds.has(cat.id)) {
-//       this.mobileOpenIds.delete(cat.id);
-//     } else {
-//       this.mobileOpenIds.add(cat.id);
-//     }
-//     this.mobileOpenIds = new Set(this.mobileOpenIds);
-//   }
-
-//   /**
-//    * Kept for any remaining internal callers — delegates to the shared
-//    * service so header and navbar never disagree on open/close state.
-//    */
-//   toggleSidebar(): void {
-//     this.mobileMenu.toggle();
-//   }
-
-//   closeSidebar(): void {
-//     this.mobileMenu.close();
-//   }
-
-//   onMobileMenuItemClick(): void {
-//     this.closeSidebar();
-//   }
-
-//   private toggleBodyScroll(): void {
-//     document.body.style.overflow = this.isSidebarOpen ? "hidden" : "";
-//   }
-
-//   trackById(_: number, item: Category): string {
-//     return item.id;
-//   }
-
-//   // ── Global key listeners ──────────────────────────────────────────────────
-
-//   @HostListener("document:keydown.escape")
-//   onEscapeKey(): void {
-//     if (this.isSidebarOpen) this.closeSidebar();
-//     if (this.isMegaMenuOpen) this.closeMegaMenu();
-//   }
-// }
 import { CommonModule } from "@angular/common";
 import {
   Component,
@@ -459,6 +165,20 @@ export class NavbarComponent implements OnChanges, OnInit, OnDestroy {
     this.isMegaMenuOpen = false;
   }
 
+  get userFullName(): string {
+    const u: any = this.authService.user();
+    const full =
+      u?.name ??
+      u?.fullName ??
+      [u?.firstName, u?.lastName].filter(Boolean).join(" ");
+    return (full ?? "").toString().trim() || "Guest";
+  }
+
+  get availableRewards(): number {
+    // same source the order summary uses: auth.user()?.availableRewards
+    return this.authService.user()?.availableRewards ?? 0;
+  }
+
   // ─────────────────────────────────────────────────────────────────────────
   // Home / Deals / New Arrivals
   // ─────────────────────────────────────────────────────────────────────────
@@ -509,6 +229,12 @@ export class NavbarComponent implements OnChanges, OnInit, OnDestroy {
     console.log("nav >> ALL categories");
   }
 
+  /**
+   * Parent category clicked — used by BOTH desktop (mega-menu row) and
+   * mobile (accordion label). Always navigates and carries the parent's
+   * children in state.category.children, so the receiving page can build
+   * the full [parentId, ...childIds] list for the API call.
+   */
   navigateCategory(cat: Category): void {
     this.closeMegaMenu();
 
@@ -519,6 +245,7 @@ export class NavbarComponent implements OnChanges, OnInit, OnDestroy {
       children: cat.children ?? [],
     };
 
+    console.log("State :", state);
     this.router.navigate(["/category", cat.id], {
       state: {
         category: state,
@@ -578,15 +305,19 @@ export class NavbarComponent implements OnChanges, OnInit, OnDestroy {
     return this.mobileOpenIds.has(categoryId);
   }
 
-  onMobileCategoryRowClick(cat: Category, event: Event): void {
-    if (cat.children?.length) {
-      this.toggleMobileCategory(cat, event);
-    } else {
-      this.navigateCategory(cat);
-      this.onMobileMenuItemClick();
-    }
-  }
+  // ❌ onMobileCategoryRowClick removed — it used to swallow navigation
+  // whenever a category had children. The template now binds the label
+  // and the chevron to separate handlers:
+  //   • label   → (click)="navigateCategory(cat); onMobileMenuItemClick()"
+  //   • chevron → (click)="toggleMobileCategory(cat, $event)"
+  // so navigation and expand/collapse are independent, matching sub-category
+  // behavior (navigateChild).
 
+  /**
+   * Chevron tap only — expands/collapses the sub-list. Never navigates.
+   * stopPropagation prevents the click from also triggering the label's
+   * navigateCategory handler above it.
+   */
   toggleMobileCategory(cat: Category, event: Event): void {
     event.preventDefault();
     event.stopPropagation();
@@ -635,8 +366,9 @@ export class NavbarComponent implements OnChanges, OnInit, OnDestroy {
 
   onLogout(): void {
     this.closeSidebar();
-    // TODO: wire up to your actual auth service, e.g.:
-    // this.authService.logout();
+
+    this.authService.logout(); // ← actually clears the session
+
     this.router.navigate(["/login"]);
   }
 
@@ -681,11 +413,6 @@ export class NavbarComponent implements OnChanges, OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Search button / Enter key.
-   *
-   * This is the ONLY place where mobile Track Order navigates.
-   */
   trackOrderMobile(): void {
     const ref = this.mobileTrackRefNo?.trim();
 
@@ -696,6 +423,7 @@ export class NavbarComponent implements OnChanges, OnInit, OnDestroy {
     this.mobileTrackOpen = false;
     this.mobileTrackRefNo = "";
 
+    this.closeSidebar(); // ← closes the mobile menu
     this.router.navigate(["/track-order", ref]);
   }
 

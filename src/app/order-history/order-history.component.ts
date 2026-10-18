@@ -255,7 +255,7 @@ export class OrderHistoryComponent {
   showAlert = false;
   isSuccess = false;
   alertMessage = "";
-
+  drawerTitle = "Order Details";
   @Input() orderId: string | null = null;
 
   drawerState: DrawerState = DrawerState.Hidden;
@@ -358,12 +358,22 @@ export class OrderHistoryComponent {
     return item?.order_id ?? _;
   }
 
-  private openDrawer(id: string): void {
+  // private openDrawer(id: string): void {
+  //   this.drawerState = DrawerState.Hidden;
+  //   this.selectedOrderId = null;
+
+  //   setTimeout(() => {
+  //     this.selectedOrderId = id;
+  //     this.drawerState = DrawerState.Half;
+  //   }, 150);
+  // }
+  private openDrawer(id: string, ref?: string): void {
     this.drawerState = DrawerState.Hidden;
     this.selectedOrderId = null;
 
     setTimeout(() => {
       this.selectedOrderId = id;
+      this.drawerTitle = ref?.trim() || "Order Details"; // e.g. "20260918-BA0004"
       this.drawerState = DrawerState.Half;
     }, 150);
   }
@@ -381,7 +391,7 @@ export class OrderHistoryComponent {
       sessionStorage.setItem("Draft_save_id", order?.order_id);
 
       if (status === "review" || status === "completed") {
-        this.openDrawer(id);
+        this.openDrawer(id, order.refno);
         return;
       }
 
@@ -526,5 +536,12 @@ export class OrderHistoryComponent {
         }, 3000);
       },
     });
+  }
+
+  onDrawerStateChange(state: DrawerState): void {
+    this.drawerState = state;
+    if (state === DrawerState.Hidden) {
+      this.drawerTitle = "Order Details";
+    }
   }
 }

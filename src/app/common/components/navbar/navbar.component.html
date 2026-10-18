@@ -112,6 +112,9 @@
 
 <!-- ════════════════════════════════════════════════════════════════════════
      Mobile Offcanvas Sidebar
+     Layout:  [Fixed header] → [Scrollable menu content] → [Fixed footer]
+     Full-height panel layered above the sticky mobile <app-header>, so
+     nothing in the menu header can slide underneath it.
      ════════════════════════════════════════════════════════════════════════ -->
 <div
   class="offcanvas"
@@ -122,33 +125,50 @@
   aria-modal="true"
   aria-labelledby="mobileSidebarLabel"
 >
+  <!-- ── Fixed header ───────────────────────────────────────────────────── -->
   <div class="offcanvas-header">
-    <span class="offcanvas-title" id="mobileSidebarLabel">Menu</span>
-    <button class="offcanvas-close" (click)="closeSidebar()" aria-label="Close">&#x2715;</button>
+
+    <!-- Row 1: branding + close -->
+    <div class="offcanvas-header__brand">
+      <img
+        class="offcanvas-logo"
+        src="assets/img/logo/dolphin_Updated.jpg"
+        alt="Purest — Wood-Cold Pressed Oil"
+        draggable="false"
+      />
+      <span class="visually-hidden" id="mobileSidebarLabel">Menu</span>
+      <button class="offcanvas-close" (click)="closeSidebar()" aria-label="Close">&#x2715;</button>
+    </div>
+
+    <!-- Row 2: logged-in greeting + rewards -->
+    <div class="mobile-user-info" *ngIf="isLoggedIn()">
+      <span class="mobile-user-avatar" aria-hidden="true">{{ userFullName.charAt(0) }}</span>
+      <div class="mobile-user-text">
+        <p class="mobile-user-greeting">Hi! {{ userFullName }}</p>
+        <p class="mobile-user-rewards" *ngIf="availableRewards > 0">
+          Available reward points : <strong>{{ availableRewards }}</strong>
+        </p>
+      </div>
+    </div>
+
+    <!-- Row 3: quick links -->
+    <div class="mobile-quick-links">
+      <a [routerLink]="['/']" (click)="onMobileMenuItemClick()">Home</a>
+      <a [routerLink]="['/']" (click)="onDealsClick()">Deals</a>
+      <a [routerLink]="['/']" (click)="onNewArrivalsClick()">New Arrivals</a>
+    </div>
   </div>
 
+  <!-- ── Scrollable menu content ────────────────────────────────────────── -->
   <div class="offcanvas-body">
 
-    <!-- Static links -->
+    <p class="mobile-section-title">Shop by Category</p>
+
     <ul class="mobile-static-links">
-      <li><a [routerLink]="['/']" (click)="onMobileMenuItemClick()">HOME</a></li>
+      <li>
+        <a (click)="navigateAll(); onMobileMenuItemClick()">VIEW ALL</a>
+      </li>
     </ul>
-
-<ul class="mobile-static-links">
-  <li><a [routerLink]="['/']" (click)="onDealsClick()">DEALS</a></li>
-</ul>
-
-<ul class="mobile-static-links">
-   <li><a [routerLink]="['/']" (click)="onNewArrivalsClick()">NEW ARRIVALS</a></li>
-</ul>
-
-    <hr class="mobile-divider" />
-
-      <ul class="mobile-static-links">
-        <li>
-          <a (click)="navigateAll(); onMobileMenuItemClick()">VIEW ALL</a>
-        </li>
-      </ul>
 
     <!-- Category accordion -->
     <ul class="mobile-cat-list" *ngIf="categories?.length">
@@ -157,13 +177,19 @@
         class="mobile-cat-item"
       >
         <!-- Parent row — expands/collapses children on tap -->
-        <div
-          class="mobile-cat-row"
-          [class.is-open]="isMobileOpen(cat.id)"
-          (click)="onMobileCategoryRowClick(cat, $event)"
-        >
-          <span class="mobile-cat-label">{{ cat.category }}</span>
-          <span class="mobile-cat-chevron" *ngIf="cat.children?.length">
+        <div class="mobile-cat-row" [class.is-open]="isMobileOpen(cat.id)">
+          <span
+            class="mobile-cat-label"
+            (click)="navigateCategory(cat); onMobileMenuItemClick()"
+          >
+            {{ cat.category }}
+          </span>
+
+          <span
+            class="mobile-cat-chevron"
+            *ngIf="cat.children?.length"
+            (click)="toggleMobileCategory(cat, $event)"
+          >
             {{ isMobileOpen(cat.id) ? '−' : '+' }}
           </span>
         </div>
@@ -192,129 +218,123 @@
       </li>
     </ul>
 
-    <!-- Mobile Track Order -->
-<div class="mobile-track-menu-item">
-
-  <button
-    type="button"
-    class="mobile-menu-track-btn"
-    (click)="toggleMobileTrackOrder()">
-
-    <span class="mobile-menu-track-left">
-
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="21"
-        height="21"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round">
-
-        <circle cx="5" cy="17" r="3"/>
-        <circle cx="19" cy="17" r="3"/>
-        <path d="M12 17H5.5"/>
-        <path d="M19 17h-2l-3-6h-4l-1 3"/>
-        <path d="M14 11l2-4h3"/>
-      </svg>
-
-      <span>Track Order</span>
-
-    </span>
-
-    <span class="track-chevron">
-      {{ mobileTrackOpen ? '−' : '+' }}
-    </span>
-
-  </button>
-
-
-  <!-- Track input -->
-  <div
-    *ngIf="mobileTrackOpen"
-    class="mobile-track-input-wrap">
-
-    <input
-      type="text"
-      [(ngModel)]="mobileTrackRefNo"
-      placeholder="Enter Order / Ref No"
-      class="mobile-track-input"
-      (keyup.enter)="trackOrderMobile()" />
-
-    <button
-      type="button"
-      class="mobile-track-search-btn"
-      (click)="trackOrderMobile()">
-
-      Search
-    </button>
-
   </div>
 
-  
+  <!-- ── Fixed footer ───────────────────────────────────────────────────────
+       Row 1: account actions (guest: Login / Sign Up,
+                               logged-in: My Orders / Profile / Logout)
+       Row 2: Track Order — one shared full-width action for both states.
+  ──────────────────────────────────────────────────────────────────────── -->
+  <div class="mobile-menu-panel__footer">
 
-</div>
+    <!-- Track input opens above the footer actions -->
+    <div *ngIf="mobileTrackOpen" class="mobile-track-input-wrap">
+      <input
+        type="text"
+        [(ngModel)]="mobileTrackRefNo"
+        placeholder="Enter Order / Ref No"
+        aria-label="Order or reference number"
+        class="mobile-track-input"
+        (keyup.enter)="trackOrderMobile()" />
 
-<div class="mobile-menu-panel__footer">
-  <ng-container *ngIf="isLoggedIn(); else guestFooter">
-    <button type="button" class="menu-item" (click)="onMyOrders()">
-      <svg class="menu-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M9 3h6l1 3h4a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4l1-3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M9 12h6M9 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      My Orders
-    </button>
+      <button
+        type="button"
+        class="mobile-track-search-btn"
+        (click)="trackOrderMobile()">
+        Search
+      </button>
+    </div>
 
-    <button type="button" class="menu-item" (click)="onProfile()">
-      <svg class="menu-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/>
-        <path d="M4 21c0-3.87 3.58-7 8-7s8 3.13 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Profile
-    </button>
+    <div
+      class="footer-actions"
+      [class.footer-actions--3]="isLoggedIn()"
+      [class.footer-actions--2]="!isLoggedIn()">
 
-    <button type="button" class="menu-item" (click)="onAccountCart()">
-      <svg class="menu-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="9" cy="20" r="1.5" fill="currentColor"/>
-        <circle cx="18" cy="20" r="1.5" fill="currentColor"/>
-        <path d="M2 3h2l2.4 12.4a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L21 7H6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Cart
-    </button>
+      <ng-container *ngIf="isLoggedIn(); else guestActions">
+        <button type="button" class="menu-item" (click)="onMyOrders()">
+          <svg class="menu-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M9 3h6l1 3h4a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4l1-3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 12h6M9 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="menu-item-label">My Orders</span>
+        </button>
 
-    <button type="button" class="menu-item danger" (click)="onLogout()">
-      <svg class="menu-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M16 17l5-5-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Logout
-    </button>
-  </ng-container>
+        <button type="button" class="menu-item" (click)="onProfile()">
+          <svg class="menu-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/>
+            <path d="M4 21c0-3.87 3.58-7 8-7s8 3.13 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="menu-item-label">Profile</span>
+        </button>
 
-  <ng-template #guestFooter>
-    <button type="button" class="menu-item" (click)="onLoginClick()">
-      <svg class="menu-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M10 17l5-5-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Login
-    </button>
+        <!-- Cart — hidden for now. To re-enable: uncomment this button and
+             change [class.footer-actions--3] above to [class.footer-actions--4].
+        <button type="button" class="menu-item" (click)="onAccountCart()">
+          <svg class="menu-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="9" cy="20" r="1.5" fill="currentColor"/>
+            <circle cx="18" cy="20" r="1.5" fill="currentColor"/>
+            <path d="M2 3h2l2.4 12.4a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L21 7H6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="menu-item-label">Cart</span>
+        </button>
+        -->
 
-    <button type="button" class="menu-item" (click)="onSignupClick()">
-      <svg class="menu-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
-        <path d="M19 8v6M22 11h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Sign Up
-    </button>
-  </ng-template>
-</div>
+        <button type="button" class="menu-item danger" (click)="onLogout()">
+          <svg class="menu-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16 17l5-5-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="menu-item-label">Logout</span>
+        </button>
+      </ng-container>
 
+      <ng-template #guestActions>
+        <button type="button" class="menu-item" (click)="onLoginClick()">
+          <svg class="menu-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10 17l5-5-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="menu-item-label">Login</span>
+        </button>
+
+        <button type="button" class="menu-item" (click)="onSignupClick()">
+          <svg class="menu-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+            <path d="M19 8v6M22 11h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="menu-item-label">Sign Up</span>
+        </button>
+      </ng-template>
+
+      <!-- Track Order — same full-width action for guests and logged-in users -->
+      <button
+        type="button"
+        class="menu-item menu-item--wide"
+        [class.is-active]="mobileTrackOpen"
+        [attr.aria-expanded]="mobileTrackOpen"
+        (click)="toggleMobileTrackOrder()">
+        <svg
+          class="menu-item-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true">
+          <circle cx="5" cy="17" r="3"/>
+          <circle cx="19" cy="17" r="3"/>
+          <path d="M12 17H5.5"/>
+          <path d="M19 17h-2l-3-6h-4l-1 3"/>
+          <path d="M14 11l2-4h3"/>
+        </svg>
+        <span class="menu-item-label">Track Order</span>
+      </button>
+    </div>
   </div>
 </div>
 

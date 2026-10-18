@@ -1,4 +1,40 @@
- .free-delivery-banner {
+ /* Gap between primary button and the secondary row */
+.secondary-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;      /* visual separation from Proceed to Checkout */
+  padding-top: 16px;
+  border-top: 1px dashed #e5e7eb;
+}
+
+/* Lighter, outlined style so Proceed stays the main action */
+.secondary-pill {
+  flex: 1 1 0;
+  min-width: 0;          /* lets text shrink instead of overflowing */
+  padding: 10px 12px;
+  border-radius: 28px;
+  background: #fff;
+  color: #1b7a3d;        /* change to match your theme */
+  border: 1.5px solid #1b7a3d;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    background: #1b7a3d;
+    color: #fff;
+  }
+}
+
+@media (max-width: 360px) {
+  .secondary-pill {
+    font-size: 13px;
+    padding: 10px 8px;
+  }
+}
+.free-delivery-banner {
   position: relative;
   overflow: hidden;
   border-radius: 8px;

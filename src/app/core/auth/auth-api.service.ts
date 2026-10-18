@@ -11,13 +11,13 @@ export interface SignupRequest {
   email: string;
   mobileNum: string;
   password: string;
-  sellerid?: string;
+  sellerid: string;
 }
 
 export interface LoginRequest {
   identifier: string;
   password: string;
-  sellerid?: string;
+  sellerid: string;
 }
 
 export interface LastDeliveryAddress {
@@ -85,7 +85,7 @@ export class AuthApiService {
   //     responseType: "text",
   //   });
   // }
-  generateOtp(payload: { email: string }): Observable<GenerateOtpResponse> {
+  generateOtp(payload: { mobileNum: string }): Observable<GenerateOtpResponse> {
     return this.http.post<GenerateOtpResponse>(
       `${BASE_URL}/GenerateOtp`,
       payload,

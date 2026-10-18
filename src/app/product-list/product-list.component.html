@@ -311,33 +311,22 @@
                         [class.card--dropdown-open]="isVariantModalOpen(p)"
                         (click)="openProduct(p.ProductId)">
 
-                      <div class="discount" *ngIf="p.DiscountPercent">- {{ p.DiscountPercent }}</div>
+                      <span class="discount" *ngIf="hasDiscount(p)">- {{ p.DiscountPercent }}%</span>
 
                       <picture class="img-wrap">
-                        <!-- Blurred background layer — same src, scaled to cover the container.
-                             The browser reuses the cached image; no extra network request. -->
-                        <!-- <img class="img-blur-bg"
-                             aria-hidden="true"
-                             [src]="buildImageUrl( $any(p).Image  , $any(p).inventoryId  || p.inventoryId,false)"
-                             alt="" loading="lazy" decoding="async" /> -->
-
-                        <ng-container *ngIf="$any(p).ImageWebp as webp">
-                          <source [srcset]="buildImageUrl(webp)" type="image/webp" />
-                        </ng-container>
-                        <!-- Foreground image — object-fit:contain so nothing is cropped -->
-                        <img class="img-main"
-                             [src]="buildImageUrl( $any(p).Image  ,  $any(p).inventoryId  || p.inventoryId,false)"
-                             (error)="onImgError($event)"
-                             [alt]="p.ProductName"
-                             loading="lazy" decoding="async" />
-                      </picture>
+                      <img class="img-main"
+                          [src]="$any(p).imageUrl || fallbackImg"
+                          (error)="onImgError($event)"
+                          [alt]="p.ProductName"
+                          loading="lazy" decoding="async" />
+                    </picture>
 
                       <div class="card-body">
                         <div class="meta">
                           <!-- <span>{{ p.Category?.CategoryName }}</span> -->
                           <!-- <span class="rating">★ ★ ★ ★ ★</span> -->
                         </div>
-                        <h3 class="title">{{ p.ProductName | uppercase }}</h3>
+                        <h3 class="title"><a class="card-link" [routerLink]="['/product', p.ProductId]" (click)="$event.stopPropagation()">{{ p.ProductName | uppercase }}</a></h3>
 
                         <!-- ── Variant section (rail) ── -->
                         <ng-container *ngIf="p.variants?.length; else noVariantsRail">
@@ -413,7 +402,7 @@
                          (click)="openProduct(p.ProductId)">
 
                   <!-- <div class="discount" *ngIf="p.DiscountPercent">{{ p.DiscountPercent }}%</div> -->
-                   <span class="discount" *ngIf="+(p.OfferPrice ?? 0) > 0">- {{ p.DiscountPercent }}%</span>
+                  <span class="discount" *ngIf="hasDiscount(p)">- {{ p.DiscountPercent }}%</span>
 
                   <picture class="img-wrap">
                     <!-- Blurred background layer — reuses the cached image, no extra request -->
@@ -423,8 +412,8 @@
                          alt="" loading="lazy" decoding="async" /> -->
 
                     <ng-container *ngIf="$any(p).ImageWebp as webp">
-                      <source [srcset]="buildImageUrl(webp)" type="image/webp" />
-                    </ng-container>
+                    <source [srcset]="buildImageUrl(webp, $any(p).inventoryId || p.inventoryId, p.isService)" type="image/webp" />
+                  </ng-container>
                     <!-- Foreground image — object-fit:contain so nothing is cropped -->
                     <img class="img-main"
                          [src]="buildImageUrl( $any(p).Image  ,  $any(p).inventoryId  || p.inventoryId,p.isService)"
@@ -438,7 +427,7 @@
                       <!-- <span>{{ p.Category?.CategoryName }}</span> -->
                       <!-- <span class="rating">★ ★ ★ ★ ★</span> -->
                     </div>
-                    <h3 class="title">{{ p.ProductName | uppercase }}</h3>
+                    <h3 class="title"><a class="card-link" [routerLink]="['/product', p.ProductId]" (click)="$event.stopPropagation()">{{ p.ProductName | uppercase }}</a></h3>
 
                 
 
@@ -527,6 +516,18 @@
                         </ng-container>
 
                       </div>
+
+                        <!-- NEW: price range line -->
+                        <div class="variant-price-range" *ngIf="getVariantPriceRange(p) as range">
+                          <ng-container *ngIf="range.min !== range.max; else singlePriceGrid">
+                            <span class="price-range-label">Price range:</span>
+                            {{ range.min | currency:'INR':'symbol':'1.2-2' }} - {{ range.max | currency:'INR':'symbol':'1.2-2' }}
+                          </ng-container>
+                          <ng-template #singlePriceGrid>
+                            <span class="price-range-label">Price:</span>
+                            {{ range.min | currency:'INR':'symbol':'1.2-2' }}
+                          </ng-template>
+                        </div>
 
                       <!-- VARIANT PRODUCT: directly open variant popup -->
                       <div class="actions">

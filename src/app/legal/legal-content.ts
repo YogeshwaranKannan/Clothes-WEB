@@ -15,7 +15,7 @@ const STORE_NAME = "Dolphin Supermarket & Organic Store";
 const STORE_ADDRESS = "Vadaseri Road, Ullikkottai, Tamil Nadu - 614018";
 const STORE_EMAIL = "dolphinsupermarket@gmail.com";
 const STORE_PHONE = "+91 93450 48872";
-const LAST_UPDATED = "14 August 2026";
+const LAST_UPDATED = "10 October 2026";
 
 export const LEGAL_PAGES: Record<string, LegalPage> = {
   "terms-of-service": {
@@ -295,6 +295,40 @@ export const LEGAL_PAGES: Record<string, LegalPage> = {
         heading: "5. Contact",
         body: [
           `For delivery questions, reach us at ${STORE_EMAIL} or ${STORE_PHONE}.`,
+        ],
+      },
+    ],
+  },
+
+  "about-us": {
+    slug: "about-us",
+    title: "About Us",
+    updated: LAST_UPDATED,
+    intro: `${STORE_NAME} is a local grocery and organic store in Ullikkottai, Tamil Nadu. This website lets our customers order from our store online.`,
+    sections: [
+      {
+        heading: "What we sell",
+        body: [
+          "We stock everyday groceries and natural products for the home, including:",
+          "- Rice and millets",
+          "- Dals and pulses",
+          "- Oils, ghee, sugar and salt",
+          "- Other household essentials",
+        ],
+      },
+      {
+        heading: "How ordering works",
+        body: [
+          "Browse our products, add them to your cart, and place your order at checkout. We deliver to Ullikkottai and nearby localities. Delivery charges and available payment options are shown at checkout before you pay. See our Shipping Policy and Refund Policy for full details.",
+        ],
+      },
+      {
+        heading: "Visit or contact us",
+        body: [
+          `${STORE_NAME}`,
+          STORE_ADDRESS,
+          `- Email: ${STORE_EMAIL}`,
+          `- Phone: ${STORE_PHONE}`,
         ],
       },
     ],

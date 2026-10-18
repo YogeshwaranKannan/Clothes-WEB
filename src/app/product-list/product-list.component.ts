@@ -1,13 +1,3 @@
-// // product-list.component.ts
-// // Changes from baseline:
-// //  1. Added selectedVariants map  — tracks which variant is active per product card
-// //  2. Added cartQtyMap$ stream     — maps productId/variantKey → quantity in cart
-// //  3. Added variant helper methods — selectVariant, variantCartKey,
-// //                                    getVariantQty, variantInCart,
-// //                                    addVariantToCart, increaseVariant, decreaseVariant
-// //  4. addToCart updated            — falls through to variant path when variants present
-// //  All other logic is unchanged.
-
 // import {
 //   Component,
 //   inject,
@@ -18,6 +8,8 @@
 //   ViewChild,
 //   AfterViewInit,
 //   OnDestroy,
+//   NgZone,
+//   ChangeDetectorRef,
 // } from "@angular/core";
 // import { CommonModule } from "@angular/common";
 // import {
@@ -26,6 +18,20 @@
 //   Router,
 //   NavigationEnd,
 // } from "@angular/router";
+// // import {
+// //   BehaviorSubject,
+// //   Observable,
+// //   combineLatest,
+// //   map,
+// //   Subscription,
+// //   switchMap,
+// //   of,
+// //   Subject,
+// //   fromEvent,
+// //   filter,
+// //   distinctUntilChanged,
+// // } from "rxjs";
+
 // import {
 //   BehaviorSubject,
 //   Observable,
@@ -34,7 +40,7 @@
 //   Subscription,
 //   switchMap,
 //   of,
-//   tap,
+//   from,
 //   Subject,
 //   fromEvent,
 //   filter,
@@ -89,6 +95,8 @@
 //     id: string;
 //     state?: CategoryNavState | null;
 //   }[] = [];
+
+//   subCategories: Category[] = [];
 //   /**
 //    * Declared with ! — assigned in ngOnInit() before any subscriber runs.
 //    * Use _productList$$ to switch sources reactively on re-navigation.
@@ -181,6 +189,62 @@
 //   searchTerm$ = new BehaviorSubject<string>("");
 //   sort$ = new BehaviorSubject<SortOption>("");
 
+//   // state
+//   private currentCategoryIds: string[] = [];
+//   allProducts: Product[] = [];
+//   invTaken = 0;
+//   servTaken = 0;
+//   seeInv = 1;
+//   seeServ = 1;
+//   loadingMore = false;
+
+//   private loadFirstPage(categoryIds: string[]): void {
+//     this.currentCategoryIds = categoryIds;
+//     this.invTaken = 0;
+//     this.servTaken = 0;
+//     this.seeInv = 1;
+//     this.seeServ = 1;
+//     this.allProducts = [];
+//     this.fetchNextPage();
+//   }
+
+//   fetchNextPage(): void {
+//     if (this.loadingMore) return;
+//     if (this.seeInv === 0 && this.seeServ === 0 && this.allProducts.length)
+//       return;
+
+//     this.loadingMore = true;
+
+//     this.productService
+//       .getProductsByCategoryIds(
+//         this.currentCategoryIds,
+//         this.invTaken,
+//         this.servTaken,
+//       )
+//       .subscribe({
+//         next: (res) => {
+//           this.allProducts = [...this.allProducts, ...res.products];
+//           this.invTaken = res.invTaken;
+//           this.servTaken = res.servTaken;
+//           this.seeInv = res.seeInv;
+//           this.seeServ = res.seeServ;
+//           this.loadingMore = false;
+//           this._productList$$.next(of(this.allProducts));
+//         },
+//         error: (err) => {
+//           console.error("fetchNextPage failed:", err);
+//           this.loadingMore = false; // <-- critical: without this, every future scroll is silently ignored
+//         },
+//       });
+//   }
+
+//   private ngZone = inject(NgZone);
+
+//   @ViewChild("scrollSentinel", { read: ElementRef })
+//   scrollSentinelRef?: ElementRef<HTMLElement>;
+
+//   private scrollObserver?: IntersectionObserver;
+
 //   // ── Variant state ─────────────────────────────────────────────────────────
 //   /**
 //    * Tracks the currently-selected Variant (or null = base product)
@@ -211,6 +275,14 @@
 
 //   // ── Streams ────────────────────────────────────────────────────────────────
 
+//   // Category rail
+//   categories$?: Observable<
+//     (import("../common/models/category.model").CategoryItem & {
+//       coverImageUrl: string;
+//     })[]
+//   >;
+//   selectedRailCategoryId: string | null = null;
+
 //   get displayProducts$(): Observable<Product[]> {
 //     return (
 //       (this.externalProducts$ as Observable<Product[]>) ??
@@ -229,13 +301,57 @@
 //     }),
 //   );
 
+//   private cdr = inject(ChangeDetectorRef);
+//   private resolvedImages = new Map<string, string>();
+//   private readonly FALLBACK_IMG = "/assets/placeholder-bike.png";
+//   readonly fallbackImg = "/assets/placeholder-bike.png";
+
+//   // use ONE constant (make sure this file exists in src/assets)
+
+//   onImgError(ev: Event) {
+//     const img = ev.target as HTMLImageElement;
+//     if (!img) return;
+//     // stop only if the placeholder itself failed (avoids an infinite loop)
+//     if (img.src.includes(this.fallbackImg)) return;
+//     img.removeAttribute("srcset");
+//     img.src = this.fallbackImg;
+//   }
+
 //   buildImageUrl(
 //     relative?: string,
 //     inventoryId?: string,
-//     isService?: boolean,
+//     isService = false,
 //   ): string {
-//     return this.imageServiceUrl.buildImageUrl(relative, inventoryId, isService);
+//     // no image path at all -> straight to placeholder, no service call
+//     if (!relative) return this.FALLBACK_IMG;
+
+//     const key = `${isService ? "s" : "p"}|${inventoryId}|${relative}`;
+//     const hit = this.resolvedImages.get(key);
+//     if (hit) return hit;
+
+//     this.resolvedImages.set(key, this.FALLBACK_IMG);
+
+//     this.imageServiceUrl
+//       .buildImageUrl(relative, inventoryId, isService)
+//       .then((url) => {
+//         this.resolvedImages.set(key, url || this.FALLBACK_IMG);
+//         this.cdr.markForCheck();
+//       })
+//       .catch(() => {
+//         this.resolvedImages.set(key, this.FALLBACK_IMG);
+//         this.cdr.markForCheck();
+//       });
+
+//     return this.FALLBACK_IMG;
 //   }
+
+//   // buildImageUrl(
+//   //   relative?: string,
+//   //   inventoryId?: string,
+//   //   isService: boolean = false,
+//   // ): Promise<string> {
+//   //   return this.imageServiceUrl.buildImageUrl(relative, inventoryId, isService);
+//   // }
 
 //   /**
 //    * The pool of products that filter chips operate on.
@@ -503,21 +619,189 @@
 //         return m;
 //       }),
 //     );
+
+//     // Load categories for the rail (reuse grouped categories).
+//     // Cover image URLs are computed once here (not in the template) so
+//     // Angular's change detection doesn't recompute them on every cycle.
+//     // this.categories$ = this.categoryService.getGroupedCategories().pipe(
+//     //   map((groups) => groups.flatMap((g) => g.items)),
+//     //   map((cats) =>
+//     //     cats.map((c) => ({
+//     //       ...c,
+//     //       coverImageUrl: this.imageServiceUrl.buildCategoryImageUrl(
+//     //         c.coverImage,
+//     //       ),
+//     //     })),
+//     //   ),
+//     // );
 //   }
 
+//   selectRailCategory(category: any | null): void {
+//     // ALL category
+//     if (!category) {
+//       this.selectedRailCategoryId = null;
+
+//       this.router.navigate(["/category/ALL"], {
+//         state: {
+//           category: {
+//             id: "ALL",
+//             category: "All Categories",
+//             parentCategory: null,
+//             children: [],
+//           },
+//         },
+//       });
+
+//       return;
+//     }
+
+//     const categoryId = String(category.id);
+
+//     this.selectedRailCategoryId = categoryId;
+
+//     // Navigate to /category/{category.id}
+//     this.router.navigate(["/category", categoryId], {
+//       state: {
+//         category: {
+//           id: categoryId,
+//           category: category.category,
+//           parentCategory: category.parentCategory ?? null,
+//           children: category.children ?? [],
+//         },
+//       },
+//     });
+//   }
+
+//   // private loadProductsForCategory(): void {
+//   //   const navState = history.state as {
+//   //     category?: CategoryNavState;
+//   //   };
+
+//   //   const routeId = this.route.snapshot.paramMap.get("id");
+//   //   const searchValue =
+//   //     this.route.snapshot.queryParamMap.get("search")?.trim() ?? "";
+
+//   //   // Prefer navigation state
+//   //   this.selectedCategory = navState?.category ?? null;
+
+//   //   // Fallback when page is refreshed or URL opened directly
+//   //   if (!this.selectedCategory && routeId) {
+//   //     this.selectedCategory = {
+//   //       id: routeId,
+//   //       category: routeId,
+//   //       parentCategory: null,
+//   //       children: [],
+//   //     };
+//   //   }
+
+//   //   // Sync the header rail selection with the current navigation state.
+//   //   // When there's no selected category or the route explicitly targets
+//   //   // the 'ALL' pseudo-category, show the "All" chip (null). Otherwise
+//   //   // mark the matching category id as selected so the active class
+//   //   // reflects the current route on initial load / navigation.
+//   //   if (!this.selectedCategory || this.selectedCategory.id === "ALL") {
+//   //     this.selectedRailCategoryId = null;
+//   //   } else {
+//   //     this.selectedRailCategoryId = this.selectedCategory.id;
+//   //   }
+
+//   //   if (!this.selectedCategory) {
+//   //     return;
+//   //   }
+
+//   //   // Build breadcrumb
+//   //   this.buildBreadcrumb(this.selectedCategory);
+
+//   //   // Use ONLY the clicked category ID
+//   //   const categoryId =
+//   //     routeId && routeId !== "ALL" ? routeId : this.selectedCategory.id;
+
+//   //   const categoryIds =
+//   //     categoryId && categoryId !== "ALL" ? [String(categoryId)] : [];
+
+//   //   console.log("Selected Category:", this.selectedCategory);
+//   //   console.log("Selected Category ID:", categoryId);
+//   //   console.log("API Category IDs:", categoryIds);
+
+//   //   // Load products
+//   //   this.productList$ =
+//   //     searchValue.length >= 3
+//   //       ? this.productService.getProductsBySearchname(
+//   //           searchValue,
+//   //           String(categoryId ?? ""),
+//   //         )
+//   //       : this.productService.getProductsByCategoryIds(categoryIds);
+
+//   //   this._productList$$.next(this.productList$);
+
+//   //   // Reset filters
+//   //   this.resetFilters();
+//   // }
+
+//   // private loadProductsForCategory(): void {
+//   //   const navState = history.state as { category?: CategoryNavState };
+
+//   //   const routeId = this.route.snapshot.paramMap.get("id");
+//   //   const searchValue =
+//   //     this.route.snapshot.queryParamMap.get("search")?.trim() ?? "";
+
+//   //   this.selectedCategory = navState?.category ?? null;
+
+//   //   if (!this.selectedCategory && routeId) {
+//   //     this.selectedCategory = {
+//   //       id: routeId,
+//   //       category: routeId,
+//   //       parentCategory: null,
+//   //       children: [],
+//   //     };
+//   //   }
+
+//   //   if (!this.selectedCategory || this.selectedCategory.id === "ALL") {
+//   //     this.selectedRailCategoryId = null;
+//   //   } else {
+//   //     this.selectedRailCategoryId = this.selectedCategory.id;
+//   //   }
+
+//   //   if (!this.selectedCategory) {
+//   //     return;
+//   //   }
+
+//   //   this.buildBreadcrumb(this.selectedCategory);
+
+//   //   const categoryId =
+//   //     routeId && routeId !== "ALL" ? routeId : this.selectedCategory.id;
+//   //   const categoryIds =
+//   //     categoryId && categoryId !== "ALL" ? [String(categoryId)] : [];
+
+//   //   console.log("Selected Category:", this.selectedCategory);
+//   //   console.log("Selected Category ID:", categoryId);
+//   //   console.log("API Category IDs:", categoryIds);
+
+//   //   this.resetFilters();
+
+//   //   if (searchValue.length >= 3) {
+//   //     // Search results aren't paginated through invTaken/servTaken today —
+//   //     // keep the simple one-shot flow.
+//   //     this.productList$ = this.productService.getProductsBySearchname(
+//   //       searchValue,
+//   //       String(categoryId ?? ""),
+//   //     );
+//   //     this._productList$$.next(this.productList$);
+//   //   } else {
+//   //     // Category browsing IS paginated — go through the new flow.
+//   //     this.loadFirstPage(categoryIds);
+//   //   }
+//   // }
+
 //   private loadProductsForCategory(): void {
-//     const navState = history.state as {
-//       category?: CategoryNavState;
-//     };
+//     const navState = history.state as { category?: CategoryNavState };
 
 //     const routeId = this.route.snapshot.paramMap.get("id");
 //     const searchValue =
 //       this.route.snapshot.queryParamMap.get("search")?.trim() ?? "";
 
-//     // Prefer navigation state
 //     this.selectedCategory = navState?.category ?? null;
 
-//     // Fallback when page is refreshed or URL opened directly
 //     if (!this.selectedCategory && routeId) {
 //       this.selectedCategory = {
 //         id: routeId,
@@ -527,33 +811,65 @@
 //       };
 //     }
 
+//     if (!this.selectedCategory || this.selectedCategory.id === "ALL") {
+//       this.selectedRailCategoryId = null;
+//     } else {
+//       this.selectedRailCategoryId = this.selectedCategory.id;
+//     }
+
 //     if (!this.selectedCategory) {
 //       return;
 //     }
 
-//     // Build breadcrumb
 //     this.buildBreadcrumb(this.selectedCategory);
 
-//     // Include current category + all child categories
+//     // ✅ was: single [categoryId] — now uses parent + all nested children
+//     this.subCategories =
+//       this.selectedCategory.parentCategory === null
+//         ? (this.selectedCategory.children ?? [])
+//         : [];
+
 //     const categoryIds = this.buildCategoryIds(this.selectedCategory);
 
 //     console.log("Selected Category:", this.selectedCategory);
-//     console.log("Category IDs:", categoryIds);
+//     console.log("API Category IDs:", categoryIds);
 
-//     // Load products
-//     this.productList$ =
-//       searchValue.length >= 3
-//         ? this.productService.getProductsBySearchname(
-//             searchValue,
-//             this.selectedCategory.id,
-//           )
-//         : this.productService.getProductsByCategoryIds(categoryIds);
-
-//     this._productList$$.next(this.productList$);
-
-//     // Reset filters
 //     this.resetFilters();
+
+//     if (searchValue.length >= 3) {
+//       this.productList$ = this.productService.getProductsBySearchname(
+//         searchValue,
+//         String(this.selectedCategory.id ?? ""),
+//       );
+//       this._productList$$.next(this.productList$);
+//     } else {
+//       this.loadFirstPage(categoryIds);
+//     }
 //   }
+
+//   navigateSubCategory(child: Category): void {
+//     if (!this.selectedCategory) return;
+
+//     const state: CategoryNavState = {
+//       id: child.id,
+//       category: child.category,
+//       parentCategory: {
+//         id: this.selectedCategory.id,
+//         category: this.selectedCategory.category,
+//         parentCategory: null,
+//       },
+//       children: [],
+//     };
+
+//     this.router.navigate(["/category", child.id], {
+//       state: { category: state },
+//     });
+//   }
+
+//   trackById(_: number, item: Category): string {
+//     return item.id;
+//   }
+
 //   private resetFilters(): void {
 //     this.selectedBrands$.next([]);
 //     this.selectedCategoryIds$.next([]);
@@ -587,7 +903,7 @@
 //         quantity: qty,
 //       }),
 //     );
-//     this.drawer.openCart();
+//     // this.drawer.openCart();
 //   }
 
 //   updateRowVariantQtyFromInput(
@@ -612,36 +928,7 @@
 //         quantity: qty,
 //       }),
 //     );
-//     this.drawer.openCart();
-//   }
-
-//   private loadProducts(
-//     categoryIds: string[],
-//     searchValue: string,
-//     routeId: string | null,
-//   ): void {
-//     if (searchValue.length >= 3) {
-//       this.productList$ = this.productService.getProductsBySearchname(
-//         searchValue,
-//         routeId || "",
-//       );
-//     } else {
-//       this.productList$ =
-//         this.productService.getProductsByCategoryIds(categoryIds);
-//     }
-
-//     this._productList$$.next(this.productList$);
-
-//     // Reset filters
-//     this.selectedBrands$.next([]);
-//     this.selectedCategoryIds$.next([]);
-//     this.selectedSizes$.next([]);
-//     this.selectedGenders$.next([]);
-//     this.selectedDiscountTiers$.next([]);
-//     this.priceMin$.next(null);
-//     this.priceMax$.next(null);
-//     this.searchTerm$.next("");
-//     this.sort$.next("");
+//     // this.drawer.openCart();
 //   }
 
 //   allowOnlyIntegers(event: KeyboardEvent): void {
@@ -672,33 +959,6 @@
 //       event.preventDefault();
 //     }
 //   }
-
-//   /** Build breadcrumb array from a CategoryNavState */
-//   // private buildBreadcrumb(state: CategoryNavState | null) {
-//   //   if (!state || state.id === "ALL") {
-//   //     this.breadcrumb = ["All Categories"];
-//   //     return;
-//   //   }
-
-//   //   // Parent clicked (has children)
-//   //   if (state.parentCategory === null && state.children?.length) {
-//   //     this.breadcrumb = ["All Categories", state.category];
-//   //     return;
-//   //   }
-
-//   //   // Child clicked
-//   //   if (state.parentCategory !== null) {
-//   //     this.breadcrumb = [
-//   //       "All Categories",
-//   //       state.parentCategory?.category ?? "",
-//   //       state.category,
-//   //     ];
-//   //     return;
-//   //   }
-
-//   //   // Leaf parent (no children)
-//   //   this.breadcrumb = ["All Categories", state.category];
-//   // }
 
 //   private buildBreadcrumb(state: CategoryNavState | null) {
 //     this.breadcrumb = [];
@@ -793,11 +1053,45 @@
 //     // so it doesn't need repositioning — and closing it on scroll would
 //     // block the user from scrolling the page while it's open. No scroll
 //     // listeners are attached here anymore.
+
+//     this.setupInfiniteScrollObserver();
+//   }
+
+//   private setupInfiniteScrollObserver(): void {
+//     const sentinel = this.scrollSentinelRef?.nativeElement;
+//     if (!sentinel || !("IntersectionObserver" in window)) {
+//       return;
+//     }
+
+//     // root: null tracks intersection against the browser viewport, which
+//     // still works correctly even when the list scrolls inside a nested
+//     // container (a mobile app-shell wrapper, a fixed-header layout, etc.) —
+//     // unlike a window:scroll listener, which only fires when `window`
+//     // itself is the element that scrolls.
+//     this.scrollObserver = new IntersectionObserver(
+//       (entries) => {
+//         const isVisible = entries.some((e) => e.isIntersecting);
+//         if (isVisible) {
+//           // IntersectionObserver callbacks run outside Angular's zone,
+//           // so re-enter it to make sure change detection picks up the
+//           // loadingMore flag and the eventual product list update.
+//           this.ngZone.run(() => this.fetchNextPage());
+//         }
+//       },
+//       {
+//         root: null,
+//         rootMargin: "300px", // start loading ~300px before the sentinel is reached
+//         threshold: 0,
+//       },
+//     );
+
+//     this.scrollObserver.observe(sentinel);
 //   }
 
 //   ngOnDestroy(): void {
 //     this.destroyed$.next();
 //     this.destroyed$.complete();
+//     this.scrollObserver?.disconnect();
 //   }
 
 //   // ─────────────────────────────────────────────────────────────────────────
@@ -889,10 +1183,16 @@
 //     return parseMoneyToNumber(val) ?? 0;
 //   }
 
-//   /**
-//    * Adds/replaces the current selection in the cart.
-//    * Uses variant prices when a variant is selected.
-//    */
+//   getTotalVariantQty(product: Product, qtyMap: Map<string, number>): number {
+//     if (!product?.variants?.length) {
+//       return 0;
+//     }
+
+//     return product.variants.reduce((total, variant) => {
+//       const key = this.variantRowCartKey(product, variant);
+//       return total + (qtyMap.get(key) ?? 0);
+//     }, 0);
+//   }
 //   addVariantToCart(product: Product, event: Event): void {
 //     event.stopPropagation();
 //     const variant = this.getSelectedVariant(product);
@@ -901,10 +1201,17 @@
 //     const sellingPrice = variant?.SellingPrice ?? (product as any).SellingPrice;
 //     const offerPrice = variant?.OfferPrice ?? (product as any).OfferPrice;
 //     const mrp = parseMoneyToNumber(String(sellingPrice ?? "")) || 0;
-//     const dealPrice = parseMoneyToNumber(String(offerPrice ?? "")) || 0;
+//     // ✅ Fall back to mrp (not 0) when the variant has no active offer — same
+//     // pattern as buildCartItem() in product.component.ts. Falling back to 0
+//     // here was storing dealPrice:0 for every non-discounted variant, which
+//     // cart-list.component.html papered over with its own mrp fallback for
+//     // the line total, but selectCartTotal/selectCartFinalTotal trusted
+//     // dealPrice as-is — summing to ₹0 for a cart full of "correct-looking"
+//     // items.
+//     const dealPrice = parseMoneyToNumber(String(offerPrice ?? "")) || mrp;
 //     const title = variant
-//       ? `${(product as any).Brand ?? ""} ${product.ProductName ?? ""} - ${variant.variantsName}`.trim()
-//       : `${(product as any).Brand ?? ""} ${product.ProductName ?? ""}`.trim();
+//       ? `${product.ProductName ?? ""} - ${variant.variantsName}`.trim()
+//       : `${product.ProductName ?? ""}`.trim();
 
 //     const image = String(
 //       (product as any).ImageUrl || (product as any).Image || "",
@@ -930,7 +1237,7 @@
 //         },
 //       }),
 //     );
-//     this.drawer.openCart();
+//     // this.drawer.openCart();
 //   }
 
 //   increaseVariant(
@@ -945,7 +1252,7 @@
 //     this.store.dispatch(
 //       updateQuantity({ productId: key, quantity: current + 1 }),
 //     );
-//     this.drawer.openCart();
+//     // this.drawer.openCart();
 //   }
 
 //   decreaseVariant(
@@ -967,38 +1274,34 @@
 //     }
 //   }
 
-//   /**
-//    * Computes a savings label like "₹80 OFF" from a variant's prices.
-//    * Returns empty string when there is no discount.
-//    */
 //   variantOfferText(v: Variant): string {
-//     if (v.offerText) return v.offerText;
+//     // If offerText exists, only show it when it is NOT a 0 OFF value
+//     if (v.offerText) {
+//       const match = String(v.offerText).match(/₹?\s*([\d,]+(?:\.\d+)?)\s*OFF/i);
+
+//       if (match) {
+//         const discount = parseFloat(match[1].replace(/,/g, ""));
+
+//         if (discount > 0) {
+//           return `${discount.toLocaleString("en-IN")}% OFF`;
+//         }
+
+//         return "";
+//       }
+
+//       return String(v.offerText);
+//     }
+
 //     const mrp = parseMoneyToNumber(String(v.SellingPrice ?? ""));
 //     const offer = parseMoneyToNumber(String(v.OfferPrice ?? ""));
-//     if (mrp > 0 && offer > 0 && mrp > offer) {
-//       return `₹${(mrp - offer).toLocaleString("en-IN")} OFF`;
+
+//     const discount = mrp - offer;
+
+//     if (mrp > 0 && offer > 0 && discount > 0) {
+//       return `${discount.toLocaleString("en-IN")}% OFF`;
 //     }
+
 //     return "";
-//   }
-
-//   // ─────────────────────────────────────────────────────────────────────────
-//   //  Original helpers (unchanged)
-//   // ─────────────────────────────────────────────────────────────────────────
-
-//   // buildImageUrl(relative?: string): string {
-//   //   if (!relative) return "assets/placeholder-bike.png";
-//   //   const trimmed = relative.trim();
-//   //   if (!trimmed) return "assets/placeholder-bike.png";
-//   //   if (trimmed.startsWith("assets/") || trimmed.startsWith("/assets/"))
-//   //     return trimmed;
-//   //   if (trimmed.startsWith("//")) return `https:${trimmed}`;
-//   //   if (/^https?:\/\//i.test(trimmed)) return trimmed;
-//   //   return `${this.imgBase}/${trimmed.replace(/^\/+/, "")}`;
-//   // }
-
-//   onImgError(ev: Event) {
-//     const img = ev.target as HTMLImageElement;
-//     if (img) img.src = "assets/placeholder-bike.png";
 //   }
 
 //   emiText(price?: string | number): string {
@@ -1390,7 +1693,9 @@
 //     const sellingPrice = variant?.SellingPrice ?? (product as any).SellingPrice;
 //     const offerPrice = variant?.OfferPrice ?? (product as any).OfferPrice;
 //     const mrp = parseMoneyToNumber(String(sellingPrice ?? "")) || 0;
-//     const dealPrice = parseMoneyToNumber(String(offerPrice ?? "")) || 0;
+//     // ✅ Fall back to mrp (not 0) when the variant has no active offer — see
+//     // the matching fix + comment in addVariantToCart() above.
+//     const dealPrice = parseMoneyToNumber(String(offerPrice ?? "")) || mrp;
 //     const title =
 //       `${(product as any).Brand ?? ""} ${product.ProductName ?? ""} - ${variant.variantsName}`.trim();
 //     const image = String(
@@ -1419,40 +1724,9 @@
 //         },
 //       }),
 //     );
-//     this.drawer.openCart();
+//     // this.drawer.openCart();
 //   }
 
-//   // increaseRowVariant(
-//   //   product: Product,
-//   //   variant: Variant,
-//   //   qtyMap: Map<string, number>,
-//   //   event: Event,
-//   // ): void {
-//   //   event.stopPropagation();
-//   //   const key = this.variantRowCartKey(product, variant);
-//   //   this.store.dispatch(
-//   //     updateQuantity({ productId: key, quantity: (qtyMap.get(key) ?? 0) + 1 }),
-//   //   );
-//   //   this.drawer.openCart();
-//   // }
-
-//   // decreaseRowVariant(
-//   //   product: Product,
-//   //   variant: Variant,
-//   //   qtyMap: Map<string, number>,
-//   //   event: Event,
-//   // ): void {
-//   //   event.stopPropagation();
-//   //   const key = this.variantRowCartKey(product, variant);
-//   //   const current = qtyMap.get(key) ?? 0;
-//   //   if (current <= 1) {
-//   //     this.store.dispatch(removeItem({ productId: key }));
-//   //   } else {
-//   //     this.store.dispatch(
-//   //       updateQuantity({ productId: key, quantity: current - 1 }),
-//   //     );
-//   //   }
-//   // }
 //   increaseRowVariant(
 //     product: Product,
 //     variant: Variant,
@@ -1470,7 +1744,7 @@
 //       }),
 //     );
 
-//     this.drawer.openCart();
+//     // this.drawer.openCart();
 //   }
 
 //   decreaseRowVariant(
@@ -1507,17 +1781,30 @@
 //   onDrawerChange(state: DrawerState): void {
 //     /* no-op */
 //   }
-// }
-// product-list.component.ts
-// Changes from baseline:
-//  1. Added selectedVariants map  — tracks which variant is active per product card
-//  2. Added cartQtyMap$ stream     — maps productId/variantKey → quantity in cart
-//  3. Added variant helper methods — selectVariant, variantCartKey,
-//                                    getVariantQty, variantInCart,
-//                                    addVariantToCart, increaseVariant, decreaseVariant
-//  4. addToCart updated            — falls through to variant path when variants present
-//  All other logic is unchanged.
 
+//   /** True only when there's an actual discount (not just OfferPrice == SellingPrice) */
+//   hasDiscount(p: Product): boolean {
+//     const offer = this.parsePrice((p as any).OfferPrice);
+//     const selling = this.parsePrice((p as any).SellingPrice);
+//     return offer > 0 && offer !== selling;
+//   }
+
+//   /** Min/max effective price across a product's variants, for the "Price range" line */
+//   getVariantPriceRange(p: Product): { min: number; max: number } | null {
+//     if (!p.variants?.length) return null;
+
+//     const prices = p.variants.map((v) => {
+//       const offer = this.parsePrice(v.OfferPrice);
+//       const selling = this.parsePrice(v.SellingPrice);
+//       return offer > 0 ? offer : selling;
+//     });
+
+//     return {
+//       min: Math.min(...prices),
+//       max: Math.max(...prices),
+//     };
+//   }
+// }
 import {
   Component,
   inject,
@@ -1529,6 +1816,7 @@ import {
   AfterViewInit,
   OnDestroy,
   NgZone,
+  ChangeDetectorRef,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
@@ -1537,6 +1825,20 @@ import {
   Router,
   NavigationEnd,
 } from "@angular/router";
+// import {
+//   BehaviorSubject,
+//   Observable,
+//   combineLatest,
+//   map,
+//   Subscription,
+//   switchMap,
+//   of,
+//   Subject,
+//   fromEvent,
+//   filter,
+//   distinctUntilChanged,
+// } from "rxjs";
+
 import {
   BehaviorSubject,
   Observable,
@@ -1545,6 +1847,7 @@ import {
   Subscription,
   switchMap,
   of,
+  from,
   Subject,
   fromEvent,
   filter,
@@ -1599,6 +1902,8 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     id: string;
     state?: CategoryNavState | null;
   }[] = [];
+
+  subCategories: Category[] = [];
   /**
    * Declared with ! — assigned in ngOnInit() before any subscriber runs.
    * Use _productList$$ to switch sources reactively on re-navigation.
@@ -1700,7 +2005,15 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
   seeServ = 1;
   loadingMore = false;
 
+  /** true while showing /category/:id?search=... results (not paginated) */
+  private isSearchMode = false;
+  /** in-flight page request, cancelled whenever a new load starts */
+  private pageSub?: Subscription;
+
   private loadFirstPage(categoryIds: string[]): void {
+    this.isSearchMode = false;
+    this.pageSub?.unsubscribe();
+    this.loadingMore = false;
     this.currentCategoryIds = categoryIds;
     this.invTaken = 0;
     this.servTaken = 0;
@@ -1711,13 +2024,17 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   fetchNextPage(): void {
+    // Search results are a single, non-paginated list. Without this guard the
+    // scroll sentinel (visible because there is only 1 result) loads the full
+    // category list and replaces the search results.
+    if (this.isSearchMode) return;
     if (this.loadingMore) return;
     if (this.seeInv === 0 && this.seeServ === 0 && this.allProducts.length)
       return;
 
     this.loadingMore = true;
 
-    this.productService
+    this.pageSub = this.productService
       .getProductsByCategoryIds(
         this.currentCategoryIds,
         this.invTaken,
@@ -1803,13 +2120,57 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     }),
   );
 
+  private cdr = inject(ChangeDetectorRef);
+  private resolvedImages = new Map<string, string>();
+  private readonly FALLBACK_IMG = "/assets/placeholder-bike.png";
+  readonly fallbackImg = "/assets/placeholder-bike.png";
+
+  // use ONE constant (make sure this file exists in src/assets)
+
+  onImgError(ev: Event) {
+    const img = ev.target as HTMLImageElement;
+    if (!img) return;
+    // stop only if the placeholder itself failed (avoids an infinite loop)
+    if (img.src.includes(this.fallbackImg)) return;
+    img.removeAttribute("srcset");
+    img.src = this.fallbackImg;
+  }
+
   buildImageUrl(
     relative?: string,
     inventoryId?: string,
-    isService?: boolean,
+    isService = false,
   ): string {
-    return this.imageServiceUrl.buildImageUrl(relative, inventoryId, isService);
+    // no image path at all -> straight to placeholder, no service call
+    if (!relative) return this.FALLBACK_IMG;
+
+    const key = `${isService ? "s" : "p"}|${inventoryId}|${relative}`;
+    const hit = this.resolvedImages.get(key);
+    if (hit) return hit;
+
+    this.resolvedImages.set(key, this.FALLBACK_IMG);
+
+    this.imageServiceUrl
+      .buildImageUrl(relative, inventoryId, isService)
+      .then((url) => {
+        this.resolvedImages.set(key, url || this.FALLBACK_IMG);
+        this.cdr.markForCheck();
+      })
+      .catch(() => {
+        this.resolvedImages.set(key, this.FALLBACK_IMG);
+        this.cdr.markForCheck();
+      });
+
+    return this.FALLBACK_IMG;
   }
+
+  // buildImageUrl(
+  //   relative?: string,
+  //   inventoryId?: string,
+  //   isService: boolean = false,
+  // ): Promise<string> {
+  //   return this.imageServiceUrl.buildImageUrl(relative, inventoryId, isService);
+  // }
 
   /**
    * The pool of products that filter chips operate on.
@@ -2195,6 +2556,62 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
   //   // Reset filters
   //   this.resetFilters();
   // }
+
+  // private loadProductsForCategory(): void {
+  //   const navState = history.state as { category?: CategoryNavState };
+
+  //   const routeId = this.route.snapshot.paramMap.get("id");
+  //   const searchValue =
+  //     this.route.snapshot.queryParamMap.get("search")?.trim() ?? "";
+
+  //   this.selectedCategory = navState?.category ?? null;
+
+  //   if (!this.selectedCategory && routeId) {
+  //     this.selectedCategory = {
+  //       id: routeId,
+  //       category: routeId,
+  //       parentCategory: null,
+  //       children: [],
+  //     };
+  //   }
+
+  //   if (!this.selectedCategory || this.selectedCategory.id === "ALL") {
+  //     this.selectedRailCategoryId = null;
+  //   } else {
+  //     this.selectedRailCategoryId = this.selectedCategory.id;
+  //   }
+
+  //   if (!this.selectedCategory) {
+  //     return;
+  //   }
+
+  //   this.buildBreadcrumb(this.selectedCategory);
+
+  //   const categoryId =
+  //     routeId && routeId !== "ALL" ? routeId : this.selectedCategory.id;
+  //   const categoryIds =
+  //     categoryId && categoryId !== "ALL" ? [String(categoryId)] : [];
+
+  //   console.log("Selected Category:", this.selectedCategory);
+  //   console.log("Selected Category ID:", categoryId);
+  //   console.log("API Category IDs:", categoryIds);
+
+  //   this.resetFilters();
+
+  //   if (searchValue.length >= 3) {
+  //     // Search results aren't paginated through invTaken/servTaken today —
+  //     // keep the simple one-shot flow.
+  //     this.productList$ = this.productService.getProductsBySearchname(
+  //       searchValue,
+  //       String(categoryId ?? ""),
+  //     );
+  //     this._productList$$.next(this.productList$);
+  //   } else {
+  //     // Category browsing IS paginated — go through the new flow.
+  //     this.loadFirstPage(categoryIds);
+  //   }
+  // }
+
   private loadProductsForCategory(): void {
     const navState = history.state as { category?: CategoryNavState };
 
@@ -2225,29 +2642,55 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.buildBreadcrumb(this.selectedCategory);
 
-    const categoryId =
-      routeId && routeId !== "ALL" ? routeId : this.selectedCategory.id;
-    const categoryIds =
-      categoryId && categoryId !== "ALL" ? [String(categoryId)] : [];
+    // ✅ was: single [categoryId] — now uses parent + all nested children
+    this.subCategories =
+      this.selectedCategory.parentCategory === null
+        ? (this.selectedCategory.children ?? [])
+        : [];
+
+    const categoryIds = this.buildCategoryIds(this.selectedCategory);
 
     console.log("Selected Category:", this.selectedCategory);
-    console.log("Selected Category ID:", categoryId);
     console.log("API Category IDs:", categoryIds);
 
     this.resetFilters();
 
     if (searchValue.length >= 3) {
-      // Search results aren't paginated through invTaken/servTaken today —
-      // keep the simple one-shot flow.
+      this.isSearchMode = true;
+      this.pageSub?.unsubscribe(); // drop any in-flight page load
+      this.loadingMore = false;
+      this.allProducts = [];
       this.productList$ = this.productService.getProductsBySearchname(
         searchValue,
-        String(categoryId ?? ""),
+        String(this.selectedCategory.id ?? ""),
       );
       this._productList$$.next(this.productList$);
     } else {
-      // Category browsing IS paginated — go through the new flow.
       this.loadFirstPage(categoryIds);
     }
+  }
+
+  navigateSubCategory(child: Category): void {
+    if (!this.selectedCategory) return;
+
+    const state: CategoryNavState = {
+      id: child.id,
+      category: child.category,
+      parentCategory: {
+        id: this.selectedCategory.id,
+        category: this.selectedCategory.category,
+        parentCategory: null,
+      },
+      children: [],
+    };
+
+    this.router.navigate(["/category", child.id], {
+      state: { category: state },
+    });
+  }
+
+  trackById(_: number, item: Category): string {
+    return item.id;
   }
 
   private resetFilters(): void {
@@ -2590,8 +3033,8 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     // items.
     const dealPrice = parseMoneyToNumber(String(offerPrice ?? "")) || mrp;
     const title = variant
-      ? `${(product as any).Brand ?? ""} ${product.ProductName ?? ""} - ${variant.variantsName}`.trim()
-      : `${(product as any).Brand ?? ""} ${product.ProductName ?? ""}`.trim();
+      ? `${product.ProductName ?? ""} - ${variant.variantsName}`.trim()
+      : `${product.ProductName ?? ""}`.trim();
 
     const image = String(
       (product as any).ImageUrl || (product as any).Image || "",
@@ -2682,11 +3125,6 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     return "";
-  }
-
-  onImgError(ev: Event) {
-    const img = ev.target as HTMLImageElement;
-    if (img) img.src = "assets/placeholder-bike.png";
   }
 
   emiText(price?: string | number): string {
@@ -3165,5 +3603,28 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onDrawerChange(state: DrawerState): void {
     /* no-op */
+  }
+
+  /** True only when there's an actual discount (not just OfferPrice == SellingPrice) */
+  hasDiscount(p: Product): boolean {
+    const offer = this.parsePrice((p as any).OfferPrice);
+    const selling = this.parsePrice((p as any).SellingPrice);
+    return offer > 0 && offer !== selling;
+  }
+
+  /** Min/max effective price across a product's variants, for the "Price range" line */
+  getVariantPriceRange(p: Product): { min: number; max: number } | null {
+    if (!p.variants?.length) return null;
+
+    const prices = p.variants.map((v) => {
+      const offer = this.parsePrice(v.OfferPrice);
+      const selling = this.parsePrice(v.SellingPrice);
+      return offer > 0 ? offer : selling;
+    });
+
+    return {
+      min: Math.min(...prices),
+      max: Math.max(...prices),
+    };
   }
 }

@@ -94,13 +94,13 @@
   </section>
 
   <!-- <app-drawer [isPublic]="true" [state]="drawerState" (stateChange)="drawerState = $event" [title]="'Order '+selectedOrderId" > -->
-      <app-drawer [isPublic]="true" [state]="drawerState" (stateChange)="drawerState = $event" [title]="'Order Details'" > 
-
-
-    <app-order-detail [orderId]="selectedOrderId"></app-order-detail>
-  </app-drawer>
-
-
- 
+     
+    <app-drawer
+      [isPublic]="true"
+      [state]="drawerState"
+      (stateChange)="onDrawerStateChange($event)"
+      [title]="drawerTitle">
+      <app-order-detail [orderId]="selectedOrderId"></app-order-detail>
+    </app-drawer>
 
 </div>

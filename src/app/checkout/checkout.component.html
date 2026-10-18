@@ -1,71 +1,53 @@
- 
 <div class="checkout-wrapper">
-  <div class="checkout-wrapper">
-    <div class="mb-lg-0 checkout-left">
+  <div class="mb-lg-0 checkout-left">
 
-      <ng-container *ngIf="!isOrderPlaced; else successTemplate">
-        <app-order-summary></app-order-summary>
-        
-        <app-customer-information></app-customer-information>
-        <app-payment></app-payment>
-        <app-review-place-order
-  (orderPlaced)="handleOrderPlaced($event)"
-  (openCustomerInformation)="openCustomerInformation()">
-        </app-review-place-order>
-      </ng-container>
+    <ng-container *ngIf="!isOrderPlaced; else successTemplate">
+      <app-order-summary></app-order-summary>
 
-      <ng-template #successTemplate>
-      <!-- <div class="success-container"> -->
-        <div
-          class="success-container"
-          [class.showing-details]="selectedRefNo">
+      <app-customer-information></app-customer-information>
+
+      <app-payment [amount]="orderTotal"></app-payment>
+
+      <app-review-place-order
+        (orderPlaced)="handleOrderPlaced($event)"
+        (openCustomerInformation)="openCustomerInformation()"
+      >
+      </app-review-place-order>
+    </ng-container>
+
+    <ng-template #successTemplate>
+      <div
+        class="success-container"
+        [class.showing-details]="selectedRefNo"
+      >
         <h2>Order placed successfully!</h2>
 
-         <p *ngIf="!selectedRefNo">
+        <p *ngIf="!selectedRefNo">
           Ref No:
           <span class="ref-link" (click)="onRefClick()">
             {{ orderRefNo }}
           </span>
         </p>
-        <p
-          *ngIf="
-            isLoggedIn 
-            
-          "
-        >
+
+        <p *ngIf="isLoggedIn">
           You have earned:
           <b>{{ rewardsEarned }} Points</b>
         </p>
 
-      <app-order-detail
-        *ngIf="selectedRefNo"
-        [refno]="selectedRefNo">
-      </app-order-detail>
-
+        <app-order-detail
+          *ngIf="selectedRefNo"
+          [refno]="selectedRefNo"
+        ></app-order-detail>
       </div>
     </ng-template>
 
     <!-- Footer Links -->
-   <div class="checkout-footer">
-  <a (click)="openInNewTab('data-protection')">
-    Data Protection
-  </a>
-
-  <a (click)="openInNewTab('contact-us')">
-    Contact Us
-  </a>
-
-  <a (click)="openInNewTab('refund-policy')">
-    Refund Policy
-  </a>
-
-  <a (click)="openInNewTab('shipping-policy')">
-    Shipping Policy
-  </a>
-  </div>
-
- 
+    <div class="checkout-footer">
+      <a (click)="openInNewTab('data-protection')">Data Protection</a>
+      <a (click)="openInNewTab('contact-us')">Contact Us</a>
+      <a (click)="openInNewTab('refund-policy')">Refund Policy</a>
+      <a (click)="openInNewTab('shipping-policy')">Shipping Policy</a>
     </div>
+
   </div>
 </div>
-

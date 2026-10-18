@@ -1,6 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { Router, RouterOutlet, NavigationEnd } from "@angular/router";
+import {
+  ActivatedRouteSnapshot,
+  Router,
+  RouterOutlet,
+  NavigationEnd,
+} from "@angular/router";
 import { Subject, takeUntil, filter } from "rxjs";
 import { HeaderComponent } from "./common/components/header/header.component";
 import { NavbarComponent } from "./common/components/navbar/navbar.component";
@@ -9,6 +14,7 @@ import { Category } from "./common/models/category.model";
 // import { CategoryService } from "./common/services/category.service";
 import { CategoryService } from "./common/services/category.service copy";
 import { ThemeService } from "./core/services/theme.service";
+import { SeoData, SeoService } from "./core/services/seo.service";
 import { HeroBannerComponent } from "./landing/hero-banner/hero-banner.component";
 import { SellerService } from "./common/services/SellerService";
 // ✅ Import ProductService so we can fire triggerRefresh() after seller loads
@@ -58,6 +64,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private productService: ProductService,
     // ✅ Injected to listen for route changes
     private router: Router,
+    private seo: SeoService,
   ) {
     // ✅ Synchronous initial check — covers the very first render before
     // any NavigationEnd event has had a chance to fire.
@@ -72,6 +79,23 @@ export class AppComponent implements OnInit, OnDestroy {
     // Strip query string and fragment before comparing, e.g. "/?ref=ad" → "/"
     const path = url.split("?")[0].split("#")[0];
     return path === "/" || path === "";
+  }
+
+  /**
+   * Applies title/description/canonical/robots from the active route's
+   * `data.seo` (merged parent → child). Pages that know more once their data
+   * loads (e.g. product detail) call SeoService.update() again themselves.
+   */
+  private applyRouteSeo(url: string): void {
+    let seo: SeoData = {};
+    let snapshot: ActivatedRouteSnapshot | null = this.router.routerState.snapshot.root;
+    while (snapshot) {
+      seo = { ...seo, ...(snapshot.data?.["seo"] ?? {}) };
+      snapshot = snapshot.firstChild;
+    }
+
+    this.seo.removeJsonLd("ld-product");
+    this.seo.update({ ...seo, path: seo.path ?? url });
   }
 
   ngOnInit(): void {
@@ -92,6 +116,7 @@ export class AppComponent implements OnInit, OnDestroy {
       )
       .subscribe((event) => {
         this.isHomePage = this.computeIsHomePage(event.urlAfterRedirects);
+        this.applyRouteSeo(event.urlAfterRedirects);
       });
 
     // ✅ Restore seller if available in localStorage

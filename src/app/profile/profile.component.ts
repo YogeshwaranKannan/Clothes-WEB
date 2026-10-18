@@ -69,7 +69,7 @@ import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { CustomerInformationComponent } from "../checkout/customer-information/customer-information.component";
 
-import { PaymentComponent } from "../checkout/payment/payment.component";
+import { PaymentComponent } from "../checkout/paymentOptions/payment.component";
 import { ShippingAddressComponent } from "../checkout/shipping-address/shipping-address.component";
 import { FormsModule } from "@angular/forms";
 import {

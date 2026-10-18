@@ -41,7 +41,12 @@ export interface RewardsDTO {
   RedeemPoints: number;
 }
 
-export type PaymentStatus = "Paid" | "Pending" | "Failed" | "Cash on Delivery";
+export type PaymentStatus =
+  | "Paid"
+  | "Pending"
+  | "Failed"
+  | "Cash on Delivery"
+  | "Unpaid"; // backend value; displayed as "Pay on Delivery"
 
 export interface OrderDetail {
   order_id: string;
@@ -67,10 +72,12 @@ export interface OrdersList {
 
 export type OrderStatus =
   | "Order Placed"
+  | "Review" // backend alias of "Processing"
   | "Processing"
   | "Shipment Ready"
   | "Out for Delivery"
-  | "Delivered";
+  | "Delivered"
+  | "Completed"; // backend alias of "Delivered"
 
 // export interface OrderItem {
 //   item_name: string;

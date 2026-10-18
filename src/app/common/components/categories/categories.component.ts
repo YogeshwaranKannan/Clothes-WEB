@@ -630,6 +630,7 @@ import {
   Observable,
   catchError,
   combineLatest,
+  forkJoin,
   map,
   of,
   switchMap,
@@ -676,9 +677,9 @@ import { LoadingScreenComponent } from "../loading-screen/loading-screen.compone
   styleUrls: ["./categories.component.scss"],
 })
 export class CategoriesComponent implements OnInit {
-  groupedWithProducts$!: Observable<
-    { group: GroupedCategory; products: Product[] }[]
-  >;
+  // groupedWithProducts$!: Observable<
+  //   { group: GroupedCategory; products: Product[] }[]
+  // >;
 
   // VARIANT modal state
   selectedVariants = new Map<string, Variant | null>();
@@ -742,6 +743,91 @@ export class CategoriesComponent implements OnInit {
       console.log("Refreshing category products...");
       this.loadGroupedProducts();
     });
+  }
+
+  groupedWithProducts$!: Observable<
+    { group: GroupedCategory; products: Product[]; hasMore?: boolean }[]
+  >;
+
+  private readonly MOBILE_LIMIT = 4;
+
+  private get isMobile(): boolean {
+    return typeof window !== "undefined" && window.innerWidth <= 768;
+  }
+
+  loadGroupedProducts(): void {
+    this.isLoading = true;
+
+    this.groupedWithProducts$ = (
+      this.isMobile ? this.loadMobileRails() : this.loadAllRails()
+    ).pipe(
+      tap(() => (this.isLoading = false)),
+      catchError((error) => {
+        console.error(error);
+        this.isLoading = false;
+        return of([]);
+      }),
+    );
+  }
+
+  /** MOBILE: one small request per category (limit + 1 to know if "View All" is needed) */
+  private loadMobileRails() {
+    return this.categoryService.getGroupedCategories().pipe(
+      switchMap((groups) =>
+        groups.length
+          ? forkJoin(
+              groups.map((group) => {
+                const ids = [
+                  String(group.id),
+                  ...group.items.map((it) => String(it.id)),
+                ];
+                return this.productService
+                  .getProductsByCategoryIds(ids, 0, 0, this.MOBILE_LIMIT + 1)
+                  .pipe(
+                    map((res) => {
+                      const valid = res.products.filter((p) =>
+                        this.hasValidImage(p),
+                      );
+                      return {
+                        group,
+                        products: valid.slice(0, this.MOBILE_LIMIT),
+                        hasMore: valid.length > this.MOBILE_LIMIT,
+                      };
+                    }),
+                  );
+              }),
+            )
+          : of([]),
+      ),
+      map((entries) => entries.filter((e) => e.products.length > 0)),
+    );
+  }
+
+  private loadAllRails() {
+    return this.categoryService.getGroupedCategories().pipe(
+      switchMap((groups) =>
+        this.productService
+          .getProducts()
+          .pipe(map((allProducts) => ({ groups, allProducts }))),
+      ),
+      map(({ groups, allProducts }) => {
+        const validProducts = allProducts.filter((p) => this.hasValidImage(p));
+        return groups
+          .map((group) => {
+            const groupCategoryIds = new Set<string>([
+              String(group.id),
+              ...group.items.map((it) => String(it.id)),
+            ]);
+            const products = validProducts.filter(
+              (p) =>
+                p.Category?.CategoryId != null &&
+                groupCategoryIds.has(String(p.Category.CategoryId)),
+            );
+            return { group, products, hasMore: products.length > 4 };
+          })
+          .filter((entry) => entry.products.length > 0);
+      }),
+    );
   }
 
   @HostListener("document:keydown.escape")
@@ -841,13 +927,10 @@ export class CategoriesComponent implements OnInit {
     const offerPrice = variant?.OfferPrice ?? (product as any).OfferPrice;
 
     const mrp = parseMoneyToNumber(String(sellingPrice ?? "")) || 0;
-    // ✅ Fall back to mrp (not 0) when the variant has no active offer —
-    // storing dealPrice:0 here is what made Order Summary's Subtotal/Total
-    // add up to ₹0 despite the cart list showing correct-looking line
-    // totals (see the matching fix in product.component.ts / product-list).
+
     const dealPrice = parseMoneyToNumber(String(offerPrice ?? "")) || mrp;
 
-    const title = `${(product as any).Brand ?? ""} ${
+    const title = `${
       product.ProductName ?? ""
     } - ${variant.variantsName}`.trim();
 
@@ -855,8 +938,6 @@ export class CategoriesComponent implements OnInit {
       (product as any).ImageUrl || (product as any).Image || "",
     ).trim();
 
-    // 🔧 FIX: clone product per cart line instead of sharing the same
-    // object reference across every variant row's cart entry.
     const productSnapshot = { ...product, selectedVariant: variant };
 
     this.store.dispatch(
@@ -1034,97 +1115,6 @@ export class CategoriesComponent implements OnInit {
   trackByVariantId(_: number, v: Variant): string {
     return v.variantsid;
   }
-  // loadGroupedProducts(): void {
-  //   this.groupedWithProducts$ = this.categoryService
-  //     .getGroupedCategories()
-  //     .pipe(
-  //       map((groups) => {
-  //         return groups;
-  //       }),
-  //       switchMap((groups) => {
-  //         return this.productService.getProducts().pipe(
-  //           map((allProducts) => ({
-  //             groups,
-  //             allProducts,
-  //           })),
-  //         );
-  //       }),
-  //       map(({ groups, allProducts }) => {
-  //         const validProducts = allProducts.filter((p) =>
-  //           this.hasValidImage(p),
-  //         );
-
-  //         console.log("Valid Products : ", validProducts);
-
-  //         return groups
-  //           .map((group) => {
-  //             const groupCategoryIds = new Set<string>([
-  //               String(group.id),
-  //               ...group.items.map((it) => String(it.id)),
-  //             ]);
-
-  //             const products = validProducts.filter((p) => {
-  //               return (
-  //                 p.Category?.CategoryId != null &&
-  //                 groupCategoryIds.has(String(p.Category.CategoryId))
-  //               );
-  //             });
-
-  //             return { group, products };
-  //           })
-  //           .filter((entry) => entry.products.length > 0);
-  //       }),
-  //     );
-  // }
-  loadGroupedProducts(): void {
-    this.isLoading = true;
-
-    this.groupedWithProducts$ = this.categoryService
-      .getGroupedCategories()
-      .pipe(
-        switchMap((groups) => {
-          return this.productService.getProducts().pipe(
-            map((allProducts) => ({
-              groups,
-              allProducts,
-            })),
-          );
-        }),
-
-        map(({ groups, allProducts }) => {
-          const validProducts = allProducts.filter((p) =>
-            this.hasValidImage(p),
-          );
-          console.log("Valid Products : ", validProducts);
-          return groups
-            .map((group) => {
-              const groupCategoryIds = new Set<string>([
-                String(group.id),
-                ...group.items.map((it) => String(it.id)),
-              ]);
-
-              const products = validProducts.filter((p) => {
-                return (
-                  p.Category?.CategoryId != null &&
-                  groupCategoryIds.has(String(p.Category.CategoryId))
-                );
-              });
-
-              return { group, products };
-            })
-            .filter((entry) => entry.products.length > 0);
-        }),
-
-        tap(() => {
-          this.isLoading = false;
-        }),
-        catchError((error) => {
-          console.error(error);
-          this.isLoading = false;
-          return of([]);
-        }),
-      );
-  }
 
   scrollRail(index: number): void {
     const rails = this.railRefs.toArray();
@@ -1173,7 +1163,7 @@ export class CategoriesComponent implements OnInit {
 
   openProduct(id: string): void {
     if (id == null) return;
-    this.router.navigate(["/products", id]);
+    this.router.navigate(["/product", id]);
   }
 
   private hasValidImage(p: Product): boolean {
@@ -1267,5 +1257,28 @@ export class CategoriesComponent implements OnInit {
         updateQuantity({ productId: pid, quantity: currentQty - 1 }),
       );
     }
+  }
+
+  /** True only when there's an actual discount (not just OfferPrice == SellingPrice) */
+  hasDiscount(p: Product): boolean {
+    const offer = this.parsePrice((p as any).OfferPrice);
+    const selling = this.parsePrice((p as any).SellingPrice);
+    return offer > 0 && offer !== selling;
+  }
+
+  /** Min/max effective price across a product's variants, for the "from ₹x - ₹y" line */
+  getVariantPriceRange(p: Product): { min: number; max: number } | null {
+    if (!p.variants?.length) return null;
+
+    const prices = p.variants.map((v) => {
+      const offer = this.parsePrice(v.OfferPrice);
+      const selling = this.parsePrice(v.SellingPrice);
+      return offer > 0 ? offer : selling;
+    });
+
+    return {
+      min: Math.min(...prices),
+      max: Math.max(...prices),
+    };
   }
 }

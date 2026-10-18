@@ -1,3 +1,5 @@
+@use '../../../../styles/media' as media;
+
 :host {
   display: block;
 }
@@ -7,16 +9,18 @@
   // --nav-bg is defined on :root and every theme body class in _theme.scss.
   // It is always the darkest surface token (navbar-level darkness), so it
   // gives the ticker a solid, anchored look without hardcoding any colour.
-  background: var(--nav-bg);
+  //background: var(--color-ticker-bg,#14532d);
+  background: var(--color-ticker-bg,#14532d);
+  
 
   // --nav-foreground is the paired legible text colour for --nav-bg across
   // all themes, ensuring contrast is maintained automatically.
-  color: var(--nav-foreground);
+  color: var(--color-ticker-title,#ffffff);
 
-  //  border-bottom: 1px solid var(--app-border);
+  border-bottom: 1px solid var(--app-border);
 
   // Fixed height to avoid layout shift
-  --ticker-height: calc(30px + 1rem);
+  --ticker-height: calc(20px + 1rem);
   font-size: var(--text-lg);               // fluid: clamp(16px, 1.25vw, 20px)
   font-weight: var(--fw-semi);             // 600 — semi-bold for strong readability
   letter-spacing: var(--tracking-wide);    // 0.04em — aids legibility on dark bg
@@ -27,7 +31,7 @@
   height: var(--ticker-height);
   overflow: hidden;
   display: block;
-  padding: 10px 1rem;
+  padding: 5px 1rem;
 }
 
 .track {
@@ -58,9 +62,26 @@
   }
 }
 
-/* Small screens: reduce padding */
-@media (max-width: 575.98px) {
+/* Mobile + tablet (< lg): compact ticker. Desktop (>= lg) is unchanged.
+   Vertical padding is dropped and the line-height matches the bar height,
+   so text stays vertically centred and the slide animation is unaffected. */
+@include media.down(lg) {
+  .ticker {
+    --ticker-height: 28px;
+  }
+
   .ticker-inner {
-  //  padding: 0.3rem 0.75rem;
+    padding: 0 1rem;
+  }
+
+  .ticker-item {
+    font-size: 0.875rem; // 14px — keeps 28px bar readable and avoids ellipsis on narrow phones
+    line-height: var(--ticker-height);
+  }
+}
+
+@include media.down(sm) {
+  .ticker-inner {
+    padding: 0 0.75rem;
   }
 }

@@ -1,34 +1,22 @@
 <div class="section-box payment-section">
 
-  <div
-    class="section-header"
-    (click)="togglePaymentOpen()"
-  >
+  <div class="section-header" (click)="togglePaymentOpen()">
     <div class="step-indicator">2</div>
 
-    <div class="section-title">
-      Select Payment Method
-    </div>
+    <div class="section-title">Select Payment Method</div>
 
-    <span
-      class="collapse-chevron"
-      [class.open]="isPaymentOpen"
-    >
-      ▾
-    </span>
+    <span class="collapse-chevron" [class.open]="isPaymentOpen">▾</span>
   </div>
 
   <ng-container *ngIf="isPaymentOpen">
-
     <div class="section-content">
-
       <div class="payment-options">
 
-        <!-- COD -->
+        <!-- COD (only if available) -->
         <label
+          *ngIf="isAvailable('COD')"
           class="radio-card"
           [class.selected]="selectedPaymentMode === 'COD'"
-          [class.radio-card--disabled]="!isAvailable('COD')"
         >
           <input
             type="radio"
@@ -37,27 +25,20 @@
             value="COD"
             [(ngModel)]="selectedPaymentMode"
             (ngModelChange)="onPaymentModeChange($event)"
-            [disabled]="!isAvailable('COD')"
           />
 
           <span class="radio-card__icon">💵</span>
 
           <span class="radio-card__text">
-            <span class="radio-card__label">
-              Cash on Delivery
-            </span>
-
-            <small *ngIf="!isAvailable('COD')">
-              Not available
-            </small>
+            <span class="radio-card__label">Cash on Delivery</span>
           </span>
         </label>
 
-        <!-- Online Payment -->
+        <!-- Online Payment (only if available) -->
         <label
+          *ngIf="isAvailable('ONLINEPAYMENT')"
           class="radio-card"
           [class.selected]="selectedPaymentMode === 'ONLINEPAYMENT'"
-          [class.radio-card--disabled]="!isAvailable('ONLINEPAYMENT')"
         >
           <input
             type="radio"
@@ -66,26 +47,38 @@
             value="ONLINEPAYMENT"
             [(ngModel)]="selectedPaymentMode"
             (ngModelChange)="onPaymentModeChange($event)"
-            [disabled]="!isAvailable('ONLINEPAYMENT')"
           />
 
           <span class="radio-card__icon">💳</span>
 
           <span class="radio-card__text">
-            <span class="radio-card__label">
-              Online Payment
-            </span>
-
-            <small *ngIf="!isAvailable('ONLINEPAYMENT')">
-              Not available
-            </small>
+            <span class="radio-card__label">Online Payment</span>
           </span>
         </label>
 
+        <!-- UPI (only if seller lists it) -->
+        <label
+          *ngIf="isAvailable('UPI')"
+          class="radio-card"
+          [class.selected]="selectedPaymentMode === 'UPI'"
+        >
+          <input
+            type="radio"
+            id="upi"
+            name="paymentMode"
+            value="UPI"
+            [(ngModel)]="selectedPaymentMode"
+            (ngModelChange)="onPaymentModeChange($event)"
+          />
+          <span class="radio-card__icon">📲</span>
+          <span class="radio-card__text">
+            <span class="radio-card__label">UPI</span>
+          </span>
+        </label>
+
+       
       </div>
-
     </div>
-
   </ng-container>
 
 </div>

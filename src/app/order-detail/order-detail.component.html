@@ -1,36 +1,32 @@
 <div class="order-detail" *ngIf="vm$ | async as vm; else loading">
   <ng-container *ngIf="vm.order as order; else notFound">
+
     <!-- Header -->
     <div class="order-ref-row">
       <h4>Order #{{ order.order_id }}</h4>
-      <div
-        class="order-status-pill"
-        [class.is-done]="vm.currentIndex === vm.stages.length - 1"
-      >
+      <!-- <div class="order-status-pill" [class.is-done]="vm.currentIndex === vm.stages.length - 1">
         {{ displayOrderStatus(order.order_status) }}
-      </div>
+      </div> -->
     </div>
 
     <!-- Delivery Status Timeline -->
     <section class="timeline-shell">
-      <div
-        class="timeline-container"
-        [style.--completed-width]="vm.completedWidth"
-        [style.--target-position]="vm.completedWidth"
-      >
-        <!-- Moving cycle icon over the line -->
-        <div class="moving-cycle" *ngIf="showCycle">🚲</div>
+      <div class="timeline-container" [style.--progress]="vm.progress">
+        <div class="timeline-track">
+          <!-- Moving cycle icon over the line -->
+          <div class="moving-cycle" *ngIf="showCycle">🚲</div>
 
-        <div
-          class="timeline-step"
-          *ngFor="let s of vm.stages; let i = index; trackBy: trackByStage"
-          [class.completed]="i <= vm.currentIndex"
-          [class.active]="i === vm.currentIndex"
-        >
-          <div class="label">{{ s }}</div>
-          <div class="dot"></div>
-          <div class="date" *ngIf="order?.stages?.[i]?.date">
-            {{ order.stages[i].date }}
+          <div
+            class="timeline-step"
+            *ngFor="let s of vm.stages; let i = index; trackBy: trackByStage"
+            [class.completed]="i <= vm.currentIndex"
+            [class.active]="i === vm.currentIndex"
+          >
+            <div class="label">{{ s }}</div>
+            <div class="dot"></div>
+            <div class="date" *ngIf="order?.stages?.[i]?.date">
+              {{ order.stages[i].date }}
+            </div>
           </div>
         </div>
       </div>
@@ -38,137 +34,103 @@
 
     <!-- Accordion: Order Summary / Customer / Delivery / Status -->
     <div class="order-accordion">
+
       <!-- ============ ORDER SUMMARY ============ -->
       <div class="acc-card" [class.open]="openSections.summary">
-        <button
-          type="button"
-          class="acc-head"
-          (click)="toggleSection('summary')"
-        >
+        <button type="button" class="acc-head"
+                [attr.aria-expanded]="openSections.summary"
+                (click)="toggleSection('summary')">
           <div class="acc-head-left">
             <span class="acc-badge cart">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <circle cx="9" cy="21" r="1" />
-                <circle cx="20" cy="21" r="1" />
-                <path
-                  d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
-                />
-              </svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
             </span>
             <span class="acc-title-group">
               <span class="acc-title">Order Summary</span>
-              <span class="acc-subtitle"
-                >{{ order.items?.length || 0 }} Item{{
-                  (order.items?.length || 0) === 1 ? "" : "s"
-                }}</span
-              >
+              <span class="acc-subtitle">{{ order.items?.length || 0 }} Item{{ (order.items?.length || 0) === 1 ? '' : 's' }}</span>
             </span>
           </div>
           <div class="acc-head-right">
-            <span class="acc-amount">₹{{ order.tot_order_value }}</span>
-            <svg
-              class="acc-chevron"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
+            <span class="acc-amount">₹{{ order.tot_order_value | number:'1.2-2' }}</span>
+            <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </button>
 
         <div class="acc-body">
           <div class="acc-body-inner">
-            <table class="items-table">
-              <thead>
-                <tr>
-                  <th style="width: 76px">Image</th>
-                  <th>Item Name</th>
-                  <th style="width: 80px">Qty</th>
-                  <th style="width: 120px">Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of order.items; trackBy: trackByItem">
-                  <td>
-                    <img
-                      class="item-img"
-                      [src]="
-                        buildImageUrl(
-                          item.image_url,
-                          item.inv_id,
-                          item.isService
-                        ) || 'assets/placeholder-bike.svg'
-                      "
-                      [alt]="item.item_name"
-                    />
-                  </td>
-                  <td>{{ item.item_name }}</td>
-                  <td>{{ item.qty }}</td>
-                  <td>
-                    <ng-container
-                      *ngIf="
-                        item.offerPrice && item.offerPrice > 0;
-                        else normalPrice
-                      "
-                    >
-                      <span class="seller-price"
-                        >₹{{ item.sellerPrice | number: "1.2-2" }}</span
-                      >
-                      <span class="offer-price"
-                        >₹{{ item.offerPrice | number: "1.2-2" }}</span
-                      >
-                    </ng-container>
-                    <ng-template #normalPrice>
-                      ₹{{ item.sellerPrice | number: "1.2-2" }}
-                    </ng-template>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <div class="acc-total-row">
-              <span>Total Value</span>
-              <span>₹{{ order.tot_order_value }}</span>
+            <div class="acc-body-content">
+              <table class="items-table">
+                <thead>
+                  <tr>
+                    <th style="width:76px;">Image</th>
+                    <th>Item Name</th>
+                    <th style="width:80px;">Qty</th>
+                    <th style="width:120px;">Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of order.items; trackBy: trackByItem">
+                    <td>
+                    <img class="item-img"
+                      [src]="(itemImg$(item) | async) || fallbackImg"
+                      (error)="onImgError($event)"
+                      [alt]="item.item_name" />
+                    </td>
+                    <td>{{ item.item_name }}</td>
+                    <td>{{ item.qty }}</td>
+                    <td>
+                      <ng-container *ngIf="item.offerPrice && item.offerPrice > 0; else normalPrice">
+                        <span class="seller-price">₹{{ item.sellerPrice ?? item.price | number:'1.2-2' }}</span>
+                        <span class="offer-price">₹{{ item.offerPrice | number:'1.2-2' }}</span>
+                      </ng-container>
+                      <ng-template #normalPrice>
+                        ₹{{ item.sellerPrice ?? item.price | number:'1.2-2' }}
+                      </ng-template>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+ 
+            <div class="acc-total-row fee-row">
+              <span>Delivery Fee</span>
+              <span [class.free]="vm.deliveryFee === 0">
+                {{ vm.deliveryFee > 0 ? '₹' + (vm.deliveryFee | number:'1.2-2') : 'FREE' }}
+              </span>
             </div>
 
-            <table
-              class="order-table"
-              *ngIf="
-                (order.rewardsDTO?.RewardPoints ?? 0) > 0 ||
-                (order.rewardsDTO?.RedeemPoints ?? 0) > 0
-              "
-            >
-              <tr *ngIf="(order.rewardsDTO?.RewardPoints ?? 0) > 0">
-                <th>Rewards Earned</th>
-                <td>{{ order.rewardsDTO?.RewardPoints }}</td>
-              </tr>
-              <tr *ngIf="(order.rewardsDTO?.RedeemPoints ?? 0) > 0">
-                <th>Rewards Redeemed</th>
-                <td>{{ order.rewardsDTO?.RedeemPoints }}</td>
-              </tr>
-            </table>
+              <!-- Total Value: strike out MRP total when an offer applies -->
+              <div class="acc-total-row">
+                <span class="reward-label" >Value</span>
+                <span class="total-amounts">
+                  <ng-container *ngIf="vm.hasOffer; else plainTotal">
+                    <span class="seller-price">₹{{ vm.totalMrp | number:'1.2-2' }}</span>
+                    <span class="offer-price">₹{{ vm.totalOffer | number:'1.2-2' }}</span>
+                  </ng-container>
+                  <ng-template #plainTotal>₹{{ vm.totalMrp | number:'1.2-2' }}</ng-template>
+                </span>
+              </div>
+
+              <!-- Rewards: label far left, value far right -->
+              <div class="rewards-block"
+                   *ngIf="(order.rewardsDTO?.RewardPoints ?? 0) > 0 || (order.rewardsDTO?.RedeemPoints ?? 0) > 0">
+                <div class="reward-row" *ngIf="(order.rewardsDTO?.RewardPoints ?? 0) > 0">
+                  <span class="reward-label">Rewards Earned Points</span>
+                  <span class="reward-value">{{ order.rewardsDTO?.RewardPoints }}</span>
+                </div>
+                <div class="reward-row" *ngIf="(order.rewardsDTO?.RedeemPoints ?? 0) > 0">
+                  <span class="reward-label">Rewards Redeemed Points</span>
+                  <span class="reward-value">{{ order.rewardsDTO?.RedeemPoints }}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- ============ CUSTOMER INFORMATION ============ -->
       <div class="acc-card" [class.open]="openSections.customer">
-        <button
-          type="button"
-          class="acc-head"
-          (click)="toggleSection('customer')"
-        >
+        <button type="button" class="acc-head"
+                [attr.aria-expanded]="openSections.customer"
+                (click)="toggleSection('customer')">
           <div class="acc-head-left">
             <span class="acc-badge num">1</span>
             <span class="acc-title-group">
@@ -176,47 +138,28 @@
             </span>
           </div>
           <div class="acc-head-right">
-            <svg
-              class="acc-chevron"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
+            <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </button>
 
         <div class="acc-body">
           <div class="acc-body-inner">
-            <table class="info-table compact">
-              <tr>
-                <th>Name</th>
-                <td>{{ order.customer?.name || "—" }}</td>
-              </tr>
-              <tr>
-                <th>Email</th>
-                <td>{{ order.customer?.email || "—" }}</td>
-              </tr>
-              <tr>
-                <th>Phone</th>
-                <td>{{ order.customer?.phone || "—" }}</td>
-              </tr>
-            </table>
+            <div class="acc-body-content">
+              <table class="info-table compact">
+                <tr><th>Name</th>  <td>{{ order.customer?.name  || '—' }}</td></tr>
+                <tr><th>Email</th> <td>{{ order.customer?.email || '—' }}</td></tr>
+                <tr><th>Phone</th> <td>{{ order.customer?.phone || '—' }}</td></tr>
+              </table>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- ============ DELIVERY INFORMATION ============ -->
       <div class="acc-card" [class.open]="openSections.delivery">
-        <button
-          type="button"
-          class="acc-head"
-          (click)="toggleSection('delivery')"
-        >
+        <button type="button" class="acc-head"
+                [attr.aria-expanded]="openSections.delivery"
+                (click)="toggleSection('delivery')">
           <div class="acc-head-left">
             <span class="acc-badge num">2</span>
             <span class="acc-title-group">
@@ -224,47 +167,28 @@
             </span>
           </div>
           <div class="acc-head-right">
-            <svg
-              class="acc-chevron"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
+            <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </button>
 
         <div class="acc-body">
           <div class="acc-body-inner">
-            <table class="info-table compact">
-              <tr>
-                <th>Delivery Address</th>
-                <td>{{ order.delivery?.address || "—" }}</td>
-              </tr>
-              <tr>
-                <th>City</th>
-                <td>{{ order.delivery?.city || "—" }}</td>
-              </tr>
-              <tr>
-                <th>Expected Delivery</th>
-                <td>{{ order.delivery?.expected_date || "—" }}</td>
-              </tr>
-            </table>
+            <div class="acc-body-content">
+              <table class="info-table compact">
+                <tr><th>Delivery Address</th>  <td>{{ order.delivery?.address       || '—' }}</td></tr>
+                <tr><th>City</th>              <td>{{ order.delivery?.city          || '—' }}</td></tr>
+                <tr><th>Expected Delivery</th> <td>{{ order.delivery?.expected_date || '—' }}</td></tr>
+              </table>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- ============ STATUS ============ -->
       <div class="acc-card" [class.open]="openSections.status">
-        <button
-          type="button"
-          class="acc-head"
-          (click)="toggleSection('status')"
-        >
+        <button type="button" class="acc-head"
+                [attr.aria-expanded]="openSections.status"
+                (click)="toggleSection('status')">
           <div class="acc-head-left">
             <span class="acc-badge num">3</span>
             <span class="acc-title-group">
@@ -272,57 +196,46 @@
             </span>
           </div>
           <div class="acc-head-right">
-            <svg
-              class="acc-chevron"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
+            <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </button>
 
         <div class="acc-body">
           <div class="acc-body-inner">
-            <table class="info-table compact">
-              <tr>
-                <th>Status</th>
-                <td>{{ displayOrderStatus(order.order_status) }}</td>
-              </tr>
-              <tr *ngIf="order.payment?.status">
-                <th>Payment Status</th>
-                <td>
-                  <span
-                    class="payment-info"
-                    [class.paid]="order.payment?.status === 'Paid'"
-                    [class.unpaid]="
-                      order.payment?.status?.toLowerCase() === 'unpaid'
-                    "
-                  >
-                    {{ displayPaymentStatus(order.payment?.status) }}
-                  </span>
-                </td>
-              </tr>
-              <tr *ngIf="order.payment?.date">
-                <th>Payment Date</th>
-                <td>{{ order.payment?.date | date: "dd-MM-yyyy" }}</td>
-              </tr>
-            </table>
+            <div class="acc-body-content">
+              <table class="info-table compact">
+                <tr>
+                  <th>Status</th>
+                  <td>{{ displayOrderStatus(order.order_status) }}</td>
+                </tr>
+                <tr *ngIf="order.payment?.status">
+                  <th>Payment Status</th>
+                  <td>
+                    <span class="payment-info"
+                          [class.paid]="order.payment?.status === 'Paid'"
+                          [class.unpaid]="order.payment?.status?.toLowerCase() === 'unpaid'">
+                      {{ displayPaymentStatus(order.payment?.status) }}
+                    </span>
+                  </td>
+                </tr>
+                <tr *ngIf="order.payment?.date">
+                  <th>Order Date</th>
+                  <td>{{ order.payment?.date | date:'dd-MM-yyyy' }}</td>
+                </tr>
+              </table>
+            </div>
           </div>
         </div>
       </div>
+
     </div>
     <!-- Footer -->
-    <div class="checkout-footer">
-      <a (click)="openInNewTab('data-protection')">Data Protection</a>
-      <a (click)="openInNewTab('contact-us')">Contact Us</a>
-      <a (click)="openInNewTab('refund-policy')">Refund Policy</a>
-      <a (click)="openInNewTab('shipping-policy')">Shipping Policy</a>
-    </div>
+    <!-- <div class="checkout-footer">
+      <a role="link" tabindex="0" (click)="openInNewTab('data-protection')" (keydown.enter)="openInNewTab('data-protection')">Data Protection</a>
+      <a role="link" tabindex="0" (click)="openInNewTab('contact-us')" (keydown.enter)="openInNewTab('contact-us')">Contact Us</a>
+      <a role="link" tabindex="0" (click)="openInNewTab('refund-policy')" (keydown.enter)="openInNewTab('refund-policy')">Refund Policy</a>
+      <a role="link" tabindex="0" (click)="openInNewTab('shipping-policy')" (keydown.enter)="openInNewTab('shipping-policy')">Shipping Policy</a>
+    </div> -->
   </ng-container>
 </div>
 

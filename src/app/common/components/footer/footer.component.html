@@ -162,28 +162,36 @@
  
          
       <div class="footer-links-inline">
-        <a (click)="openInNewTab('terms-of-service')">
+        <a [href]="legalBase + '/terms-of-service'" target="_blank" rel="noopener">
           Terms of Service
         </a>
 
-        <a (click)="openInNewTab('privacy-policy')">
+        <a [href]="legalBase + '/privacy-policy'" target="_blank" rel="noopener">
           Privacy Policy
         </a>
 
-        <a (click)="openInNewTab('data-protection')">
+        <a [href]="legalBase + '/data-protection'" target="_blank" rel="noopener">
           Data Protection
         </a>
 
-        <a (click)="openInNewTab('contact-us')">
+        <a [href]="legalBase + '/contact-us'" target="_blank" rel="noopener">
           Contact Us
         </a>
 
-        <a (click)="openInNewTab('refund-policy')">
+        <a [href]="legalBase + '/refund-policy'" target="_blank" rel="noopener">
           Refund Policy
         </a>
 
-        <a (click)="openInNewTab('shipping-policy')">
+        <a [href]="legalBase + '/shipping-policy'" target="_blank" rel="noopener">
           Shipping Policy
+        </a>
+
+        <a [href]="legalBase + '/about-us'" target="_blank" rel="noopener">
+          About Us
+        </a>
+
+        <a href="https://razorpay.com/" target="_blank" rel="noopener">
+          Payment powered by Razorpay
         </a>
       </div>
  

@@ -335,16 +335,62 @@ export class CustomerInformationComponent {
     });
 
     this.checkoutValidationService.registerForm("customer", this.customerForm);
-
     const saved = sessionStorage.getItem("customer_form");
 
     if (saved) {
       this.customerForm.patchValue(JSON.parse(saved));
+      const p = this.customerForm.get("phone");
+      p?.setValue(this.normalizePhone(p.value), { emitEvent: false });
+
+      // restore delivery/pickup choice
+      this.selectedMode =
+        this.customerForm.get("deliveryMode")?.value === "PICKUP"
+          ? "PICKUP"
+          : "DELIVERY";
+
+      // pickup doesn't need the address fields
+      if (this.selectedMode === "PICKUP") {
+        this.clearAddressValidators();
+      }
     } else {
       this.loadUserLastDeliveryAddress();
     }
 
+    // tell the order summary / total which mode is active
+    this.checkoutValidationService.setDeliveryMode(this.selectedMode);
+
     this.loadAddresses();
+  }
+
+  // ── Phone helpers ────────────────────────────────────────────────
+
+  /** Keep digits only, then drop leading zeros */
+  /** Digits only, drop +91 / leading zeros, max 10 digits */
+  private normalizePhone(value: unknown): string {
+    let digits = String(value ?? "").replace(/\D/g, "");
+
+    if (digits.length === 12 && digits.startsWith("91")) {
+      digits = digits.slice(2); // +91XXXXXXXXXX -> XXXXXXXXXX
+    }
+
+    return digits.replace(/^0+/, "").slice(0, 10);
+  }
+
+  /** Block non-digits while typing or pasting */
+  onPhoneInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const cleaned = this.normalizePhone(input.value);
+
+    if (input.value !== cleaned) {
+      input.value = cleaned;
+    }
+    this.customerForm.get("phone")?.setValue(cleaned);
+  }
+  /** Strip leading 0 on blur */
+  onPhoneBlur(): void {
+    const control = this.customerForm.get("phone");
+    control?.setValue(this.normalizePhone(control.value));
+    control?.markAsTouched();
   }
 
   // private loadUserLastDeliveryAddress(): void {
@@ -385,7 +431,9 @@ export class CustomerInformationComponent {
 
       email: this.customerForm.get("email")?.value || user.email || "",
 
-      phone: this.customerForm.get("phone")?.value || user.phone || "",
+      phone:
+        this.customerForm.get("phone")?.value ||
+        this.normalizePhone(user.phone),
     });
 
     const hasAddress =
@@ -415,13 +463,17 @@ export class CustomerInformationComponent {
   private loadAddresses(): void {
     this.chottaService.getOrders().subscribe({
       next: (list) => {
-        console.log("Address res-> ", list);
         this.deliveryList = list.filter((x) => x.addressType === "DELIVERY");
-
         this.pickupList = list.filter((x) => x.addressType === "PICKUP");
 
-        this.selectedMode = "DELIVERY";
+        // restored PICKUP: use the pickup point, don't touch the delivery address
+        if (this.selectedMode === "PICKUP") {
+          this.selectedOrder = this.pickupList[0];
+          this.updateSelectedAddressLabel();
+          return;
+        }
 
+        // DELIVERY (default)
         this.selectedOrder =
           this.deliveryList.find(
             (x) => x.default === true || x.default === "true",
@@ -437,6 +489,7 @@ export class CustomerInformationComponent {
   }
 
   onModeChange(): void {
+    this.checkoutValidationService.setDeliveryMode(this.selectedMode);
     if (this.selectedMode === "DELIVERY") {
       this.selectedOrder =
         this.deliveryList.find(
@@ -531,15 +584,12 @@ export class CustomerInformationComponent {
   }
   clearCustomerForm(): void {
     sessionStorage.removeItem("customer_form");
-
     this.customerForm.reset({
-      country: "India",
-      saveForFuture: false,
-      billingSameAsShipping: true,
-      deliveryMode: "DELIVERY",
-      selectedAddressLabel: "",
+      /* ...existing... */
     });
-
+    this.selectedMode = "DELIVERY";
+    this.checkoutValidationService.setDeliveryMode("DELIVERY");
+    this.enableAddressValidators();
     this.filledFromUserAddress = false;
   }
 
