@@ -1,21 +1,18 @@
 // ============================================================
 // login.component.ts
 // src/app/pages/login/login.component.ts
-//
-// CHANGES FROM ORIGINAL:
-//   1. SampleUser now includes role ('USER' | 'ADMIN')
-//   2. AuthUser built from found user includes role
-//   3. login() clears loginError before each attempt
-//   4. login() reads returnUrl from query params and navigates there
-//   5. selectSampleUser() also honours returnUrl
-//   6. ActivatedRoute injected via inject() (consistent with existing style)
 // ============================================================
 
 import { CommonModule } from "@angular/common";
-import { inject } from "@angular/core";
-import { ChangeDetectionStrategy, Component, OnDestroy } from "@angular/core";
 import {
-  AbstractControl,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  inject,
+} from "@angular/core";
+import {
   FormBuilder,
   FormGroup,
   FormsModule,
@@ -27,11 +24,10 @@ import { AuthService, AuthUser } from "../../../core/auth/auth.service";
 import { AuthApiService } from "../../../core/auth/auth-api.service";
 import { HttpErrorResponse } from "@angular/common/http";
 
-import { ChangeDetectorRef } from "@angular/core";
 import { SellerService } from "../../services/SellerService";
 import { INPUT_LENGTH } from "../../utils/input-length.config";
 
-// [UPDATED] SampleUser now carries role, matching the updated AuthUser interface
+// SampleUser carries role, matching the AuthUser interface
 type SampleUser = AuthUser & { password: string };
 
 @Component({
@@ -42,7 +38,7 @@ type SampleUser = AuthUser & { password: string };
   styleUrls: ["./login.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent implements OnDestroy {
+export class LoginComponent implements OnInit, OnDestroy {
   activeTab: "login" | "signup" = "login";
 
   loginForm!: FormGroup;
@@ -82,85 +78,14 @@ export class LoginComponent implements OnDestroy {
   attempt = 1;
   isVerifyingOtp = false;
 
-  // isSendingOtp = false;
-  // isVerifyingOtp = false;
-
   signupOtpSuccess: string | null = null;
   signupOtpError: string | null = null;
 
-  // ── Forgot-password OTP expiry countdown ─────────────────────────────────
-  // GenerateOtp does not return an expiry, so the UI uses a fixed window.
-  readonly OTP_EXPIRY_SECONDS = 10 * 60;
-  otpSecondsLeft = 0;
-  otpExpired = false;
-  private otpExpiresAt = 0;
-  private otpTimerId: ReturnType<typeof setInterval> | null = null;
-
-  get otpTimerRunning(): boolean {
-    return this.otpSent && !this.otpExpired && this.otpSecondsLeft > 0;
-  }
-
-  get otpCountdown(): string {
-    const mm = Math.floor(this.otpSecondsLeft / 60);
-    const ss = this.otpSecondsLeft % 60;
-    return `${String(mm).padStart(2, "0")}:${String(ss).padStart(2, "0")}`;
-  }
-
-  // Basic validation only: both filled, length >= 6, and matching.
-  get canUpdatePassword(): boolean {
-    return (
-      !!this.newPassword &&
-      !!this.confirmPassword &&
-      this.newPassword.length >= 6 &&
-      this.newPassword === this.confirmPassword
-    );
-  }
-
-  private startOtpTimer(): void {
-    this.stopOtpTimer();
-    this.otpExpired = false;
-    this.otpExpiresAt = Date.now() + this.OTP_EXPIRY_SECONDS * 1000;
-    this.otpSecondsLeft = this.OTP_EXPIRY_SECONDS;
-
-    this.otpTimerId = setInterval(() => {
-      this.otpSecondsLeft = Math.max(
-        0,
-        Math.ceil((this.otpExpiresAt - Date.now()) / 1000),
-      );
-
-      if (this.otpSecondsLeft === 0) {
-        this.onOtpExpired();
-      }
-
-      this.cdr.detectChanges();
-    }, 1000);
-  }
-
-  private stopOtpTimer(): void {
-    if (this.otpTimerId) {
-      clearInterval(this.otpTimerId);
-      this.otpTimerId = null;
-    }
-  }
-
-  private onOtpExpired(): void {
-    this.stopOtpTimer();
-    this.otpExpired = true;
-    this.otpVerified = false;
-    this.otp = "";
-    this.forgotSuccess = null;
-    this.forgotError = "OTP expired. Please request a new OTP.";
-  }
-
-  private resetOtpTimer(): void {
-    this.stopOtpTimer();
-    this.otpSecondsLeft = 0;
-    this.otpExpired = false;
-  }
-
-  ngOnDestroy(): void {
-    this.stopOtpTimer();
-  }
+  // ── Extra state used by the HTML template ─────────────────────────────────
+  loginSuccess: string | null = null;
+  isLoggingIn = false;
+  isRegistering = false;
+  isResetting = false;
 
   showForgotPassword(): void {
     this.forgotPasswordMode = true;
@@ -168,33 +93,22 @@ export class LoginComponent implements OnDestroy {
     this.otpSent = false;
     this.otpVerified = false;
 
-    // this.forgotEmail = "";
-    this.forgotMobile = "";
+    this.forgotEmail = "";
     this.otp = "";
 
     this.newPassword = "";
     this.confirmPassword = "";
 
     this.forgotError = null;
-
-    this.resetOtpTimer();
   }
 
   private auth = inject(AuthService);
   private authApi = inject(AuthApiService);
   private router = inject(Router);
   private sellerService = inject(SellerService);
-
-  // [ADDED] Injected via inject() to match the existing style of this component.
-  // Using snapshot.queryParamMap inside login() — no subscription needed.
   private route = inject(ActivatedRoute);
 
-  // [UPDATED] role added to every sample user.
-  // buyer → USER role (standard customer access)
-  // seller → ADMIN role (seller dashboard access)
-  //
-  // In a real system, role comes from the API response, not from this array.
-  // This array is MOCK ONLY and will be deleted when the backend is integrated.
+  // MOCK ONLY - will be deleted when the backend is integrated.
   sampleUsers: SampleUser[] = [
     {
       firstName: "Yogesh",
@@ -254,15 +168,14 @@ export class LoginComponent implements OnDestroy {
 
     this.registerForm = this.fb.group({
       firstName: ["", [Validators.required, Validators.minLength(4)]],
-      // lastName: ["", [Validators.required, Validators.minLength(4)]],
-      // email: ["", [Validators.email]],
+      email: ["", [Validators.required, Validators.email]],
       phone: ["", [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       password: ["", [Validators.required, Validators.minLength(6)]],
       confirmPassword: ["", [Validators.required]],
     });
   }
 
-  // ── Form control getters ──────────────────────────────────────────────────
+  // ── Password strength (signup) ────────────────────────────────────────────
 
   passwordStrong = false;
 
@@ -312,11 +225,20 @@ export class LoginComponent implements OnDestroy {
     }
   }
 
+  // ── Password strength (forgot / new password) ─────────────────────────────
+
   newPasswordStrong = false;
 
   newPasswordStrengthPercent = 0;
 
   newPasswordStrengthText = "Weak";
+
+  newPasswordRules = {
+    length: false,
+    number: false,
+    upper: false,
+    special: false,
+  };
 
   checkNewPasswordStrength() {
     const password = this.newPassword || "";
@@ -329,6 +251,13 @@ export class LoginComponent implements OnDestroy {
 
     const specialCount = (password.match(/[!@#$%^&*(),.?":{}|<>]/g) || [])
       .length;
+
+    this.newPasswordRules = {
+      length: hasLength,
+      number: hasNumber,
+      upper: capitalCount >= 2,
+      special: specialCount >= 2,
+    };
 
     let score = 0;
 
@@ -353,6 +282,8 @@ export class LoginComponent implements OnDestroy {
     this.newPasswordStrong =
       hasLength && hasNumber && capitalCount >= 2 && specialCount >= 2;
   }
+
+  // ── Form control getters ──────────────────────────────────────────────────
 
   get identifier() {
     return this.loginForm.get("identifier");
@@ -392,7 +323,7 @@ export class LoginComponent implements OnDestroy {
     this.activeTab = tab;
     this.forgotPasswordMode = false;
 
-    // ── Reset all error/success messages ─────────────────────────────
+    // Reset all error/success messages
     this.loginError = null;
 
     this.forgotError = null;
@@ -401,7 +332,7 @@ export class LoginComponent implements OnDestroy {
     this.signupOtpError = null;
     this.signupOtpSuccess = null;
 
-    // ── Reset OTP states ─────────────────────────────────────────────
+    // Reset OTP states
     this.signupOtpSent = false;
     this.signupOtpVerified = false;
     this.signupOtp = "";
@@ -411,23 +342,30 @@ export class LoginComponent implements OnDestroy {
     this.otpVerified = false;
     this.otp = "";
     this.attempt = 1;
-    this.resetOtpTimer();
 
-    // ── Reset loading states ─────────────────────────────────────────
+    this.stopResendTimer();
+
+    // Reset loading states
     this.isSendingOtp = false;
     this.isVerifyingOtp = false;
 
-    // ── Reset forgot-password fields ─────────────────────────────────
+    // Reset forgot-password fields
     this.forgotMobile = "";
     this.newPassword = "";
     this.confirmPassword = "";
 
-    // ── Reset password strength ──────────────────────────────────────
+    // Reset password strength
     this.newPasswordStrong = false;
     this.newPasswordStrengthPercent = 0;
     this.newPasswordStrengthText = "Weak";
+    this.newPasswordRules = {
+      length: false,
+      number: false,
+      upper: false,
+      special: false,
+    };
 
-    // ── Reset signup password strength ───────────────────────────────
+    // Reset signup password strength
     this.passwordStrong = false;
     this.passwordStrengthPercent = 0;
     this.passwordStrengthText = "Weak";
@@ -445,14 +383,9 @@ export class LoginComponent implements OnDestroy {
   }
 
   // ── Private helper: returnUrl ─────────────────────────────────────────────
-  //
-  // [ADDED] Reads the returnUrl query param that the auth guard appends when
-  // redirecting an unauthenticated user to /login.
-  //
-  // Example URL the guard produces:
+  // Reads the returnUrl query param the auth guard appends, e.g.
   //   /login?returnUrl=%2Fprofile
-  //
-  // Falls back to '/' if no returnUrl is present (direct navigation to /login).
+  // Falls back to '/' when not present.
 
   private getReturnUrl(): string {
     return this.route.snapshot.queryParamMap.get("returnUrl") ?? "/";
@@ -485,18 +418,13 @@ export class LoginComponent implements OnDestroy {
         }
       }
     });
-
-    // this.registerForm.get("confirmPassword")?.valueChanges.subscribe(() => {
-    //   const password = this.registerForm.get("password")?.value;
-    //   const confirm = this.registerForm.get("confirmPassword")?.value;
-
-    //   if (confirm && password !== confirm) {
-    //     this.registerForm.get("confirmPassword")?.setErrors({ mismatch: true });
-    //   } else {
-    //     this.registerForm.get("confirmPassword")?.setErrors(null);
-    //   }
-    // });
   }
+
+  ngOnDestroy(): void {
+    this.stopResendTimer();
+  }
+
+  // ── Login ─────────────────────────────────────────────────────────────────
 
   login(): void {
     this.auth.logout();
@@ -508,14 +436,17 @@ export class LoginComponent implements OnDestroy {
     }
 
     const payload = {
-      identifier: this.normalizeMobile(this.loginForm.get("identifier")?.value),
+      identifier: String(this.loginForm.get("identifier")?.value ?? "").trim(),
       password: this.loginForm.get("password")?.value,
-      sellerid: this.sellerService.getSellerId(),
+      // sellerid: this.sellerService.getSellerId(),
     };
+
+    this.isLoggingIn = true;
 
     this.authApi.login(payload).subscribe({
       next: (res) => {
         console.log("Login Response:", res);
+        this.isLoggingIn = false;
 
         if (!res?.success) {
           this.loginError = res?.message || "Login failed";
@@ -526,6 +457,7 @@ export class LoginComponent implements OnDestroy {
 
         if (!res?.user) {
           this.loginError = "User not found";
+          this.cdr.detectChanges();
           return;
         }
 
@@ -537,7 +469,7 @@ export class LoginComponent implements OnDestroy {
           phone: res.user.mobileNum,
           type: res.user.type,
           role: res.user.role,
-
+          isSeller: res.user.isSeller,
           lastDeliveryAddesses: res.user.lastDeliveryAddesses,
           reward: res.user.reward,
           lastEarned: res.user.lastEarned,
@@ -557,11 +489,13 @@ export class LoginComponent implements OnDestroy {
 
       error: (err: HttpErrorResponse) => {
         console.error("Login Error:", err);
-        this.cdr.detectChanges();
+        this.isLoggingIn = false;
         this.loginError = this.getErrorMessage(err);
+        this.cdr.detectChanges();
       },
     });
   }
+
   private getErrorMessage(err: any): string {
     return (
       err?.error?.message ||
@@ -569,6 +503,8 @@ export class LoginComponent implements OnDestroy {
       "Something went wrong. Please try again."
     );
   }
+
+  // ── Register ──────────────────────────────────────────────────────────────
 
   register(): void {
     this.auth.logout();
@@ -592,35 +528,29 @@ export class LoginComponent implements OnDestroy {
     const payload = {
       firstName: form.firstName.trim(),
       lastName: "",
-      email: "",
-      mobileNum: this.normalizeMobile(form.phone),
+      email: String(form.email ?? "")
+        .trim()
+        .toLowerCase(),
+      mobileNum: String(form.phone ?? "").trim(),
       password: String(form.password ?? "").trim(),
-      sellerid: this.sellerService.getSellerId(),
-      companyname: this.sellerService.getCompanyName(),
+      // sellerid: this.sellerService.getSellerId() ?? null,
+      // companyname: this.sellerService.getCompanyName(),
     };
 
     console.log("Signup Payload:", payload);
 
+    this.isRegistering = true;
+
     this.authApi.signup(payload).subscribe({
       next: (res) => {
         console.log("Signup Response:", res);
+        this.isRegistering = false;
 
         if (!res.success || !res.user) {
           this.loginError = res.message || "Signup failed";
           this.cdr.detectChanges();
           return;
         }
-
-        // Build AuthUser
-        // const user: AuthUser = {
-        //   id: res.user.id,
-        //   firstName: res.user.firstName,
-        //   lastName: res.user.lastName,
-        //   email: res.user.email,
-        //   phone: res.user.mobileNum,
-        //   type: res.user.type,
-        //   role: res.user.role,
-        // };
 
         const user: AuthUser = {
           id: res.user.id,
@@ -650,366 +580,37 @@ export class LoginComponent implements OnDestroy {
       },
 
       error: (err: HttpErrorResponse) => {
-        console.error("Login Error:", err);
-        this.cdr.detectChanges();
+        console.error("Signup Error:", err);
+        this.isRegistering = false;
         this.loginError = this.getErrorMessage(err);
+        this.cdr.detectChanges();
       },
     });
   }
 
-  // ── Mobile number helpers ────────────────────────────────────────────────
-
-  /** Keep digits only, then drop leading zeros */
-  private normalizeMobile(value: unknown): string {
-    return String(value ?? "")
-      .replace(/\D/g, "")
-      .replace(/^0+/, "");
-  }
-
-  /** Reactive-form fields: block non-digits while typing or pasting */
-  onMobileInput(event: Event, control: AbstractControl | null): void {
-    const input = event.target as HTMLInputElement;
-    const digitsOnly = input.value.replace(/\D/g, "");
-    if (input.value !== digitsOnly) {
-      input.value = digitsOnly;
-    }
-    control?.setValue(digitsOnly);
-  }
-
-  /** Reactive-form fields: strip leading 0 on blur */
-  onMobileBlur(control: AbstractControl | null): void {
-    control?.setValue(this.normalizeMobile(control.value));
-  }
-
-  /** Forgot-password field (ngModel) */
-  onForgotMobileInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const digitsOnly = input.value.replace(/\D/g, "");
-    input.value = digitsOnly;
-    this.forgotMobile = digitsOnly;
-  }
-
-  onForgotMobileBlur(): void {
-    this.forgotMobile = this.normalizeMobile(this.forgotMobile);
-  }
-
-  // generateOtp(): void {
-  //   this.forgotError = null;
-
-  //   if (!this.forgotEmail) {
-  //     this.forgotError = "Enter email";
-  //     return;
-  //   }
-  //   this.isSendingOtp = true;
-  //   this.authApi
-  //     .generateOtp({
-  //       email: this.forgotEmail,
-  //     })
-  //     .subscribe({
-  //       next: (res) => {
-  //         console.log("Generate OTP res--> ", res);
-
-  //         if (res === "OTP SENT") {
-  //           this.otpSent = true;
-  //           this.forgotSuccess = "OTP sent successfully";
-  //         } else {
-  //           this.forgotError = res;
-  //         }
-  //         this.isSendingOtp = false;
-  //         this.cdr.detectChanges();
-  //       },
-
-  //       error: () => {
-  //         this.forgotError = "Failed to send OTP";
-  //         this.isSendingOtp = false;
-  //         this.cdr.detectChanges();
-  //       },
-  //     });
-  // }
-  // generateOtp(): void {
-  //   this.signupOtpError = null;
-  //   this.signupOtpSuccess = null;
-
-  //   // const email = this.registerForm.get("email")?.value?.trim();
-
-  //   // if (!email) {
-  //   //   this.signupOtpError = "Enter email";
-  //   //   return;
-  //   // }
-
-  //   // if (this.rEmail?.invalid) {
-  //   //   this.signupOtpError = "Enter a valid email";
-  //   //   return;
-  //   // }
-
-  //   this.isSendingOtp = true;
-
-  //   this.authApi.generateOtp({ email: null }).subscribe({
-  //     next: (res) => {
-  //       console.log("OTP res-> ", res);
-  //       this.isSendingOtp = false;
-
-  //       if (res === "OTP SENT") {
-  //         this.signupOtpSent = true;
-  //         this.signupOtpVerified = false;
-  //         this.signupOtp = "";
-
-  //         this.signupOtpSuccess = "OTP sent successfully";
-  //       } else {
-  //         this.signupOtpError = res;
-  //       }
-
-  //       this.cdr.detectChanges();
-  //     },
-
-  //     error: () => {
-  //       this.isSendingOtp = false;
-  //       this.signupOtpError = "Failed to send OTP";
-  //       this.cdr.detectChanges();
-  //     },
-  //   });
-  // }
-
-  // generateForgotOtp(): void {
-  //   this.forgotError = null;
-  //   this.forgotSuccess = null;
-
-  //   if (!this.forgotEmail) {
-  //     this.forgotError = "Enter email";
-  //     return;
-  //   }
-
-  //   this.isSendingOtp = true;
-
-  //   this.authApi
-  //     .generateOtp({
-  //       email: this.forgotEmail.trim(),
-  //     })
-  //     .subscribe({
-  //       next: (res) => {
-  //         this.isSendingOtp = false;
-
-  //         if (res === "OTP SENT") {
-  //           this.otpSent = true;
-  //           this.otpVerified = false;
-  //           this.otp = "";
-
-  //           this.forgotSuccess = "OTP sent successfully";
-  //         } else {
-  //           this.forgotError = res;
-  //         }
-
-  //         this.cdr.detectChanges();
-  //       },
-
-  //       error: () => {
-  //         this.isSendingOtp = false;
-  //         this.forgotError = "Failed to send OTP";
-  //         this.cdr.detectChanges();
-  //       },
-  //     });
-  // }
-
-  // attempt = 1;
-  // isVerifyingOtp = false;
-  // // verifyOtp(): void {
-  // //   this.isVerifyingOtp = true;
-  // //   this.authApi
-  // //     .validateOtp({
-  // //       email: this.forgotEmail,
-  // //       otp: this.otp,
-  // //       attempt: this.attempt,
-  // //     })
-  // //     .subscribe({
-  // //       next: (valid) => {
-  // //         if (valid) {
-  // //           this.authApi
-  // //             .deleteOtp({
-  // //               email: this.forgotEmail,
-  // //               otp: this.otp,
-  // //             })
-  // //             .subscribe();
-
-  // //           this.otpVerified = true;
-
-  // //           this.forgotSuccess = "OTP verified";
-  // //         } else {
-  // //           this.attempt++;
-
-  // //           this.forgotError = "Invalid OTP";
-  // //         }
-  // //         this.isVerifyingOtp = false;
-  // //         this.cdr.detectChanges();
-  // //       },
-
-  // //       error: () => {
-  // //         this.forgotError = "OTP validation failed";
-  // //         this.isVerifyingOtp = false;
-  // //         this.cdr.detectChanges();
-  // //       },
-  // //     });
-  // // }
-
-  // verifyOtp(): void {
-  //   this.signupOtpError = null;
-  //   this.signupOtpSuccess = null;
-
-  //   const email = this.registerForm.get("email")?.value?.trim();
-
-  //   if (!this.signupOtp) {
-  //     this.signupOtpError = "Enter OTP";
-  //     return;
-  //   }
-
-  //   this.isVerifyingOtp = true;
-
-  //   this.authApi
-  //     .validateOtp({
-  //       email,
-  //       otp: this.signupOtp,
-  //       attempt: this.signupAttempt,
-  //     })
-  //     .subscribe({
-  //       next: (valid) => {
-  //         this.isVerifyingOtp = false;
-
-  //         if (valid) {
-  //           this.authApi
-  //             .deleteOtp({
-  //               email,
-  //               otp: this.signupOtp,
-  //             })
-  //             .subscribe();
-
-  //           this.signupOtpVerified = true;
-  //           this.signupOtpSent = false;
-
-  //           this.signupOtpSuccess = "OTP verified successfully";
-  //         } else {
-  //           this.signupAttempt++;
-  //           this.signupOtpError = "Invalid OTP";
-  //         }
-
-  //         this.cdr.detectChanges();
-  //       },
-
-  //       error: () => {
-  //         this.isVerifyingOtp = false;
-  //         this.signupOtpError = "OTP validation failed";
-  //         this.cdr.detectChanges();
-  //       },
-  //     });
-  // }
-
-  // verifyForgotOtp(): void {
-  //   this.forgotError = null;
-  //   this.forgotSuccess = null;
-
-  //   if (!this.otp) {
-  //     this.forgotError = "Enter OTP";
-  //     return;
-  //   }
-
-  //   this.isVerifyingOtp = true;
-
-  //   this.authApi
-  //     .validateOtp({
-  //       email: this.forgotEmail.trim(),
-  //       otp: this.otp,
-  //       attempt: this.attempt,
-  //     })
-  //     .subscribe({
-  //       next: (valid) => {
-  //         this.isVerifyingOtp = false;
-
-  //         if (valid) {
-  //           this.authApi
-  //             .deleteOtp({
-  //               email: this.forgotEmail.trim(),
-  //               otp: this.otp,
-  //             })
-  //             .subscribe();
-
-  //           this.otpVerified = true;
-  //           this.forgotSuccess = "OTP verified successfully";
-  //         } else {
-  //           this.attempt++;
-  //           this.forgotError = "Invalid OTP";
-  //         }
-
-  //         this.cdr.detectChanges();
-  //       },
-
-  //       error: () => {
-  //         this.isVerifyingOtp = false;
-  //         this.forgotError = "OTP validation failed";
-  //         this.cdr.detectChanges();
-  //       },
-  //     });
-  // }
-
-  // resetPassword(): void {
-  //   this.forgotError = null;
-
-  //   if (!this.newPassword) {
-  //     this.forgotError = "Enter new password";
-  //     return;
-  //   }
-
-  //   if (this.newPassword !== this.confirmPassword) {
-  //     this.forgotError = "Passwords do not match";
-  //     return;
-  //   }
-
-  //   this.authApi
-  //     .resetPassword({
-  //       email: this.forgotEmail,
-  //       password: this.newPassword,
-  //     })
-  //     .subscribe({
-  //       next: () => {
-  //         this.forgotSuccess = "Password updated successfully";
-
-  //         this.forgotPasswordMode = false;
-
-  //         this.activeTab = "login";
-  //         this.cdr.detectChanges();
-  //       },
-
-  //       error: () => {
-  //         this.forgotError = "Failed to update password";
-  //         this.cdr.detectChanges();
-  //       },
-  //     });
-  // }
-
-  // ── selectSampleUser() ────────────────────────────────────────────────────
-  //
-  // Quick-login shortcut used in development and demos.
-  // [UPDATED] Now also honours returnUrl so clicking a sample user card while
-  // on /login?returnUrl=%2Forder-history sends the user to /order-history.
+  // ── OTP: signup ───────────────────────────────────────────────────────────
 
   generateOtp(): void {
     this.signupOtpError = null;
     this.signupOtpSuccess = null;
 
-    const mobileNum = String(
-      this.registerForm.get("phone")?.value ?? "",
-    ).trim();
+    const email = String(this.registerForm.get("email")?.value ?? "")
+      .trim()
+      .toLowerCase();
 
-    if (!mobileNum) {
-      this.signupOtpError = "Enter mobile number";
+    if (!email) {
+      this.signupOtpError = "Enter email";
       return;
     }
 
-    if (!/^[0-9]{10}$/.test(mobileNum)) {
-      this.signupOtpError = "Enter a valid 10-digit mobile number";
+    if (this.registerForm.get("email")?.invalid) {
+      this.signupOtpError = "Enter a valid email";
       return;
     }
 
     this.isSendingOtp = true;
 
-    this.authApi.generateOtp({ mobileNum }).subscribe({
+    this.authApi.generateOtp({ email }).subscribe({
       next: (res: any) => {
         console.log("OTP res -> ", res);
 
@@ -1019,52 +620,53 @@ export class LoginComponent implements OnDestroy {
 
           console.log("Generated OTP:", otp);
 
+          this.signupOtpSent = true;
+          this.signupOtpVerified = false;
+          this.signupOtp = "";
+          this.signupAttempt = 1;
+
+          this.signupOtpSuccess = "OTP sent successfully to your WhatsApp.";
+
+          this.isSendingOtp = false;
+          this.startResendTimer();
+          this.cdr.detectChanges();
+
           // Send OTP through WhatsApp
-          this.authApi
-            .sendWhatsAppOtp({
-              to: mobileNum,
-              customerNumber: mobileNum,
-              otp: otp,
-            })
-            .subscribe({
-              next: (whatsappRes) => {
-                console.log("WhatsApp OTP response -> ", whatsappRes);
-
-                this.signupOtpSent = true;
-                this.signupOtpVerified = false;
-                this.signupOtp = "";
-                this.signupAttempt = 1;
-
-                this.signupOtpSuccess =
-                  "OTP sent successfully to your WhatsApp.";
-
-                this.isSendingOtp = false;
-                this.cdr.detectChanges();
-              },
-
-              error: (whatsappErr) => {
-                // console.error("WhatsApp OTP Error:", whatsappErr);
-
-                // this.isSendingOtp = false;
-
-                // this.signupOtpError =
-                //   whatsappErr?.error?.message ||
-                //   "OTP generated but failed to send on WhatsApp.";
-
-                // this.cdr.detectChanges();
-
-                this.signupOtpSent = true;
-                this.signupOtpVerified = false;
-                this.signupOtp = "";
-                this.signupAttempt = 1;
-
-                this.signupOtpSuccess =
-                  "OTP sent successfully to your WhatsApp.";
-
-                this.isSendingOtp = false;
-                this.cdr.detectChanges();
-              },
-            });
+          // this.authApi
+          //   .sendWhatsAppOtp({
+          //     to: mobileNum,
+          //     customerNumber: mobileNum,
+          //     otp: otp,
+          //   })
+          //   .subscribe({
+          //     next: (whatsappRes) => {
+          //       console.log("WhatsApp OTP response -> ", whatsappRes);
+          //
+          //       this.signupOtpSent = true;
+          //       this.signupOtpVerified = false;
+          //       this.signupOtp = "";
+          //       this.signupAttempt = 1;
+          //
+          //       this.signupOtpSuccess =
+          //         "OTP sent successfully to your WhatsApp.";
+          //
+          //       this.isSendingOtp = false;
+          //       this.cdr.detectChanges();
+          //     },
+          //
+          //     error: (whatsappErr) => {
+          //       this.signupOtpSent = true;
+          //       this.signupOtpVerified = false;
+          //       this.signupOtp = "";
+          //       this.signupAttempt = 1;
+          //
+          //       this.signupOtpSuccess =
+          //         "OTP sent successfully to your WhatsApp.";
+          //
+          //       this.isSendingOtp = false;
+          //       this.cdr.detectChanges();
+          //     },
+          //   });
         } else {
           this.isSendingOtp = false;
 
@@ -1087,25 +689,103 @@ export class LoginComponent implements OnDestroy {
     });
   }
 
+  verifyOtp(): void {
+    this.signupOtpError = null;
+    this.signupOtpSuccess = null;
+
+    const email = String(this.registerForm.get("email")?.value ?? "")
+      .trim()
+      .toLowerCase();
+
+    if (!email) {
+      this.signupOtpError = "Enter email";
+      return;
+    }
+
+    if (!this.signupOtp) {
+      this.signupOtpError = "Enter OTP";
+      return;
+    }
+
+    if (!/^[0-9]{6}$/.test(this.signupOtp)) {
+      this.signupOtpError = "Enter a valid 6-digit OTP";
+      return;
+    }
+
+    this.isVerifyingOtp = true;
+
+    this.authApi
+      .validateOtp({
+        email,
+        otp: this.signupOtp,
+        attempt: this.signupAttempt,
+      })
+      .subscribe({
+        next: (valid) => {
+          this.isVerifyingOtp = false;
+
+          if (valid) {
+            this.authApi
+              .deleteOtp({
+                email,
+                otp: this.signupOtp,
+              })
+              .subscribe({
+                next: (res) => {
+                  console.log("Signup OTP deleted:", res);
+                },
+                error: (err) => {
+                  console.error("Signup OTP delete error:", err);
+                },
+              });
+
+            this.signupOtpVerified = true;
+            this.signupOtpSent = false;
+            this.stopResendTimer();
+
+            this.signupOtpSuccess = "Email OTP verified successfully";
+          } else {
+            this.signupAttempt++;
+            this.signupOtpError = "Invalid OTP";
+          }
+
+          this.cdr.detectChanges();
+        },
+
+        error: (err) => {
+          console.error("Verify OTP Error:", err);
+
+          this.isVerifyingOtp = false;
+
+          this.signupOtpError =
+            err?.error?.message || err?.error?.msg || "OTP validation failed";
+
+          this.cdr.detectChanges();
+        },
+      });
+  }
+
+  // ── OTP: forgot password ──────────────────────────────────────────────────
+
   generateForgotOtp(): void {
     this.forgotError = null;
     this.forgotSuccess = null;
 
-    const mobileNum = String(this.forgotMobile ?? "").trim();
+    const email = this.forgotEmail.trim().toLowerCase();
 
-    if (!mobileNum) {
-      this.forgotError = "Enter mobile number";
+    if (!email) {
+      this.forgotError = "Enter email";
       return;
     }
 
-    if (!/^[0-9]{10}$/.test(mobileNum)) {
-      this.forgotError = "Enter a valid 10-digit mobile number";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      this.forgotError = "Enter a valid email";
       return;
     }
 
     this.isSendingOtp = true;
 
-    this.authApi.generateOtp({ mobileNum }).subscribe({
+    this.authApi.generateOtp({ email }).subscribe({
       next: (res) => {
         console.log("Forgot OTP res -> ", res);
 
@@ -1114,55 +794,25 @@ export class LoginComponent implements OnDestroy {
 
           console.log("Generated Forgot OTP:", otp);
 
+          this.otpSent = true;
+          this.otpVerified = false;
+          this.otp = "";
+          this.attempt = 1;
+
+          this.forgotSuccess = "OTP sent successfully to your email.";
+
+          this.isSendingOtp = false;
+          this.startResendTimer();
+          this.cdr.detectChanges();
+
           // Send OTP through WhatsApp
-          this.authApi
-            .sendWhatsAppOtp({
-              to: mobileNum,
-              customerNumber: mobileNum,
-              otp: otp,
-            })
-            .subscribe({
-              next: (whatsappRes) => {
-                console.log("Forgot WhatsApp OTP response -> ", whatsappRes);
-
-                this.otpSent = true;
-                this.otpVerified = false;
-                this.otp = "";
-                this.attempt = 1;
-
-                this.forgotSuccess = "OTP sent successfully to your WhatsApp.";
-                this.startOtpTimer();
-
-                this.isSendingOtp = false;
-                this.cdr.detectChanges();
-              },
-
-              error: (whatsappErr) => {
-                // console.error(
-                //   "Forgot WhatsApp OTP Error:",
-                //   whatsappErr?.error || whatsappErr,
-                // );
-
-                // this.isSendingOtp = false;
-
-                // this.forgotError =
-                //   whatsappErr?.error?.message ||
-                //   whatsappErr?.error?.msg ||
-                //   "OTP generated but failed to send on WhatsApp.";
-
-                // this.cdr.detectChanges();
-                this.otpSent = true;
-                this.otpVerified = false;
-                this.otp = "";
-                this.attempt = 1;
-
-                this.forgotSuccess = "OTP sent successfully to your WhatsApp.";
-                this.startOtpTimer();
-
-                this.isSendingOtp = false;
-                this.cdr.detectChanges();
-              },
-            });
+          // this.authApi
+          //   .sendWhatsAppOtp({
+          //     to: mobileNum,
+          //     customerNumber: mobileNum,
+          //     otp: otp,
+          //   })
+          //   .subscribe({ ... });
         } else {
           this.isSendingOtp = false;
 
@@ -1185,94 +835,19 @@ export class LoginComponent implements OnDestroy {
     });
   }
 
-  verifyOtp(): void {
-    this.signupOtpError = null;
-    this.signupOtpSuccess = null;
-
-    const mobileNum = String(
-      this.registerForm.get("phone")?.value ?? "",
-    ).trim();
-
-    if (!mobileNum) {
-      this.signupOtpError = "Enter mobile number";
-      return;
-    }
-
-    if (!this.signupOtp) {
-      this.signupOtpError = "Enter OTP";
-      return;
-    }
-
-    if (!/^[0-9]{6}$/.test(this.signupOtp)) {
-      this.signupOtpError = "Enter a valid 6-digit OTP";
-      return;
-    }
-
-    this.isVerifyingOtp = true;
-
-    this.authApi
-      .validateOtp({
-        mobileNum,
-        otp: this.signupOtp,
-        attempt: this.signupAttempt,
-      })
-      .subscribe({
-        next: (valid) => {
-          this.isVerifyingOtp = false;
-
-          if (valid) {
-            this.authApi
-              .deleteOtp({
-                mobileNum,
-                otp: this.signupOtp,
-              })
-              .subscribe({
-                next: (res) => {
-                  console.log("Signup OTP deleted:", res);
-                },
-                error: (err) => {
-                  console.error("Signup OTP delete error:", err);
-                },
-              });
-
-            this.signupOtpVerified = true;
-            this.signupOtpSent = false;
-
-            this.signupOtpSuccess = "Mobile number OTP verified successfully";
-          } else {
-            this.signupAttempt++;
-            this.signupOtpError = "Invalid OTP";
-          }
-
-          this.cdr.detectChanges();
-        },
-
-        error: (err) => {
-          console.error("Verify OTP Error:", err);
-
-          this.isVerifyingOtp = false;
-
-          this.signupOtpError =
-            err?.error?.message || err?.error?.msg || "OTP validation failed";
-
-          this.cdr.detectChanges();
-        },
-      });
-  }
-
   verifyForgotOtp(): void {
     this.forgotError = null;
     this.forgotSuccess = null;
 
-    const mobileNum = String(this.forgotMobile ?? "").trim();
+    const email = this.forgotEmail.trim().toLowerCase();
 
-    if (!mobileNum) {
-      this.forgotError = "Enter mobile number";
+    if (!email) {
+      this.forgotError = "Enter email";
       return;
     }
 
-    if (!/^[0-9]{10}$/.test(mobileNum)) {
-      this.forgotError = "Enter a valid 10-digit mobile number";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      this.forgotError = "Enter a valid email";
       return;
     }
 
@@ -1290,7 +865,7 @@ export class LoginComponent implements OnDestroy {
 
     this.authApi
       .validateOtp({
-        mobileNum,
+        email,
         otp: this.otp,
         attempt: this.attempt,
       })
@@ -1301,7 +876,7 @@ export class LoginComponent implements OnDestroy {
           if (valid) {
             this.authApi
               .deleteOtp({
-                mobileNum,
+                email,
                 otp: this.otp,
               })
               .subscribe({
@@ -1314,28 +889,15 @@ export class LoginComponent implements OnDestroy {
               });
 
             this.otpVerified = true;
-            this.newPassword = "";
-            this.confirmPassword = "";
-            this.checkNewPasswordStrength();
+            this.stopResendTimer();
 
-            this.forgotSuccess = "Mobile number OTP verified successfully";
+            this.forgotSuccess = "Email OTP verified successfully";
           } else {
             this.attempt++;
             this.forgotError = "Invalid OTP";
           }
 
           this.cdr.detectChanges();
-
-          // Browser autofill may drop the saved password into the newly
-          // rendered New Password field; clear it once it has rendered.
-          if (this.otpVerified) {
-            setTimeout(() => {
-              this.newPassword = "";
-              this.confirmPassword = "";
-              this.checkNewPasswordStrength();
-              this.cdr.detectChanges();
-            });
-          }
         },
 
         error: (err) => {
@@ -1359,8 +921,9 @@ export class LoginComponent implements OnDestroy {
       return;
     }
 
-    if (this.newPassword.length < 6) {
-      this.forgotError = "Password must be at least 6 characters.";
+    if (!this.newPasswordStrong) {
+      this.forgotError =
+        "Password must contain at least 6 characters, a number, 2 uppercase letters and 2 special characters.";
       return;
     }
 
@@ -1369,51 +932,38 @@ export class LoginComponent implements OnDestroy {
       return;
     }
 
+    this.isResetting = true;
+
     this.authApi
       .resetPassword({
-        mobileNum: String(this.forgotMobile ?? "").trim(),
+        email: this.forgotEmail.trim().toLowerCase(),
         password: this.newPassword.trim(),
-        sellerid: this.sellerService.getSellerId(),
+        // sellerid: this.sellerService.getSellerId(),
       })
       .subscribe({
         next: () => {
+          this.isResetting = false;
           this.forgotSuccess = "Password updated successfully";
-          this.resetOtpTimer();
-
-          // Pre-fill the login mobile with the number just reset; never carry
-          // over any old password (component state or browser autofill).
-          const mobileNum = String(this.forgotMobile ?? "").trim();
-          this.loginForm.reset({
-            identifier: mobileNum,
-            password: "",
-            remember: this.loginForm.get("remember")?.value ?? false,
-          });
-          this.showLoginPassword = false;
-          this.newPassword = "";
-          this.confirmPassword = "";
 
           this.forgotPasswordMode = false;
           this.activeTab = "login";
 
           this.cdr.detectChanges();
-
-          // Browser autofill can repopulate the password after the login
-          // panel re-renders, so clear it once more on the next tick.
-          setTimeout(() => {
-            this.loginForm.get("password")?.setValue("");
-            this.cdr.detectChanges();
-          });
         },
 
         error: (err) => {
           console.error("Reset Password Error:", err);
 
+          this.isResetting = false;
           this.forgotError = err?.error?.message || "Failed to update password";
 
           this.cdr.detectChanges();
         },
       });
   }
+
+  // ── selectSampleUser() ────────────────────────────────────────────────────
+  // Quick-login shortcut used in development and demos. Honours returnUrl.
 
   selectSampleUser(user: SampleUser): void {
     // Autofill the form fields (visual feedback for the user)
@@ -1422,20 +972,18 @@ export class LoginComponent implements OnDestroy {
       password: user.password,
     });
 
-    // Build AuthUser — strip password, include role
-    // [UPDATED] role included
+    // Build AuthUser - strip password, include role
     const u: AuthUser = {
       id: undefined,
       firstName: user.firstName,
       email: user.email,
       phone: user.phone,
       type: user.type,
-      role: user.role, // ← NEW
+      role: user.role,
     };
 
     this.auth.login(u);
 
-    // [UPDATED] Respect returnUrl — same fix applied here as in login()
     this.router.navigateByUrl(this.getReturnUrl());
   }
 
@@ -1449,4 +997,208 @@ export class LoginComponent implements OnDestroy {
   }
 
   loginError: string | null = null;
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // Members used by the HTML template (6-box OTP input, resend timer, helpers)
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // ── 6-box OTP input ───────────────────────────────────────────────────────
+
+  readonly otpIndexes = [0, 1, 2, 3, 4, 5];
+  trackByIndex = (i: number) => i;
+
+  private signupDigitsArr: string[] = Array(6).fill("");
+  private forgotDigitsArr: string[] = Array(6).fill("");
+
+  // Always kept in sync with the existing signupOtp / otp strings
+  get signupOtpDigits(): string[] {
+    if (this.signupDigitsArr.join("") !== this.signupOtp) {
+      this.signupDigitsArr = this.toDigits(this.signupOtp);
+    }
+    return this.signupDigitsArr;
+  }
+
+  get otpDigits(): string[] {
+    if (this.forgotDigitsArr.join("") !== this.otp) {
+      this.forgotDigitsArr = this.toDigits(this.otp);
+    }
+    return this.forgotDigitsArr;
+  }
+
+  private toDigits(value: string): string[] {
+    const arr = Array(6).fill("");
+    (value || "")
+      .replace(/\D/g, "")
+      .slice(0, 6)
+      .split("")
+      .forEach((d, i) => (arr[i] = d));
+    return arr;
+  }
+
+  private setDigits(mode: "signup" | "forgot", arr: string[]): void {
+    if (mode === "signup") {
+      this.signupDigitsArr = arr;
+      this.signupOtp = arr.join("");
+      this.signupOtpError = null;
+    } else {
+      this.forgotDigitsArr = arr;
+      this.otp = arr.join("");
+      this.forgotError = null;
+    }
+  }
+
+  private getBoxes(el: HTMLElement): HTMLInputElement[] {
+    return Array.from(
+      el.parentElement?.querySelectorAll<HTMLInputElement>("input.otp__box") ??
+        [],
+    );
+  }
+
+  private focusBox(el: HTMLElement, index: number): void {
+    const box = this.getBoxes(el)[index];
+    box?.focus();
+  }
+
+  onOtpInput(event: Event, index: number, mode: "signup" | "forgot"): void {
+    const el = event.target as HTMLInputElement;
+    const clean = el.value.replace(/\D/g, "");
+    const digits = [
+      ...(mode === "signup" ? this.signupOtpDigits : this.otpDigits),
+    ];
+
+    if (clean.length > 1) {
+      // autofill (one-time-code) or multi-char input: spread across boxes
+      clean
+        .slice(0, 6 - index)
+        .split("")
+        .forEach((d, i) => (digits[index + i] = d));
+      this.setDigits(mode, digits);
+      this.getBoxes(el).forEach((b, i) => (b.value = digits[i]));
+      this.focusBox(el, Math.min(index + clean.length, 5));
+      return;
+    }
+
+    digits[index] = clean;
+    el.value = clean;
+    this.setDigits(mode, digits);
+
+    if (clean && index < 5) {
+      this.focusBox(el, index + 1);
+    }
+  }
+
+  onOtpKeydown(
+    event: KeyboardEvent,
+    index: number,
+    mode: "signup" | "forgot",
+  ): void {
+    const el = event.target as HTMLInputElement;
+
+    if (event.key === "Backspace" && !el.value && index > 0) {
+      event.preventDefault();
+      const digits = [
+        ...(mode === "signup" ? this.signupOtpDigits : this.otpDigits),
+      ];
+      digits[index - 1] = "";
+      this.setDigits(mode, digits);
+      const prev = this.getBoxes(el)[index - 1];
+      if (prev) {
+        prev.value = "";
+        prev.focus();
+      }
+    } else if (event.key === "ArrowLeft" && index > 0) {
+      event.preventDefault();
+      this.focusBox(el, index - 1);
+    } else if (event.key === "ArrowRight" && index < 5) {
+      event.preventDefault();
+      this.focusBox(el, index + 1);
+    } else if (event.key === "Enter") {
+      event.preventDefault();
+      if (mode === "signup" && this.signupOtp.length === 6) this.verifyOtp();
+      if (mode === "forgot" && this.otp.length === 6) this.verifyForgotOtp();
+    }
+  }
+
+  onOtpPaste(event: ClipboardEvent, mode: "signup" | "forgot"): void {
+    event.preventDefault();
+    const el = event.target as HTMLElement;
+    const text = (event.clipboardData?.getData("text") ?? "")
+      .replace(/\D/g, "")
+      .slice(0, 6);
+    if (!text) return;
+
+    const digits = this.toDigits(text);
+    this.setDigits(mode, digits);
+    this.getBoxes(el).forEach((b, i) => (b.value = digits[i]));
+    this.focusBox(el, Math.min(text.length, 5));
+  }
+
+  // ── Resend timer ──────────────────────────────────────────────────────────
+
+  resendSeconds = 0;
+  private resendTimer: any = null;
+
+  private startResendTimer(seconds = 30): void {
+    this.stopResendTimer();
+    this.resendSeconds = seconds;
+    this.resendTimer = setInterval(() => {
+      this.resendSeconds--;
+      if (this.resendSeconds <= 0) this.stopResendTimer();
+      this.cdr.detectChanges();
+    }, 1000);
+  }
+
+  private stopResendTimer(): void {
+    if (this.resendTimer) clearInterval(this.resendTimer);
+    this.resendTimer = null;
+    this.resendSeconds = 0;
+  }
+
+  // ── Signup email helpers ──────────────────────────────────────────────────
+
+  onSignupEmailEdit(): void {
+    if (this.signupOtpSent) {
+      this.signupOtpSent = false;
+      this.signupOtp = "";
+      this.signupOtpError = null;
+      this.signupOtpSuccess = null;
+      this.stopResendTimer();
+    }
+  }
+
+  changeSignupEmail(): void {
+    this.signupOtpVerified = false;
+    this.signupOtpSent = false;
+    this.signupOtp = "";
+    this.signupAttempt = 1;
+    this.signupOtpError = null;
+    this.signupOtpSuccess = null;
+    this.stopResendTimer();
+  }
+
+  // ── Forgot-password helpers ───────────────────────────────────────────────
+
+  get forgotEmailValid(): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.forgotEmail.trim());
+  }
+
+  onForgotEmailEdit(): void {
+    if (this.otpSent) {
+      this.otpSent = false;
+      this.otp = "";
+      this.forgotError = null;
+      this.forgotSuccess = null;
+      this.stopResendTimer();
+    }
+  }
+
+  changeForgotEmail(): void {
+    this.otpVerified = false;
+    this.otpSent = false;
+    this.otp = "";
+    this.attempt = 1;
+    this.forgotError = null;
+    this.forgotSuccess = null;
+    this.stopResendTimer();
+  }
 }

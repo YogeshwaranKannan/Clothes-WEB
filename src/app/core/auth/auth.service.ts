@@ -34,6 +34,8 @@ export interface AuthUser {
 
   type: "buyer" | "seller";
 
+  isSeller?: boolean;
+
   role: WebRole;
 
   lastDeliveryAddesses?: LastDeliveryAddress[];
@@ -337,7 +339,7 @@ export class AuthService {
 
           type: res.type ?? "buyer",
           role: this.normalizeWebRole(res.role),
-
+          isSeller: res.isSeller ?? currentUser.isSeller ?? false,
           reward: res.reward ?? 0,
           lastEarned: res.lastEarned ?? 0,
           lastRedeemed: res.lastRedeemed ?? 0,

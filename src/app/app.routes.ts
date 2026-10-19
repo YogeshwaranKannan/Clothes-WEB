@@ -146,7 +146,10 @@ export const routes: Routes = [
       import("./legal/legal-page.component").then((m) => m.LegalPageComponent),
     data: {
       slug: "data-protection",
-      seo: { title: "Data Protection Statement", path: `${legalBase}/data-protection` },
+      seo: {
+        title: "Data Protection Statement",
+        path: `${legalBase}/data-protection`,
+      },
     },
   },
   {
@@ -175,6 +178,15 @@ export const routes: Routes = [
       slug: "shipping-policy",
       seo: { title: "Shipping Policy", path: `${legalBase}/shipping-policy` },
     },
+  },
+  {
+    path: "my-inventory",
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import("./features/seller/my-inventory/my-inventory.component").then(
+        (m) => m.MyInventoryComponent,
+      ),
+    data: { seo: { title: "My Inventory", noindex: true } },
   },
   {
     path: ":companyname/about-us",

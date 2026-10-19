@@ -730,6 +730,7 @@ import {
   EventEmitter,
   Output,
   ViewChild,
+  computed,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule, Router, NavigationEnd } from "@angular/router";
@@ -827,6 +828,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
 
   readonly user = this.auth.user;
   readonly isLoggedIn = this.auth.isLoggedIn;
+  readonly isSeller = computed(() => !!this.user()?.isSeller);
 
   // ── Mobile hamburger (opens the sidebar owned by <app-navbar>) ─────────────
   private mobileMenu = inject(MobileMenuService);
@@ -1089,5 +1091,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     } catch {}
 
     this.router.navigate(["/login"]).catch(() => {});
+  }
+  onInventory(): void {
+    this.router.navigate(["/my-inventory"]).catch(() => {});
   }
 }

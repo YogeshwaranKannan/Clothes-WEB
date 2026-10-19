@@ -1,0 +1,218 @@
+<div class="scrim" (click)="requestClose()" aria-hidden="true"></div>
+
+<aside class="drawer" role="dialog" aria-modal="true" [attr.aria-label]="title">
+  <header class="drawer-head">
+    <div>
+      <h2>{{ title }}</h2>
+      <p>{{ isEdit ? "Update details, prices and stock." : "Add a product and its pricing variants." }}</p>
+    </div>
+    <button type="button" class="icon-btn" (click)="requestClose()" aria-label="Close">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="drawer-form" novalidate>
+    <div class="drawer-body">
+
+      <!-- loading skeleton -->
+      <ng-container *ngIf="loading; else content">
+        <div class="skeleton" style="height: 220px"></div>
+        <div class="skeleton" style="height: 260px"></div>
+      </ng-container>
+
+      <ng-template #content>
+        <!-- ============ BASIC DETAILS ============ -->
+        <section class="card">
+          <h3>Basic details</h3>
+
+          <div class="field suggest-wrap">
+            <label for="pname">Product name</label>
+            <input id="pname" formControlName="productName" placeholder="e.g. Organic Tomato"
+                   autocomplete="off" (focus)="showSuggestions = true"
+                   [class.invalid]="form.get('productName')?.touched && form.get('productName')?.invalid" />
+            <ul class="suggestions" *ngIf="showSuggestions && suggestions.length" role="listbox">
+              <li *ngFor="let s of suggestions" role="option" (mousedown)="pickSuggestion(s)">
+                <span>{{ s.productName }}</span>
+                <small *ngIf="s.price">₹{{ s.price | number: "1.0-2" }}</small>
+              </li>
+            </ul>
+          </div>
+
+          <div class="field">
+            <label for="pdesc">Description</label>
+            <textarea id="pdesc" rows="3" formControlName="productDescription"
+                      placeholder="What makes this product worth buying?"
+                      [class.invalid]="form.get('productDescription')?.touched && form.get('productDescription')?.invalid"></textarea>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label for="brand">Brand</label>
+              <input id="brand" formControlName="brand" placeholder="Brand name" />
+              <small class="hint" *ngIf="isEdit">Brand can’t be changed after the product is created.</small>
+            </div>
+
+            <div class="field" *ngIf="categories.length">
+              <label for="cat">Category</label>
+              <select id="cat" formControlName="categoryId"
+                      [class.invalid]="form.get('categoryId')?.touched && form.get('categoryId')?.invalid">
+                <option value="">Select a category</option>
+                <option *ngFor="let c of categories" [value]="c.value">{{ c.label }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="switches">
+            <label class="switch">
+              <input type="checkbox" formControlName="quickadd" />
+              <span class="track"></span>
+              <span class="switch-text"><b>Quick add</b><small>Customers can add it to cart in one tap</small></span>
+            </label>
+            <label class="switch">
+              <input type="checkbox" formControlName="deals" />
+              <span class="track"></span>
+              <span class="switch-text"><b>Deal</b><small>Show in the deals section</small></span>
+            </label>
+            <label class="switch">
+              <input type="checkbox" formControlName="newArrivals" />
+              <span class="track"></span>
+              <span class="switch-text"><b>New arrival</b><small>Show in new arrivals</small></span>
+            </label>
+          </div>
+        </section>
+
+        <!-- ============ VARIANTS ============ -->
+        <section class="card">
+          <div class="card-head">
+            <h3>Pricing variants</h3>
+            <button type="button" class="btn ghost sm" (click)="addVariant()">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              Add variant
+            </button>
+          </div>
+
+          <div formArrayName="variants" class="variants">
+            <div class="variant" *ngFor="let c of variants.controls; let i = index"
+                 [formGroupName]="i" [class.open]="c.value.expanded">
+
+              <div class="variant-head">
+                <button type="button" class="variant-toggle" (click)="toggleVariant(c)"
+                        [attr.aria-expanded]="c.value.expanded">
+                  <svg class="chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+                  <span class="variant-title">{{ c.value.variantName || "Variant " + (i + 1) }}</span>
+                  <span class="variant-summary" *ngIf="!c.value.expanded">
+                    ₹{{ c.value.sellingPrice || 0 }} &nbsp;·&nbsp; {{ c.value.quantity || 0 }} in stock
+                  </span>
+                </button>
+                <button type="button" class="icon-btn danger" *ngIf="variants.length > 1"
+                        [disabled]="c.value.fromEdit" (click)="removeVariant(i)"
+                        [attr.aria-label]="'Remove variant ' + (i + 1)"
+                        [title]="c.value.fromEdit ? 'Saved variants can’t be removed' : 'Remove variant'">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg>
+                </button>
+              </div>
+
+              <div class="variant-body" *ngIf="c.value.expanded">
+                <div class="grid-2">
+                  <div class="field">
+                    <label>Variant name</label>
+                    <input formControlName="variantName" placeholder="e.g. 1 kg pack"
+                           [class.invalid]="c.get('variantName')?.touched && c.get('variantName')?.invalid" />
+                  </div>
+                  <div class="field">
+                    <label>Quantity in stock</label>
+                    <input formControlName="quantity" inputmode="numeric" placeholder="0"
+                           (input)="onQuantity(c, $any($event.target).value)" />
+                  </div>
+                </div>
+
+                <div class="grid-2">
+                  <div class="field">
+                    <label>Procurement price</label>
+                    <div class="money"><span>₹</span>
+                      <input formControlName="procumentPrice" inputmode="decimal" placeholder="0.00"
+                             (input)="onProcurement(c, $any($event.target).value)" (blur)="onPriceBlur(c)" />
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label>Selling price</label>
+                    <div class="money"><span>₹</span>
+                      <input formControlName="sellingPrice" inputmode="decimal" placeholder="0.00"
+                             (input)="onSelling(c, $any($event.target).value)" (blur)="onPriceBlur(c)" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label>Offer price <span class="optional">(optional)</span></label>
+                  <div class="money"><span>₹</span>
+                    <input formControlName="offerPrice" inputmode="decimal" placeholder="0.00"
+                           (input)="onOffer(c, $any($event.target).value)" (blur)="onOfferBlur(c)" />
+                  </div>
+                </div>
+
+                <!-- live readout -->
+                <div class="readout">
+                  <div><span>Margin</span><b>{{ c.value.margin || "0.00" }}%</b></div>
+                  <div><span>Discount</span><b>{{ c.value.discount || "0.00" }}%</b></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ IMAGES ============ -->
+        <section class="card">
+          <div class="card-head">
+            <h3>Images <span class="optional">(optional)</span></h3>
+            <span class="count">{{ images.length }}/3</span>
+          </div>
+
+          <label class="dropzone" [class.drag]="dragging" [class.disabled]="imagesFull"
+                 (dragover)="$event.preventDefault(); dragging = true" (dragleave)="dragging = false"
+                 (drop)="onDrop($event)">
+            <input type="file" accept="image/png,image/jpeg" multiple hidden [disabled]="imagesFull"
+                   (change)="onFiles($any($event.target).files); $any($event.target).value = ''" />
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg>
+            <b>{{ imagesFull ? "You’ve added 3 images" : "Drop images here or click to browse" }}</b>
+            <small>JPG or PNG, up to 2.5 MB each</small>
+          </label>
+          <p class="error-text" *ngIf="imageError">{{ imageError }}</p>
+
+          <div class="thumbs" *ngIf="images.length">
+            <div class="thumb" *ngFor="let img of images; let i = index" [class.default]="img.isDefault">
+              <img [src]="img.uri" [alt]="img.name" />
+              <button type="button" class="thumb-remove" (click)="removeImage(i)" aria-label="Remove image">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              </button>
+              <button type="button" class="thumb-default" (click)="setDefaultImage(i)">
+                {{ img.isDefault ? "Default image" : "Make default" }}
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ OPTIONAL FIELDS ============ -->
+        <section class="card" *ngIf="!form.get('quickadd')?.value">
+          <h3>Additional details <span class="optional">(optional)</span></h3>
+          <div class="grid-3">
+            <div class="field"><label>Unit</label><input formControlName="unit" placeholder="kg, pack…" /></div>
+            <div class="field"><label>Expiry</label><input formControlName="expiry" inputmode="numeric" placeholder="Days" /></div>
+            <div class="field"><label>Minimum order</label><input formControlName="minimumOrder" inputmode="numeric" placeholder="0" /></div>
+          </div>
+        </section>
+      </ng-template>
+    </div>
+
+    <footer class="drawer-foot">
+      <p class="error-text" role="alert" *ngIf="formError">{{ formError }}</p>
+      <div class="actions">
+        <button type="button" class="btn ghost" (click)="requestClose()" [disabled]="saving">Cancel</button>
+        <button type="submit" class="btn primary" [disabled]="saving || loading">
+          <span class="spinner" *ngIf="saving"></span>
+          {{ saving ? "Saving…" : isEdit ? "Save changes" : "Add product" }}
+        </button>
+      </div>
+    </footer>
+  </form>
+</aside>

@@ -1,0 +1,115 @@
+<section class="page">
+  <header class="page-head">
+    <div>
+      <h1>My inventory</h1>
+      <p *ngIf="!loading">{{ rows.length }} {{ rows.length === 1 ? "product" : "products" }} in your store</p>
+    </div>
+    <button type="button" class="btn primary" (click)="openAdd()">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      Add product
+    </button>
+  </header>
+
+  <div class="toolbar">
+    <div class="search">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input type="search" [(ngModel)]="search" placeholder="Search by product or category" aria-label="Search inventory" />
+    </div>
+    <div class="chips" role="tablist" aria-label="Filter products">
+      <button type="button" role="tab" *ngFor="let f of [['all','All'],['deals','Deals'],['new','New arrivals'],['low','Low stock']]"
+              [class.on]="filter === f[0]" [attr.aria-selected]="filter === f[0]" (click)="filter = $any(f[0])">
+        {{ f[1] }} <span>{{ count($any(f[0])) }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- error -->
+  <div class="notice error" *ngIf="loadError" role="alert">
+    <span>{{ loadError }}</span>
+    <button type="button" class="btn ghost sm" (click)="load()">Try again</button>
+  </div>
+
+  <!-- loading -->
+  <div class="list" *ngIf="loading">
+    <div class="skeleton" *ngFor="let _ of [1,2,3,4,5]"></div>
+  </div>
+
+  <!-- list -->
+  <div class="list" *ngIf="!loading && !loadError && filtered.length">
+    <div class="row head" aria-hidden="true">
+      <span>Product</span><span>Category</span><span>Price</span><span>Stock</span><span></span>
+    </div>
+
+    <article class="row" *ngFor="let r of filtered; trackBy: trackById">
+      <div class="cell product">
+        <div class="thumb">
+          <img *ngIf="r.item.imageUrl; else letter" [src]="r.item.imageUrl" [alt]="r.item.productName" />
+          <ng-template #letter><span>{{ initial(r) }}</span></ng-template>
+        </div>
+        <div class="meta">
+          <b>{{ r.item.productName }}</b>
+          <div class="tags">
+            <small>{{ r.variants }} {{ r.variants === 1 ? "variant" : "variants" }}</small>
+            <em class="tag deal" *ngIf="r.item.deals">Deal</em>
+            <em class="tag new" *ngIf="r.item.newArrivals">New</em>
+            <em class="tag off" *ngIf="!r.active">Inactive</em>
+          </div>
+        </div>
+      </div>
+
+      <div class="cell category" data-label="Category">{{ r.category }}</div>
+      <div class="cell price" data-label="Price">{{ r.priceLabel }}</div>
+      <div class="cell stock" data-label="Stock">
+        <span class="pill" [class.low]="r.stock <= lowStock && r.stock > 0" [class.out]="r.stock === 0">
+          {{ r.stock === 0 ? "Out of stock" : r.stock + " in stock" }}
+        </span>
+      </div>
+
+      <div class="cell actions">
+        <button type="button" class="icon-btn" (click)="openEdit(r)" [attr.aria-label]="'Edit ' + r.item.productName" title="Edit">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.8 2.8 0 00-4-4L4 16v4zM14 6l4 4"/></svg>
+        </button>
+        <button type="button" class="icon-btn danger" (click)="askDelete(r)" [attr.aria-label]="'Delete ' + r.item.productName" title="Delete">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg>
+        </button>
+      </div>
+    </article>
+  </div>
+
+  <!-- empty -->
+  <div class="empty" *ngIf="!loading && !loadError && !filtered.length">
+    <div class="empty-art">
+      <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8zM3 8l9 5 9-5M12 13v8"/></svg>
+    </div>
+    <ng-container *ngIf="!rows.length; else noMatch">
+      <h2>Add your first product</h2>
+      <p>Products you add here show up in your store for customers to order.</p>
+      <button type="button" class="btn primary" (click)="openAdd()">Add product</button>
+    </ng-container>
+    <ng-template #noMatch>
+      <h2>No products match</h2>
+      <p>Try a different search or clear the filter.</p>
+      <button type="button" class="btn ghost" (click)="search = ''; filter = 'all'">Clear filters</button>
+    </ng-template>
+  </div>
+</section>
+
+<!-- add / edit overlay -->
+<app-product-form-dialog *ngIf="formOpen" [inventoryId]="editingId" (closed)="onFormClosed($event)"></app-product-form-dialog>
+
+<!-- delete confirm -->
+<div class="modal-scrim" *ngIf="deleteTarget" (click)="cancelDelete()">
+  <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="del-title" (click)="$event.stopPropagation()">
+    <h2 id="del-title">Delete this product?</h2>
+    <p><b>{{ deleteTarget.item.productName }}</b> and its {{ deleteTarget.variants }} {{ deleteTarget.variants === 1 ? "variant" : "variants" }} will be removed from your store. This can’t be undone.</p>
+    <div class="modal-actions">
+      <button type="button" class="btn ghost" (click)="cancelDelete()" [disabled]="deleting">Keep product</button>
+      <button type="button" class="btn danger" (click)="confirmDelete()" [disabled]="deleting">
+        {{ deleting ? "Deleting…" : "Delete product" }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- toast -->
+<div class="toast" *ngIf="toast" [class.error]="toast.kind === 'error'" role="status">{{ toast.text }}</div>

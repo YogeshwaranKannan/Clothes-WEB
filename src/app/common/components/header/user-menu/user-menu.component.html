@@ -1,19 +1,20 @@
 <div class="user-menu-host">
-    
   <button
-  #avatarBtn
-  id="avatarBtnId"
-  type="button"
-  class="avatar-btn"
-  aria-haspopup="menu"
-  [attr.aria-expanded]="open"
-  [attr.aria-controls]="menuId"
-  (click)="toggleMenu($event)"
->
-    <span class="avatar-initial" aria-hidden="true">{{ (user?.firstName || userName || 'G').charAt(0) }}</span>
+    #avatarBtn
+    id="avatarBtnId"
+    type="button"
+    class="avatar-btn"
+    aria-haspopup="menu"
+    [attr.aria-expanded]="open"
+    [attr.aria-controls]="menuId"
+    (click)="toggleMenu($event)"
+  >
+    <span class="avatar-initial" aria-hidden="true">{{
+      (user?.firstName || userName || "G").charAt(0)
+    }}</span>
     <!-- <span class="avatar-caret" aria-hidden="true"></span> -->
     <span class="sr-only">User menu</span>
-</button>
+  </button>
 
   <!-- backdrop on mobile -->
   <div
@@ -33,21 +34,45 @@
     [ngStyle]="menuStyles"
   >
     <div class="menu-header">
-      <div class="menu-avatar">{{ (user?.firstName || userName || 'G').charAt(0) }}</div>
+      <div class="menu-avatar">
+        {{ (user?.firstName || userName || "G").charAt(0) }}
+      </div>
       <div class="menu-user">
-        <div class="menu-name">{{ user?.firstName || userName || 'Guest' }}</div>
-        <div class="menu-email">Avl Points: {{ user?.availableRewards || 0 }}</div>
+        <div class="menu-name">
+          {{ user?.firstName || userName || "Guest" }}
+        </div>
+        <div class="menu-email">
+          Avl Points: {{ user?.availableRewards || 0 }}
+        </div>
       </div>
       <!-- <div class="menu-role">{{ user?.type }}</div> -->
     </div>
 
-    <button role="menuitem" class="menu-item" (click)="onOrders()">My Orders</button>
-    <button *ngIf="showProfile" role="menuitem" class="menu-item" (click)="onProfile()">Profile</button>
+    <button role="menuitem" class="menu-item" (click)="onOrders()">
+      My Orders
+    </button>
+    <button
+      *ngIf="showProfile"
+      role="menuitem"
+      class="menu-item"
+      (click)="onProfile()"
+    >
+      Profile
+    </button>
+    <button
+      *ngIf="showInventory"
+      role="menuitem"
+      class="menu-item"
+      (click)="onInventory()"
+    >
+      My Inventory
+    </button>
     <button role="menuitem" class="menu-item" (click)="openCart()">Cart</button>
 
     <div class="menu-footer">
-      <button role="menuitem" class="menu-item danger" (click)="onLogout()">Logout</button>
+      <button role="menuitem" class="menu-item danger" (click)="onLogout()">
+        Logout
+      </button>
     </div>
   </div>
 </div>
- 
