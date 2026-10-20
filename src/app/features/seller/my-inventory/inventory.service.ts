@@ -65,7 +65,7 @@ export interface InsertProductsPayload {
   companyName: string;
   productName: string;
   productDescription: string;
-  categoryId: string;
+  categoryId: string | null;
   quickadd: boolean;
   unit: string;
   product_type: string | null;

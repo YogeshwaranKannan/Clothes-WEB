@@ -18,7 +18,13 @@ import {
   Validators,
 } from "@angular/forms";
 import { Subject, firstValueFrom, of } from "rxjs";
-import { catchError, debounceTime, distinctUntilChanged, switchMap, takeUntil } from "rxjs/operators";
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  switchMap,
+  takeUntil,
+} from "rxjs/operators";
 import {
   CategoryOption,
   InsertProductsPayload,
@@ -127,7 +133,9 @@ export class ProductFormDialogComponent implements OnInit, OnDestroy {
       this.categories = await firstValueFrom(this.api.categories());
       if (this.inventoryId) await this.loadProduct(this.inventoryId);
     } catch (e: any) {
-      this.formError = e?.error?.msg || "Couldn’t load the form. Check your connection and try again.";
+      this.formError =
+        e?.error?.msg ||
+        "Couldn’t load the form. Check your connection and try again.";
     } finally {
       this.loading = false;
     }
@@ -143,7 +151,10 @@ export class ProductFormDialogComponent implements OnInit, OnDestroy {
       productName: data?.productname ?? "",
       productDescription: data?.productDescription ?? "",
       brand: data?.brand ?? "",
-      categoryId: this.categories.find((c) => String(c.value).trim() === String(data?.categoryId).trim())?.value ?? "",
+      categoryId:
+        this.categories.find(
+          (c) => String(c.value).trim() === String(data?.categoryId).trim(),
+        )?.value ?? "",
       quickadd: data?.quickadd ?? true,
       deals: !!data?.deals,
       newArrivals: !!data?.newArrivals,
@@ -176,11 +187,15 @@ export class ProductFormDialogComponent implements OnInit, OnDestroy {
           }),
         ),
       );
-      this.variants.controls.forEach((g, i) => i > 0 && g.patchValue({ expanded: false }));
+      this.variants.controls.forEach(
+        (g, i) => i > 0 && g.patchValue({ expanded: false }),
+      );
     }
 
     this.images = await firstValueFrom(
-      this.api.images(data?._id ?? id, data?.productid ?? "").pipe(catchError(() => of([]))),
+      this.api
+        .images(data?._id ?? id, data?.productid ?? "")
+        .pipe(catchError(() => of([]))),
     );
   }
 
@@ -223,7 +238,8 @@ export class ProductFormDialogComponent implements OnInit, OnDestroy {
   }
 
   removeVariant(i: number): void {
-    if (this.variants.length > 1 && !this.variants.at(i).value.fromEdit) this.variants.removeAt(i);
+    if (this.variants.length > 1 && !this.variants.at(i).value.fromEdit)
+      this.variants.removeAt(i);
   }
 
   toggleVariant(g: AbstractControl): void {
@@ -249,21 +265,31 @@ export class ProductFormDialogComponent implements OnInit, OnDestroy {
 
   onQuantity(g: AbstractControl, raw: string): void {
     const digits = raw.replace(/[^0-9]/g, "");
-    g.patchValue({ quantity: digits.length > 1 ? digits.replace(/^0+/, "") : digits });
+    g.patchValue({
+      quantity: digits.length > 1 ? digits.replace(/^0+/, "") : digits,
+    });
   }
 
   onProcurement(g: AbstractControl, raw: string): void {
     const cleaned = this.sanitizeDecimal(raw);
     let sell = g.value.sellingPrice;
     if (cleaned && this.n(sell) === 0) sell = cleaned; // auto-fill selling price
-    g.patchValue({ procumentPrice: cleaned, sellingPrice: sell, margin: this.margin(cleaned, sell) });
+    g.patchValue({
+      procumentPrice: cleaned,
+      sellingPrice: sell,
+      margin: this.margin(cleaned, sell),
+    });
   }
 
   onSelling(g: AbstractControl, raw: string): void {
     const cleaned = this.sanitizeDecimal(raw);
     let proc = g.value.procumentPrice;
     if (cleaned && this.n(proc) === 0) proc = cleaned; // auto-fill procurement price
-    g.patchValue({ sellingPrice: cleaned, procumentPrice: proc, margin: this.margin(proc, cleaned) });
+    g.patchValue({
+      sellingPrice: cleaned,
+      procumentPrice: proc,
+      margin: this.margin(proc, cleaned),
+    });
   }
 
   onPriceBlur(g: AbstractControl): void {
@@ -309,7 +335,11 @@ export class ProductFormDialogComponent implements OnInit, OnDestroy {
   }
 
   private hasDuplicateVariantName(): boolean {
-    const names = this.variants.controls.map((g) => String(g.value.variantName ?? "").trim().toLowerCase());
+    const names = this.variants.controls.map((g) =>
+      String(g.value.variantName ?? "")
+        .trim()
+        .toLowerCase(),
+    );
     return names.some((n, i) => names.indexOf(n) !== i);
   }
 
@@ -348,7 +378,9 @@ export class ProductFormDialogComponent implements OnInit, OnDestroy {
               name: this.uniqueName(this.api.formatName(file.name)),
               type: file.type,
               base64: dataUrl, // backend strips the "data:...;base64," header
-              isDefault: this.images.length === 0 || !this.images.some((i) => i.isDefault),
+              isDefault:
+                this.images.length === 0 ||
+                !this.images.some((i) => i.isDefault),
             },
           ];
         };
@@ -360,7 +392,9 @@ export class ProductFormDialogComponent implements OnInit, OnDestroy {
     if (!this.images.some((i) => i.name === name)) return name;
     const dot = name.lastIndexOf(".");
     const stamp = Date.now().toString(36);
-    return dot > 0 ? `${name.slice(0, dot)}-${stamp}${name.slice(dot)}` : `${name}-${stamp}`;
+    return dot > 0
+      ? `${name.slice(0, dot)}-${stamp}${name.slice(dot)}`
+      : `${name}-${stamp}`;
   }
 
   onDrop(e: DragEvent): void {
@@ -370,13 +404,17 @@ export class ProductFormDialogComponent implements OnInit, OnDestroy {
   }
 
   setDefaultImage(i: number): void {
-    this.images = this.images.map((img, idx) => ({ ...img, isDefault: idx === i }));
+    this.images = this.images.map((img, idx) => ({
+      ...img,
+      isDefault: idx === i,
+    }));
   }
 
   removeImage(i: number): void {
     const wasDefault = this.images[i].isDefault;
     let next = this.images.filter((_, idx) => idx !== i);
-    if (wasDefault && next.length) next = next.map((img, idx) => ({ ...img, isDefault: idx === 0 }));
+    if (wasDefault && next.length)
+      next = next.map((img, idx) => ({ ...img, isDefault: idx === 0 }));
     this.images = next;
   }
 
@@ -386,15 +424,21 @@ export class ProductFormDialogComponent implements OnInit, OnDestroy {
     const f = this.form;
     f.markAllAsTouched();
     if (!f.get("productName")!.value?.trim()) return "Enter a product name.";
-    if (!f.get("productDescription")!.value?.trim()) return "Add a short description.";
+    if (!f.get("productDescription")!.value?.trim())
+      return "Add a short description.";
     if (!f.getRawValue().brand?.trim()) return "Enter the brand name.";
-    if (this.categories.length && !f.get("categoryId")!.value) return "Choose a category.";
-    if (this.images.length && !this.images.some((i) => i.isDefault)) return "Pick one default image.";
+    if (this.categories.length && !f.get("categoryId")!.value)
+      return "Choose a category.";
+    if (this.images.length && !this.images.some((i) => i.isDefault))
+      return "Pick one default image.";
 
     const zero = this.variants.controls.find((g) => !this.n(g.value.quantity));
-    if (zero) return `Quantity can’t be 0 for “${String(zero.value.variantName || "this variant").trim()}”.`;
-    if (this.hasIncompleteVariant()) return "Fill in name, quantity, procurement and selling price for every variant.";
-    if (this.hasDuplicateVariantName()) return "Two variants share the same name.";
+    if (zero)
+      return `Quantity can’t be 0 for “${String(zero.value.variantName || "this variant").trim()}”.`;
+    if (this.hasIncompleteVariant())
+      return "Fill in name, quantity, procurement and selling price for every variant.";
+    if (this.hasDuplicateVariantName())
+      return "Two variants share the same name.";
     return null;
   }
 
@@ -425,7 +469,7 @@ export class ProductFormDialogComponent implements OnInit, OnDestroy {
         companyName: this.api.companyName,
         productName: name,
         productDescription: String(raw.productDescription).trim(),
-        categoryId: raw.categoryId,
+        categoryId: raw.categoryId || null,
         quickadd: !!raw.quickadd,
         unit: String(raw.unit ?? "").trim(),
         product_type: null,
@@ -458,10 +502,14 @@ export class ProductFormDialogComponent implements OnInit, OnDestroy {
       if (res?.success) {
         this.closed.emit(true);
       } else {
-        this.formError = res?.message || "Couldn’t save the product. Try again.";
+        this.formError =
+          res?.message || "Couldn’t save the product. Try again.";
       }
     } catch (e: any) {
-      this.formError = e?.error?.message || e?.message || "Couldn’t save the product. Try again.";
+      this.formError =
+        e?.error?.message ||
+        e?.message ||
+        "Couldn’t save the product. Try again.";
     } finally {
       this.saving = false;
     }
