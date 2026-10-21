@@ -45,21 +45,21 @@
                       [class.invalid]="form.get('productDescription')?.touched && form.get('productDescription')?.invalid"></textarea>
           </div>
 
-          <div class="grid-2">
-            <div class="field">
-              <label for="brand">Brand</label>
-              <input id="brand" formControlName="brand" placeholder="Brand name" />
-              <small class="hint" *ngIf="isEdit">Brand can’t be changed after the product is created.</small>
-            </div>
+          <div class="field">
+            <label for="brand">Brand</label>
+            <input id="brand" formControlName="brand" placeholder="Brand name" />
+            <small class="hint" *ngIf="isEdit">Brand can’t be changed after the product is created.</small>
+          </div>
 
-            <div class="field" *ngIf="categories.length">
-              <label for="cat">Category</label>
-              <select id="cat" formControlName="categoryId"
-                      [class.invalid]="form.get('categoryId')?.touched && form.get('categoryId')?.invalid">
-                <option value="">Select a category</option>
-                <option *ngFor="let c of categories" [value]="c.value">{{ c.label }}</option>
-              </select>
-            </div>
+          <div class="field">
+            <label>Category</label>
+            <app-category-picker
+              [options]="categories"
+              [value]="form.get('categoryId')?.value"
+              [invalid]="categoryInvalid"
+              (valueChange)="onCategoryChange($event)"
+              (optionsChange)="onCategoriesChange($event)">
+            </app-category-picker>
           </div>
 
           <div class="switches">

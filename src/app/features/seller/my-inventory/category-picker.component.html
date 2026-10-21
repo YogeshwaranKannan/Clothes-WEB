@@ -1,0 +1,112 @@
+<div class="picker" (keydown.escape)="onEscape($event)">
+
+  <!-- ============ TRIGGER ============ -->
+  <button type="button" class="trigger" *ngIf="!creating"
+          [class.open]="open" [class.invalid]="invalid"
+          aria-haspopup="listbox" [attr.aria-expanded]="open" (click)="toggle()">
+    <span class="trigger-text" [class.placeholder]="!selected">
+      {{ selected ? (selected.path || selected.label) : "Select a category" }}
+    </span>
+    <svg class="chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+  </button>
+
+  <!-- ============ DROPDOWN ============ -->
+  <div class="panel" *ngIf="open && !creating">
+    <div class="search">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input #searchEl type="text" autocomplete="off" placeholder="Search categories"
+             aria-label="Search categories" [value]="query"
+             (input)="onQuery($any($event.target).value)" (keydown)="onSearchKey($event)" />
+    </div>
+
+    <ul class="list" role="listbox">
+      <li *ngFor="let o of filtered; let i = index" role="option"
+          [class.active]="i === active" [class.selected]="o.value === value"
+          [class.child]="!query && !!o.depth"
+          [attr.aria-selected]="o.value === value"
+          (mousedown)="$event.preventDefault(); select(o.value)" (mouseenter)="active = i">
+        <span class="name">{{ o.label }}</span>
+        <span class="in" *ngIf="query && o.parentLabel">in {{ o.parentLabel }}</span>
+        <svg *ngIf="o.value === value" class="check" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>
+      </li>
+
+      <li class="empty" *ngIf="!filtered.length">
+        {{ options.length ? "No category matches “" + query.trim() + "”." : "You don’t have any categories yet." }}
+      </li>
+    </ul>
+
+    <button type="button" class="create-row" (click)="startCreate()">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      {{ query.trim() && !exactMatch ? "Create “" + query.trim() + "”" : "Create new category" }}
+    </button>
+  </div>
+
+  <!-- ============ CREATE FORM ============ -->
+  <div class="create" *ngIf="creating" role="group" aria-label="New category">
+    <div class="create-head">
+      <div>
+        <b>New category</b>
+        <small>It will be added to your store and selected for this product.</small>
+      </div>
+      <button type="button" class="icon-btn" (click)="cancelCreate()" [disabled]="saving" aria-label="Cancel new category">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+    <div class="field">
+      <label for="newcat-name">Name</label>
+      <input id="newcat-name" type="text" maxlength="60" placeholder="e.g. Cold-pressed oils"
+             [value]="newName" (input)="newName = $any($event.target).value"
+             (keydown.enter)="$event.preventDefault(); create()" />
+    </div>
+
+    <div class="field">
+      <label for="newcat-parent">Parent category <span class="optional">(optional)</span></label>
+      <select id="newcat-parent" (change)="newParent = $any($event.target).value">
+        <option value="" [selected]="!newParent">None, make it a top-level category</option>
+        <option *ngFor="let p of parents" [value]="p.value" [selected]="newParent === p.value">{{ p.label }}</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="newcat-desc">Description <span class="optional">(optional)</span></label>
+      <textarea id="newcat-desc" rows="2" maxlength="200" placeholder="A short line customers will see"
+                [value]="newDesc" (input)="newDesc = $any($event.target).value"></textarea>
+    </div>
+
+    <div class="field">
+      <label>Cover image <span class="optional">(optional)</span></label>
+      <div class="cover" *ngIf="newCoverUrl; else pickCover">
+        <img [src]="newCoverUrl" alt="Cover preview" />
+        <div class="cover-meta">
+          <b>{{ newCover?.name }}</b>
+          <button type="button" class="link" (click)="clearCover()">Remove image</button>
+        </div>
+      </div>
+      <ng-template #pickCover>
+        <label class="cover-pick">
+          <input type="file" accept="image/png,image/jpeg" hidden
+                 (change)="onCover($any($event.target).files); $any($event.target).value = ''" />
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg>
+          <span><b>Add a cover image</b><small>JPG or PNG, up to 2.5 MB</small></span>
+        </label>
+      </ng-template>
+    </div>
+
+    <label class="switch">
+      <input type="checkbox" [checked]="newHome" (change)="newHome = $any($event.target).checked" />
+      <span class="track"></span>
+      <span class="switch-text"><b>Show on home page</b><small>Feature this category on your storefront</small></span>
+    </label>
+
+    <p class="error-text" role="alert" *ngIf="error">{{ error }}</p>
+
+    <div class="create-actions">
+      <button type="button" class="btn ghost" (click)="cancelCreate()" [disabled]="saving">Cancel</button>
+      <button type="button" class="btn primary" (click)="create()" [disabled]="saving">
+        <span class="spinner" *ngIf="saving"></span>
+        {{ saving ? "Creating…" : "Create category" }}
+      </button>
+    </div>
+  </div>
+</div>
