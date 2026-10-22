@@ -188,6 +188,15 @@ export const routes: Routes = [
       ),
     data: { seo: { title: "My Inventory", noindex: true } },
   },
+  // {
+  //   path: "review-orders",
+  //   canActivate: [authGuard],
+  //   loadComponent: () =>
+  //     import("./features/seller/my-inventory/review-orders.component").then(
+  //       (m) => m.ReviewOrdersComponent,
+  //     ),
+  //   data: { seo: { title: "Review Orders", noindex: true } },
+  // },
   {
     path: ":companyname/about-us",
     loadComponent: () =>
