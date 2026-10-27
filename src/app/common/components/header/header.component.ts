@@ -1095,4 +1095,11 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   onInventory(): void {
     this.router.navigate(["/my-inventory"]).catch(() => {});
   }
+  onReviewOrders(): void {
+    console.log("2. header: received event");
+    this.router.navigate(["/review-orders"]).then(
+      (ok) => console.log("3. navigation result:", ok),
+      (err) => console.error("3. navigation failed:", err),
+    );
+  }
 }

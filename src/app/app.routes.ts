@@ -3,6 +3,7 @@ import { LandingComponent } from "./landing/landing.component";
 import { OrderDetailComponent } from "./order-detail/order-detail.component";
 import { authGuard } from "./core/guards/auth.guard";
 import { companyname } from "./common/utils/constant";
+import { sellerGuard } from "./features/seller/review-orders/seller.guard";
 
 // Canonical prefix for legal pages, e.g. "/Dolphin"
 const legalBase = `/${companyname.replace(/^\/+|\/+$/g, "")}`;
@@ -188,15 +189,15 @@ export const routes: Routes = [
       ),
     data: { seo: { title: "My Inventory", noindex: true } },
   },
-  // {
-  //   path: "review-orders",
-  //   canActivate: [authGuard],
-  //   loadComponent: () =>
-  //     import("./features/seller/my-inventory/review-orders.component").then(
-  //       (m) => m.ReviewOrdersComponent,
-  //     ),
-  //   data: { seo: { title: "Review Orders", noindex: true } },
-  // },
+  {
+    path: "review-orders",
+    canActivate: [sellerGuard],
+    loadComponent: () =>
+      import("./features/seller/review-orders/review-orders.component").then(
+        (m) => m.ReviewOrdersComponent,
+      ),
+    data: { seo: { title: "Review Orders", noindex: true } },
+  },
   {
     path: ":companyname/about-us",
     loadComponent: () =>

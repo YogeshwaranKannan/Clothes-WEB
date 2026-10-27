@@ -43,6 +43,14 @@ export class UserMenuComponent implements AfterViewInit, OnDestroy {
   @Input() showInventory = false; // true only for seller accounts
   @Output() inventory = new EventEmitter<void>();
 
+  @Output() reviewOrders = new EventEmitter<void>();
+
+  onReviewOrders() {
+    console.log("1. user-menu: Review Orders clicked");
+    this.reviewOrders.emit();
+    this.closeMenu();
+  }
+
   onInventory() {
     this.inventory.emit();
     this.closeMenu();

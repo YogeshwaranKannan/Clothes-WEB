@@ -1,0 +1,661 @@
+<section class="page">
+  <header class="page-head">
+    <div>
+      <h1>Review orders</h1>
+      <p>
+        Orders waiting for your review, plus the ones you have closed or
+        rejected.
+      </p>
+    </div>
+    <button
+      type="button"
+      class="btn ghost"
+      (click)="reload()"
+      [disabled]="loading"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        width="16"
+        height="16"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        [class.spin]="loading"
+      >
+        <path d="M20 12a8 8 0 11-2.34-5.66M20 4v5h-5" />
+      </svg>
+      Refresh
+    </button>
+  </header>
+
+  <!-- search -->
+  <div class="search">
+    <svg
+      viewBox="0 0 24 24"
+      width="18"
+      height="18"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+    >
+      <circle cx="11" cy="11" r="7" />
+      <path d="M20 20l-3.5-3.5" />
+    </svg>
+    <input
+      type="text"
+      autocomplete="off"
+      aria-label="Search orders"
+      placeholder="Search by customer name, mobile number or order no."
+      [value]="query"
+      (input)="onQuery($any($event.target).value)"
+    />
+    <button
+      type="button"
+      class="clear"
+      *ngIf="query"
+      (click)="clearSearch()"
+      aria-label="Clear search"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        width="16"
+        height="16"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.4"
+        stroke-linecap="round"
+      >
+        <path d="M6 6l12 12M18 6L6 18" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- tabs -->
+  <div class="tabs" role="tablist" aria-label="Order status">
+    <button
+      type="button"
+      role="tab"
+      *ngFor="let t of tabs"
+      [attr.data-tab]="t.key"
+      [class.on]="tab === t.key"
+      [attr.aria-selected]="tab === t.key"
+      (click)="setTab(t.key)"
+    >
+      <span class="dot"></span>
+      {{ t.label }}
+      <span class="count">{{ count(t) }}</span>
+    </button>
+  </div>
+
+  <p class="summary" *ngIf="!loading && inTab.length">
+    {{ inTab.length }} {{ inTab.length === 1 ? "order" : "orders" }} worth
+    <b>{{ inr(tabTotal) }}</b>
+  </p>
+
+  <!-- error -->
+  <div class="notice error" *ngIf="error" role="alert">
+    <span>{{ error }}</span>
+    <button type="button" class="btn ghost sm" (click)="reload()">
+      Try again
+    </button>
+  </div>
+
+  <!-- loading -->
+  <div class="list" *ngIf="loading && !rows.length">
+    <div class="skeleton" *ngFor="let _ of [1, 2, 3, 4]"></div>
+  </div>
+
+  <!-- list -->
+  <div class="list" *ngIf="!error && visible.length">
+    <div class="row head" aria-hidden="true">
+      <span>Customer</span><span>Order</span><span>Amount</span
+      ><span>Payment</span><span>Status</span>
+    </div>
+
+    <article
+      class="row"
+      *ngFor="let r of visible; trackBy: trackById"
+      tabindex="0"
+      role="button"
+      [attr.aria-label]="'Open order ' + r.ref"
+      [attr.data-status]="r.stage"
+      (click)="open(r)"
+      (keydown.enter)="open(r)"
+    >
+      <div class="cell customer">
+        <span class="avatar" [style.background]="avatar(r)">{{
+          initial(r)
+        }}</span>
+        <div class="meta">
+          <b>{{ r.customerName ? title(r.customerName) : "Customer" }}</b>
+          <small>{{ r.customerMobile || "No mobile number" }}</small>
+        </div>
+      </div>
+
+      <div class="cell order" data-label="Order">
+        <span class="ref">{{ r.ref }}</span>
+        <small *ngIf="r.orderDate">Placed {{ date(r.orderDate) }}</small>
+        <small *ngIf="r.stage === 'closed' && r.deliveredDate"
+          >Delivered {{ date(r.deliveredDate) }}</small
+        >
+      </div>
+
+      <div class="cell amount" data-label="Amount">
+        <b>{{ inr(net(r)) }}</b>
+        <small class="saved" *ngIf="r.discount > 0"
+          ><s>{{ inr(r.gross) }}</s> &nbsp;Saved {{ inr(r.discount) }}</small
+        >
+      </div>
+
+      <div class="cell pay" data-label="Payment">
+        <span class="paid">Paid {{ inr(r.paid) }}</span>
+        <span class="due" *ngIf="r.due > 0">Due {{ inr(r.due) }}</span>
+        <span
+          class="pill"
+          *ngIf="
+            (r.stage === 'review' || r.stage === 'transit') && r.paymentStatus
+          "
+          [class.ok]="isPaid(r)"
+          [class.bad]="!isPaid(r)"
+          >{{ title(r.paymentStatus) }}</span
+        >
+      </div>
+
+      <div class="cell status">
+        <span class="chip" [ngClass]="meta(r.stage).cls">{{
+          meta(r.stage).label
+        }}</span>
+        <svg
+          class="go"
+          viewBox="0 0 24 24"
+          width="18"
+          height="18"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M9 6l6 6-6 6" />
+        </svg>
+      </div>
+
+      <p class="reason" *ngIf="r.rejection?.reason">
+        <svg
+          viewBox="0 0 24 24"
+          width="14"
+          height="14"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 8v5M12 16.5v.01" />
+        </svg>
+        {{ r.rejection?.reason }}
+      </p>
+    </article>
+  </div>
+
+  <div class="more" *ngIf="!loading && inTab.length > visible.length">
+    <button type="button" class="btn ghost" (click)="more()">
+      Show more ({{ inTab.length - visible.length }} left)
+    </button>
+  </div>
+
+  <!-- empty -->
+  <div class="empty" *ngIf="!loading && !error && !inTab.length">
+    <div class="empty-art">
+      <svg
+        viewBox="0 0 24 24"
+        width="30"
+        height="30"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path
+          d="M9 4h6a2 2 0 012 2v1H7V6a2 2 0 012-2zM5 7h14l-1 13H6L5 7zM9 12h6M9 16h4"
+        />
+      </svg>
+    </div>
+    <ng-container *ngIf="!query; else noMatch">
+      <h2>{{ current.empty.title }}</h2>
+      <p>{{ current.empty.text }}</p>
+    </ng-container>
+    <ng-template #noMatch>
+      <h2>No orders match “{{ query }}”</h2>
+      <p>Check the spelling, or try a mobile number or order number.</p>
+      <button type="button" class="btn ghost" (click)="clearSearch()">
+        Clear search
+      </button>
+    </ng-template>
+  </div>
+</section>
+
+<!-- ============ ORDER DETAILS DRAWER ============ -->
+<div class="scrim" *ngIf="selected" (click)="close()" aria-hidden="true"></div>
+
+<aside
+  class="drawer"
+  *ngIf="selected as o"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="'Order ' + o.ref"
+>
+  <header class="drawer-head">
+    <div class="head-title">
+      <span class="ref">{{ o.ref }}</span>
+      <h2>{{ o.customerName ? title(o.customerName) : "Customer" }}</h2>
+      <span class="chip" [ngClass]="meta(o.stage).cls">{{
+        meta(o.stage).label
+      }}</span>
+    </div>
+
+    <div class="head-actions" *ngIf="o.stage === 'review'">
+      <button
+        type="button"
+        class="btn danger-ghost sm"
+        (click)="startReject(o)"
+        [disabled]="busy"
+        [class.active]="panel === 'reject'"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          width="15"
+          height="15"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.4"
+          stroke-linecap="round"
+        >
+          <path d="M6 6l12 12M18 6L6 18" />
+        </svg>
+        Reject
+      </button>
+      <button
+        type="button"
+        class="btn success sm"
+        (click)="startAccept()"
+        [disabled]="busy"
+        [class.active]="panel === 'accept'"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          width="15"
+          height="15"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M5 12l5 5 9-10" />
+        </svg>
+        Accept
+      </button>
+    </div>
+
+    <div class="head-actions" *ngIf="o.stage === 'transit'">
+      <button
+        type="button"
+        class="btn success sm"
+        (click)="startDeliver()"
+        [disabled]="busy"
+        [class.active]="panel === 'deliver'"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          width="15"
+          height="15"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M3 7h11v9H3zM14 10h4l3 3v3h-7zM7 19a1.8 1.8 0 100-3.6A1.8 1.8 0 007 19zM17 19a1.8 1.8 0 100-3.6 1.8 1.8 0 000 3.6z"
+          />
+        </svg>
+        Mark as delivered
+      </button>
+    </div>
+
+    <button
+      type="button"
+      class="icon-btn head-close"
+      (click)="close()"
+      [disabled]="busy"
+      aria-label="Close"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+      >
+        <path d="M6 6l12 12M18 6L6 18" />
+      </svg>
+    </button>
+  </header>
+
+  <div class="drawer-body">
+    <!-- ===== accept confirmation ===== -->
+    <section
+      class="card panel accept"
+      *ngIf="panel === 'accept'"
+      role="group"
+      aria-label="Accept order"
+    >
+      <h3>Accept this order?</h3>
+      <ul class="effects">
+        <li>The order moves to the <b>In transit</b> tab.</li>
+        <li>Stock for its items is reduced.</li>
+        <li>
+          When it reaches the customer, open it there and mark it as delivered.
+        </li>
+      </ul>
+      <p class="error-text" role="alert" *ngIf="actionError">
+        {{ actionError }}
+      </p>
+      <ul class="issues" *ngIf="issues.length">
+        <li *ngFor="let i of issues">{{ i }}</li>
+      </ul>
+      <div class="panel-actions">
+        <button
+          type="button"
+          class="btn ghost"
+          (click)="cancelPanel()"
+          [disabled]="busy"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn success"
+          (click)="confirmAccept()"
+          [disabled]="busy"
+        >
+          <span class="spinner" *ngIf="busy"></span>
+          {{ busy ? "Accepting…" : "Yes, accept order" }}
+        </button>
+      </div>
+    </section>
+
+    <!-- ===== delivered confirmation ===== -->
+    <section
+      class="card panel deliver"
+      *ngIf="panel === 'deliver'"
+      role="group"
+      aria-label="Mark as delivered"
+    >
+      <h3>Mark this order as delivered?</h3>
+      <ul class="effects">
+        <li>The order moves to the <b>Closed</b> tab as <b>Completed</b>.</li>
+        <li>Any amount still due is recorded as paid.</li>
+        <li>The customer receives a delivery confirmation email.</li>
+      </ul>
+      <p class="error-text" role="alert" *ngIf="actionError">
+        {{ actionError }}
+      </p>
+      <div class="panel-actions">
+        <button
+          type="button"
+          class="btn ghost"
+          (click)="cancelPanel()"
+          [disabled]="busy"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn success"
+          (click)="confirmDeliver()"
+          [disabled]="busy"
+        >
+          <span class="spinner" *ngIf="busy"></span>
+          {{ busy ? "Saving…" : "Yes, mark delivered" }}
+        </button>
+      </div>
+    </section>
+
+    <!-- ===== reject form ===== -->
+    <section
+      class="card panel reject"
+      *ngIf="panel === 'reject'"
+      role="group"
+      aria-label="Reject order"
+    >
+      <h3>Reject this order</h3>
+      <p class="hint">Pick a reason or write your own.</p>
+
+      <div class="reasons" role="group" aria-label="Quick reasons">
+        <button
+          type="button"
+          *ngFor="let r of reasons"
+          [class.on]="reasonPick === r"
+          (click)="pickReason(r)"
+        >
+          {{ r }}
+        </button>
+      </div>
+
+      <label class="fl" for="rej-reason">Reason</label>
+      <textarea
+        id="rej-reason"
+        rows="3"
+        maxlength="200"
+        placeholder="Why is this order being rejected?"
+        [value]="reasonText"
+        (input)="reasonText = $any($event.target).value"
+      ></textarea>
+
+      <div class="refund" *ngIf="o.paid > 0">
+        <div>
+          <label class="fl" for="rej-amt">Refund amount</label>
+          <div class="money">
+            <span>₹</span>
+            <input
+              id="rej-amt"
+              inputmode="decimal"
+              [value]="refundAmount"
+              (input)="onRefundInput($any($event.target).value)"
+            />
+          </div>
+          <small>Paid so far {{ inr(o.paid) }}</small>
+        </div>
+        <div>
+          <label class="fl" for="rej-mode">Refund mode</label>
+          <select
+            id="rej-mode"
+            (change)="refundMode = $any($event.target).value"
+          >
+            <option value="" [selected]="!refundMode">Select</option>
+            <option
+              *ngFor="let m of refundModes"
+              [value]="m"
+              [selected]="refundMode === m"
+            >
+              {{ m }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <p class="error-text" role="alert" *ngIf="actionError">
+        {{ actionError }}
+      </p>
+      <div class="panel-actions">
+        <button
+          type="button"
+          class="btn ghost"
+          (click)="cancelPanel()"
+          [disabled]="busy"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn danger"
+          (click)="confirmReject()"
+          [disabled]="busy"
+        >
+          <span class="spinner" *ngIf="busy"></span>
+          {{ busy ? "Rejecting…" : "Reject order" }}
+        </button>
+      </div>
+    </section>
+
+    <section class="card rejected" *ngIf="o.rejection as rj">
+      <h3>Rejection and refund</h3>
+      <dl>
+        <div>
+          <dt>Reason</dt>
+          <dd>{{ rj.reason || "Not provided" }}</dd>
+        </div>
+        <div *ngIf="rj.date">
+          <dt>Rejected on</dt>
+          <dd>{{ date(rj.date) }}</dd>
+        </div>
+        <div>
+          <dt>Refund status</dt>
+          <dd>
+            {{
+              rj.refundStatus
+                ? title(rj.refundStatus)
+                : o.paymentStatus
+                  ? title(o.paymentStatus)
+                  : "N/A"
+            }}
+          </dd>
+        </div>
+        <div>
+          <dt>Refund amount</dt>
+          <dd>{{ inr(rj.refundAmount) }}</dd>
+        </div>
+        <div>
+          <dt>Refund mode</dt>
+          <dd>{{ rj.refundMode || "N/A" }}</dd>
+        </div>
+        <div *ngIf="rj.customerNeedToPay > 0">
+          <dt>Customer needs to pay</dt>
+          <dd>{{ inr(rj.customerNeedToPay) }}</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="card">
+      <h3>Customer</h3>
+      <dl>
+        <div>
+          <dt>Mobile</dt>
+          <dd>{{ o.customerMobile || "N/A" }}</dd>
+        </div>
+        <div>
+          <dt>Delivery mode</dt>
+          <dd>{{ o.deliveryMode ? title(o.deliveryMode) : "N/A" }}</dd>
+        </div>
+        <div class="wide">
+          <dt>
+            {{
+              o.deliveryMode === "PICKUP"
+                ? "Pickup location"
+                : "Delivery address"
+            }}
+          </dt>
+          <dd>{{ o.address || "N/A" }}</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="card">
+      <h3>
+        Items <span class="muted">({{ o.lines.length }})</span>
+      </h3>
+      <ul class="lines" *ngIf="o.lines.length; else noLines">
+        <li *ngFor="let l of o.lines">
+          <div class="l-name">
+            <b>{{ l.name }}</b>
+            <small *ngIf="l.variant">{{ l.variant }}</small>
+          </div>
+          <div class="l-qty">{{ l.qty }} × {{ inr(l.unitPrice) }}</div>
+          <div class="l-amt">{{ inr(l.amount) }}</div>
+        </li>
+      </ul>
+      <ng-template #noLines
+        ><p class="muted">
+          No item details available for this order.
+        </p></ng-template
+      >
+    </section>
+
+    <section class="card">
+      <h3>Payment</h3>
+      <dl class="totals">
+        <div>
+          <dt>Order value</dt>
+          <dd>{{ inr(o.gross) }}</dd>
+        </div>
+        <div *ngIf="o.discount > 0">
+          <dt>Discount</dt>
+          <dd class="green">− {{ inr(o.discount) }}</dd>
+        </div>
+        <div class="strong">
+          <dt>Total</dt>
+          <dd>{{ inr(net(o)) }}</dd>
+        </div>
+        <div>
+          <dt>Paid</dt>
+          <dd class="green">{{ inr(o.paid) }}</dd>
+        </div>
+        <div *ngIf="o.due > 0">
+          <dt>Amount due</dt>
+          <dd class="red">{{ inr(o.due) }}</dd>
+        </div>
+        <div *ngIf="o.paymentStatus">
+          <dt>Payment status</dt>
+          <dd>
+            <span
+              class="pill"
+              [class.ok]="isPaid(o)"
+              [class.bad]="!isPaid(o)"
+              >{{ title(o.paymentStatus) }}</span
+            >
+          </dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="card" *ngIf="o.orderDate || o.dueDate || o.deliveredDate">
+      <h3>Dates</h3>
+      <dl>
+        <div *ngIf="o.orderDate">
+          <dt>Ordered</dt>
+          <dd>{{ date(o.orderDate) }}</dd>
+        </div>
+        <div *ngIf="o.dueDate">
+          <dt>Due</dt>
+          <dd>{{ date(o.dueDate) }}</dd>
+        </div>
+        <div *ngIf="o.deliveredDate">
+          <dt>Delivered</dt>
+          <dd>{{ date(o.deliveredDate) }}</dd>
+        </div>
+      </dl>
+    </section>
+  </div>
+</aside>
+
+<div class="toast" *ngIf="toast" role="status">{{ toast }}</div>

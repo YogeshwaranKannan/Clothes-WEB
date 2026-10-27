@@ -67,6 +67,15 @@
     >
       My Inventory
     </button>
+
+    <button
+      *ngIf="showInventory"
+      role="menuitem"
+      class="menu-item"
+      (click)="onReviewOrders()"
+    >
+      Review Orders
+    </button>
     <button role="menuitem" class="menu-item" (click)="openCart()">Cart</button>
 
     <div class="menu-footer">
